@@ -1,2 +1,2 @@
-# sensrnet-registry-frontend
-SensRNet Registry Frontend component
+# SensRNet Registry Frontend component
+
