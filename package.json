@@ -21,6 +21,7 @@
     "@angular/router": "~9.1.7",
     "@types/ol": "^5.3.3",
     "bootstrap": "^3.3.7",
+    "generieke-geo-componenten-feature-info": "^6.0.0",
     "generieke-geo-componenten-map": "^8.0.0",
     "generieke-geo-componenten-search": "^6.0.1",
     "jquery": "^3.5.1",

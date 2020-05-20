@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GgcMapModule } from 'generieke-geo-componenten-map';
 import { GgcSearchModule } from 'generieke-geo-componenten-search';
+import { GgcFeatureInfoModule } from 'generieke-geo-componenten-feature-info';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,7 +23,8 @@ import { FormComponent } from './form/form.component';
     AppRoutingModule,
     ReactiveFormsModule,
     GgcMapModule.forRoot(),
-    GgcSearchModule
+    GgcSearchModule,
+    GgcFeatureInfoModule
   ],
   providers: [],
   bootstrap: [AppComponent]
