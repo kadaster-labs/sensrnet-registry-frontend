@@ -1,0 +1,19 @@
+.nav {
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 10px !important;
+    border-color: black !important;
+}
+
+.dropdown-menu {
+    font-size: 14px !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+}
+
+a {
+    font-size: 14px !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    color: black !important;
+  }

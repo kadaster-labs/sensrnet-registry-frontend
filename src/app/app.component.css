@@ -1,0 +1,20 @@
+#backgroundmap {
+    width: 100% !important;
+    height: 100vh !important;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#navbar {
+    position: absolute !important;
+    z-index: 20 !important;
+    left: 15vw !important;
+    width: 20vw !important;
+    margin-top: 10px;
+}
+
+#logo {
+    position: absolute !important;
+    z-index: 10 !important;
+    margin-top: 10px;
+}
