@@ -7,9 +7,11 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
-  profileForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
+  RegisterSensor = new FormGroup({
+    type: new FormControl(''),
+    latitude: new FormControl(''),
+    longitude: new FormControl(''),
+    height: new FormControl('')
   });
 
   constructor() { }
@@ -19,7 +21,7 @@ export class FormComponent implements OnInit {
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    console.warn(this.profileForm.value);
+    console.warn(this.RegisterSensor.value);
   }
 
 }

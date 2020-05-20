@@ -1,6 +1,9 @@
 #form {
-  background-color: rgba(19, 65, 115, 0.8);
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 10px 10px 10px 10px;
+  box-shadow: 0 10px 10px -5px grey;
+  border-radius: 5px;
 }
 
 :host {
@@ -13,8 +16,8 @@
     display: block;
     width: 6em;
     margin: .5em 0;
-    color: #607D8B;
-    font-weight: bold;
+    color: #000000;
+    font-weight: lighter;
   }
   
   input {
