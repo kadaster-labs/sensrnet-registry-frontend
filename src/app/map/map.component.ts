@@ -5,13 +5,10 @@ import {
   SearchComponentEventTypes
 } from 'generieke-geo-componenten-search';
 import {
-  DrawInteractionService, FeatureCollectionForCoordinate, FeatureCollectionForLayer,
-  MapComponentDrawTypes,
+  FeatureCollectionForCoordinate, FeatureCollectionForLayer,
   MapComponentEvent,
   MapComponentEventTypes,
   MapService,
-  MeasureEventTypes,
-  MeasureService,
   SelectionService
 } from 'generieke-geo-componenten-map';
 import { Dataset, DatasetTreeEvent, Service, Theme } from 'generieke-geo-componenten-dataset-tree';
@@ -26,7 +23,6 @@ import {
   SortFilterConfig
 } from 'generieke-geo-componenten-feature-info';
 import { Subscription } from 'rxjs';
-import { PrintComponentEvent, PrintConfig } from 'generieke-geo-componenten-print';
 import { Coordinate } from 'ol/coordinate';
 
 @Component({

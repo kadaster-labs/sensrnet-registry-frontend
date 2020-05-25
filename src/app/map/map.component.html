@@ -1,6 +1,6 @@
 <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
 
-<ggc-dataset-tree [themes]="layers" (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
+<!-- <ggc-dataset-tree [themes]="layers" (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
 [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed" [iconExpanded]="iconExpanded"
 [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked" [iconInfoUrl]="iconInfoUrl"
 [hideTree]="hideTreeDataset"></ggc-dataset-tree>
@@ -14,14 +14,14 @@
 [minResolution]="dataset.services[0].layers[0].minResolution"
 [maxResolution]="dataset.services[0].layers[0].maxResolution"
 [zIndex]="dataset.services[0].layers[0].zIndex">
-</ggc-wms-layer>
+</ggc-wms-layer> -->
 
 <ggc-layer-brt-achtergrondkaart [mapName]="'srn'"></ggc-layer-brt-achtergrondkaart>
 
 <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search> 
 
-<ggc-feature-info-tabs [featureInfoCollectionArray]="dataTabFeatureInfo" (events)="handleFeatureInfoEvent($event)">
+<!-- <ggc-feature-info-tabs [featureInfoCollectionArray]="dataTabFeatureInfo" (events)="handleFeatureInfoEvent($event)">
     <ggc-feature-info [featureInfoCollection]="currentTabFeatureInfo"></ggc-feature-info>
 </ggc-feature-info-tabs>
 
-<ggc-dataset-legend [datasetLegends]="datasetsLegends"></ggc-dataset-legend>
+<ggc-dataset-legend [datasetLegends]="datasetsLegends"></ggc-dataset-legend> -->
