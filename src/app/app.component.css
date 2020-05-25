@@ -12,7 +12,7 @@
     margin-top: 10px !important;
     margin-right: 0px !important;
     padding: 0px 0px 0px 0px !important;
-    left: 83v !important;
+    left: 83% !important;
 }
 
 #form {
@@ -32,4 +32,9 @@
     height: 100vh !important;
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.map {
+    width: 100vw;
+    height: 85vh;
 }
