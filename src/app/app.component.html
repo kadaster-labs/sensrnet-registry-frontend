@@ -1,11 +1,11 @@
-<div class="row container-fluid">
-        <ul class="col-lg-5 nav nav-pills" id="navbar">
+<div class="container-fluid">
+    <div class="row">
+        <ul class="col-lg-12 nav nav-pills" id="navbar">
             <a class="navbar-brand">SensRNet
                 Registration App</a>
-
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">Owner <span class="caret"></span></a>
+                    aria-expanded="false">Owner<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a>Register owner</a></li>
                     <li><a>Update owner</a></li>
@@ -13,78 +13,73 @@
             </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">Sensor <span class="caret"></span></a>
+                    aria-expanded="false">Sensor<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a role="button" data-toggle="collapse" data-target="#formbar">Register sensor</a></li>
                     <li><a>Update sensor</a></li>
                 </ul>
             </li>
         </ul>
-    <div class="col-lg-1" id="logo">
-        <img src="assets\SensRNet-logo.png" width="145px" class="image">
+        <div class="col-lg-1" id="logo">
+            <img src="assets\SensRNet-logo.png" width="145px" class="image">
+        </div>
     </div>
-</div>
-
-<div class="collapse row" id="formbar">
-    <div id="form-inside">
-        <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
-            <label> Name
-                <input class="form-control" type="text" formControlName="name">
-            </label>
-            <label> Aim
-                <input class="form-control" type="text" formControlName="aim">
-            </label>
-            <label> Description
-                <textarea class="form-control" type="text" formControlName="description"></textarea>
-            </label>
-            <label> Manufacturer
-                <input class="form-control" type="text" formControlName="manufacturer">
-            </label>
-            <label> Active
-                <input  class="form-control" type="checkbox" formControlName="active">
-            </label>
-            <label> Documentation
-                <input class="form-control" type="text" formControlName="documentation">
-            </label>
-            <label> DataStream
-                <input class="form-control" type="text" formControlName="dataStream">
-            </label>
-            <a role="button" class="btn btn-default" (click)="startDrawPoint()">Select location</a>
-            <a role="button" class="btn btn-default" (click)="clearDrawing('srn')">Clear</a>
-            <br>
-            <hr>
-            <button id="register-button" type="submit" [disabled]="!RegisterSensor.valid">Register</button>
-        </form>
+    <div class="row">
+        <div class="collapse col-lg-12" id="formbar">
+            <div id="form-inside">
+                <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
+                    <div class="input-group">
+                        <label> Name
+                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name">
+                        </label>
+                        <br>
+                        <label> Aim
+                            <input class="form-control" type="text" formControlName="aim"
+                                placeholder="Aim of the sensor">
+                        </label>
+                        <br>
+                        <label> Description
+                            <textarea class="form-control" type="text" formControlName="description"
+                                placeholder="Describe the sensor"></textarea>
+                        </label>
+                        <br>
+                        <label> Manufacturer
+                            <input class="form-control" type="text" formControlName="manufacturer"
+                                placeholder="Enter name of the manufacturer">
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" formControlName="active"> Active
+                        </label>
+                        <br>
+                        <label> Documentation
+                            <input class="form-control" type="url" formControlName="documentation"
+                                placeholder="url of documentation">
+                        </label>
+                        <br>
+                        <label> DataStreams
+                            <input class="form-control" type="text" formControlName="dataStreams">
+                        </label>
+                        <br>
+                        <br>
+                        <a role="button" class="btn btn-success" (click)="startDrawPoint()">Select location</a>
+                        <a role="button" class="btn btn-outline-primary" (click)="clearDrawing('srn')">Clear</a>
+                        <br>
+                        <hr>
+                        <button class="btn btn-primary btn-lg" type="submit"
+                            [disabled]="!RegisterSensor.valid">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-
-<div class="row">
-    <!-- <div class="col-lg-5" id="search">
+    <div class="row">
+        <!-- <div class="col-lg-5" id="search">
         <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search>
     </div> -->
-
-    <!-- <div class="row container-fluid">
-        <div class="col-lg-5" id="search">
-            <ggc-dataset-tree [themes]="layers" (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
-                [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"
-                [iconExpanded]="iconExpanded" [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked"
-                [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"></ggc-dataset-tree>
-            <ggc-feature-info-tabs [featureInfoCollectionArray]="dataTabFeatureInfo"
-                (events)="handleFeatureInfoEvent($event)">
-                <ggc-feature-info [featureInfoCollection]="currentTabFeatureInfo"></ggc-feature-info>
-            </ggc-feature-info-tabs>
-            <ggc-dataset-legend [datasetLegends]="datasetsLegends"></ggc-dataset-legend>
-        </div> -->
-
-    <div id="backgroundmap">
-        <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
-        <ggc-wms-layer *ngFor="let dataset of activeWmsDatasets" [layerName]="dataset.services[0].layers[0].name"
-            [url]="dataset.services[0].url" [layers]="dataset.services[0].layers[0].technicalName" [mapName]="mapName"
-            [getFeatureInfoOnSingleclick]="true" [attributions]="dataset.services[0].layers[0].attributions"
-            [minResolution]="dataset.services[0].layers[0].minResolution"
-            [maxResolution]="dataset.services[0].layers[0].maxResolution"
-            [zIndex]="dataset.services[0].layers[0].zIndex">
-        </ggc-wms-layer>
-        <ggc-layer-brt-achtergrondkaart [mapName]="'srn'"></ggc-layer-brt-achtergrondkaart>
+        <div id="backgroundmap">
+            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
+            <ggc-layer-brt-achtergrondkaart [mapName]="'srn'"></ggc-layer-brt-achtergrondkaart>
+        </div>
     </div>
 </div>

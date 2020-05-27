@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
     manufacturer: new FormControl(''),
     active: new FormControl(''),
     documentation: new FormControl(''),
-    dataStream: new FormControl(''),
+    dataStreams: new FormControl(''),
     location: new FormControl('')
 
   });
