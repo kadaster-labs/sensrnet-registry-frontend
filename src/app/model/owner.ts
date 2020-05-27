@@ -4,7 +4,7 @@ export class Owner {
     constructor(
         public organisationName: string,
         public website: URL,
-        public contact: ContactDetails,
+        public contactDetails: ContactDetails,
         public sensors: Sensor[],
         public users: User[]
     ) { }

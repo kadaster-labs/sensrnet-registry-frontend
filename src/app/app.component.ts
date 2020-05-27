@@ -1,3 +1,5 @@
+import { Owner } from './model/owner';
+import { Sensor } from './model/sensor';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   SearchComponentElementIds,
