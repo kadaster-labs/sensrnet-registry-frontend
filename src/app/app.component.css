@@ -2,8 +2,10 @@
     position: absolute;
     z-index: 20;
     width: 27vw;
+    height: 13vh;
     background-color: rgba(19, 65, 115, 0.8);
     box-shadow: 0 10px 10px -5px grey;
+    padding: 0px 0px 0px 0px !important;
 }
 
 #logo {
@@ -14,10 +16,10 @@
     margin: 9px 0px 0px 0px !important;
 }
 
-#formbar {
+#registerSensorForm, #registerOwnerForm {
     position: absolute;
-    top: 12vh;
-    height: 88vh;
+    top: 14vh;
+    height: 86vh;
     z-index: 10;
     width: 27vw;
     background-color: #ffffff;
@@ -37,10 +39,9 @@
 }
 
 #search {
-    position: relative;
-    /* z-index: 20;
-    width: 30vw;
-    top: 20vh; */
+    position: absolute;
+    z-index: 20;
+    width: 10vw;
 }
 
 #backgroundmap {
@@ -58,6 +59,11 @@
     font-size: 30px;
     height: 40px;
     color: white;
+    margin-top: 5px;
+}
+
+.dropdown {
+    margin-top: 5px;
 }
 
 .dropdown-toggle {

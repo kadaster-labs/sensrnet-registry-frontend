@@ -7,7 +7,7 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Owner<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a>Register owner</a></li>
+                    <li><a role="button" data-toggle="collapse" data-target="#registerOwnerForm">Register owner</a></li>
                     <li><a>Update owner</a></li>
                 </ul>
             </li>
@@ -15,8 +15,16 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Sensor<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a role="button" data-toggle="collapse" data-target="#formbar">Register sensor</a></li>
+                    <li><a role="button" data-toggle="collapse" data-target="#registerSensorForm">Register sensor</a></li>
                     <li><a>Update sensor</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">Zoeken  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search>
                 </ul>
             </li>
         </ul>
@@ -25,7 +33,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="collapse col-lg-12" id="formbar">
+        <div class="collapse col-lg-12" id="registerSensorForm">
             <div id="form-inside">
                 <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
                     <div class="input-group">
@@ -73,10 +81,40 @@
             </div>
         </div>
     </div>
+
+
     <div class="row">
-        <!-- <div class="col-lg-5" id="search">
-        <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search>
-    </div> -->
+        <div class="collapse col-lg-12" id="registerOwnerForm">
+            <div id="form-inside">
+                <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
+                    <div class="input-group">
+                        <label> Hallo
+                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name">
+                        </label>
+                        <br>
+                        <label> Aim
+                            <input class="form-control" type="text" formControlName="aim"
+                                placeholder="Aim of the sensor">
+                        </label>
+                        <br>
+                        <label> Description
+                            <textarea class="form-control" type="text" formControlName="description"
+                                placeholder="Describe the sensor"></textarea>
+                        </label>
+                        <br>
+                        <a role="button" class="btn btn-success" (click)="startDrawPoint()">Select location</a>
+                        <a role="button" class="btn btn-outline-primary" (click)="clearDrawing('srn')">Clear</a>
+                        <br>
+                        <hr>
+                        <button class="btn btn-primary btn-lg" type="submit"
+                            [disabled]="!RegisterSensor.valid">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div id="backgroundmap">
             <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
             <ggc-layer-brt-achtergrondkaart [mapName]="'srn'"></ggc-layer-brt-achtergrondkaart>
