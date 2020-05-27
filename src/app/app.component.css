@@ -1,40 +1,117 @@
+
 #navbar {
-    position: absolute ;
-    z-index: 20 ;
-    width: 30vw ;
-    padding: 0px 0px 0px 0px ;
-    margin: 0px 0px 0px 0px ;
+    position: absolute;
+    z-index: 20;
+    width: 30vw;
+    padding: 0px 0px 0px 0px !important;
+    margin: 0px 0px 0px 0px !important;
+    background-color: rgba(19, 65, 115, 0.8);
+    box-shadow: 0 10px 10px -5px grey;
 }
 
 #logo {
     position: absolute;
-    z-index: 10 ;
-    margin-top: 10px ;
-    margin-right: 0px ;
-    padding: 0px 0px 0px 0px ;
-    left: 83% ;
+    z-index: 10;
+    left: 88vw;
+    padding: 0px 0px 0px 0px !important;
+    margin: 10px 0px 0px 0px !important;
 }
 
-#form {
-    position: absolute ;
-    z-index: 40 ;
-    margin: 0px ;
-    padding: 0px 0px 0px 15px ;
-    margin: 0px 0px 0px 10px ;
-    top: 15vh;
-    z-index: 1 ;
-    width: 28vw ;
-    height: 70vh ;
+#formbar {
+    position: absolute;
+    top: 12vh;
+    height: 88vh;
+    z-index: 10;
+    width: 30vw;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 10px -5px grey;
+}
+
+#form-inside {
+    margin-left: 20px;
+}
+
+#register-button {
+    background-color: rgba(19, 65, 115, 0.8) !important;
+    color: #ffffff !important;
+}
+
+#feature-info {
+    position: absolute;
+    z-index: 20;
+    width: 30vw;
+    /* padding: 0px 0px 0px 0px ; */
+    /* margin: 0px 0px 0px 0px ; */
+    top: 20vh;
+}
+
+#search {
+    position: absolute;
+    z-index: 20;
+    width: 30vw;
+    /* padding: 0px 0px 0px 0px ; */
+    /* margin: 0px 0px 0px 0px ; */
+    top: 20vh;
 }
 
 #backgroundmap {
-    width: 100% ;
-    height: 100vh ;
-    padding-left: 0px;
-    padding-right: 0px;
+    width: 100%;
+    height: 100vh;
 }
 
-.map {
-    width: 100vw;
-    height: 85vh;
+.dropdown-menu {
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-style: normal;
+}
+
+.navbar-brand {
+    font-weight: normal;
+    font-size: 30px;
+    height: 40px;
+    color: white;
+}
+
+a.dropdown-toggle {
+    color: white;
+}
+
+.open > a,
+a:hover {
+    color: rgb(19, 65, 115);
+}
+
+label {
+    display: block;
+    width: 6em;
+    margin: 0.5em 0;
+    color: #000000;
+    font-weight: normal;
+}
+
+input {
+    height: 2em;
+    font-size: 1em;
+    padding-left: 0.4em;
+}
+
+button {
+    font-family: Arial;
+    background-color: #eee;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+} */
+
+button:hover {
+    background-color: #cfd8dc;
+}
+
+button:disabled {
+    background-color: #eee;
+    color: #ccc;
+    cursor: auto;
 }

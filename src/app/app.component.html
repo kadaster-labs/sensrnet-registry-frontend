@@ -1,18 +1,90 @@
 <div class="row container-fluid">
-    <div class="col-lg-5" id="navbar">
-        <app-nav></app-nav>
+        <ul class="col-lg-5 nav nav-pills" id="navbar">
+            <a class="navbar-brand">SensRNet
+                Registration App</a>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">Owner <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a>Register owner</a></li>
+                    <li><a>Update owner</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">Sensor <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a role="button" data-toggle="collapse" data-target="#formbar">Register sensor</a></li>
+                    <li><a>Update sensor</a></li>
+                </ul>
+            </li>
+        </ul>
+    <div class="col-lg-1" id="logo">
+        <img src="assets\SensRNet-logo.png" width="145px" class="image">
     </div>
-    <div class="col-lg-2" id="logo">
-        <img src="assets\SensRNet-logo.png" width="200px" class="image">
+</div>
+
+<div class="collapse row" id="formbar">
+    <div id="form-inside">
+        <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
+            <label> Name
+                <input class="form-control" type="text" formControlName="name">
+            </label>
+            <label> Aim
+                <input class="form-control" type="text" formControlName="aim">
+            </label>
+            <label> Description
+                <textarea class="form-control" type="text" formControlName="description"></textarea>
+            </label>
+            <label> Manufacturer
+                <input class="form-control" type="text" formControlName="manufacturer">
+            </label>
+            <label> Active
+                <input  class="form-control" type="checkbox" formControlName="active">
+            </label>
+            <label> Documentation
+                <input class="form-control" type="text" formControlName="documentation">
+            </label>
+            <label> DataStream
+                <input class="form-control" type="text" formControlName="dataStream">
+            </label>
+            <a role="button" class="btn btn-default" (click)="startDrawPoint()">Select location</a>
+            <a role="button" class="btn btn-default" (click)="clearDrawing('srn')">Clear</a>
+            <br>
+            <hr>
+            <button id="register-button" type="submit" [disabled]="!RegisterSensor.valid">Register</button>
+        </form>
     </div>
 </div>
 
-<div class="row container-fluid" id="form">
-    <app-form></app-form>
+<div class="row">
+    <!-- <div class="col-lg-5" id="search">
+        <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search>
+    </div> -->
+
+    <!-- <div class="row container-fluid">
+        <div class="col-lg-5" id="search">
+            <ggc-dataset-tree [themes]="layers" (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
+                [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"
+                [iconExpanded]="iconExpanded" [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked"
+                [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"></ggc-dataset-tree>
+            <ggc-feature-info-tabs [featureInfoCollectionArray]="dataTabFeatureInfo"
+                (events)="handleFeatureInfoEvent($event)">
+                <ggc-feature-info [featureInfoCollection]="currentTabFeatureInfo"></ggc-feature-info>
+            </ggc-feature-info-tabs>
+            <ggc-dataset-legend [datasetLegends]="datasetsLegends"></ggc-dataset-legend>
+        </div> -->
+
+    <div id="backgroundmap">
+        <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
+        <ggc-wms-layer *ngFor="let dataset of activeWmsDatasets" [layerName]="dataset.services[0].layers[0].name"
+            [url]="dataset.services[0].url" [layers]="dataset.services[0].layers[0].technicalName" [mapName]="mapName"
+            [getFeatureInfoOnSingleclick]="true" [attributions]="dataset.services[0].layers[0].attributions"
+            [minResolution]="dataset.services[0].layers[0].minResolution"
+            [maxResolution]="dataset.services[0].layers[0].maxResolution"
+            [zIndex]="dataset.services[0].layers[0].zIndex">
+        </ggc-wms-layer>
+        <ggc-layer-brt-achtergrondkaart [mapName]="'srn'"></ggc-layer-brt-achtergrondkaart>
+    </div>
 </div>
-
-<div class="container-fluid" id="backgroundmap">
-    <app-map></app-map>
-</div>
-
-

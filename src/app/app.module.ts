@@ -1,25 +1,22 @@
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+
 import { GgcMapModule } from 'generieke-geo-componenten-map';
 import { GgcSearchModule } from 'generieke-geo-componenten-search';
 import { GgcFeatureInfoModule } from 'generieke-geo-componenten-feature-info';
 import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
 import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MapComponent } from './map/map.component';
-import { NavComponent } from './nav/nav.component';
-import { FormComponent } from './form/form.component';
+import { SensorService } from './services/sensor.service';
+import { OwnerService } from './services/owner.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent,
-    NavComponent,
-    FormComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,9 +26,10 @@ import { FormComponent } from './form/form.component';
     GgcSearchModule,
     GgcFeatureInfoModule,
     GgcDatasetTreeModule,
-    GgcDatasetLegendModule
+    GgcDatasetLegendModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [SensorService, OwnerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

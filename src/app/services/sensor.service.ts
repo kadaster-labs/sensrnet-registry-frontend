@@ -5,5 +5,25 @@ import { Injectable } from '@angular/core';
 })
 export class SensorService {
 
-  constructor() { }
+
+registerSensor() { }
+
+updateSensorDetails() { }
+
+removeSensor() { }
+
+transferOwnership() { }
+
+shareOwnership() { }
+
+deactivateSensor() { }
+
+activateSensorDetails() { }
+
+relocateSensor() { }
+
+addDatastreamToSensor() { }
+
+removeDatastreamFromSensor() { }
+
 }
