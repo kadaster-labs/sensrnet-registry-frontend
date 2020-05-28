@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  viewer-sensrnet:
+    image: viewer
+    ports:
+      - 4200:4200

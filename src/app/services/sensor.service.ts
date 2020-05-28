@@ -1,10 +1,10 @@
+import { Sensor } from './../model/sensor';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SensorService {
-
 
 registerSensor() { }
 

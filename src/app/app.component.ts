@@ -61,7 +61,6 @@ export class AppComponent implements OnInit {
 
   drawSubscription: Subscription;
 
-
   RegisterSensor = new FormGroup({
     name: new FormControl(''),
     aim: new FormControl(''),
@@ -71,19 +70,35 @@ export class AppComponent implements OnInit {
     documentation: new FormControl(''),
     dataStreams: new FormControl(''),
     location: new FormControl('')
+  });
 
+  UpdateSensor = new FormGroup({
+    name: new FormControl(''),
+    aim: new FormControl(''),
+    description: new FormControl(''),
+    manufacturer: new FormControl(''),
+    active: new FormControl(''),
+    documentation: new FormControl(''),
+    dataStreams: new FormControl(''),
+    location: new FormControl('')
+  });
+
+  RegisterOwner = new FormGroup({
+    organisation: new FormControl(''),
+    website: new FormControl(''),
+    contactPublic: new FormControl(''),
+    contactPerson: new FormControl(''),
+  });
+
+  UpdateOwner = new FormGroup({
+    organisation: new FormControl(''),
+    website: new FormControl(''),
+    contactPublic: new FormControl(''),
+    contactPerson: new FormControl(''),
   });
 
   constructor(private drawService: DrawInteractionService, private ownerService: OwnerService, private sensorService: SensorService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
-    this.httpClient.get('/assets/layers.json').subscribe(
-      data => {
-        this.layers = data as Theme[];
-      },
-      error => {
-        // error
-      }
-    );
   }
 
   ngOnInit(): void {
@@ -151,72 +166,6 @@ export class AppComponent implements OnInit {
   handleFeatureInfoEvent(event: FeatureInfoComponentEvent) {
     if (event.type === FeatureInfoComponentEventType.SELECTEDTAB) {
       this.currentTabFeatureInfo = event.value;
-    }
-  }
-
-  handleDatasetTreeEvents(event: DatasetTreeEvent) {
-    if (event.type === 'layerActivated') {
-      const geactiveerdeService = event.value.services[0];
-      if (geactiveerdeService.type === 'wms') {
-        this.activeWmsDatasets.push(event.value);
-      } else if (geactiveerdeService.type === 'wmts') {
-        this.activeWmtsDatasets.push(event.value);
-      } else if (geactiveerdeService.type === 'geojson') {
-        this.activeGeojsonServices.push(geactiveerdeService);
-      }
-    } else if (event.type === 'layerDeactivated') {
-      const gedeactiveerdeService = event.value.services[0];
-      if (gedeactiveerdeService.type === 'wms') {
-        this.activeWmsDatasets = this.activeWmsDatasets.filter(dataset =>
-          dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
-        this.activeWmsDatasets = this.activeWmsDatasets.filter(dataset => dataset.services.length > 0);
-      } else if (gedeactiveerdeService.type === 'geojson') {
-        this.activeGeojsonServices = this.activeGeojsonServices.filter(service => service.url !== gedeactiveerdeService.url);
-      } else if (gedeactiveerdeService.type === 'wmts') {
-        this.activeWmtsDatasets = this.activeWmtsDatasets.filter(dataset =>
-          dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
-        this.activeWmtsDatasets = this.activeWmtsDatasets.filter(dataset => dataset.services.length > 0);
-      }
-    }
-
-    /*
-     * Aan en uitzetten van legend
-     */
-    if (event.type === 'layerActivated') {
-      const activatedLayer = event.value.services[0].layers[0];
-      const datasetLegend = this.datasetsLegends.find(object => object.name === event.value.datasetName);
-
-      if (datasetLegend !== null && datasetLegend !== undefined) {
-        datasetLegend.legendUrls.push(activatedLayer.legendUrl);
-      } else {
-        const newDatasetLegend = new DatasetLegend(event.value.datasetName, activatedLayer.technicalName, [activatedLayer.legendUrl]);
-        this.datasetsLegends.push(newDatasetLegend);
-      }
-    } else if (event.type === 'layerDeactivated') {
-      const deActivatedLayer = event.value.services[0].layers[0];
-      const datasetLegend = this.datasetsLegends.find(datasetsLegend => datasetsLegend.name === event.value.datasetName);
-
-      datasetLegend.legendUrls = datasetLegend.legendUrls.filter(legendUrl => legendUrl !== deActivatedLayer.legendUrl);
-
-      if (datasetLegend.legendUrls.length === 0) {
-        this.datasetsLegends = this.datasetsLegends.filter(dataset => dataset.name !== datasetLegend.name);
-      }
-    }
-  }
-
-  activeDatasets: Dataset[] = [];
-
-  datasetTreeEventToMap(event: DatasetTreeEvent) {
-    /*
-     * Activeren en deactiveren van kaartlagen
-     */
-    if (event.type === 'layerActivated') {
-      this.activeDatasets.push(event.value);
-    } else if (event.type === 'layerDeactivated') {
-      const gedeactiveerdeService = event.value.services[0];
-      this.activeDatasets = this.activeDatasets.filter(dataset =>
-        dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
-      this.activeDatasets = this.activeDatasets.filter(dataset => dataset.services.length > 0);
     }
   }
 
