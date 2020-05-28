@@ -8,6 +8,12 @@
     padding: 0px 0px 0px 0px !important;
 }
 
+#test-button {
+    position: absolute;
+    left: 50vw;
+    z-index: 200;
+}
+
 #logo {
     position: absolute;
     z-index: 10;

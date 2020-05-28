@@ -15,19 +15,25 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Sensor<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a role="button" data-toggle="collapse" data-target="#registerSensorForm">Register sensor</a></li>
+                    <li><a role="button" data-toggle="collapse" data-target="#registerSensorForm">Register sensor</a>
+                    </li>
                     <li><a>Update sensor</a></li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">Zoeken  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    aria-expanded="false">Zoeken <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search>
                 </ul>
             </li>
         </ul>
+
+        <div class="col-lg-1" id="test-button">
+            <a role="button" class="btn btn-warning" (click)="TestGetAllSensors()">Test Get request</a>
+        </div>
+
         <div class="col-lg-1" id="logo">
             <img src="assets\SensRNet-logo.png" width="145px" class="image">
         </div>
@@ -89,7 +95,8 @@
                 <form [formGroup]="RegisterOwner" (ngSubmit)="onSubmit()">
                     <div class="input-group">
                         <label> Organisation name
-                            <input class="form-control" type="text" formControlName="organisation" placeholder="Enter name of organisation">
+                            <input class="form-control" type="text" formControlName="organisation"
+                                placeholder="Enter name of organisation">
                         </label>
                         <br>
                         <label> Website

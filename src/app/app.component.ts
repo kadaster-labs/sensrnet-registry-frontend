@@ -104,6 +104,14 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  TestRegisterSensor() {
+    this.sensorService.registerSensor()
+  }
+
+  TestGetAllSensors() {
+    this.sensorService.getAllSensors()
+  }
+
   startDrawPoint() {
     this.drawService.startDrawInteraction(MapComponentDrawTypes.POINT, this.mapName);
     this.subscribeOnDrawEvents();

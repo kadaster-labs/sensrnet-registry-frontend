@@ -6,13 +6,12 @@ export class Sensor {
         public manufacturer: string,
         public active: boolean,
         public observationArea: string,
-        public documentation: URL,
-        public dataStream: DataStream[],
+        public documentationUrl: string,
+        public dataStreams: DataStream[],
         public location: Location,
         public theme: Theme,
-        public category: Category,
-        public type: TypeBeacon | TypeCamera | TypeSensor,
-        public typeDetails: JSON
+        public typeName: TypeBeacon | TypeCamera | TypeSensor,
+        public typeDetails: string
     ) { }
 }
 
@@ -22,12 +21,12 @@ export class DataStream {
         public reason: string,
         public description: string,
         public observedProperty: string,
-        public unitOfMeasurment: string,
+        public unitOfMeasurement: string,
         public isPublic: boolean,
         public isOpenData: boolean,
         public isReusable: boolean,
-        public documentation: URL,
-        public datalink: URL,
+        public documentationUrl: string,
+        public datalink: string,
         public dataFrequency: number,
         public dataQuality: number
     ) { }
@@ -51,12 +50,6 @@ export enum Theme {
     Mobility,
     SoilAndUnderground,
     Other
-}
-
-export enum Category{
-    Sensor,
-    Camera,
-    Beacon,
 }
 
 export enum TypeBeacon {
@@ -86,4 +79,3 @@ export enum TypeSensor {
     DetectionLoop,
     HeightDetectionDevice
 }
-
