@@ -2,7 +2,7 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 
 export class DataService {
-    private url: string = 'http://localhost:3000';
+    private url: string = 'http://localhost:3000/sensor';
     private socket: SocketIOClient.Socket;
 
     constructor() { }
@@ -15,15 +15,15 @@ export class DataService {
         });
     }
 
-    public sendMessage(namespace='/', message) {
-        this.socket.emit(namespace, message);
+    public sendMessage(namespace: string = '/', ...args: any[]) {
+        this.socket.emit(namespace, ...args);
     }
 
     public subscribeTo(namespace='/'): Observable<any> {
         return Observable.create((observer) => {
             this.socket.on(namespace, (message) => {
                 observer.next(message);
-            })
+            });
         })
     }
 }

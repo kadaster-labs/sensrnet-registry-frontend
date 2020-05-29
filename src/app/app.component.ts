@@ -106,18 +106,24 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.connect();
 
-    // subscribe to owner events
-    this.dataService.subscribeTo('owner').subscribe({
-      next(x) { console.log('got owner value ' + x); },
+    // subscribe to sensor events
+    this.dataService.subscribeTo('Sensors').subscribe({
+      next(x) {
+        console.log(`Received sensors `);
+        console.log(x);
+      },
       error(err) { console.error('something wrong occurred: ' + err); },
-      complete() { console.log('done'); }
+      complete() { console.log('done'); },
     });
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('sensor').subscribe({
-      next(x) { console.log('got sensor value ' + x); },
+    this.dataService.subscribeTo('SensorCreated').subscribe({
+      next(x) {
+        console.log(`Sensor was created `);
+        console.log(x);
+      },
       error(err) { console.error('something wrong occurred: ' + err); },
-      complete() { console.log('done'); }
+      complete() { console.log('done'); },
     });
   }
 
