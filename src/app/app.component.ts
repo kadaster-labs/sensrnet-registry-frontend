@@ -1,3 +1,4 @@
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { Owner } from './model/owner';
 import { Sensor } from './model/sensor';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -30,6 +31,7 @@ import { Subscription } from 'rxjs';
 import { Coordinate } from 'ol/coordinate';
 import { SensorService } from './services/sensor.service';
 import { OwnerService } from './services/owner.service';
+import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -97,11 +99,26 @@ export class AppComponent implements OnInit {
     contactPerson: new FormControl(''),
   });
 
-  constructor(private drawService: DrawInteractionService, private ownerService: OwnerService, private sensorService: SensorService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService) {
+  constructor(private drawService: DrawInteractionService, private ownerService: OwnerService, private sensorService: SensorService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService, private dataService: DataService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
   }
 
   ngOnInit(): void {
+    this.dataService.connect();
+
+    // subscribe to owner events
+    this.dataService.subscribeTo('owner').subscribe({
+      next(x) { console.log('got owner value ' + x); },
+      error(err) { console.error('something wrong occurred: ' + err); },
+      complete() { console.log('done'); }
+    });
+
+    // subscribe to sensor events
+    this.dataService.subscribeTo('sensor').subscribe({
+      next(x) { console.log('got sensor value ' + x); },
+      error(err) { console.error('something wrong occurred: ' + err); },
+      complete() { console.log('done'); }
+    });
   }
 
   TestRegisterSensor() {
