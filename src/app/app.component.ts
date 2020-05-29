@@ -34,6 +34,12 @@ import { OwnerService } from './services/owner.service';
 import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
 
+import GeoJSON from 'ol/format/GeoJSON';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import { Circle as CircleStyle, Style } from 'ol/style';
+import Stroke from 'ol/style/Stroke';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -60,6 +66,9 @@ export class AppComponent implements OnInit {
   iconUnchecked = 'far fa-square';
   iconChecked = 'far fa-check-square';
   iconInfoUrl = 'fas fa-info-circle';
+
+  private vectorSource;
+  private vectorLayer;
 
   drawSubscription: Subscription;
 
@@ -99,6 +108,8 @@ export class AppComponent implements OnInit {
     contactPerson: new FormControl(''),
   });
 
+  private sensors = [];
+
   constructor(private drawService: DrawInteractionService, private ownerService: OwnerService, private sensorService: SensorService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService, private dataService: DataService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
   }
@@ -107,23 +118,44 @@ export class AppComponent implements OnInit {
     this.dataService.connect();
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('Sensors').subscribe({
-      next(x) {
-        console.log(`Received sensors `);
-        console.log(x);
-      },
-      error(err) { console.error('something wrong occurred: ' + err); },
-      complete() { console.log('done'); },
+    this.dataService.subscribeTo('Sensors').subscribe(x => {
+      console.log(`Received sensors `);
+      this.sensors = x;
+      const features = x.map((sensor) => ({
+        coordinates: [sensor.location.x, sensor.location.y],
+        type: 'Point',
+      }));
+
+      this.vectorSource = new VectorSource({
+        features: (new GeoJSON()).readFeatures({
+          features,
+          type: 'FeatureCollection',
+          }),
+      });
+
+      this.vectorLayer = new VectorLayer({
+        source: this.vectorSource,
+        style: new Style({
+          image: new CircleStyle({
+            fill: null,
+            radius: 5,
+            stroke: new Stroke({color: 'red', width: 1})
+          }),
+        }),
+      });
+
+      this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
     });
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('SensorCreated').subscribe({
-      next(x) {
-        console.log(`Sensor was created `);
-        console.log(x);
-      },
-      error(err) { console.error('something wrong occurred: ' + err); },
-      complete() { console.log('done'); },
+    this.dataService.subscribeTo('SensorCreated').subscribe(x => {
+      console.log(`Sensor was created `);
+      console.log(x);
+      this.sensors.push(x);
+      this.vectorSource.addFeature({
+        coordinates: [x.location.x, x.location.y],
+        type: 'Point',
+      });
     });
   }
 
