@@ -1,4 +1,4 @@
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   SearchComponentElementIds,
@@ -29,13 +29,19 @@ import { Subscription, Observable } from 'rxjs';
 import { Coordinate } from 'ol/coordinate';
 import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import proj4 from 'proj4'
 
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Circle as CircleStyle, Style } from 'ol/style';
+import { Cluster } from 'ol/source';
+
+import { Circle as CircleStyle, Style, Fill, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import { SensorCreated } from './model/events/created.event';
+import Point from 'ol/geom/Point';
+import Feature from 'ol/Feature';
+import { ProjectionLike } from 'ol/proj';
 
 @Component({
   selector: 'app-root',
@@ -66,6 +72,7 @@ export class AppComponent implements OnInit {
 
   private vectorSource;
   private vectorLayer;
+  private clusterSource;
 
   drawSubscription: Subscription;
 
@@ -105,10 +112,12 @@ export class AppComponent implements OnInit {
     contactPerson: new FormControl(''),
   });
 
-  testGet: any;
+  private epsgRD: String = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs'
+  private epsgWGS84: String = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+  private mapCoordinateWGS84: [];
+  private mapCoordinateRD: [];
 
   private sensors = [];
-
 
   constructor(private drawService: DrawInteractionService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService, private dataService: DataService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
@@ -130,18 +139,44 @@ export class AppComponent implements OnInit {
         features: (new GeoJSON()).readFeatures({
           features,
           type: 'FeatureCollection',
-          }),
+        }),
       });
 
+      this.clusterSource = new Cluster({
+        distance: 20,
+        source: this.vectorSource
+      });
+
+      let styleCache = {}
+
       this.vectorLayer = new VectorLayer({
-        source: this.vectorSource,
-        style: new Style({
-          image: new CircleStyle({
-            fill: null,
-            radius: 5,
-            stroke: new Stroke({color: 'red', width: 1}),
-          }),
-        }),
+        source: this.clusterSource,
+        style: function (feature) {
+          let size = feature.get('features').length;
+          let style = styleCache[size];
+          if (!style) {
+            style = new Style({
+              image: new CircleStyle({
+                radius: 15,
+                stroke: new Stroke({
+                 color: '#ffffff'
+                }),
+                fill: new Fill({
+                  color: 'rgba(19, 65, 115, 0.8)'
+                })
+              }),
+              text: new Text({
+                text: size.toString(),
+                fill: new Fill({
+                  color: '#ffffff'
+                }),
+                textAlign: 'center'
+              })
+            });
+            styleCache[size] = style;
+          }
+          return style;
+        }
       });
 
       this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
@@ -230,6 +265,13 @@ export class AppComponent implements OnInit {
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = this.mapService.getMap(this.mapName).getView().getResolution();
     }
+    // create point from single map click (RD and WGS84)
+    if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
+      this.mapCoordinateRD = mapEvent.value.coordinate
+      console.log(this.mapCoordinateRD)
+      this.mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, this.mapCoordinateRD)
+      console.log(this.mapCoordinateWGS84)
+    }
   }
 
   onFeatureInfoEvent(event: FeatureInfoComponentEvent) {
@@ -244,7 +286,6 @@ export class AppComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
     console.warn(this.RegisterSensor.value);
   }
 
