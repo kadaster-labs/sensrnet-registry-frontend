@@ -11,8 +11,7 @@ import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SensorService } from './services/sensor.service';
-import { OwnerService } from './services/owner.service';
+import { DataService } from './services/data.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +28,7 @@ import { OwnerService } from './services/owner.service';
     GgcDatasetLegendModule,
     HttpClientModule,
   ],
-  providers: [SensorService, OwnerService],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

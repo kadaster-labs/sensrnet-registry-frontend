@@ -1,5 +1,4 @@
-import { Owner } from './model/owner';
-import { Sensor } from './model/sensor';
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   SearchComponentElementIds,
@@ -26,11 +25,17 @@ import {
   FeatureInfoDisplayType,
   SortFilterConfig
 } from 'generieke-geo-componenten-feature-info';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Coordinate } from 'ol/coordinate';
-import { SensorService } from './services/sensor.service';
-import { OwnerService } from './services/owner.service';
+import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
+
+import GeoJSON from 'ol/format/GeoJSON';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import { Circle as CircleStyle, Style } from 'ol/style';
+import Stroke from 'ol/style/Stroke';
+import { SensorCreated } from './model/events/created.event';
 
 @Component({
   selector: 'app-root',
@@ -58,6 +63,9 @@ export class AppComponent implements OnInit {
   iconUnchecked = 'far fa-square';
   iconChecked = 'far fa-check-square';
   iconInfoUrl = 'fas fa-info-circle';
+
+  private vectorSource;
+  private vectorLayer;
 
   drawSubscription: Subscription;
 
@@ -99,27 +107,58 @@ export class AppComponent implements OnInit {
 
   testGet: any;
 
-  constructor(private drawService: DrawInteractionService, private ownerService: OwnerService, private sensorService: SensorService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService) {
+  private sensors = [];
+
+
+  constructor(private drawService: DrawInteractionService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService, private dataService: DataService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
   }
 
   ngOnInit(): void {
-  }
+    this.dataService.connect();
 
-  testRegisterSensor() {
-    this.sensorService.registerSensor()
-  }
+    // subscribe to sensor events
+    this.dataService.subscribeTo<any>('Sensors').subscribe((sensors: Array<any>) => {
+      console.log(`Received sensors `);
+      this.sensors = sensors;
+      const features = sensors.map((sensor) => ({
+        coordinates: [sensor.location.x, sensor.location.y],
+        type: 'Point',
+      }));
 
-  testGetAllSensors() {
-    this.sensorService.getAllSensors().subscribe((data: any[])=>{
-      console.log(data);
-    this.testGet = data;
-  })
-  }
+      this.vectorSource = new VectorSource({
+        features: (new GeoJSON()).readFeatures({
+          features,
+          type: 'FeatureCollection',
+          }),
+      });
 
-  showAllSensors() {
-    this.testGetAllSensors()
-    alert(JSON.stringify(this.testGet))
+      this.vectorLayer = new VectorLayer({
+        source: this.vectorSource,
+        style: new Style({
+          image: new CircleStyle({
+            fill: null,
+            radius: 5,
+            stroke: new Stroke({color: 'red', width: 1}),
+          }),
+        }),
+      });
+
+      this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
+    });
+
+    // subscribe to sensor events
+    const sensorCreated$: Observable<SensorCreated> = this.dataService.subscribeTo<SensorCreated>('SensorCreated');
+    sensorCreated$.subscribe((newSensor: SensorCreated) => {
+      console.log(`Sensor was created `);
+      console.log(newSensor);
+
+      this.sensors.push(newSensor);
+      this.vectorSource.addFeature({
+        coordinates: [newSensor.data.location.x, newSensor.data.location.y],
+        type: 'Point',
+      });
+    });
   }
 
   startDrawPoint() {
