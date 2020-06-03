@@ -67,6 +67,7 @@ export class AppComponent implements OnInit {
 
   private vectorSource;
   private vectorLayer;
+  private location: [number, number];
 
   drawSubscription: Subscription;
 
@@ -78,7 +79,7 @@ export class AppComponent implements OnInit {
     active: new FormControl(''),
     documentation: new FormControl(''),
     dataStreams: new FormControl(''),
-    location: new FormControl('')
+    location: new FormControl({}),
   });
 
   UpdateSensor = new FormGroup({
@@ -189,6 +190,14 @@ export class AppComponent implements OnInit {
       if (interactionEventObservable) {
         this.drawSubscription = interactionEventObservable.subscribe(evt => {
           console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
+          const location = evt.event.feature.getGeometry().getFlatCoordinates();
+          this.RegisterSensor.patchValue({ location: {
+            baseObjectId: 'IDK',
+            epsgCode: '28992',
+            x: location[0],
+            y: location[1],
+            z: 0,
+          }});
         });
       }
     }
@@ -261,6 +270,8 @@ export class AppComponent implements OnInit {
   }
 
   submitCreateSensor() {
+    this.drawService.stopDrawInteraction(this.mapName);
+
     // TODO: Use EventEmitter with form value
     console.warn(this.RegisterSensor.value);
     const sensor: object = {
