@@ -1,3 +1,4 @@
+# Author: Maarten Hoekstra (KKN), edited by Jeroen Grift for SensRNet
 FROM ubuntu:18.04
 
 ARG http_proxy="http://ssl-proxy.cs.kadaster.nl:8080"

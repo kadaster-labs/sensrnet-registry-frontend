@@ -1,10 +1,5 @@
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Component, Inject, OnInit } from '@angular/core';
-import {
-  SearchComponentElementIds,
-  SearchComponentEvent,
-  SearchComponentEventTypes
-} from 'generieke-geo-componenten-search';
+import { Component, OnInit } from '@angular/core';
+import {SearchComponentEvent} from 'generieke-geo-componenten-search';
 import {
   FeatureCollectionForCoordinate, FeatureCollectionForLayer,
   MapComponentEvent,
@@ -14,31 +9,22 @@ import {
   MapComponentDrawTypes,
   DrawInteractionService
 } from 'generieke-geo-componenten-map';
-import { Dataset, DatasetTreeEvent, Service, Theme } from 'generieke-geo-componenten-dataset-tree';
 import { HttpClient } from '@angular/common/http';
-import { DatasetLegend } from 'generieke-geo-componenten-dataset-legend';
 import {
   FeatureInfoCollection,
   FeatureInfoComponentEvent,
   FeatureInfoComponentEventType,
-  FeatureInfoConfigService,
-  FeatureInfoDisplayType,
-  SortFilterConfig
 } from 'generieke-geo-componenten-feature-info';
 import { Subscription, Observable } from 'rxjs';
-import { Coordinate } from 'ol/coordinate';
 import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import proj4 from 'proj4'
-
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
-
 import { Circle as CircleStyle, Style, Fill, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-
 import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
 
@@ -51,30 +37,19 @@ import Feature from 'ol/Feature';
 export class AppComponent implements OnInit {
   title = 'SensRNet'
   mapName = 'srn';
-  layers: Theme[];
-  currentMapResolution: number = undefined;
-  activeWmsDatasets: Dataset[] = [];
-  hideTreeDataset = false;
 
+  currentMapResolution: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
-  activeGeojsonServices: Service[] = [];
-  activeWmtsDatasets: Dataset[] = [];
-  datasetsLegends: DatasetLegend[] = [];
-  featureInfoDisplay: FeatureInfoDisplayType = FeatureInfoDisplayType.TABLE;
+  drawSubscription: Subscription;
 
-  iconCollapsed = 'fas fa-chevron-right';
-  iconExpanded = 'fas fa-chevron-left';
-  iconUnchecked = 'far fa-square';
-  iconChecked = 'far fa-check-square';
-  iconInfoUrl = 'fas fa-info-circle';
-
-  private vectorSource;
-  private vectorLayer;
-  private clusterSource;
+  private vectorSource: VectorSource;
+  private vectorLayer: VectorLayer;
+  private clusterSource: Cluster;
   private location: [number, number];
 
-  drawSubscription: Subscription;
+  public registerOwnerSent = false;
+  public registerSensorSent = false;
 
   RegisterSensor = new FormGroup({
     name: new FormControl(''),
@@ -105,9 +80,6 @@ export class AppComponent implements OnInit {
     publicName: new FormControl(''),
     website: new FormControl(''),
   });
-
-  public registerOwnerSent = false;
-  public registerSensorSent = false;
 
   UpdateOwner = new FormGroup({
     organisation: new FormControl(''),
@@ -155,6 +127,7 @@ export class AppComponent implements OnInit {
 
       this.vectorLayer = new VectorLayer({
         source: this.clusterSource,
+        // rewrite this function
         style: function (feature) {
           let size = feature.get('features').length;
           let style = styleCache[size];
