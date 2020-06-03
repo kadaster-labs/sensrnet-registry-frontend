@@ -35,7 +35,8 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Circle as CircleStyle, Style } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { SensorCreated } from './model/events/created.event';
+import { SensorRegistered } from './model/events/registered.event';
+import Feature from 'ol/Feature';
 
 @Component({
   selector: 'app-root',
@@ -66,6 +67,7 @@ export class AppComponent implements OnInit {
 
   private vectorSource;
   private vectorLayer;
+  private location: [number, number];
 
   drawSubscription: Subscription;
 
@@ -77,7 +79,7 @@ export class AppComponent implements OnInit {
     active: new FormControl(''),
     documentation: new FormControl(''),
     dataStreams: new FormControl(''),
-    location: new FormControl('')
+    location: new FormControl({}),
   });
 
   UpdateSensor = new FormGroup({
@@ -148,16 +150,32 @@ export class AppComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    const sensorCreated$: Observable<SensorCreated> = this.dataService.subscribeTo<SensorCreated>('SensorCreated');
-    sensorCreated$.subscribe((newSensor: SensorCreated) => {
-      console.log(`Sensor was created `);
+    const sensorCreated$: Observable<SensorRegistered> = this.dataService.subscribeTo<SensorRegistered>('SensorRegistered');
+    sensorCreated$.subscribe((newSensor: SensorRegistered) => {
+      console.log(`Socket.io heard that a new SensorCreated event was fired`);
       console.log(newSensor);
 
       this.sensors.push(newSensor);
-      this.vectorSource.addFeature({
+
+      this.sensors.push(newSensor);
+      const feature = {
         coordinates: [newSensor.data.location.x, newSensor.data.location.y],
+        featureProjection: 'EPSG:28992',
         type: 'Point',
+      };
+
+      const newFeature: Feature = (new GeoJSON({
+        dataProjection: 'EPSG:28992',
+        featureProjection: 'EPSG:28992',
+      })).readFeature({
+        dataProjection: 'EPSG:28992',
+        feature,
+        featureProjection: 'EPSG:28992',
+        type: 'Feature',
       });
+
+      this.vectorSource.addFeature(newFeature);
+
     });
   }
 
@@ -172,6 +190,14 @@ export class AppComponent implements OnInit {
       if (interactionEventObservable) {
         this.drawSubscription = interactionEventObservable.subscribe(evt => {
           console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
+          const location = evt.event.feature.getGeometry().getFlatCoordinates();
+          this.RegisterSensor.patchValue({ location: {
+            baseObjectId: 'IDK',
+            epsgCode: '28992',
+            x: location[0],
+            y: location[1],
+            z: 0,
+          }});
         });
       }
     }
@@ -243,11 +269,31 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  submitCreateSensor() {
+    this.drawService.stopDrawInteraction(this.mapName);
+
     // TODO: Use EventEmitter with form value
     console.warn(this.RegisterSensor.value);
+    const sensor: object = {
+      active: this.RegisterSensor.value.active || false,
+      aim: this.RegisterSensor.value.aim,
+      dataStreams: this.RegisterSensor.value.dataStreams || [],
+      description: this.RegisterSensor.value.description,
+      documentation: this.RegisterSensor.value.documentation,
+      location: this.RegisterSensor.value.location || {x: 0, y: 0, z: 0},
+      manufacturer: this.RegisterSensor.value.manufacturer,
+      name: this.RegisterSensor.value.name,
+      typeName: 'Type',
+    };
+
+    this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
+      console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
+    }, err => {
+      console.log(err);
+    })
   }
 
+  submitCreateOwner() {
+    console.log('Create owner');
+  }
 };
-
-

@@ -37,7 +37,7 @@
     <div class="row">
         <div class="collapse col-lg-12" id="registerSensorForm">
             <div id="form-inside">
-                <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
+                <form [formGroup]="RegisterSensor" (ngSubmit)="submitCreateSensor()">
                     <div class="input-group">
                         <label> Name
                             <input class="form-control" type="text" formControlName="name" placeholder="Enter name">
@@ -88,7 +88,7 @@
     <div class="row">
         <div class="collapse col-lg-12" id="registerOwnerForm">
             <div id="form-inside">
-                <form [formGroup]="RegisterOwner" (ngSubmit)="onSubmit()">
+                <form [formGroup]="RegisterOwner" (ngSubmit)="submitCreateOwner()">
                     <div class="input-group">
                         <label> Organisation name
                             <input class="form-control" type="text" formControlName="organisation"
