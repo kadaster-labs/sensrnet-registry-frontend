@@ -1,8 +1,8 @@
+import { Observable, Subscriber } from 'rxjs';
 import * as io from 'socket.io-client';
-import { Observable } from 'rxjs';
 
 export class DataService {
-    private url: string = 'http://localhost:3000/sensor';
+    private url = 'http://localhost:3000/sensor';
     private socket: SocketIOClient.Socket;
 
     constructor() { }
@@ -19,11 +19,11 @@ export class DataService {
         this.socket.emit(namespace, ...args);
     }
 
-    public subscribeTo(namespace='/'): Observable<any> {
-        return Observable.create((observer) => {
-            this.socket.on(namespace, (message) => {
+    public subscribeTo<T>(namespace: string = '/'): Observable<T> {
+        return new Observable((observer: Subscriber<T>) => {
+            this.socket.on(namespace, (message: T) => {
                 observer.next(message);
             });
-        })
+        });
     }
 }

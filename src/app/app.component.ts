@@ -27,7 +27,7 @@ import {
   FeatureInfoDisplayType,
   SortFilterConfig
 } from 'generieke-geo-componenten-feature-info';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Coordinate } from 'ol/coordinate';
 import { SensorService } from './services/sensor.service';
 import { OwnerService } from './services/owner.service';
@@ -39,6 +39,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Circle as CircleStyle, Style } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
+import { SensorCreated } from './model/events/created.event';
 
 @Component({
   selector: 'app-root',
@@ -118,10 +119,10 @@ export class AppComponent implements OnInit {
     this.dataService.connect();
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('Sensors').subscribe(x => {
+    this.dataService.subscribeTo<any>('Sensors').subscribe((sensors: Array<any>) => {
       console.log(`Received sensors `);
-      this.sensors = x;
-      const features = x.map((sensor) => ({
+      this.sensors = sensors;
+      const features = sensors.map((sensor) => ({
         coordinates: [sensor.location.x, sensor.location.y],
         type: 'Point',
       }));
@@ -139,7 +140,7 @@ export class AppComponent implements OnInit {
           image: new CircleStyle({
             fill: null,
             radius: 5,
-            stroke: new Stroke({color: 'red', width: 1})
+            stroke: new Stroke({color: 'red', width: 1}),
           }),
         }),
       });
@@ -148,12 +149,14 @@ export class AppComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('SensorCreated').subscribe(x => {
+    const sensorCreated$: Observable<SensorCreated> = this.dataService.subscribeTo<SensorCreated>('SensorCreated');
+    sensorCreated$.subscribe((newSensor: SensorCreated) => {
       console.log(`Sensor was created `);
-      console.log(x);
-      this.sensors.push(x);
+      console.log(newSensor);
+
+      this.sensors.push(newSensor);
       this.vectorSource.addFeature({
-        coordinates: [x.location.x, x.location.y],
+        coordinates: [newSensor.data.location.x, newSensor.data.location.y],
         type: 'Point',
       });
     });
