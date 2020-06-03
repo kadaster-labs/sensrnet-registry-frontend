@@ -35,7 +35,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Circle as CircleStyle, Style } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { SensorCreated } from './model/events/created.event';
+import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
 
 @Component({
@@ -149,8 +149,8 @@ export class AppComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    const sensorCreated$: Observable<SensorCreated> = this.dataService.subscribeTo<SensorCreated>('SensorCreated');
-    sensorCreated$.subscribe((newSensor: SensorCreated) => {
+    const sensorCreated$: Observable<SensorRegistered> = this.dataService.subscribeTo<SensorRegistered>('SensorRegistered');
+    sensorCreated$.subscribe((newSensor: SensorRegistered) => {
       console.log(`Socket.io heard that a new SensorCreated event was fired`);
       console.log(newSensor);
 
