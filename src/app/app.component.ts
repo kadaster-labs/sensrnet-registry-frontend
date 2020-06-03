@@ -94,11 +94,15 @@ export class AppComponent implements OnInit {
   });
 
   RegisterOwner = new FormGroup({
-    organisation: new FormControl(''),
+    companyName: new FormControl(''),
+    email: new FormControl(''),
+    name: new FormControl(''),
+    publicName: new FormControl(''),
     website: new FormControl(''),
-    contactPublic: new FormControl(''),
-    contactPerson: new FormControl(''),
   });
+
+  public registerOwnerSent = false;
+  public registerSensorSent = false;
 
   UpdateOwner = new FormGroup({
     organisation: new FormControl(''),
@@ -175,7 +179,6 @@ export class AppComponent implements OnInit {
       });
 
       this.vectorSource.addFeature(newFeature);
-
     });
   }
 
@@ -288,12 +291,38 @@ export class AppComponent implements OnInit {
 
     this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
       console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
+
+      this.registerSensorSent = true;
+      setTimeout(() => {
+        this.registerSensorSent = false;
+      }, 2500);
     }, err => {
       console.log(err);
-    })
+    });
   }
 
   submitCreateOwner() {
     console.log('Create owner');
+
+    console.warn(this.RegisterOwner.value);
+    const owner: object = {
+      companyName: this.RegisterOwner.value.companyName,
+      email: this.RegisterOwner.value.email,
+      name: this.RegisterOwner.value.name,
+      publicName: this.RegisterOwner.value.publicName,
+      ssoId: 'local',
+      website: this.RegisterOwner.value.website,
+    };
+
+    this.httpClient.post('http://localhost:3000/Owner', owner, {}).subscribe((data: any) => {
+      console.log(`Owner was succesfully posted, received id ${data.ownerId}`);
+
+      this.registerOwnerSent = true;
+      setTimeout(() => {
+        this.registerOwnerSent = false;
+      }, 2500);
+    }, err => {
+      console.log(err);
+    });
   }
 };
