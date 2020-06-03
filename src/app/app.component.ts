@@ -97,6 +97,8 @@ export class AppComponent implements OnInit {
     contactPerson: new FormControl(''),
   });
 
+  testGet: any;
+
   constructor(private drawService: DrawInteractionService, private ownerService: OwnerService, private sensorService: SensorService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
   }
@@ -104,12 +106,20 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  TestRegisterSensor() {
+  testRegisterSensor() {
     this.sensorService.registerSensor()
   }
 
-  TestGetAllSensors() {
-    this.sensorService.getAllSensors()
+  testGetAllSensors() {
+    this.sensorService.getAllSensors().subscribe((data: any[])=>{
+      console.log(data);
+    this.testGet = data;
+  })
+  }
+
+  showAllSensors() {
+    this.testGetAllSensors()
+    alert(JSON.stringify(this.testGet))
   }
 
   startDrawPoint() {

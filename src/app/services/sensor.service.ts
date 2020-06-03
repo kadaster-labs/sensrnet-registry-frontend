@@ -49,18 +49,19 @@ export class SensorService {
   constructor(private http: HttpClient) {
   }
 
-  getAllSensors() {
-    return this.http.get(this.backendUrl).subscribe(
-      (data) => {
-        console.log(data)
-      },
-      (err: HttpErrorResponse) => {
-        console.log(err.message);
-      }
-    )
-  }
+  getGeoJSONMap() { }
 
-  getGeoJsonSensors() { }
+  getAllSensors() {
+    return this.http.get(this.backendUrl)
+    // .subscribe(
+    //   (data) => {
+    //     console.log(data)
+    //   },
+    //   (err: HttpErrorResponse) => {
+    //     console.log(err.message);
+    //   }
+    // )
+  }
 
   getSensorById() { }
 
