@@ -37,7 +37,7 @@
     <div class="row">
         <div class="collapse col-lg-12" id="registerSensorForm">
             <div id="form-inside">
-                <form [formGroup]="RegisterSensor" (ngSubmit)="onSubmit()">
+                <form [formGroup]="RegisterSensor" (ngSubmit)="submitCreateSensor()">
                     <div class="input-group">
                         <label> Name
                             <input class="form-control" type="text" formControlName="name" placeholder="Enter name">
@@ -78,6 +78,7 @@
                         <hr>
                         <button class="btn btn-primary btn-lg" type="submit"
                             [disabled]="!RegisterSensor.valid">Register</button>
+                        <span class="glyphicon alert-success" aria-hidden="true" [ngClass]="{'glyphicon-check': registerSensorSent}"></span>
                     </div>
                 </form>
             </div>
@@ -88,30 +89,37 @@
     <div class="row">
         <div class="collapse col-lg-12" id="registerOwnerForm">
             <div id="form-inside">
-                <form [formGroup]="RegisterOwner" (ngSubmit)="onSubmit()">
+                <form [formGroup]="RegisterOwner" (ngSubmit)="submitCreateOwner()">
                     <div class="input-group">
-                        <label> Organisation name
-                            <input class="form-control" type="text" formControlName="organisation"
-                                placeholder="Enter name of organisation">
-                        </label>
-                        <br>
-                        <label> Website
-                            <input class="form-control" type="text" formControlName="website"
-                                placeholder="Enter website of the organisation">
-                        </label>
-                        <br>
-                        <label> Contact person
-                            <input class="form-control" type="text" formControlName="contactPerson"
-                                placeholder="Contact details of the person">
-                        </label>
-                        <br>
-                        <label> Contact public
-                            <input class="form-control" type="text" formControlName="contactPublic"
-                                placeholder="Contact details of the organisation">
-                        </label>
-                        <hr>
-                        <button class="btn btn-primary btn-lg" type="submit"
-                            [disabled]="!RegisterSensor.valid">Register</button>
+                      <label> Email
+                          <input class="form-control" type="text" formControlName="email"
+                              placeholder="Enter contact email address">
+                      </label>
+                      <br>
+                      <label> Public name
+                        <input class="form-control" type="text" formControlName="publicName"
+                            placeholder="Visible name">
+                      </label>
+                      <br>
+                      <label> Name
+                          <input class="form-control" type="text" formControlName="name"
+                              placeholder="Contact name">
+                      </label>
+                      <br>
+                      <label> Company name
+                        <input class="form-control" type="text" formControlName="companyName"
+                            placeholder="Enter name of organisation">
+                      </label>
+                      <br>
+                      <label> Website
+                          <input class="form-control" type="text" formControlName="website"
+                              placeholder="Enter website of the organisation">
+                      </label>
+                      <hr>
+                      <button class="btn btn-primary btn-lg" type="submit"
+                          [disabled]="!RegisterSensor.valid">Register
+                      </button>
+                      <span class="glyphicon alert-success" aria-hidden="true" [ngClass]="{'glyphicon-check': registerOwnerSent}"></span>
                     </div>
                 </form>
             </div>
@@ -124,5 +132,3 @@
             <ggc-layer-brt-achtergrondkaart [mapName]="'srn'"></ggc-layer-brt-achtergrondkaart>
         </div>
     </div>
-    <!-- <ggc-feature-info></ggc-feature-info> -->
-</div>

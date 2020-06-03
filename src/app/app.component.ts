@@ -38,10 +38,9 @@ import { Cluster } from 'ol/source';
 
 import { Circle as CircleStyle, Style, Fill, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { SensorCreated } from './model/events/created.event';
-import Point from 'ol/geom/Point';
+
+import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
-import { ProjectionLike } from 'ol/proj';
 
 @Component({
   selector: 'app-root',
@@ -73,6 +72,7 @@ export class AppComponent implements OnInit {
   private vectorSource;
   private vectorLayer;
   private clusterSource;
+  private location: [number, number];
 
   drawSubscription: Subscription;
 
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit {
     active: new FormControl(''),
     documentation: new FormControl(''),
     dataStreams: new FormControl(''),
-    location: new FormControl('')
+    location: new FormControl({}),
   });
 
   UpdateSensor = new FormGroup({
@@ -99,11 +99,15 @@ export class AppComponent implements OnInit {
   });
 
   RegisterOwner = new FormGroup({
-    organisation: new FormControl(''),
+    companyName: new FormControl(''),
+    email: new FormControl(''),
+    name: new FormControl(''),
+    publicName: new FormControl(''),
     website: new FormControl(''),
-    contactPublic: new FormControl(''),
-    contactPerson: new FormControl(''),
   });
+
+  public registerOwnerSent = false;
+  public registerSensorSent = false;
 
   UpdateOwner = new FormGroup({
     organisation: new FormControl(''),
@@ -183,16 +187,31 @@ export class AppComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    const sensorCreated$: Observable<SensorCreated> = this.dataService.subscribeTo<SensorCreated>('SensorCreated');
-    sensorCreated$.subscribe((newSensor: SensorCreated) => {
-      console.log(`Sensor was created `);
+    const sensorCreated$: Observable<SensorRegistered> = this.dataService.subscribeTo<SensorRegistered>('SensorRegistered');
+    sensorCreated$.subscribe((newSensor: SensorRegistered) => {
+      console.log(`Socket.io heard that a new SensorCreated event was fired`);
       console.log(newSensor);
 
       this.sensors.push(newSensor);
-      this.vectorSource.addFeature({
+
+      this.sensors.push(newSensor);
+      const feature = {
         coordinates: [newSensor.data.location.x, newSensor.data.location.y],
+        featureProjection: 'EPSG:28992',
         type: 'Point',
+      };
+
+      const newFeature: Feature = (new GeoJSON({
+        dataProjection: 'EPSG:28992',
+        featureProjection: 'EPSG:28992',
+      })).readFeature({
+        dataProjection: 'EPSG:28992',
+        feature,
+        featureProjection: 'EPSG:28992',
+        type: 'Feature',
       });
+
+      this.vectorSource.addFeature(newFeature);
     });
   }
 
@@ -207,6 +226,14 @@ export class AppComponent implements OnInit {
       if (interactionEventObservable) {
         this.drawSubscription = interactionEventObservable.subscribe(evt => {
           console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
+          const location = evt.event.feature.getGeometry().getFlatCoordinates();
+          this.RegisterSensor.patchValue({ location: {
+            baseObjectId: 'IDK',
+            epsgCode: '28992',
+            x: location[0],
+            y: location[1],
+            z: 0,
+          }});
         });
       }
     }
@@ -285,10 +312,55 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  submitCreateSensor() {
+    this.drawService.stopDrawInteraction(this.mapName);
     console.warn(this.RegisterSensor.value);
+    const sensor: object = {
+      active: this.RegisterSensor.value.active || false,
+      aim: this.RegisterSensor.value.aim,
+      dataStreams: this.RegisterSensor.value.dataStreams || [],
+      description: this.RegisterSensor.value.description,
+      documentation: this.RegisterSensor.value.documentation,
+      location: this.RegisterSensor.value.location || {x: 0, y: 0, z: 0},
+      manufacturer: this.RegisterSensor.value.manufacturer,
+      name: this.RegisterSensor.value.name,
+      typeName: 'Type',
+    };
+
+    this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
+      console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
+
+      this.registerSensorSent = true;
+      setTimeout(() => {
+        this.registerSensorSent = false;
+      }, 2500);
+    }, err => {
+      console.log(err);
+    });
   }
 
+  submitCreateOwner() {
+    console.log('Create owner');
+
+    console.warn(this.RegisterOwner.value);
+    const owner: object = {
+      companyName: this.RegisterOwner.value.companyName,
+      email: this.RegisterOwner.value.email,
+      name: this.RegisterOwner.value.name,
+      publicName: this.RegisterOwner.value.publicName,
+      ssoId: 'local',
+      website: this.RegisterOwner.value.website,
+    };
+
+    this.httpClient.post('http://localhost:3000/Owner', owner, {}).subscribe((data: any) => {
+      console.log(`Owner was succesfully posted, received id ${data.ownerId}`);
+
+      this.registerOwnerSent = true;
+      setTimeout(() => {
+        this.registerOwnerSent = false;
+      }, 2500);
+    }, err => {
+      console.log(err);
+    });
+  }
 };
-
-

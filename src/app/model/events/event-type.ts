@@ -3,7 +3,7 @@ export enum EventType {
   Deleted = 'Deleted',
   Activated = 'Activated',
   Deactivated = 'Deactivated',
-  SensorCreated = 'SensorCreated',
+  SensorRegistered = 'SensorRegistered',
   OwnershipShared = 'OwnershipShared',
   LocationUpdated = 'LocationUpdated',
   DataStreamCreated = 'DataStreamCreated',

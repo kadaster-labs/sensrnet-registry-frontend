@@ -3,7 +3,7 @@ import { ISensorSchema } from '../bodies/sensor-body';
 import { Event } from './event';
 import { EventType } from './event-type';
 
-export class SensorCreated extends Event<ISensorSchema> {
+export class SensorRegistered extends Event<ISensorSchema> {
 
   constructor(aggregatedId: string, nodeId: string, ownerIds: Array<string>,
               name: string, location: LocationBody, aim: string, description: string,
@@ -11,7 +11,7 @@ export class SensorCreated extends Event<ISensorSchema> {
               documentationUrl: string, theme: Array<string>, typeName: string,
               typeDetails: object) {
 
-    super(`sensor-${aggregatedId}`, EventType.SensorCreated, {
+    super(`sensor-${aggregatedId}`, EventType.SensorRegistered, {
       active,
       aim,
       description,
