@@ -178,7 +178,7 @@ export class AppComponent implements OnInit {
         }
       });
 
-      this.vectorLayer.setZIndex(4);
+      this.vectorLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
     });
 

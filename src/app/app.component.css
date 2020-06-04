@@ -37,14 +37,15 @@
 
 #layer-header, #search-header, #info-header {
     float: right;
-    background-color: rgba(19, 65, 115, 0.8);
-    color: #ffffff;
+    color: rgb(19, 65, 115);
+    background-color: #ffffff;
     font-weight: lighter;
     font-size: 15px;
     width: 50%;
-    text-align: center;
+    text-align: left;
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 10px;
 }
 
 #layers, #search, #info {
