@@ -18,8 +18,8 @@ import {
 import { Subscription, Observable } from 'rxjs';
 import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import proj4 from 'proj4'
-import GeoJSON from 'ol/format/GeoJSON';
+import proj4 from 'proj4';
+import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
@@ -27,6 +27,9 @@ import { Circle as CircleStyle, Style, Fill, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
+import { ISensorSchema } from './model/bodies/sensor-body';
+import GeometryType from 'ol/geom/GeometryType';
+import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
 
 @Component({
@@ -54,6 +57,8 @@ export class AppComponent implements OnInit {
 
   public registerOwnerSent = false;
   public registerSensorSent = false;
+
+  private uniqueId = 0;
 
   RegisterSensor = new FormGroup({
     name: new FormControl(''),
@@ -92,8 +97,8 @@ export class AppComponent implements OnInit {
     contactPerson: new FormControl(''),
   });
 
-  private epsgRD: String = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs'
-  private epsgWGS84: String = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+  private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs'
+  private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
   private mapCoordinateWGS84: [];
   private mapCoordinateRD: [];
 
@@ -125,19 +130,26 @@ export class AppComponent implements OnInit {
     this.dataService.connect();
 
     // subscribe to sensor events
-    this.dataService.subscribeTo<any>('Sensors').subscribe((sensors: Array<any>) => {
+    this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensorSchema>) => {
       console.log(`Received sensors `);
       this.sensors = sensors;
-      const features = sensors.map((sensor) => ({
-        coordinates: [sensor.location.x, sensor.location.y],
-        type: 'Point',
+      const featuresData: Array<any> = sensors.map((sensor) => ({
+        geometry: {
+          coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[1], sensor.location.coordinates[0]]),
+          type: sensor.location.type,
+        },
+        id: sensor._id,
+        properties: {},
+        type: 'Feature',
       }));
 
+      const features: Array<Feature> = (new GeoJSON()).readFeatures({
+        features: featuresData,
+        type: 'FeatureCollection',
+      });
+
       this.vectorSource = new VectorSource({
-        features: (new GeoJSON()).readFeatures({
-          features,
-          type: 'FeatureCollection',
-        }),
+        features,
       });
 
       this.clusterSource = new Cluster({
@@ -190,24 +202,22 @@ export class AppComponent implements OnInit {
 
       this.sensors.push(newSensor);
 
-      this.sensors.push(newSensor);
       const feature = {
-        coordinates: [newSensor.data.location.x, newSensor.data.location.y],
-        featureProjection: 'EPSG:28992',
-        type: 'Point',
+        geometry: {
+          coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.latitude, newSensor.longitude]),
+          type: 'Point',
+        },
+        id: newSensor.sensorId,
+        properties: {},
+        type: 'Feature',
       };
 
-      const newFeature: Feature = (new GeoJSON({
-        dataProjection: 'EPSG:28992',
-        featureProjection: 'EPSG:28992',
-      })).readFeature({
-        dataProjection: 'EPSG:28992',
-        feature,
-        featureProjection: 'EPSG:28992',
-        type: 'Feature',
+      const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
+        features: [feature],
+        type: 'FeatureCollection',
       });
 
-      this.vectorSource.addFeature(newFeature);
+      this.vectorSource.addFeatures(newFeatures);
     });
   }
 
@@ -222,16 +232,14 @@ export class AppComponent implements OnInit {
       if (interactionEventObservable) {
         this.drawSubscription = interactionEventObservable.subscribe(evt => {
           console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
-          const location = evt.event.feature.getGeometry().getFlatCoordinates();
-          this.RegisterSensor.patchValue({
-            location: {
-              baseObjectId: 'IDK',
-              epsgCode: '28992',
-              x: location[0],
-              y: location[1],
-              z: 0,
-            }
-          });
+          const locationRD = evt.event.feature.getGeometry().getFlatCoordinates();
+          const locationWGS84 = proj4(this.epsgRD, this.epsgWGS84, locationRD);
+          this.RegisterSensor.patchValue({ location: {
+            baseObjectId: 'IDK',
+            height: 0,
+            latitude: locationWGS84[0],
+            longitude: locationWGS84[1],
+          }});
         });
       }
     }
