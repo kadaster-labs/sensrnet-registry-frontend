@@ -1,7 +1,7 @@
+import Geometry from 'ol/geom/Geometry';
+
 export class LocationBody {
-  public x: number;
-  public y: number;
-  public z: number;
-  public epsgCode: number;
+  public coordinates: [number, number];
+  public type: Geometry;
   public baseObjectId: string;
 }
