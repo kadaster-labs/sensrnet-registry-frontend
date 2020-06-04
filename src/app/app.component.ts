@@ -19,7 +19,7 @@ import { Subscription, Observable } from 'rxjs';
 import { DataService } from './services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import proj4 from 'proj4';
-import GeoJSON from 'ol/format/GeoJSON';
+import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
@@ -29,6 +29,7 @@ import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
 import { ISensorSchema } from './model/bodies/sensor-body';
 import GeometryType from 'ol/geom/GeometryType';
+import Point from 'ol/geom/Point';
 
 @Component({
   selector: 'app-root',
@@ -110,16 +111,23 @@ export class AppComponent implements OnInit {
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensorSchema>) => {
       console.log(`Received sensors `);
       this.sensors = sensors;
-      const features: Array<any> = sensors.map((sensor) => ({
-        coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[1], sensor.location.coordinates[0]]),
-        type: sensor.location.type,
+      const featuresData: Array<any> = sensors.map((sensor) => ({
+        geometry: {
+          coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[1], sensor.location.coordinates[0]]),
+          type: sensor.location.type,
+        },
+        id: sensor._id,
+        properties: {},
+        type: 'Feature',
       }));
 
+      const features: Array<Feature> = (new GeoJSON()).readFeatures({
+        features: featuresData,
+        type: 'FeatureCollection',
+      });
+
       this.vectorSource = new VectorSource({
-        features: (new GeoJSON()).readFeatures({
-          features,
-          type: 'FeatureCollection',
-        }),
+        features,
       });
 
       this.clusterSource = new Cluster({
@@ -172,16 +180,19 @@ export class AppComponent implements OnInit {
       this.sensors.push(newSensor);
 
       const feature = {
-        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.latitude, newSensor.longitude]),
-        type: GeometryType.POINT,
+        geometry: {
+          coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.latitude, newSensor.longitude]),
+          type: 'Point',
+        },
+        id: newSensor.sensorId,
+        properties: {},
+        type: 'Feature',
       };
 
       const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
         features: [feature],
         type: 'FeatureCollection',
       });
-
-      this.uniqueId++;
 
       this.vectorSource.addFeatures(newFeatures);
     });
