@@ -28,6 +28,7 @@ import Stroke from 'ol/style/Stroke';
 import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
 import { ISensorSchema } from './model/bodies/sensor-body';
+import GeometryType from 'ol/geom/GeometryType';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +52,8 @@ export class AppComponent implements OnInit {
 
   public registerOwnerSent = false;
   public registerSensorSent = false;
+
+  private uniqueId = 0;
 
   RegisterSensor = new FormGroup({
     name: new FormControl(''),
@@ -107,7 +110,7 @@ export class AppComponent implements OnInit {
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensorSchema>) => {
       console.log(`Received sensors `);
       this.sensors = sensors;
-      const features = sensors.map((sensor) => ({
+      const features: Array<any> = sensors.map((sensor) => ({
         coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[1], sensor.location.coordinates[0]]),
         type: sensor.location.type,
       }));
@@ -168,23 +171,19 @@ export class AppComponent implements OnInit {
 
       this.sensors.push(newSensor);
 
-      // const feature = {
-      //   coordinates: [newSensor.data.location.latitude, newSensor.data.location.longitude],
-      //   featureProjection: 'WGS',
-      //   type: 'Point',
-      // };
+      const feature = {
+        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.latitude, newSensor.longitude]),
+        type: GeometryType.POINT,
+      };
 
-      // const newFeature: Feature = (new GeoJSON({
-      //   dataProjection: 'EPSG:28992',
-      //   featureProjection: 'EPSG:28992',
-      // })).readFeature({
-      //   dataProjection: 'EPSG:28992',
-      //   feature,
-      //   featureProjection: 'EPSG:28992',
-      //   type: 'Feature',
-      // });
+      const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
+        features: [feature],
+        type: 'FeatureCollection',
+      });
 
-      // this.vectorSource.addFeature(newFeature);
+      this.uniqueId++;
+
+      this.vectorSource.addFeatures(newFeatures);
     });
   }
 
