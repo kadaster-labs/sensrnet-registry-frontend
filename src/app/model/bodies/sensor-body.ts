@@ -1,15 +1,11 @@
+import { LocationBody } from './location-body';
+
 export interface ISensorSchema {
   sensorId: string;
   nodeId: string;
   ownerIds?: Array<string>;
   name?: string;
-  location: {
-      x: number,
-      y: number,
-      z: number,
-      epsgCode: number,
-      baseObjectId: string,
-  };
+  location: LocationBody;
   dataStreams?: Array<any>;
   aim?: string;
   description?: string;
