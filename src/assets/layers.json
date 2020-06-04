@@ -1,67 +1,47 @@
 [
-    {"themeName": "CBS (WMS)",
-      "themes": [
-        {
-          "themeName": "CBS Wijken en buurten",
-          "datasets": [
-            {
-              "datasetName": "CBS Wijken en buurten 2017",
-              "services": [
-                {
-                  "type": "wms",
-                  "url": "https://geodata.nationaalgeoregister.nl/wijkenbuurten2017/wms",
-                  "layers": [
-                    {
-                      "name": "CBS Buurten 2017",
-                      "technicalName": "cbs_buurten_2017",
-                      "legendUrl": "https://geodata.nationaalgeoregister.nl/wijkenbuurten2017/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=cbs_buurten_2017"
-                    },
-                    {
-                      "name": "CBS Wijken 2017",
-                      "technicalName": "cbs_wijken_2017",
-                      "legendUrl": "https://geodata.nationaalgeoregister.nl/wijkenbuurten2017/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=cbs_wijken_2017"
-                    },
-                    {
-                      "name": "Gemeenten 2017",
-                      "technicalName": "gemeenten2017",
-                      "legendUrl": "https://geodata.nationaalgeoregister.nl/wijkenbuurten2017/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=gemeenten2017"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "themeName": "Terugmeldingen",
-      "datasets": [
-        {
-          "datasetName": "Terugmeldingen (geojson)",
-          "services": [
-            {
-              "type": "geojson",
-              "url": "https://geodata.nationaalgeoregister.nl/bgtterugmeldingen/wfs?request=GetFeature&service=WFS&typename=bgtterugmeldingen:bgtterugmeldingen&outputFormat=json",
-              "layers": [
-                {
-                  "name": "BGT terugmeldingen",
-                  "legendUrl": "https://geodata.nationaalgeoregister.nl/bgtterugmeldingen/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bgtterugmeldingen"
-                }
-              ]
-            },
-            {
-              "type": "geojson",
-              "url": "https://geodata.nationaalgeoregister.nl/brtterugmeldingen/wfs?request=GetFeature&service=WFS&typename=brtterugmeldingen:brtterugmeldingen&outputFormat=json",
-              "layers": [
-                {
-                  "name": "BRT terugmeldingen",
-                  "legendUrl": "https://geodata.nationaalgeoregister.nl/brtterugmeldingen/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=brtterugmeldingen"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  {
+    "themeName": "Lagen",
+    "datasets": [
+     
+      {
+        "datasetName": "Luchtfoto",
+        "services": [
+          {
+            "type": "wmts",
+            "url": "https://geodata.nationaalgeoregister.nl/luchtfoto/rgb/wmts?",
+            "layers": [
+              {
+                "name": "Luchtfoto 2019 Ortho 25cm RGB",
+                "technicalName": "2019_ortho25",
+                "minResolution": 0.000102539,
+                "maxResolution": 1720.320,
+                "legendUrl": null,
+                "zIndex": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "datasetName": "BRT achtergrondkaart",
+        "services": [
+          {
+            "type": "wmts",
+            "url": "https://geodata.nationaalgeoregister.nl/wmts/brtachtergrondkaartgrijs?",
+            "layers": [
+              {
+                "name": "BRT",
+                "technicalName": "brtachtergrondkaartgrijs",
+                "minResolution": 0.000102539,
+                "maxResolution": 1720.320,
+                "active": true,
+                "legendUrl": null,
+                "zIndex": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
