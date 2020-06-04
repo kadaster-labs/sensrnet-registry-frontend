@@ -1,7 +1,7 @@
 import { LocationBody } from './location-body';
 
 export interface ISensorSchema {
-  sensorId: string;
+  _id: string;
   nodeId: string;
   ownerIds?: Array<string>;
   name?: string;
