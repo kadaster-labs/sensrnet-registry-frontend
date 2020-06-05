@@ -109,11 +109,11 @@ export class AppComponent implements OnInit {
 
     // subscribe to sensor events
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensorSchema>) => {
-      console.log(`Received sensors `);
+      console.log(`Received ${sensors.length} sensors`);
       this.sensors = sensors;
       const featuresData: Array<any> = sensors.map((sensor) => ({
         geometry: {
-          coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[1], sensor.location.coordinates[0]]),
+          coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[0], sensor.location.coordinates[1]]),
           type: sensor.location.type,
         },
         id: sensor._id,
@@ -181,7 +181,7 @@ export class AppComponent implements OnInit {
 
       const feature = {
         geometry: {
-          coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.latitude, newSensor.longitude]),
+          coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.longitude, newSensor.latitude]),
           type: 'Point',
         },
         id: newSensor.sensorId,
@@ -214,8 +214,8 @@ export class AppComponent implements OnInit {
           this.RegisterSensor.patchValue({ location: {
             baseObjectId: 'IDK',
             height: 0,
-            latitude: locationWGS84[0],
-            longitude: locationWGS84[1],
+            latitude: locationWGS84[1],
+            longitude: locationWGS84[0],
           }});
         });
       }
