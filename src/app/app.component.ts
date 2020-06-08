@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SearchComponentEvent} from 'generieke-geo-componenten-search';
+import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import {
   FeatureCollectionForCoordinate, FeatureCollectionForLayer,
   MapComponentEvent,
@@ -30,6 +30,7 @@ import Feature from 'ol/Feature';
 import { ISensorSchema } from './model/bodies/sensor-body';
 import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
+import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
 
 @Component({
   selector: 'app-root',
@@ -45,6 +46,9 @@ export class AppComponent implements OnInit {
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
   drawSubscription: Subscription;
+  activeDatasets: Dataset [] = [];
+  activeWmtsDatasets: Dataset[] = [];
+  activeWmsDatasets: Dataset[] = [];
 
   private vectorSource: VectorSource;
   private vectorLayer: VectorLayer;
@@ -100,11 +104,29 @@ export class AppComponent implements OnInit {
 
   private sensors = [];
 
+  myLayers: Theme[];
+  hideTreeDataset = false;
+
+  iconCollapsed = 'fas fa-chevron-right';
+  iconExpanded = 'fas fa-chevron-left';
+  iconUnchecked = 'far fa-square';
+  iconChecked = 'far fa-check-square';
+  iconInfoUrl = 'fas fa-info-circle';
+
   constructor(private drawService: DrawInteractionService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService, private dataService: DataService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
   }
 
   ngOnInit(): void {
+    this.httpClient.get('/assets/layers.json').subscribe(
+      data => {
+        this.myLayers = data as Theme[];
+      },
+      error => {
+        // error
+      }
+    );
+
     this.dataService.connect();
 
     // subscribe to sensor events
@@ -148,7 +170,7 @@ export class AppComponent implements OnInit {
               image: new CircleStyle({
                 radius: 15,
                 stroke: new Stroke({
-                 color: '#ffffff'
+                  color: '#ffffff'
                 }),
                 fill: new Fill({
                   color: 'rgba(19, 65, 115, 0.8)'
@@ -168,6 +190,7 @@ export class AppComponent implements OnInit {
         }
       });
 
+      this.vectorLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
     });
 
@@ -295,6 +318,31 @@ export class AppComponent implements OnInit {
     }
   }
 
+  handleDatasetTreeEvents(event: DatasetTreeEvent) {
+    /*
+     * Activeren en deactiveren van kaartlagen
+     */
+    if (event.type === 'layerActivated') {
+      const geactiveerdeService = event.value.services[0];
+      if (geactiveerdeService.type === 'wms') {
+        this.activeWmsDatasets.push(event.value);
+      } else if (geactiveerdeService.type === 'wmts') {
+        this.activeWmtsDatasets.push(event.value);
+      }
+    } else if (event.type === 'layerDeactivated') {
+      const gedeactiveerdeService = event.value.services[0];
+      if (gedeactiveerdeService.type === 'wms') {
+        this.activeWmsDatasets = this.activeWmsDatasets.filter(dataset =>
+          dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
+        this.activeWmsDatasets = this.activeWmsDatasets.filter(dataset => dataset.services.length > 0);
+      } else if (gedeactiveerdeService.type === 'wmts') {
+        this.activeWmtsDatasets = this.activeWmtsDatasets.filter(dataset =>
+          dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
+        this.activeWmtsDatasets = this.activeWmtsDatasets.filter(dataset => dataset.services.length > 0);
+      }
+    }
+  }
+
   submitCreateSensor() {
     this.drawService.stopDrawInteraction(this.mapName);
     console.warn(this.RegisterSensor.value);
@@ -304,7 +352,7 @@ export class AppComponent implements OnInit {
       dataStreams: this.RegisterSensor.value.dataStreams || [],
       description: this.RegisterSensor.value.description,
       documentation: this.RegisterSensor.value.documentation,
-      location: this.RegisterSensor.value.location || {x: 0, y: 0, z: 0},
+      location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
       manufacturer: this.RegisterSensor.value.manufacturer,
       name: this.RegisterSensor.value.name,
       typeName: 'Type',
