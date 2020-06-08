@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
   drawSubscription: Subscription;
-  activeDatasets: Dataset [] = [];
+  activeDatasets: Dataset[] = [];
   activeWmtsDatasets: Dataset[] = [];
   activeWmsDatasets: Dataset[] = [];
 
@@ -139,7 +139,9 @@ export class AppComponent implements OnInit {
           type: sensor.location.type,
         },
         id: sensor._id,
-        properties: {},
+        properties: {
+          active: sensor.active
+        },
         type: 'Feature',
       }));
 
@@ -161,29 +163,90 @@ export class AppComponent implements OnInit {
 
       this.vectorLayer = new VectorLayer({
         source: this.clusterSource,
-        // rewrite this function
         style: function (feature) {
-          let size = feature.get('features').length;
-          let style = styleCache[size];
+          let size = feature.get('features').length.toString()
+          let style: Style
+
+          // Define style
+          if (size === '1') {
+            let active = feature.get('features')[0].values_.active
+            if (!active) {
+              size = '1na'
+              style = styleCache[size]
+            }
+            else {
+              size = '1a'
+              style = styleCache[size]
+            }
+          }
+          else {
+            style = styleCache[size]
+          }
+
           if (!style) {
-            style = new Style({
-              image: new CircleStyle({
-                radius: 15,
-                stroke: new Stroke({
-                  color: '#ffffff'
-                }),
-                fill: new Fill({
-                  color: 'rgba(19, 65, 115, 0.8)'
+            if (size === '1na' || size === '1a') {
+              let active = feature.get('features')[0].values_.active
+              if (!active) {
+                style = new Style({
+                  image: new CircleStyle({
+                    radius: 15,
+                    stroke: new Stroke({
+                      color: '#ffffff'
+                    }),
+                    fill: new Fill({
+                      color: 'rgba(19, 65, 115, 0.25)'
+                    })
+                  }),
+                  text: new Text({
+                    text: '1',
+                    fill: new Fill({
+                      color: '#ffffff'
+                    }),
+                    textAlign: 'center'
+                  })
                 })
-              }),
-              text: new Text({
-                text: size.toString(),
-                fill: new Fill({
-                  color: '#ffffff'
+              }
+              else {
+                style = new Style({
+                  image: new CircleStyle({
+                    radius: 15,
+                    stroke: new Stroke({
+                      color: '#ffffff'
+                    }),
+                    fill: new Fill({
+                      color: 'rgba(19, 65, 115, 0.9)'
+                    })
+                  }),
+                  text: new Text({
+                    text: '1',
+                    fill: new Fill({
+                      color: '#ffffff'
+                    }),
+                    textAlign: 'center'
+                  })
+                })
+              }
+            }
+            else {
+              style = new Style({
+                image: new CircleStyle({
+                  radius: 15,
+                  stroke: new Stroke({
+                    color: '#ffffff'
+                  }),
+                  fill: new Fill({
+                    color: 'rgba(19, 65, 115, 0.8)'
+                  })
                 }),
-                textAlign: 'center'
+                text: new Text({
+                  text: size,
+                  fill: new Fill({
+                    color: '#ffffff'
+                  }),
+                  textAlign: 'center'
+                })
               })
-            });
+            }
             styleCache[size] = style;
           }
           return style;
@@ -234,12 +297,14 @@ export class AppComponent implements OnInit {
           console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
           const locationRD = evt.event.feature.getGeometry().getFlatCoordinates();
           const locationWGS84 = proj4(this.epsgRD, this.epsgWGS84, locationRD);
-          this.RegisterSensor.patchValue({ location: {
-            baseObjectId: 'IDK',
-            height: 0,
-            latitude: locationWGS84[1],
-            longitude: locationWGS84[0],
-          }});
+          this.RegisterSensor.patchValue({
+            location: {
+              baseObjectId: 'IDK',
+              height: 0,
+              latitude: locationWGS84[1],
+              longitude: locationWGS84[0],
+            }
+          });
         });
       }
     }

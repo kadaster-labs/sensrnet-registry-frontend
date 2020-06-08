@@ -13,7 +13,7 @@
               {
                 "name": "Luchtfoto 2019 Ortho 25cm RGB",
                 "technicalName": "2019_ortho25",
-                "minResolution": 0.000102539,
+                "minResolution": 0.00002563476,
                 "maxResolution": 1720.320,
                 "legendUrl": null,
                 "zIndex": 2
@@ -32,7 +32,7 @@
               {
                 "name": "BRT",
                 "technicalName": "brtachtergrondkaartgrijs",
-                "minResolution": 0.000102539,
+                "minResolution": 0.00002563476,
                 "maxResolution": 1720.320,
                 "active": true,
                 "legendUrl": null,
