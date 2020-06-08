@@ -1,0 +1,149 @@
+.navbar {
+  position: absolute;
+  z-index: 20;
+  width: 27vw;
+  height: 13vh;
+  background-color: rgba(19, 65, 115, 0.8);
+  box-shadow: 0 10px 10px -5px grey;
+  padding: 0px 0px 0px 0px !important;
+  border-radius: 0px !important;
+}
+
+.logo {
+  position: absolute;
+  z-index: 10;
+  left: 90vw;
+  padding: 0px 0px 0px 0px !important;
+  margin: 9px 0px 0px 0px !important;
+}
+
+#registerSensorForm, #registerOwnerForm {
+  position: absolute;
+  top: 14vh;
+  height: 86vh;
+  z-index: 10;
+  width: 27vw;
+  background-color: #ffffff;
+  box-shadow: 0 10px 10px -5px grey;
+}
+
+#right-form {
+  position: absolute;
+  left: 80%;
+  width: 20%;
+  top: 20vh;
+  z-index: 100;
+}
+
+#layer-header, #search-header, #info-header {
+  float: right;
+  color: rgb(19, 65, 115);
+  background-color: #ffffff;
+  font-weight: lighter;
+  font-size: 15px;
+  width: 50%;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+#layers, #search, #info {
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 24vw !important;
+  border-radius: 4px !important;
+}
+
+.feature-info {
+  position: absolute;
+  z-index: 20;
+  width: 30vw;
+  top: 20vh;
+}
+
+.search {
+  position: absolute;
+  z-index: 20;
+  width: 10vw;
+}
+
+.backgroundmap {
+  width: 100vw;
+  height: 100vh;
+}
+
+.dropdown-menu {
+  font-size: 14px;
+  font-style: normal;
+}
+
+.navbar-brand {
+  font-weight: normal;
+  font-size: 30px;
+  height: 40px;
+  color: white;
+  margin-top: 5px;
+}
+
+.dropdown {
+  margin-top: 5px;
+}
+
+.dropdown-toggle {
+  color: white;
+}
+
+.open > .dropdown-toggle,
+.dropdown-toggle:hover {
+  color: rgb(19, 65, 115);
+}
+
+label {
+  /* display: block; */
+  /* width: 10em; */
+  margin-top: 5px;
+  /* margin: 0.5em 0; */
+  color: #000000;
+  font-style: normal;
+  font-weight: normal;
+}
+
+input {
+  height: 2em;
+  font-size: 1em;
+  padding-left: 0.4em;
+}
+
+textarea {
+  font-size: 1em;
+  padding-left: 0.4em;
+}
+
+input::placeholder, textarea::placeholder {
+  font-weight: lighter;
+  font-style: oblique;
+  font-size: 12px;
+}
+
+/*
+button {
+  font-family: Arial;
+  background-color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #cfd8dc;
+}
+
+button:disabled {
+  background-color: #eee;
+  color: #ccc;
+  cursor: auto;
+} */
