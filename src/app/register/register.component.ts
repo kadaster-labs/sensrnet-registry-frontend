@@ -53,9 +53,6 @@ export class RegisterComponent implements OnInit {
     // reset alerts on submit
     this.alertService.clear();
 
-    this.alertService.success('Registration successful', true);
-    this.router.navigate(['/login']);
-
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
