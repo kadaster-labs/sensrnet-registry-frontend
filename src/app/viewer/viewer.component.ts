@@ -33,7 +33,7 @@ import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
-import { User } from '../model/user';
+import { Owner } from '../model/owner';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -105,7 +105,7 @@ export class ViewerComponent implements OnInit {
 
   private sensors = [];
 
-  currentUser: User;
+  currentOwner: Owner;
 
   myLayers: Theme[];
   hideTreeDataset = false;
@@ -126,7 +126,7 @@ export class ViewerComponent implements OnInit {
     private dataService: DataService,
   ) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this));
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    this.authenticationService.currentOwner.subscribe(x => this.currentOwner = x);
   }
 
   ngOnInit(): void {
