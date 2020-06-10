@@ -9,10 +9,18 @@ export class OwnerService {
   constructor(private http: HttpClient) { }
 
   public register(user: Owner) {
-    return this.http.post(`${environment.apiUrl}/user`, user);
+    return this.http.post(`${environment.apiUrl}/Owner`, user);
+  }
+
+  public update(user: Owner) {
+    return this.http.put(`${environment.apiUrl}/Owner/${user.id}`, user);
   }
 
   public delete(id: number) {
-    return this.http.delete(`${environment.apiUrl}/users/${id}`);
+    return this.http.delete(`${environment.apiUrl}/Owner/${id}`);
+  }
+
+  public get(id: number) {
+    return this.http.get(`${environment.apiUrl}/Owner/${id}`);
   }
 }
