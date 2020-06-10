@@ -14,6 +14,6 @@ export interface ISensorSchema {
   observationArea?: object;
   documentationUrl?: string;
   theme?: Array<string>;
-  typeName: string;
+  typeName: String;
   typeDetails: object;
 }

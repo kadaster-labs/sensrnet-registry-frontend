@@ -28,6 +28,7 @@ import Stroke from 'ol/style/Stroke';
 import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
 import { ISensorSchema } from './model/bodies/sensor-body';
+import { TypeName } from './model/bodies/sensorType-body';
 import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
@@ -41,6 +42,9 @@ import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-data
 export class AppComponent implements OnInit {
   title = 'SensRNet'
   mapName = 'srn';
+
+  types: any[];
+  sensorTypes = TypeName;
 
   currentMapResolution: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
@@ -67,8 +71,8 @@ export class AppComponent implements OnInit {
     manufacturer: new FormControl(''),
     active: new FormControl(''),
     documentation: new FormControl(''),
-    dataStreams: new FormControl(''),
     location: new FormControl({}),
+    typeName: new FormControl(''),
   });
 
   UpdateSensor = new FormGroup({
@@ -78,7 +82,7 @@ export class AppComponent implements OnInit {
     manufacturer: new FormControl(''),
     active: new FormControl(''),
     documentation: new FormControl(''),
-    dataStreams: new FormControl(''),
+    typeName: new FormControl(''),
     location: new FormControl('')
   });
 
@@ -128,6 +132,9 @@ export class AppComponent implements OnInit {
         // error
       }
     );
+
+    this.types = Object.keys(this.sensorTypes).filter(String);
+    // this.sensorTypes = TypeName.Sensor; //Default the value
 
     this.dataService.connect();
 
@@ -257,7 +264,9 @@ export class AppComponent implements OnInit {
           type: 'Point',
         },
         id: newSensor.sensorId,
-        properties: {},
+        properties: {          
+          active: newSensor.active,
+          typeName: newSensor.typeName},
         type: 'Feature',
       };
 
@@ -400,13 +409,13 @@ export class AppComponent implements OnInit {
     const sensor: object = {
       active: this.RegisterSensor.value.active || false,
       aim: this.RegisterSensor.value.aim,
-      dataStreams: this.RegisterSensor.value.dataStreams || [],
       description: this.RegisterSensor.value.description,
       documentation: this.RegisterSensor.value.documentation,
       location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
       manufacturer: this.RegisterSensor.value.manufacturer,
       name: this.RegisterSensor.value.name,
-      typeName: 'Type',
+      dataStreams: this.RegisterSensor.value.dataStreams || [],
+      typeName: this.RegisterSensor.value.typeName || [],
     };
 
     this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
