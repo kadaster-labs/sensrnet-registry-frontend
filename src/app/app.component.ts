@@ -25,13 +25,13 @@ import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
 import { Circle as CircleStyle, Style, Fill, Text, Icon } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
-import { ISensorSchema } from './model/bodies/sensor-body';
-import { TypeName } from './model/bodies/sensorType-body';
+import { ISensor } from './model/bodies/sensor-body';
 import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
+import { EventType } from './model/events/event-type';
+import { TypeName } from './model/bodies/sensorType-body';
 
 @Component({
   selector: 'app-root',
@@ -139,7 +139,7 @@ export class AppComponent implements OnInit {
     this.dataService.connect();
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensorSchema>) => {
+    this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
       this.sensors = sensors;
       const featuresData: Array<any> = sensors.map((sensor) => ({
@@ -251,24 +251,14 @@ export class AppComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    const sensorCreated$: Observable<SensorRegistered> = this.dataService.subscribeTo<SensorRegistered>('SensorRegistered');
-    sensorCreated$.subscribe((newSensor: SensorRegistered) => {
+    const sensorCreated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
+    sensorCreated$.subscribe((newSensor: ISensor) => {
       console.log(`Socket.io heard that a new SensorCreated event was fired`);
       console.log(newSensor);
 
       this.sensors.push(newSensor);
 
-      const feature = {
-        geometry: {
-          coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.longitude, newSensor.latitude]),
-          type: 'Point',
-        },
-        id: newSensor.sensorId,
-        properties: {          
-          active: newSensor.active,
-          typeName: newSensor.typeName},
-        type: 'Feature',
-      };
+      const feature: object = this.sensorToFeature(newSensor);
 
       const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
         features: [feature],
@@ -277,6 +267,21 @@ export class AppComponent implements OnInit {
 
       this.vectorSource.addFeatures(newFeatures);
     });
+  }
+
+  private sensorToFeature(newSensor: ISensor): object {
+    return {
+      geometry: {
+        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.location.coordinates[0], newSensor.location.coordinates[1]]),
+        type: 'Point',
+      },
+      id: newSensor._id,
+      properties: {
+        active: newSensor.active,
+        typeName: [newSensor.typeName]
+      },
+      type: 'Feature',
+    };
   }
 
   startDrawPoint() {
