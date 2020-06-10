@@ -23,7 +23,7 @@ import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
-import { Circle as CircleStyle, Style, Fill, Text } from 'ol/style';
+import { Circle as CircleStyle, Style, Fill, Text, Icon } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import { SensorRegistered } from './model/events/registered.event';
 import Feature from 'ol/Feature';
@@ -113,6 +113,8 @@ export class AppComponent implements OnInit {
   iconChecked = 'far fa-check-square';
   iconInfoUrl = 'fas fa-info-circle';
 
+  iconDir = '/assets/icons/'
+
   constructor(private drawService: DrawInteractionService, private httpClient: HttpClient, public mapService: MapService, private selectionService: SelectionService, private dataService: DataService) {
     this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this))
   }
@@ -140,7 +142,8 @@ export class AppComponent implements OnInit {
         },
         id: sensor._id,
         properties: {
-          active: sensor.active
+          active: sensor.active,
+          typeName: sensor.typeName
         },
         type: 'Feature',
       }));
@@ -155,7 +158,7 @@ export class AppComponent implements OnInit {
       });
 
       this.clusterSource = new Cluster({
-        distance: 20,
+        distance: 40,
         source: this.vectorSource
       });
 
@@ -164,82 +167,66 @@ export class AppComponent implements OnInit {
       this.vectorLayer = new VectorLayer({
         source: this.clusterSource,
         style: function (feature) {
-          let size = feature.get('features').length.toString()
+          let numberOfFeatures = feature.get('features').length
           let style: Style
 
           // Define style
-          if (size === '1') {
+          if (numberOfFeatures === 1) {
             let active = feature.get('features')[0].values_.active
+            let sensorType = feature.get('features')[0].values_.typeName[0]
             if (!active) {
-              size = '1na'
-              style = styleCache[size]
+              numberOfFeatures = 'inactive' + sensorType
+              style = styleCache[numberOfFeatures]
             }
             else {
-              size = '1a'
-              style = styleCache[size]
+              numberOfFeatures = 'active' + sensorType
+              style = styleCache[numberOfFeatures]
             }
           }
           else {
-            style = styleCache[size]
+            style = styleCache[numberOfFeatures]
           }
 
           if (!style) {
-            if (size === '1na' || size === '1a') {
+            if (typeof numberOfFeatures === 'string') {
               let active = feature.get('features')[0].values_.active
+              let sensorType = feature.get('features')[0].values_.typeName[0]
+              console.log(sensorType)
+              console.log(active)
               if (!active) {
                 style = new Style({
-                  image: new CircleStyle({
-                    radius: 15,
-                    stroke: new Stroke({
-                      color: '#ffffff'
-                    }),
-                    fill: new Fill({
-                      color: 'rgba(19, 65, 115, 0.25)'
-                    })
-                  }),
-                  text: new Text({
-                    text: '1',
-                    fill: new Fill({
-                      color: '#ffffff'
-                    }),
-                    textAlign: 'center'
+                  image: new Icon({
+                    opacity: 0.25,
+                    scale: 0.35,
+                    src: `/assets/icons/${sensorType}.png`,
                   })
-                })
+                });
               }
               else {
                 style = new Style({
-                  image: new CircleStyle({
-                    radius: 15,
-                    stroke: new Stroke({
-                      color: '#1A2D82'
-                    }),
-                    fill: new Fill({
-                      color: 'rgba(19, 65, 115, 0.9)'
-                    })
-                  }),
-                  text: new Text({
-                    text: '1',
-                    fill: new Fill({
-                      color: '#ffffff'
-                    }),
-                    textAlign: 'center'
+                  image: new Icon({
+                    opacity: 0.9,
+                    scale: 0.35,
+                    src: `/assets/icons/${sensorType}.png`,
                   })
-                })
+                });
               }
             }
             else {
               style = new Style({
                 image: new CircleStyle({
-                  radius: 15,
+                  radius: 25,
                   stroke: new Stroke({
-                    color: '#C70039'
+                    color: '#ffffff',
+                    width: 3
                   }),
                   fill: new Fill({
-                    color: 'rgba(255, 87, 51, 0.8)'
+                    color: 'rgba(19, 65, 115, 0.9)'
                   })
                 }),
                 text: new Text({
-                  text: size,
+                  text: numberOfFeatures.toString(),
+                  font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
                   fill: new Fill({
                     color: '#ffffff'
                   }),
@@ -247,12 +234,11 @@ export class AppComponent implements OnInit {
                 })
               })
             }
-            styleCache[size] = style;
+            styleCache[numberOfFeatures] = style;
           }
           return style;
         }
       });
-
       this.vectorLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
     });
