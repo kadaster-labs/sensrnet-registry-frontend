@@ -134,7 +134,6 @@ export class AppComponent implements OnInit {
     );
 
     this.types = Object.keys(this.sensorTypes).filter(String);
-    // this.sensorTypes = TypeName.Sensor; //Default the value
 
     this.dataService.connect();
 
@@ -142,18 +141,7 @@ export class AppComponent implements OnInit {
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
       this.sensors = sensors;
-      const featuresData: Array<any> = sensors.map((sensor) => ({
-        geometry: {
-          coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[0], sensor.location.coordinates[1]]),
-          type: sensor.location.type,
-        },
-        id: sensor._id,
-        properties: {
-          active: sensor.active,
-          typeName: sensor.typeName
-        },
-        type: 'Feature',
-      }));
+      const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
 
       const features: Array<Feature> = (new GeoJSON()).readFeatures({
         features: featuresData,
