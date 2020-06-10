@@ -1,11 +1,13 @@
-import { LocationBody } from './location-body';
-
-export interface ISensorSchema {
+export interface ISensor {
   _id: string;
   nodeId: string;
   ownerIds?: Array<string>;
   name?: string;
-  location: LocationBody;
+  location: {
+      type: 'Point',
+      coordinates: Array<number>,
+  };
+  baseObjectId: string;
   dataStreams?: Array<any>;
   aim?: string;
   description?: string;
@@ -14,6 +16,6 @@ export interface ISensorSchema {
   observationArea?: object;
   documentationUrl?: string;
   theme?: Array<string>;
-  typeName: string;
-  typeDetails: object;
+  typeName: Array<string>;
+  typeDetails?: Array<object>;
 }

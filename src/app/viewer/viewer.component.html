@@ -25,6 +25,7 @@
                   aria-expanded="false">Logout</a>
           </li>
       </ul>
+
       <div class="col-lg-1 logo">
           <img src="assets\SensRNet-logo.png" width="145px" class="image">
       </div>
@@ -63,9 +64,13 @@
                               placeholder="url of documentation">
                       </label>
                       <br>
-                      <label> DataStreams
-                          <input class="form-control" type="text" formControlName="dataStreams">
+
+                      <label>Select type of sensor
+                          <select class="form-control" formControlName="typeName">
+                              <option *ngFor="let type of types" [value]="type">{{sensorTypes[type]}}</option>
+                          </select>
                       </label>
+
                       <br>
                       <br>
                       <a role="button" class="btn btn-success" (click)="startDrawPoint()">Select location</a>
@@ -141,10 +146,11 @@
               </div>
               <div class="row">
                   <div class="collapse col-lg-12" id="layersForm">
-                      <ggc-dataset-tree [themes]="myLayers" (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
-                      [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed" [iconExpanded]="iconExpanded"
-                      [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked" [iconInfoUrl]="iconInfoUrl"
-                      [hideTree]="hideTreeDataset"></ggc-dataset-tree>
+                      <ggc-dataset-tree [themes]="myLayers"
+                          (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
+                          [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"
+                          [iconExpanded]="iconExpanded" [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked"
+                          [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"></ggc-dataset-tree>
                   </div>
               </div>
           </div>

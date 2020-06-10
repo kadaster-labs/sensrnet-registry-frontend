@@ -23,17 +23,18 @@ import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
-import { Circle as CircleStyle, Style, Fill, Text } from 'ol/style';
+import { Circle as CircleStyle, Style, Fill, Text, Icon } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { SensorRegistered } from '../model/events/registered.event';
 import Feature from 'ol/Feature';
-import { ISensorSchema } from '../model/bodies/sensor-body';
+import { ISensor } from '../model/bodies/sensor-body';
 import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
+import { TypeName } from '../model/bodies/sensorType-body';
+import { EventType } from '../model/events/event-type';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -42,6 +43,9 @@ import { Owner } from '../model/owner';
 export class ViewerComponent implements OnInit {
   title = 'SensRNet'
   mapName = 'srn';
+
+  types: any[];
+  sensorTypes = TypeName;
 
   currentMapResolution: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
@@ -68,8 +72,8 @@ export class ViewerComponent implements OnInit {
     manufacturer: new FormControl(''),
     active: new FormControl(''),
     documentation: new FormControl(''),
-    dataStreams: new FormControl(''),
     location: new FormControl({}),
+    typeName: new FormControl(''),
   });
 
   UpdateSensor = new FormGroup({
@@ -79,7 +83,7 @@ export class ViewerComponent implements OnInit {
     manufacturer: new FormControl(''),
     active: new FormControl(''),
     documentation: new FormControl(''),
-    dataStreams: new FormControl(''),
+    typeName: new FormControl(''),
     location: new FormControl('')
   });
 
@@ -116,6 +120,8 @@ export class ViewerComponent implements OnInit {
   iconChecked = 'far fa-check-square';
   iconInfoUrl = 'fas fa-info-circle';
 
+  iconDir = '/assets/icons/'
+
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -139,21 +145,15 @@ export class ViewerComponent implements OnInit {
       }
     );
 
+    this.types = Object.keys(this.sensorTypes).filter(String);
+
     this.dataService.connect();
 
     // subscribe to sensor events
-    this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensorSchema>) => {
+    this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
       this.sensors = sensors;
-      const featuresData: Array<any> = sensors.map((sensor) => ({
-        geometry: {
-          coordinates: proj4(this.epsgWGS84, this.epsgRD, [sensor.location.coordinates[0], sensor.location.coordinates[1]]),
-          type: sensor.location.type,
-        },
-        id: sensor._id,
-        properties: {},
-        type: 'Feature',
-      }));
+      const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
 
       const features: Array<Feature> = (new GeoJSON()).readFeatures({
         features: featuresData,
@@ -165,7 +165,7 @@ export class ViewerComponent implements OnInit {
       });
 
       this.clusterSource = new Cluster({
-        distance: 20,
+        distance: 40,
         source: this.vectorSource
       });
 
@@ -175,28 +175,74 @@ export class ViewerComponent implements OnInit {
         source: this.clusterSource,
         // rewrite this function
         style: function (feature) {
-          let size = feature.get('features').length;
-          let style = styleCache[size];
+          let numberOfFeatures = feature.get('features').length
+          let style: Style
+
+          // Define style
+          if (numberOfFeatures === 1) {
+            let active = feature.get('features')[0].values_.active
+            let sensorType = feature.get('features')[0].values_.typeName[0]
+            if (!active) {
+              numberOfFeatures = 'inactive' + sensorType
+              style = styleCache[numberOfFeatures]
+            }
+            else {
+              numberOfFeatures = 'active' + sensorType
+              style = styleCache[numberOfFeatures]
+            }
+          }
+          else {
+            style = styleCache[numberOfFeatures]
+          }
+
           if (!style) {
-            style = new Style({
-              image: new CircleStyle({
-                radius: 15,
-                stroke: new Stroke({
-                  color: '#ffffff'
+            if (typeof numberOfFeatures === 'string') {
+              let active = feature.get('features')[0].values_.active
+              let sensorType = feature.get('features')[0].values_.typeName[0]
+              console.log(sensorType)
+              console.log(active)
+              if (!active) {
+                style = new Style({
+                  image: new Icon({
+                    opacity: 0.25,
+                    scale: 0.35,
+                    src: `/assets/icons/${sensorType}.png`,
+                  })
+                });
+              }
+              else {
+                style = new Style({
+                  image: new Icon({
+                    opacity: 0.9,
+                    scale: 0.35,
+                    src: `/assets/icons/${sensorType}.png`,
+                  })
+                });
+              }
+            }
+            else {
+              style = new Style({
+                image: new CircleStyle({
+                  radius: 25,
+                  stroke: new Stroke({
+                    color: '#ffffff',
+                    width: 3
+                  }),
+                  fill: new Fill({
+                    color: 'rgba(19, 65, 115, 0.9)'
+                  })
                 }),
-                fill: new Fill({
-                  color: 'rgba(19, 65, 115, 0.8)'
+                text: new Text({
+                  text: numberOfFeatures.toString(),
+                  font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
+                  fill: new Fill({
+                    color: '#ffffff'
+                  }),
+                  textAlign: 'center'
                 })
-              }),
-              text: new Text({
-                text: size.toString(),
-                fill: new Fill({
-                  color: '#ffffff'
-                }),
-                textAlign: 'center'
               })
-            });
-            styleCache[size] = style;
+            }
+            styleCache[numberOfFeatures] = style;
           }
           return style;
         }
@@ -207,22 +253,14 @@ export class ViewerComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    const sensorCreated$: Observable<SensorRegistered> = this.dataService.subscribeTo<SensorRegistered>('SensorRegistered');
-    sensorCreated$.subscribe((newSensor: SensorRegistered) => {
+    const sensorCreated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
+    sensorCreated$.subscribe((newSensor: ISensor) => {
       console.log(`Socket.io heard that a new SensorCreated event was fired`);
       console.log(newSensor);
 
       this.sensors.push(newSensor);
 
-      const feature = {
-        geometry: {
-          coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.longitude, newSensor.latitude]),
-          type: 'Point',
-        },
-        id: newSensor.sensorId,
-        properties: {},
-        type: 'Feature',
-      };
+      const feature: object = this.sensorToFeature(newSensor);
 
       const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
         features: [feature],
@@ -231,6 +269,21 @@ export class ViewerComponent implements OnInit {
 
       this.vectorSource.addFeatures(newFeatures);
     });
+  }
+
+  private sensorToFeature(newSensor: ISensor): object {
+    return {
+      geometry: {
+        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.location.coordinates[0], newSensor.location.coordinates[1]]),
+        type: 'Point',
+      },
+      id: newSensor._id,
+      properties: {
+        active: newSensor.active,
+        typeName: [newSensor.typeName]
+      },
+      type: 'Feature',
+    };
   }
 
   startDrawPoint() {
@@ -246,12 +299,14 @@ export class ViewerComponent implements OnInit {
           console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
           const locationRD = evt.event.feature.getGeometry().getFlatCoordinates();
           const locationWGS84 = proj4(this.epsgRD, this.epsgWGS84, locationRD);
-          this.RegisterSensor.patchValue({ location: {
-            baseObjectId: 'IDK',
-            height: 0,
-            latitude: locationWGS84[1],
-            longitude: locationWGS84[0],
-          }});
+          this.RegisterSensor.patchValue({
+            location: {
+              baseObjectId: 'IDK',
+              height: 0,
+              latitude: locationWGS84[1],
+              longitude: locationWGS84[0],
+            }
+          });
         });
       }
     }
@@ -361,13 +416,13 @@ export class ViewerComponent implements OnInit {
     const sensor: object = {
       active: this.RegisterSensor.value.active || false,
       aim: this.RegisterSensor.value.aim,
-      dataStreams: this.RegisterSensor.value.dataStreams || [],
       description: this.RegisterSensor.value.description,
       documentation: this.RegisterSensor.value.documentation,
       location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
       manufacturer: this.RegisterSensor.value.manufacturer,
       name: this.RegisterSensor.value.name,
-      typeName: 'Type',
+      dataStreams: this.RegisterSensor.value.dataStreams || [],
+      typeName: this.RegisterSensor.value.typeName || [],
     };
 
     this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {

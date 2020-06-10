@@ -6,5 +6,5 @@ export class Owner {
   public organization: string;
   public phone: string;
   public website: string;
-  public token: string;
+  public access_token: string;
 }

@@ -21,7 +21,17 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/kadaster-huisstijl/dist/assets",
+                "output": "./assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/kadaster-huisstijl/dist/css",
+                "output": "./css/"
+              }
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
