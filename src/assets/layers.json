@@ -14,7 +14,6 @@
                 "name": "Luchtfoto 2019 Ortho 25cm RGB",
                 "technicalName": "2019_ortho25",
                 "minResolution": 0.000102539,
-                "maxResolution": 1720.320,
                 "legendUrl": null,
                 "zIndex": 2
               }
@@ -33,10 +32,28 @@
                 "name": "BRT",
                 "technicalName": "brtachtergrondkaartgrijs",
                 "minResolution": 0.000102539,
-                "maxResolution": 1720.320,
                 "active": true,
                 "legendUrl": null,
                 "zIndex": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "datasetName": "BAG",
+        "services": [
+          {
+            "type": "wms",
+            "url": "https://geodata.nationaalgeoregister.nl/bag/wms",
+            "layers": [
+              {
+                "name": "Panden",
+                "technicalName": "pand",
+                "minResolution": 0.000102539,
+                "maxResolution": 0.840,
+                "legendUrl": null,
+                "zIndex": 6
               }
             ]
           }
