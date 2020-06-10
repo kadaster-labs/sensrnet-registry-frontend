@@ -211,7 +211,7 @@ export class AppComponent implements OnInit {
                   image: new CircleStyle({
                     radius: 15,
                     stroke: new Stroke({
-                      color: '#ffffff'
+                      color: '#1A2D82'
                     }),
                     fill: new Fill({
                       color: 'rgba(19, 65, 115, 0.9)'
@@ -232,10 +232,10 @@ export class AppComponent implements OnInit {
                 image: new CircleStyle({
                   radius: 15,
                   stroke: new Stroke({
-                    color: '#ffffff'
+                    color: '#C70039'
                   }),
                   fill: new Fill({
-                    color: 'rgba(19, 65, 115, 0.8)'
+                    color: 'rgba(255, 87, 51, 0.8)'
                   })
                 }),
                 text: new Text({
