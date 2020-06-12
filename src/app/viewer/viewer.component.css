@@ -17,6 +17,10 @@
   margin: 9px 0px 0px 0px !important;
 }
 
+td {
+  border-top: 0px !important;
+}
+
 #registerSensorForm, #registerOwnerForm {
   position: absolute;
   top: 14vh;
@@ -36,20 +40,31 @@
 }
 
 #layer-header, #search-header, #info-header {
-  float: right;
+  float: left;
   color: rgb(19, 65, 115);
   background-color: #ffffff;
   font-weight: lighter;
   font-size: 15px;
-  width: 50%;
-  text-align: left;
+  text-align: right;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
 }
 
+#infoForm, #layersForm, #searchForm {
+  background-color: #ffffff !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  margin-right: 0px;
+}
+
 #layers, #search, #info {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+#search-background, #layers-background, #info-background {
+  background-color: #ffffff !important;
 }
 
 .form-control {
@@ -62,12 +77,6 @@
   z-index: 20;
   width: 30vw;
   top: 20vh;
-}
-
-.search {
-  position: absolute;
-  z-index: 20;
-  width: 10vw;
 }
 
 .backgroundmap {

@@ -167,7 +167,7 @@ export class ViewerComponent implements OnInit {
       });
 
       this.clusterSource = new Cluster({
-        distance: 40,
+        distance: 50,
         source: this.vectorSource
       });
 
@@ -389,7 +389,13 @@ export class ViewerComponent implements OnInit {
         else {
           this.activeFeatureInfo = null
         }
-      });
+      }
+        , {
+          layerFilter: function (layer) {
+            return layer.getProperties().source instanceof Cluster;
+          }
+        }
+      );
     }
   }
 
