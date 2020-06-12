@@ -1,3 +1,4 @@
+import { sensorInfo } from './../model/bodies/sensorInfo';
 import { Component, OnInit } from '@angular/core';
 import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import {
@@ -51,9 +52,10 @@ export class ViewerComponent implements OnInit {
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
   drawSubscription: Subscription;
-  activeDatasets: Dataset [] = [];
+  activeDatasets: Dataset[] = [];
   activeWmtsDatasets: Dataset[] = [];
   activeWmsDatasets: Dataset[] = [];
+  activeFeatureInfo: sensorInfo;
 
   private vectorSource: VectorSource;
   private vectorLayer: VectorLayer;
@@ -199,8 +201,6 @@ export class ViewerComponent implements OnInit {
             if (typeof numberOfFeatures === 'string') {
               let active = feature.get('features')[0].values_.active
               let sensorType = feature.get('features')[0].values_.typeName[0]
-              console.log(sensorType)
-              console.log(active)
               if (!active) {
                 style = new Style({
                   image: new Icon({
@@ -279,8 +279,12 @@ export class ViewerComponent implements OnInit {
       },
       id: newSensor._id,
       properties: {
+        name: newSensor.name,
+        typeName: newSensor.typeName,
         active: newSensor.active,
-        typeName: [newSensor.typeName]
+        aim: newSensor.aim,
+        description: newSensor.description,
+        manufacturer: newSensor.manufacturer,
       },
       type: 'Feature',
     };
@@ -362,17 +366,33 @@ export class ViewerComponent implements OnInit {
   }
 
   handleMapEvents(mapEvent: MapComponentEvent) {
+    const map = this.mapService.getMap(this.mapName);
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
-      this.currentMapResolution = this.mapService.getMap(this.mapName).getView().getResolution();
+      this.currentMapResolution = map.getView().getResolution();
     }
-    // create point from single map click (RD and WGS84)
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
       this.mapCoordinateRD = mapEvent.value.coordinate
-      console.log(this.mapCoordinateRD)
       this.mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, this.mapCoordinateRD)
-      console.log(this.mapCoordinateWGS84)
+      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
+        const features = data.getProperties().features;
+        if (features.length === 1) {
+          const feature = new sensorInfo(
+            features[0].values_.name,
+            features[0].values_.typeName,
+            features[0].values_.active,
+            features[0].values_.aim,
+            features[0].values_.description,
+            features[0].values_.manufacturer
+          )
+          this.activeFeatureInfo = feature
+        }
+        else {
+          this.activeFeatureInfo = null
+        }
+      });
     }
   }
+
 
   onFeatureInfoEvent(event: FeatureInfoComponentEvent) {
     if (event.type === FeatureInfoComponentEventType.SELECTEDTAB) {
@@ -465,5 +485,5 @@ export class ViewerComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
-}
+  }
 };

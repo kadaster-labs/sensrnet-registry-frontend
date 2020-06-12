@@ -160,7 +160,35 @@
                           class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Feature info</a>
               </div>
               <div class="row">
-                  <div class="collapse col-lg-12" id="infoForm">Test
+                  <div class="collapse col-lg-12" id="infoForm">
+                    <table class="table table-hover">
+                        <tbody>
+                          <tr>
+                            <td>Name</td>
+                            <td>{{ activeFeatureInfo?.name }}</td>
+                          </tr>
+                          <tr>
+                            <td>Sensortype</td>
+                            <td>{{ activeFeatureInfo?.typeName }}</td>
+                          </tr>
+                          <tr>
+                            <td>Active</td>
+                            <td>{{ activeFeatureInfo?.active }}</td>
+                          </tr>
+                          <tr>
+                            <td>Aim</td>
+                            <td>{{ activeFeatureInfo?.aim }}</td>
+                          </tr>
+                          <tr>
+                            <td>Description</td>
+                            <td>{{ activeFeatureInfo?.description }}</td>
+                          </tr>
+                          <tr>
+                            <td>Manufacturer</td>
+                            <td>{{ activeFeatureInfo?.manufacturer }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                   </div>
               </div>
           </div>
