@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: viewer-sensrnet
+  name: viewer-sensrnet
+  namespace: sensrnet-frontend
+spec:
+  ports:
+  - name: "4200"
+    port: 4200
+    targetPort: 4200
+  selector:
+    io.kompose.service: viewer-sensrnet
+status:
+  loadBalancer: {}
