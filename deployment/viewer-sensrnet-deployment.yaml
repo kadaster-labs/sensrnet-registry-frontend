@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -6,11 +6,14 @@ metadata:
     kompose.version: 1.19.0 (f63a961c)
   creationTimestamp: null
   labels:
-    io.kompose.service: viewer-sensrnet
+    app: viewer-sensrnet
   name: viewer-sensrnet
   namespace: sensrnet-frontend
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: viewer-sensrnet
   strategy: {}
   template:
     metadata:
@@ -19,10 +22,10 @@ spec:
         kompose.version: 1.19.0 (f63a961c)
       creationTimestamp: null
       labels:
-        io.kompose.service: viewer-sensrnet
+        app: viewer-sensrnet
     spec:
       containers:
-      - image: sensrnetacr.azurecr.io/sensrnet-viewer:202006120933
+      - image: sensrnetregistry.azurecr.io/sensrnet-viewer:202006120933
         name: viewer-sensrnet
         ports:
         - containerPort: 4200
