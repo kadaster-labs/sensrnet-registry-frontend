@@ -56,6 +56,8 @@ export class ViewerComponent implements OnInit {
   activeWmtsDatasets: Dataset[] = [];
   activeWmsDatasets: Dataset[] = [];
   activeFeatureInfo: sensorInfo;
+  highlightLayer: VectorLayer;
+  highlightSource: VectorSource;
 
   private vectorSource: VectorSource;
   private vectorLayer: VectorLayer;
@@ -226,7 +228,7 @@ export class ViewerComponent implements OnInit {
                   radius: 25,
                   stroke: new Stroke({
                     color: '#ffffff',
-                    width: 3
+                    width: 2
                   }),
                   fill: new Fill({
                     color: 'rgba(19, 65, 115, 0.9)'
@@ -373,21 +375,28 @@ export class ViewerComponent implements OnInit {
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
       this.mapCoordinateRD = mapEvent.value.coordinate
       this.mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, this.mapCoordinateRD)
+      this.removeHighlight()
       map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
         const features = data.getProperties().features;
         if (features.length === 1) {
+          const firstFeature = features[0]
           const feature = new sensorInfo(
-            features[0].values_.name,
-            features[0].values_.typeName,
-            features[0].values_.active,
-            features[0].values_.aim,
-            features[0].values_.description,
-            features[0].values_.manufacturer
+            firstFeature.values_.name,
+            firstFeature.values_.typeName,
+            firstFeature.values_.active,
+            firstFeature.values_.aim,
+            firstFeature.values_.description,
+            firstFeature.values_.manufacturer
           )
+          const geometry = new Feature({
+            geometry: firstFeature.values_.geometry
+          })
+          this.highlightFeature(geometry)
           this.activeFeatureInfo = feature
         }
         else {
           this.activeFeatureInfo = null
+          this.removeHighlight()
         }
       }
         , {
@@ -397,6 +406,31 @@ export class ViewerComponent implements OnInit {
         }
       );
     }
+  }
+
+  highlightFeature(feature: Feature) {
+    this.highlightSource = new VectorSource({
+      features: [feature]
+    });
+    this.highlightLayer = new VectorLayer({
+      source: this.highlightSource,
+      style: new Style({
+        image: new CircleStyle({
+          radius: 17,
+          stroke: new Stroke({
+            color: '#FF0000 ',
+            width: 2
+          }),
+        }),
+      })
+    });
+
+    this.highlightLayer.setZIndex(20);
+    this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
+  }
+
+  removeHighlight() {
+    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
   }
 
 
