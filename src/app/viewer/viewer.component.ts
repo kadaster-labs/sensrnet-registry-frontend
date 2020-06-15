@@ -18,7 +18,7 @@ import {
 } from 'generieke-geo-componenten-feature-info';
 import { Subscription, Observable } from 'rxjs';
 import { DataService } from '../services/data.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import proj4 from 'proj4';
 import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
@@ -70,14 +70,14 @@ export class ViewerComponent implements OnInit {
   private uniqueId = 0;
 
   RegisterSensor = new FormGroup({
-    name: new FormControl(''),
+    name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     aim: new FormControl(''),
     description: new FormControl(''),
-    manufacturer: new FormControl(''),
+    manufacturer: new FormControl('', Validators.required),
     active: new FormControl(''),
-    documentation: new FormControl(''),
-    location: new FormControl({}),
-    typeName: new FormControl(''),
+    documentation: new FormControl('', Validators.required),
+    location: new FormControl({}, Validators.required),
+    typeName: new FormControl('', Validators.required),
   });
 
   UpdateSensor = new FormGroup({
@@ -292,6 +292,11 @@ export class ViewerComponent implements OnInit {
     };
   }
 
+  // convenience getter for easy access to form fields
+  get form() {
+    return this.RegisterSensor.controls;
+  }
+
   startDrawPoint() {
     this.drawService.startDrawInteraction(MapComponentDrawTypes.POINT, this.mapName);
     this.subscribeOnDrawEvents();
@@ -414,15 +419,23 @@ export class ViewerComponent implements OnInit {
     });
     this.highlightLayer = new VectorLayer({
       source: this.highlightSource,
-      style: new Style({
+      style: [new Style({
         image: new CircleStyle({
-          radius: 17,
+          radius: 22,
           stroke: new Stroke({
             color: '#FF0000 ',
-            width: 2
+            width: 1,
           }),
         }),
-      })
+      }), new Style({
+        image: new CircleStyle({
+          radius: 26,
+          stroke: new Stroke({
+            color: '#FF0000 ',
+            width: 2,
+          }),
+        }),
+      })], opacity: 0.7
     });
 
     this.highlightLayer.setZIndex(20);

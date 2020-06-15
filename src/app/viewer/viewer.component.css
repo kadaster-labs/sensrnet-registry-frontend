@@ -156,3 +156,22 @@ button:disabled {
   color: #ccc;
   cursor: auto;
 } */
+
+/* .ng-valid,
+.ng-valid.required {
+  background-color: lightgreen;
+} */
+
+/* .ng-invalid {
+  color: #FF0000;
+  font-weight: lighter;
+  font-style: italic;
+  font-size: 10px;
+} */
+
+.invalid-input {
+  color: #FF0000;
+  font-weight: lighter;
+  font-style: italic;
+  font-size: 10px;
+}

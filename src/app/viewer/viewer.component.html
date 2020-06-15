@@ -37,7 +37,11 @@
                 <form [formGroup]="RegisterSensor" (ngSubmit)="submitCreateSensor()">
                     <div class="input-group">
                         <label> Name
-                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name">
+                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name" [ngClass]="{ 'is-invalid': form.name.dirty && form.name.errors }">
+                            <div *ngIf="form.name.errors" class="invalid-input">
+                                <span *ngIf="form.name.errors.required">Name is required</span>
+                                <span *ngIf="form.name.errors.minlength">Name must be at least 2 characters</span>
+                            </div>
                         </label>
                         <br>
                         <label> Aim
