@@ -1,8 +1,9 @@
 import { Observable, Subscriber } from 'rxjs';
 import * as io from 'socket.io-client';
+import { environment } from 'src/environments/environment';
 
 export class DataService {
-  private url = 'http://localhost:3000/sensor';
+  private url = `${environment.apiUrl}/sensor`;
   private socket: SocketIOClient.Socket;
 
   constructor() { }

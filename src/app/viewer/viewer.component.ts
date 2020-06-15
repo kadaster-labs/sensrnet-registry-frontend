@@ -35,6 +35,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
 import { TypeName } from '../model/bodies/sensorType-body';
 import { EventType } from '../model/events/event-type';
+import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -425,7 +426,7 @@ export class ViewerComponent implements OnInit {
       typeName: this.RegisterSensor.value.typeName || [],
     };
 
-    this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
+    this.httpClient.post(`${environment.apiUrl}/Sensor`, sensor, {}).subscribe((data: any) => {
       console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
 
       this.registerSensorSent = true;
@@ -450,7 +451,7 @@ export class ViewerComponent implements OnInit {
       website: this.RegisterOwner.value.website,
     };
 
-    this.httpClient.post('http://localhost:3000/Owner', owner, {}).subscribe((data: any) => {
+    this.httpClient.post(`${environment.apiUrl}/Owner`, owner, {}).subscribe((data: any) => {
       console.log(`Owner was succesfully posted, received id ${data.ownerId}`);
 
       this.registerOwnerSent = true;
