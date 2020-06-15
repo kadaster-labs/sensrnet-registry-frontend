@@ -3,12 +3,17 @@
 set -ex
 # SET THE FOLLOWING VARIABLES
 USERNAME=sensrnet
+REGISTRY=sensrnetregistry.azurecr.io
 # image name
 IMAGE=registry-frontend
+
+# ensure we're logged on at the registry
+az acr login --name sensrnetregistry
+
 # ensure we're up to date
-# git pull
+git pull
 # bump version
-# npm version patch
+npm version patch
 
 VERSION=$(node -pe "require('./package.json').version")
 echo "version: $VERSION"
@@ -25,8 +30,8 @@ git commit -m "release v$VERSION"
 git tag -a "$VERSION" -m "release v$VERSION"
 git push
 git push --tags
-docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$VERSION
+docker tag $REGISTRY/$USERNAME/$IMAGE:latest $REGISTRY/$USERNAME/$IMAGE:$VERSION
 
 # push it
-docker push sensrnetregistry.azurecr.io/$USERNAME/$IMAGE:latest
-docker push sensrnetregistry.azurecr.io/$USERNAME/$IMAGE:$VERSION
+docker push $REGISTRY/$USERNAME/$IMAGE:latest
+docker push $REGISTRY/$USERNAME/$IMAGE:$VERSION
