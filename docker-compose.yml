@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  viewer-sensrnet:
+  registry-frontend:
     build:
         context: "."
     ports:
