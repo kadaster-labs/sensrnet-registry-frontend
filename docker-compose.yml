@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  viewer-sensrnet:
+    build:
+        context: "."
+    ports:
+      - 4200:4200
