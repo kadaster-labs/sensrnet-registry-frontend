@@ -25,7 +25,7 @@ spec:
         app: viewer-sensrnet
     spec:
       containers:
-      - image: sensrnetregistry.azurecr.io/sensrnet-viewer:202006120933
+      - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
         name: viewer-sensrnet
         ports:
         - containerPort: 4200
