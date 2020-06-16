@@ -9,13 +9,12 @@ export class DataService {
   constructor() { }
 
   public connect() {
-    // socket.io-client excepts the url to be in the form of host/namespace. This doesn't work when the backend has the
+    // socket.io-client expects the url to be in the form of host/namespace. This doesn't work when the backend has the
     // globalPrefix /api/. In this case, the socket path has to be set manually. The uri needs to be in the form
     // host/namespace.
     const host = this.url.substring(0, this.url.lastIndexOf('/'));  // strip the /api part
     const namespace = 'sensor';
     const conn = `${host}/${namespace}`;
-    console.log(`Connecting to ${conn}`);
 
     this.socket = io(conn, {
       path: '/api/socket.io',
