@@ -1,3 +1,4 @@
+import { sensorInfo } from './../model/bodies/sensorInfo';
 import { Component, OnInit } from '@angular/core';
 import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import {
@@ -6,8 +7,6 @@ import {
   MapComponentEventTypes,
   MapService,
   SelectionService,
-  MapComponentDrawTypes,
-  DrawInteractionService
 } from 'generieke-geo-componenten-map';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -17,9 +16,9 @@ import {
 } from 'generieke-geo-componenten-feature-info';
 import { Subscription, Observable } from 'rxjs';
 import { DataService } from '../services/data.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import proj4 from 'proj4';
-import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
+import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
@@ -27,14 +26,13 @@ import { Circle as CircleStyle, Style, Fill, Text, Icon } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import Feature from 'ol/Feature';
 import { ISensor } from '../model/bodies/sensor-body';
-import GeometryType from 'ol/geom/GeometryType';
-import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
 import { TypeName } from '../model/bodies/sensorType-body';
 import { EventType } from '../model/events/event-type';
+import Point from 'ol/geom/Point';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -50,30 +48,34 @@ export class ViewerComponent implements OnInit {
   currentMapResolution: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
-  drawSubscription: Subscription;
-  activeDatasets: Dataset [] = [];
+  activeDatasets: Dataset[] = [];
   activeWmtsDatasets: Dataset[] = [];
   activeWmsDatasets: Dataset[] = [];
+  activeFeatureInfo: sensorInfo;
+  highlightLayer: VectorLayer;
+  highlightSource: VectorSource;
+  selectLocationLayer: VectorLayer;
+  selectLocationSource: VectorSource;
+  selectLocation = false;
+  locationFeature = Feature;
+  locationList = ["Select Location", "Confirm", "Clear"]
 
   private vectorSource: VectorSource;
   private vectorLayer: VectorLayer;
   private clusterSource: Cluster;
-  private location: [number, number];
 
   public registerOwnerSent = false;
   public registerSensorSent = false;
 
-  private uniqueId = 0;
-
   RegisterSensor = new FormGroup({
-    name: new FormControl(''),
+    name: new FormControl('', [Validators.required, Validators.minLength(6)]),
     aim: new FormControl(''),
     description: new FormControl(''),
-    manufacturer: new FormControl(''),
+    manufacturer: new FormControl('', Validators.required),
     active: new FormControl(''),
-    documentation: new FormControl(''),
-    location: new FormControl({}),
-    typeName: new FormControl(''),
+    documentation: new FormControl('', Validators.required),
+    location: new FormControl({}, Validators.required),
+    typeName: new FormControl('', Validators.required),
   });
 
   UpdateSensor = new FormGroup({
@@ -125,13 +127,10 @@ export class ViewerComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private drawService: DrawInteractionService,
     private httpClient: HttpClient,
     public mapService: MapService,
-    private selectionService: SelectionService,
     private dataService: DataService,
   ) {
-    this.selectionService.getObservable(this.mapName).subscribe(this.handleSelectionServiceEvents.bind(this));
     this.authenticationService.currentOwner.subscribe(x => this.currentOwner = x);
   }
 
@@ -141,15 +140,11 @@ export class ViewerComponent implements OnInit {
         this.myLayers = data as Theme[];
       },
       error => {
-        // error
       }
     );
 
     this.types = Object.keys(this.sensorTypes).filter(String);
-
     this.dataService.connect();
-
-    // subscribe to sensor events
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
       this.sensors = sensors;
@@ -163,13 +158,12 @@ export class ViewerComponent implements OnInit {
       this.vectorSource = new VectorSource({
         features,
       });
-
       this.clusterSource = new Cluster({
-        distance: 40,
+        distance: 50,
         source: this.vectorSource
       });
 
-      let styleCache = {}
+      const styleCache = {}
 
       this.vectorLayer = new VectorLayer({
         source: this.clusterSource,
@@ -178,7 +172,6 @@ export class ViewerComponent implements OnInit {
           let numberOfFeatures = feature.get('features').length
           let style: Style
 
-          // Define style
           if (numberOfFeatures === 1) {
             let active = feature.get('features')[0].values_.active
             let sensorType = feature.get('features')[0].values_.typeName[0]
@@ -194,13 +187,10 @@ export class ViewerComponent implements OnInit {
           else {
             style = styleCache[numberOfFeatures]
           }
-
           if (!style) {
             if (typeof numberOfFeatures === 'string') {
               let active = feature.get('features')[0].values_.active
               let sensorType = feature.get('features')[0].values_.typeName[0]
-              console.log(sensorType)
-              console.log(active)
               if (!active) {
                 style = new Style({
                   image: new Icon({
@@ -226,7 +216,7 @@ export class ViewerComponent implements OnInit {
                   radius: 25,
                   stroke: new Stroke({
                     color: '#ffffff',
-                    width: 3
+                    width: 2
                   }),
                   fill: new Fill({
                     color: 'rgba(19, 65, 115, 0.9)'
@@ -247,7 +237,6 @@ export class ViewerComponent implements OnInit {
           return style;
         }
       });
-
       this.vectorLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
     });
@@ -271,124 +260,69 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  private sensorToFeature(newSensor: ISensor): object {
-    return {
-      geometry: {
-        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.location.coordinates[0], newSensor.location.coordinates[1]]),
-        type: 'Point',
-      },
-      id: newSensor._id,
-      properties: {
-        active: newSensor.active,
-        typeName: [newSensor.typeName]
-      },
-      type: 'Feature',
-    };
-  }
-
-  startDrawPoint() {
-    this.drawService.startDrawInteraction(MapComponentDrawTypes.POINT, this.mapName);
-    this.subscribeOnDrawEvents();
-  }
-
-  private subscribeOnDrawEvents() {
-    if (!this.drawSubscription) {
-      const interactionEventObservable = this.drawService.drawEventsObservableMap.get(this.mapName);
-      if (interactionEventObservable) {
-        this.drawSubscription = interactionEventObservable.subscribe(evt => {
-          console.log('DrawInteractionEvent: ' + evt.type + '; Type geometry: ' + evt.drawType);
-          const locationRD = evt.event.feature.getGeometry().getFlatCoordinates();
-          const locationWGS84 = proj4(this.epsgRD, this.epsgWGS84, locationRD);
-          this.RegisterSensor.patchValue({
-            location: {
-              baseObjectId: 'IDK',
-              height: 0,
-              latitude: locationWGS84[1],
-              longitude: locationWGS84[0],
-            }
-          });
-        });
-      }
-    }
-  }
-
-  clearDrawing(mapIndex: string) {
-    this.drawService.clearDrawInteraction(this.mapName);
-  }
-
-  clearFeatures(mapIndex: string) {
-    this.drawService.clearDrawInteractionLayer(this.mapName);
-  }
-
   handleEvent(event: SearchComponentEvent) {
     this.mapService.zoomToPdokResult(event, 'srn');
   }
 
-  clearSelection(mapIndex: string) {
-    this.selectionService.clearSelection(this.mapName);
-  }
-
-  setSelectionMode(selectionMode: string) {
-    if (selectionMode === 'single') {
-      this.selectionService.setSingleselectMode(this.mapName);
-    } else if (selectionMode === 'multi') {
-      this.selectionService.setMultiselectMode(this.mapName);
-    }
-  }
-
-  handleSelectionServiceEvents(event: MapComponentEvent) {
-    if (event.type === MapComponentEventTypes.SELECTIONSERVICE_MAPCLICKED) {
-      // clear dataFeatureInfo on singleclick
-      this.dataTabFeatureInfo = [];
-      this.mapService.clearSelectionLayer(event.mapName);
-    } else if (event.type === MapComponentEventTypes.SELECTIONSERVICE_SELECTIONUPDATED) {
-      const result: FeatureCollectionForCoordinate = event.value;
-      const featureinfoCollection: FeatureCollectionForLayer[] = result.featureCollectionForLayers;
-      this.mapService.clearSelectionLayer(event.mapName);
-      featureinfoCollection.forEach((featureinfo) => {
-        this.mapService.addFeaturesToSelectionLayer(featureinfo.features, event.mapName);
-      });
-      this.dataTabFeatureInfo = [...featureinfoCollection];
-    } else if (event.type === MapComponentEventTypes.SELECTIONSERVICE_CLEARSELECTION) {
-      this.dataTabFeatureInfo = [];
-      this.mapService.clearSelectionLayer(event.mapName);
-    }
-  }
-
-  handleFeatureInfoEvent(event: FeatureInfoComponentEvent) {
-    if (event.type === FeatureInfoComponentEventType.SELECTEDTAB) {
-      this.currentTabFeatureInfo = event.value;
-    }
-  }
-
   handleMapEvents(mapEvent: MapComponentEvent) {
+    const map = this.mapService.getMap(this.mapName);
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
-      this.currentMapResolution = this.mapService.getMap(this.mapName).getView().getResolution();
+      this.currentMapResolution = map.getView().getResolution();
     }
-    // create point from single map click (RD and WGS84)
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
-      this.mapCoordinateRD = mapEvent.value.coordinate
-      console.log(this.mapCoordinateRD)
-      this.mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, this.mapCoordinateRD)
-      console.log(this.mapCoordinateWGS84)
-    }
-  }
+      const mapCoordinateRD = mapEvent.value.coordinate
+      const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD)
+      this.removeHighlight()
 
-  onFeatureInfoEvent(event: FeatureInfoComponentEvent) {
-    if (event.type === FeatureInfoComponentEventType.SELECTEDTAB) {
-      this.currentTabFeatureInfo = event.value;
-    } else if (event.type === FeatureInfoComponentEventType.SELECTEDOBJECT) {
-      this.mapService.clearHighlightLayer(this.mapName);
-      if (event.value) { // er is een geselecteerd object
-        this.mapService.addFeaturesToHighlightLayer([event.value], this.mapName);
+      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
+        const features = data.getProperties().features;
+        if (features.length === 1) {
+          const firstFeature = features[0]
+          const feature = new sensorInfo(
+            firstFeature.values_.name,
+            firstFeature.values_.typeName,
+            firstFeature.values_.active,
+            firstFeature.values_.aim,
+            firstFeature.values_.description,
+            firstFeature.values_.manufacturer
+          )
+          const geometry = new Feature({
+            geometry: firstFeature.values_.geometry
+          })
+
+          this.highlightFeature(geometry)
+          this.activeFeatureInfo = feature
+        }
+        else {
+          this.activeFeatureInfo = null
+          this.removeHighlight()
+        }
+      },
+        {
+          layerFilter: function (layer) {
+            return layer.getProperties().source instanceof Cluster;
+          }
+        });
+
+      if (this.selectLocation === true) {
+        this.removeLocation()
+        this.RegisterSensor.patchValue({
+          location: {
+            baseObjectId: 'IDK',
+            height: 0,
+            latitude: mapCoordinateWGS84[1],
+            longitude: mapCoordinateWGS84[0],
+          }
+        })
+        const locationFeature = new Feature({
+          geometry: new Point(mapCoordinateRD)
+        })
+        this.setLocation(locationFeature)
       }
     }
   }
 
   handleDatasetTreeEvents(event: DatasetTreeEvent) {
-    /*
-     * Activeren en deactiveren van kaartlagen
-     */
     if (event.type === 'layerActivated') {
       const geactiveerdeService = event.value.services[0];
       if (geactiveerdeService.type === 'wms') {
@@ -410,8 +344,98 @@ export class ViewerComponent implements OnInit {
     }
   }
 
+  private sensorToFeature(newSensor: ISensor): object {
+    return {
+      geometry: {
+        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.location.coordinates[0], newSensor.location.coordinates[1]]),
+        type: 'Point',
+      },
+      id: newSensor._id,
+      properties: {
+        name: newSensor.name,
+        typeName: newSensor.typeName,
+        active: newSensor.active,
+        aim: newSensor.aim,
+        description: newSensor.description,
+        manufacturer: newSensor.manufacturer,
+      },
+      type: 'Feature',
+    };
+  }
+
+  get form() {
+    return this.RegisterSensor.controls;
+  }
+
+  SelectLocationOn() {
+    this.selectLocation = true;
+  }
+
+  SelectLocationOff() {
+    this.selectLocation = false;
+  }
+
+  private setLocation(feature: Feature) {
+    this.selectLocationSource = new VectorSource({
+      features: [feature]
+    });
+    this.selectLocationLayer = new VectorLayer({
+      source: this.selectLocationSource,
+      style: new Style({
+        image: new CircleStyle({
+          radius: 10,
+          stroke: new Stroke({
+            color: '#F34E15',
+            width: 2,
+          }),
+          fill: new Fill({
+            color: '#F34E15'
+          })
+        })
+      })
+    })
+    this.selectLocationLayer.setZIndex(25);
+    this.mapService.getMap(this.mapName).addLayer(this.selectLocationLayer);
+  }
+
+  removeLocation() {
+    this.SelectLocationOff()
+    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
+  }
+
+  private highlightFeature(feature: Feature) {
+    this.highlightSource = new VectorSource({
+      features: [feature]
+    });
+    this.highlightLayer = new VectorLayer({
+      source: this.highlightSource,
+      style: [new Style({
+        image: new CircleStyle({
+          radius: 22,
+          stroke: new Stroke({
+            color: '#FF0000 ',
+            width: 1,
+          }),
+        }),
+      }), new Style({
+        image: new CircleStyle({
+          radius: 25,
+          stroke: new Stroke({
+            color: '#FF0000 ',
+            width: 2,
+          }),
+        }),
+      })], opacity: 0.7
+    });
+    this.highlightLayer.setZIndex(20);
+    this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
+  }
+
+  private removeHighlight() {
+    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
+  }
+
   submitCreateSensor() {
-    this.drawService.stopDrawInteraction(this.mapName);
     console.warn(this.RegisterSensor.value);
     const sensor: object = {
       active: this.RegisterSensor.value.active || false,
@@ -427,6 +451,7 @@ export class ViewerComponent implements OnInit {
 
     this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
       console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
+      this.removeLocation()
 
       this.registerSensorSent = true;
       setTimeout(() => {
@@ -465,5 +490,5 @@ export class ViewerComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
-}
+  }
 };
