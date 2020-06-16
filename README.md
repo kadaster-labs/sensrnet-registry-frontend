@@ -1,6 +1,6 @@
 # Viewer
 
-This is the frontend repo of SensRNet. In order to run the 
+This is the frontend repo of SensRNet. 
 
 ## local development server Ng
 

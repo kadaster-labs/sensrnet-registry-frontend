@@ -17,6 +17,10 @@
   margin: 9px 0px 0px 0px;
 }
 
+td {
+  border-top: 0px !important;
+}
+
 #registerSensorForm, #registerOwnerForm {
   position: absolute;
   top: 14vh;
