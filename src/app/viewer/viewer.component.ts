@@ -2,19 +2,15 @@ import { sensorInfo } from './../model/bodies/sensorInfo';
 import { Component, OnInit } from '@angular/core';
 import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import {
-  FeatureCollectionForCoordinate, FeatureCollectionForLayer,
   MapComponentEvent,
   MapComponentEventTypes,
   MapService,
-  SelectionService,
 } from 'generieke-geo-componenten-map';
 import { HttpClient } from '@angular/common/http';
 import {
   FeatureInfoCollection,
-  FeatureInfoComponentEvent,
-  FeatureInfoComponentEventType,
 } from 'generieke-geo-componenten-feature-info';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DataService } from '../services/data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import proj4 from 'proj4';
@@ -386,7 +382,7 @@ export class ViewerComponent implements OnInit {
           radius: 5,
           stroke: new Stroke({
             color: '#F34E15',
-            width: 1,
+            width: 2,
           }),
           fill: new Fill({
             color: '#F34E15'
