@@ -305,7 +305,7 @@ export class ViewerComponent implements OnInit {
         });
 
       if (this.selectLocation === true) {
-        this.removeLocation()
+        this.removeLocationFeatures()
         this.RegisterSensor.patchValue({
           location: {
             baseObjectId: 'IDK',
@@ -383,10 +383,10 @@ export class ViewerComponent implements OnInit {
       source: this.selectLocationSource,
       style: new Style({
         image: new CircleStyle({
-          radius: 10,
+          radius: 5,
           stroke: new Stroke({
             color: '#F34E15',
-            width: 2,
+            width: 1,
           }),
           fill: new Fill({
             color: '#F34E15'
@@ -398,8 +398,12 @@ export class ViewerComponent implements OnInit {
     this.mapService.getMap(this.mapName).addLayer(this.selectLocationLayer);
   }
 
-  removeLocation() {
-    this.SelectLocationOff()
+  removeLocationFeatures() {
+    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
+  }
+
+  clearLocationLayer() {
+    this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
   }
 
@@ -451,7 +455,7 @@ export class ViewerComponent implements OnInit {
 
     this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
       console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
-      this.removeLocation()
+      this.clearLocationLayer()
 
       this.registerSensorSent = true;
       setTimeout(() => {

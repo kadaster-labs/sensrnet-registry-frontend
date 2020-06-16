@@ -5,20 +5,16 @@
   height: 13vh;
   background-color: rgba(19, 65, 115, 0.8);
   box-shadow: 0 10px 10px -5px grey;
-  padding: 0px 0px 0px 0px !important;
-  border-radius: 0px !important;
+  padding: 0px 0px 0px 0px;
+  border-radius: 0px;
 }
 
 .logo {
   position: absolute;
   z-index: 10;
   left: 90vw;
-  padding: 0px 0px 0px 0px !important;
-  margin: 9px 0px 0px 0px !important;
-}
-
-td {
-  border-top: 0px !important;
+  padding: 0px 0px 0px 0px;
+  margin: 9px 0px 0px 0px;
 }
 
 #registerSensorForm, #registerOwnerForm {
@@ -52,7 +48,7 @@ td {
 }
 
 #infoForm, #layersForm, #searchForm {
-  background-color: #ffffff !important;
+  background-color: #ffffff;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-right: 10px;
@@ -64,11 +60,11 @@ td {
 }
 
 #search-background, #layers-background, #info-background {
-  background-color: #ffffff !important;
+  background-color: #ffffff;
 }
 
 .form-control {
-  width: 24vw !important;
+  width: 24vw;
   border-radius: 4px !important;
 }
 
@@ -110,11 +106,12 @@ td {
   color: rgb(19, 65, 115);
 }
 
+td {
+  border-top: 0px !important;
+}
+
 label {
-  /* display: block; */
-  /* width: 10em; */
   margin-top: 5px;
-  /* margin: 0.5em 0; */
   color: #000000;
   font-style: normal;
   font-weight: normal;
@@ -136,38 +133,6 @@ input::placeholder, textarea::placeholder {
   font-style: oblique;
   font-size: 12px;
 }
-
-/*
-button {
-  font-family: Arial;
-  background-color: #ffffff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #cfd8dc;
-}
-
-button:disabled {
-  background-color: #eee;
-  color: #ccc;
-  cursor: auto;
-} */
-
-/* .ng-valid,
-.ng-valid.required {
-  background-color: lightgreen;
-} */
-
-/* .ng-invalid {
-  color: #FF0000;
-  font-weight: lighter;
-  font-style: italic;
-  font-size: 10px;
-} */
 
 .invalid-input {
   color: #FF0000;
