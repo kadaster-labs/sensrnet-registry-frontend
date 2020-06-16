@@ -20,7 +20,7 @@ import { Subscription, Observable } from 'rxjs';
 import { DataService } from '../services/data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import proj4 from 'proj4';
-import GeoJSON, { GeoJSONFeature, GeoJSONPoint } from 'ol/format/GeoJSON';
+import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
@@ -28,14 +28,14 @@ import { Circle as CircleStyle, Style, Fill, Text, Icon } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import Feature from 'ol/Feature';
 import { ISensor } from '../model/bodies/sensor-body';
-import GeometryType from 'ol/geom/GeometryType';
-import Point from 'ol/geom/Point';
 import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-dataset-tree';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
 import { TypeName } from '../model/bodies/sensorType-body';
 import { EventType } from '../model/events/event-type';
+import Draw from 'ol/interaction/Draw';
+import Point from 'ol/geom/Point';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -58,19 +58,20 @@ export class ViewerComponent implements OnInit {
   activeFeatureInfo: sensorInfo;
   highlightLayer: VectorLayer;
   highlightSource: VectorSource;
+  selectLocationLayer: VectorLayer;
+  selectLocationSource: VectorSource;
+  selectLocation = false;
+  locationFeature = Feature;
 
   private vectorSource: VectorSource;
   private vectorLayer: VectorLayer;
   private clusterSource: Cluster;
-  private location: [number, number];
 
   public registerOwnerSent = false;
   public registerSensorSent = false;
 
-  private uniqueId = 0;
-
   RegisterSensor = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(6)]),
     aim: new FormControl(''),
     description: new FormControl(''),
     manufacturer: new FormControl('', Validators.required),
@@ -173,16 +174,16 @@ export class ViewerComponent implements OnInit {
         source: this.vectorSource
       });
 
-      let styleCache = {}
+      const styleCache = {}
 
       this.vectorLayer = new VectorLayer({
         source: this.clusterSource,
+
         // rewrite this function
         style: function (feature) {
           let numberOfFeatures = feature.get('features').length
           let style: Style
 
-          // Define style
           if (numberOfFeatures === 1) {
             let active = feature.get('features')[0].values_.active
             let sensorType = feature.get('features')[0].values_.typeName[0]
@@ -198,7 +199,6 @@ export class ViewerComponent implements OnInit {
           else {
             style = styleCache[numberOfFeatures]
           }
-
           if (!style) {
             if (typeof numberOfFeatures === 'string') {
               let active = feature.get('features')[0].values_.active
@@ -249,7 +249,6 @@ export class ViewerComponent implements OnInit {
           return style;
         }
       });
-
       this.vectorLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
     });
@@ -292,14 +291,8 @@ export class ViewerComponent implements OnInit {
     };
   }
 
-  // convenience getter for easy access to form fields
   get form() {
     return this.RegisterSensor.controls;
-  }
-
-  startDrawPoint() {
-    this.drawService.startDrawInteraction(MapComponentDrawTypes.POINT, this.mapName);
-    this.subscribeOnDrawEvents();
   }
 
   private subscribeOnDrawEvents() {
@@ -317,7 +310,8 @@ export class ViewerComponent implements OnInit {
               latitude: locationWGS84[1],
               longitude: locationWGS84[0],
             }
-          });
+          })
+          this.drawService.clearDrawInteraction(this.mapName)
         });
       }
     }
@@ -327,16 +321,12 @@ export class ViewerComponent implements OnInit {
     this.drawService.clearDrawInteraction(this.mapName);
   }
 
-  clearFeatures(mapIndex: string) {
-    this.drawService.clearDrawInteractionLayer(this.mapName);
+  clearSelection(mapIndex: string) {
+    this.selectionService.clearSelection(this.mapName);
   }
 
   handleEvent(event: SearchComponentEvent) {
     this.mapService.zoomToPdokResult(event, 'srn');
-  }
-
-  clearSelection(mapIndex: string) {
-    this.selectionService.clearSelection(this.mapName);
   }
 
   setSelectionMode(selectionMode: string) {
@@ -349,7 +339,6 @@ export class ViewerComponent implements OnInit {
 
   handleSelectionServiceEvents(event: MapComponentEvent) {
     if (event.type === MapComponentEventTypes.SELECTIONSERVICE_MAPCLICKED) {
-      // clear dataFeatureInfo on singleclick
       this.dataTabFeatureInfo = [];
       this.mapService.clearSelectionLayer(event.mapName);
     } else if (event.type === MapComponentEventTypes.SELECTIONSERVICE_SELECTIONUPDATED) {
@@ -372,14 +361,22 @@ export class ViewerComponent implements OnInit {
     }
   }
 
+  SelectLocationOn() {
+    this.selectLocation = true;
+  }
+
+  SelectLocationOff() {
+    this.selectLocation = false;
+  }
+
   handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
     }
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
-      this.mapCoordinateRD = mapEvent.value.coordinate
-      this.mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, this.mapCoordinateRD)
+      const mapCoordinateRD = mapEvent.value.coordinate
+      const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD)
       this.removeHighlight()
       map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
         const features = data.getProperties().features;
@@ -396,6 +393,7 @@ export class ViewerComponent implements OnInit {
           const geometry = new Feature({
             geometry: firstFeature.values_.geometry
           })
+
           this.highlightFeature(geometry)
           this.activeFeatureInfo = feature
         }
@@ -403,14 +401,54 @@ export class ViewerComponent implements OnInit {
           this.activeFeatureInfo = null
           this.removeHighlight()
         }
-      }
-        , {
+      },
+        {
           layerFilter: function (layer) {
             return layer.getProperties().source instanceof Cluster;
           }
-        }
-      );
+        });
+
+      if (this.selectLocation === true) {
+        this.removeLocation()
+        this.RegisterSensor.patchValue({
+          location: {
+            baseObjectId: 'IDK',
+            height: 0,
+            latitude: mapCoordinateWGS84[1],
+            longitude: mapCoordinateWGS84[0],
+          }
+        })
+        const locationFeature = new Feature({
+          geometry: new Point(mapCoordinateRD)
+        })
+        this.setLocation(locationFeature)
+        console.log(locationFeature)
+      }
     }
+  }
+
+  setLocation(feature: Feature) {
+    this.selectLocationSource = new VectorSource({
+      features: [feature]
+    });
+    this.selectLocationLayer = new VectorLayer({
+      source: this.selectLocationSource,
+      style: new Style({
+        image: new CircleStyle({
+          radius: 22,
+          stroke: new Stroke({
+            color: '#FF0000 ',
+            width: 1,
+          }),
+        })
+      })
+    })
+    this.selectLocationLayer.setZIndex(25);
+    this.mapService.getMap(this.mapName).addLayer(this.selectLocationLayer);
+  }
+
+  removeLocation() {
+    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
   }
 
   highlightFeature(feature: Feature) {
@@ -429,7 +467,7 @@ export class ViewerComponent implements OnInit {
         }),
       }), new Style({
         image: new CircleStyle({
-          radius: 26,
+          radius: 25,
           stroke: new Stroke({
             color: '#FF0000 ',
             width: 2,
@@ -437,7 +475,6 @@ export class ViewerComponent implements OnInit {
         }),
       })], opacity: 0.7
     });
-
     this.highlightLayer.setZIndex(20);
     this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
   }
@@ -446,22 +483,7 @@ export class ViewerComponent implements OnInit {
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
   }
 
-
-  onFeatureInfoEvent(event: FeatureInfoComponentEvent) {
-    if (event.type === FeatureInfoComponentEventType.SELECTEDTAB) {
-      this.currentTabFeatureInfo = event.value;
-    } else if (event.type === FeatureInfoComponentEventType.SELECTEDOBJECT) {
-      this.mapService.clearHighlightLayer(this.mapName);
-      if (event.value) { // er is een geselecteerd object
-        this.mapService.addFeaturesToHighlightLayer([event.value], this.mapName);
-      }
-    }
-  }
-
   handleDatasetTreeEvents(event: DatasetTreeEvent) {
-    /*
-     * Activeren en deactiveren van kaartlagen
-     */
     if (event.type === 'layerActivated') {
       const geactiveerdeService = event.value.services[0];
       if (geactiveerdeService.type === 'wms') {

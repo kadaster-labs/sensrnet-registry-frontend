@@ -37,10 +37,12 @@
                 <form [formGroup]="RegisterSensor" (ngSubmit)="submitCreateSensor()">
                     <div class="input-group">
                         <label> Name
-                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name" [ngClass]="{ 'is-invalid': form.name.dirty && form.name.errors }">
-                            <div *ngIf="form.name.errors" class="invalid-input">
+                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
+                                [ngClass]="{ 'is-invalid': (form.name.dirty || form.name.touched) && form.name.errors }">
+                            <div *ngIf="(form.name.dirty || form.name.touched) && form.name.errors"
+                                class="invalid-input">
                                 <span *ngIf="form.name.errors.required">Name is required</span>
-                                <span *ngIf="form.name.errors.minlength">Name must be at least 2 characters</span>
+                                <span *ngIf="form.name.errors.minlength">Name must be at least 6 characters</span>
                             </div>
                         </label>
                         <br>
@@ -74,11 +76,30 @@
                                 <option *ngFor="let type of types" [value]="type">{{sensorTypes[type]}}</option>
                             </select>
                         </label>
+                        <br>
+                        <br>
 
-                        <br>
-                        <br>
-                        <a role="button" class="btn btn-success" (click)="startDrawPoint()">Select location</a>
-                        <a role="button" class="btn btn-outline-primary" (click)="clearDrawing('srn')">Clear</a>
+                        
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn">
+                              <input type="radio" (click)="SelectLocationOn()"> Select location
+                            </label>
+                            <label class="btn">
+                              <input type="radio" (click)="SelectLocationOff()" [checked]="true"> Confirm
+                            </label>
+                            <label class="btn">
+                              <input type="radio" (click)="removeLocation()"> clear
+                            </label>
+                          </div>
+<!--                  
+                        <label> Select location
+                            <a class="btn-toggle">
+                                <a class="btn btn-default" (click)="SelectLocationOn()">on</a>
+                                <a class="btn btn-primary active" (click)="SelectLocationOn()">off</a>
+                            </a>
+                            <a role="button" class="btn btn-outline-primary" (click)="removeLocation()">Clear</a>
+                        </label> -->
+                        <!-- <a role="button" class="btn btn-success" (click)="SelectLocationOn()">Select location</a> -->
                         <br>
                         <hr>
                         <button class="btn btn-primary btn-lg" type="submit"
