@@ -3,13 +3,23 @@ import * as io from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 
 export class DataService {
-  private url = `${environment.apiUrl}/sensor`;
+  private url = `${environment.apiUrl}`;
   private socket: SocketIOClient.Socket;
 
   constructor() { }
 
   public connect() {
-    this.socket = io(this.url);
+    // socket.io-client excepts the url to be in the form of host/namespace. This doesn't work when the backend has the
+    // globalPrefix /api/. In this case, the socket path has to be set manually. The uri needs to be in the form
+    // host/namespace.
+    const host = this.url.substring(0, this.url.lastIndexOf('/'));  // strip the /api part
+    const namespace = 'sensor';
+    const conn = `${host}/${namespace}`;
+    console.log(`Connecting to ${conn}`);
+
+    this.socket = io(conn, {
+      path: '/api/socket.io',
+    });
 
     this.socket.on('connect', (socket) => {
       console.log('Socket.io connected');
