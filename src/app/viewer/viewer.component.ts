@@ -28,7 +28,9 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
 import { Category, TypeSensor, TypeCamera, TypeBeacon } from '../model/bodies/sensorTypes';
 import { EventType } from '../model/events/event-type';
+import { environment } from 'src/environments/environment';
 import Point from 'ol/geom/Point';
+import Control from 'ol/control/Control';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -262,6 +264,8 @@ export class ViewerComponent implements OnInit {
 
       this.vectorSource.addFeatures(newFeatures);
     });
+
+    this.addFindMeButton();
   }
 
   handleEvent(event: SearchComponentEvent) {
@@ -457,7 +461,7 @@ export class ViewerComponent implements OnInit {
       typeName: this.RegisterSensor.value.typeName || [],
     };
 
-    this.httpClient.post('http://localhost:3000/Sensor', sensor, {}).subscribe((data: any) => {
+    this.httpClient.post(`${environment.apiUrl}/Sensor`, sensor, {}).subscribe((data: any) => {
       console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
       this.clearLocationLayer()
 
@@ -483,7 +487,7 @@ export class ViewerComponent implements OnInit {
       website: this.RegisterOwner.value.website,
     };
 
-    this.httpClient.post('http://localhost:3000/Owner', owner, {}).subscribe((data: any) => {
+    this.httpClient.post(`${environment.apiUrl}/Owner`, owner, {}).subscribe((data: any) => {
       console.log(`Owner was succesfully posted, received id ${data.ownerId}`);
 
       this.registerOwnerSent = true;
@@ -493,6 +497,44 @@ export class ViewerComponent implements OnInit {
     }, err => {
       console.log(err);
     });
+  }
+
+  private zoomToPoint(point: Point) {
+    const view = this.mapService.getMap('srn').getView();
+    view.fit(point, {
+      maxZoom: 10,
+    });
+  }
+
+  private zoomToPosition(position: Position) {
+    const coords = [position.coords.longitude, position.coords.latitude];
+    const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
+    const point = new Point(coordsRD);
+    this.zoomToPoint(point);
+  }
+
+  private findMe() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        this.zoomToPosition(position);
+      });
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  }
+
+  private addFindMeButton() {
+    const locate = document.createElement('div');
+    locate.className = 'ol-control ol-unselectable locate';
+    locate.innerHTML = '<button title="Locate me">◎</button>';
+    locate.addEventListener('click', () => {
+      this.findMe();
+    });
+
+    this.mapService.getMap('srn').addControl(new Control({
+      element: locate,
+    }));
+    console.log(this.mapService.getMap().getControls());
   }
 
   logout() {
