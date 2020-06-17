@@ -26,7 +26,7 @@ import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-data
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
-import { TypeName } from '../model/bodies/sensorType-body';
+import { Category, TypeSensor, TypeCamera, TypeBeacon } from '../model/bodies/sensorTypes';
 import { EventType } from '../model/events/event-type';
 import Point from 'ol/geom/Point';
 
@@ -39,7 +39,11 @@ export class ViewerComponent implements OnInit {
   mapName = 'srn';
 
   types: any[];
-  sensorTypes = TypeName;
+  sensorTypes = TypeSensor;
+  cameraTypes = TypeCamera;
+  beaconTypes = TypeBeacon;
+
+  // categories = Object.keys(Category).filter(String);
 
   currentMapResolution: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
@@ -139,7 +143,11 @@ export class ViewerComponent implements OnInit {
       }
     );
 
-    this.types = Object.keys(this.sensorTypes).filter(String);
+    const s_type = Object.keys(this.sensorTypes).filter(String);
+    const c_type = Object.keys(this.cameraTypes).filter(String);
+    const b_type = Object.keys(this.beaconTypes).filter(String);
+    this.types = s_type.concat(c_type, b_type)
+
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
