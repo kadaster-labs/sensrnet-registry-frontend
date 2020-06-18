@@ -3,6 +3,7 @@ export enum Theme {
     NatureAndEnvironment = "NatureAndEnvironment",
     Waste = "Waste",
     Safety = "Safety",
-    
-
+    Mobility = "Mobility",
+    SoilandUnderground = "SoilandUnderground",
+    Other = "Other"
 }

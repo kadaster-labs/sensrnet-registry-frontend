@@ -71,12 +71,62 @@
                         </label>
                         <br>
 
-                        <label>Select type of sensor
-                            <select class="form-control" formControlName="typeName">
-                                <option *ngFor="let type of types" [value]="type">{{types[type]}}</option>
+                        <label>Select category
+                            <select [(ngModel)]="selectedType" data-container="body" class="form-control selectpicker"
+                                formControlName="typeName">
+                                <option *ngFor="let type of sensorCategoriesList" [value]="type">
+                                    {{sensorCategories[type]}}
+                                </option>
                             </select>
                         </label>
                         <br>
+
+                        <label>Select {{selectedType}} type
+                            <select class="form-control selectpicker" data-container="body" formControlName="theme">
+                                <div [ngSwitch]="selectedType">
+                                    <div *ngSwitchCase="'Beacon'">
+                                        <option *ngFor="let type of beaconTypesList" [value]="type">
+                                            {{type}}
+                                        </option>
+                                    </div>
+                                    <div *ngSwitchCase="'Sensor'">
+                                        <option *ngFor="let type of sensorTypesList" [value]="type">
+                                            {{type}}
+                                        </option>
+                                    </div>
+                                    <div *ngSwitchCase="'Camera'">
+                                        <option *ngFor="let type of cameraTypesList" [value]="type">
+                                            {{type}}
+                                        </option>
+                                    </div>
+                                </div>
+                                <!-- <select class="form-control selectpicker" data-container="body" formControlName="theme">
+                                    <div *ngIf="true">
+                                        <option *ngFor="let type of beaconTypesList" [value]="type">
+                                            {{beaconTypes[type]}}
+                                        </option>
+                                    </div> -->
+                                <!-- <div *ngIf="true">
+                                    <option *ngFor="let type of sensorTypesList" [value]="type">{{sensorTypes[type]}}
+                                    </option>
+                                </div> -->
+                                <!-- <ng-container *ngIf="selectedType">
+                                    <option *ngFor="let type of cameraTypesList" [value]="type">{{cameraTypes[type]}}
+                                    </option>
+                                </ng-container> -->
+                            </select>
+                        </label>
+                        <br>
+
+                        <label>Select theme
+                            <br>
+                            <select class="form-control selectpicker" multiple data-selected-text-format="count > 3"
+                                formControlName="theme">
+                                <option *ngFor="let type of sensorThemesList" [value]="type">{{sensorThemes[type]}}
+                            </select>
+                        </label>
+                        <br>
+
                         <br>
                         <button class="btn" type="button" (click)="SelectLocationOn()"> Select location </button>
                         <!-- <button class="btn" type="button" (click)="SelectLocationOff()"> Confirm </button> -->
@@ -157,9 +207,9 @@
             </div>
             <div id="info">
                 <div class="row" id="info-background">
-                    <a id="info-header" role="button" data-toggle="collapse" data-target="#infoForm"><span
-                            class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Feature info</a>
-                    <div class="collapse col-lg-12" id="infoForm">
+                    <a id="info-header" role="button"><span class="glyphicon glyphicon-info-sign"
+                            aria-hidden="true"></span> Feature info</a>
+                    <div [ngClass]="{'show': showInfo}" class="collapse col-lg-12" id="infoForm">
                         <table class="table table-hover">
                             <tbody>
                                 <tr>
@@ -186,6 +236,10 @@
                                     <td><b>Manufacturer</b></td>
                                     <td><i>{{ activeFeatureInfo?.manufacturer }}</i></td>
                                 </tr>
+                                <tr>
+                                    <td><b>Theme</b></td>
+                                    <td><i>{{ activeFeatureInfo?.theme }}</i></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -196,7 +250,7 @@
 
     <div class="row">
         <div class="backgroundmap">
-            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
+            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
                 [url]="dataset.services[0].url" [getFeatureInfoOnSingleclick]="true"
                 [layer]="dataset.services[0].layers[0].technicalName" [mapName]="mapName"

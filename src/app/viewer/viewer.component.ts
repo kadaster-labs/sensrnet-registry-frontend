@@ -1,3 +1,4 @@
+import { Theme as SensorTheme } from './../model/bodies/sensorTheme';
 import { sensorInfo } from './../model/bodies/sensorInfo';
 import { Component, OnInit } from '@angular/core';
 import { SearchComponentEvent } from 'generieke-geo-componenten-search';
@@ -40,12 +41,16 @@ export class ViewerComponent implements OnInit {
   title = 'SensRNet'
   mapName = 'srn';
 
-  types: any[];
+  sensorCategories = Category;
+  sensorCategoriesList: string[];
   sensorTypes = TypeSensor;
-  cameraTypes = TypeCamera;
+  sensorTypesList: string[];
   beaconTypes = TypeBeacon;
-
-  // categories = Object.keys(Category).filter(String);
+  beaconTypesList: string[];
+  cameraTypes = TypeCamera;
+  cameraTypesList: string[];
+  sensorThemes = SensorTheme;
+  sensorThemesList: string[];
 
   currentMapResolution: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
@@ -61,6 +66,9 @@ export class ViewerComponent implements OnInit {
   selectLocation = false;
   locationFeature = Feature;
   locationList = ["Select Location", "Confirm", "Clear"]
+
+  selectedType: 'Beacon';
+  public showInfo = false;
 
   private vectorSource: VectorSource;
   private vectorLayer: VectorLayer;
@@ -78,6 +86,7 @@ export class ViewerComponent implements OnInit {
     documentation: new FormControl('', Validators.required),
     location: new FormControl({}, Validators.required),
     typeName: new FormControl('', Validators.required),
+    theme: new FormControl('', Validators.required)
   });
 
   UpdateSensor = new FormGroup({
@@ -145,11 +154,12 @@ export class ViewerComponent implements OnInit {
       }
     );
 
-    const s_type = Object.keys(this.sensorTypes).filter(String);
-    const c_type = Object.keys(this.cameraTypes).filter(String);
-    const b_type = Object.keys(this.beaconTypes).filter(String);
-    this.types = s_type.concat(c_type, b_type)
-
+    this.sensorCategoriesList = Object.keys(this.sensorCategories).filter(String);
+    this.sensorThemesList = Object.keys(this.sensorThemes).filter(String);
+    this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
+    this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
+    this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);
+    
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
@@ -281,9 +291,12 @@ export class ViewerComponent implements OnInit {
       const mapCoordinateRD = mapEvent.value.coordinate
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD)
       this.removeHighlight()
+      this.activeFeatureInfo = null
+      this.showInfo = false
 
       map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
         const features = data.getProperties().features;
+        console.log(features.length)
         if (features.length === 1) {
           const firstFeature = features[0]
           const feature = new sensorInfo(
@@ -292,18 +305,20 @@ export class ViewerComponent implements OnInit {
             firstFeature.values_.active,
             firstFeature.values_.aim,
             firstFeature.values_.description,
-            firstFeature.values_.manufacturer
+            firstFeature.values_.manufacturer,
+            firstFeature.values_.theme,
           )
           const geometry = new Feature({
             geometry: firstFeature.values_.geometry
           })
-
           this.highlightFeature(geometry)
           this.activeFeatureInfo = feature
+          this.showInfo = true;
         }
         else {
           this.activeFeatureInfo = null
           this.removeHighlight()
+          this.showInfo = false;
         }
       },
         {
@@ -366,6 +381,7 @@ export class ViewerComponent implements OnInit {
         aim: newSensor.aim,
         description: newSensor.description,
         manufacturer: newSensor.manufacturer,
+        theme: newSensor.theme,
       },
       type: 'Feature',
     };
@@ -373,6 +389,10 @@ export class ViewerComponent implements OnInit {
 
   get form() {
     return this.RegisterSensor.controls;
+  }
+
+  changeOpenInfo() {
+    this.showInfo = !this.showInfo
   }
 
   SelectLocationOn() {
@@ -411,6 +431,7 @@ export class ViewerComponent implements OnInit {
   }
 
   clearLocationLayer() {
+    console.log(this.selectedType)
     this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
   }
@@ -459,6 +480,7 @@ export class ViewerComponent implements OnInit {
       name: this.RegisterSensor.value.name,
       dataStreams: this.RegisterSensor.value.dataStreams || [],
       typeName: this.RegisterSensor.value.typeName || [],
+      theme: this.RegisterSensor.value.theme || [],
     };
 
     this.httpClient.post(`${environment.apiUrl}/Sensor`, sensor, {}).subscribe((data: any) => {

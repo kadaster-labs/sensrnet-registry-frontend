@@ -21,6 +21,10 @@ td {
   border-top: 0px !important;
 }
 
+#category {
+  z-index: 100 !important;
+}
+
 #registerSensorForm, #registerOwnerForm {
   position: absolute;
   top: 14vh;

@@ -1,4 +1,5 @@
 export class sensorInfo {
+    
     constructor(
         public name: string,
         public typeName: Array<string>,

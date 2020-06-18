@@ -21,6 +21,8 @@
     "@angular/router": "~8.2.14",
     "@types/ol": "^6.3.1",
     "bootstrap": "^3.3.7",
+    "bootstrap-multiselect": "^0.9.15",
+    "bootstrap-select": "^1.13.17",
     "core-js": "^2.6.11",
     "generieke-geo-componenten-dataset-legend": "^4.0.1",
     "generieke-geo-componenten-dataset-tree": "^4.1.0",
