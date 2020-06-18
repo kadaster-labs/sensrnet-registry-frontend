@@ -72,8 +72,7 @@
                         <br>
 
                         <label>Select category
-                            <select [(ngModel)]="selectedType" data-container="body" class="form-control selectpicker"
-                                formControlName="typeName">
+                            <select data-container="body" class="form-control selectpicker" formControlName="typeName">
                                 <option *ngFor="let type of sensorCategoriesList" [value]="type">
                                     {{sensorCategories[type]}}
                                 </option>
@@ -81,40 +80,12 @@
                         </label>
                         <br>
 
-                        <label>Select {{selectedType}} type
-                            <select class="form-control selectpicker" data-container="body" formControlName="theme">
-                                <div [ngSwitch]="selectedType">
-                                    <div *ngSwitchCase="'Beacon'">
-                                        <option *ngFor="let type of beaconTypesList" [value]="type">
-                                            {{type}}
-                                        </option>
-                                    </div>
-                                    <div *ngSwitchCase="'Sensor'">
-                                        <option *ngFor="let type of sensorTypesList" [value]="type">
-                                            {{type}}
-                                        </option>
-                                    </div>
-                                    <div *ngSwitchCase="'Camera'">
-                                        <option *ngFor="let type of cameraTypesList" [value]="type">
-                                            {{type}}
-                                        </option>
-                                    </div>
-                                </div>
-                                <!-- <select class="form-control selectpicker" data-container="body" formControlName="theme">
-                                    <div *ngIf="true">
-                                        <option *ngFor="let type of beaconTypesList" [value]="type">
-                                            {{beaconTypes[type]}}
-                                        </option>
-                                    </div> -->
-                                <!-- <div *ngIf="true">
-                                    <option *ngFor="let type of sensorTypesList" [value]="type">{{sensorTypes[type]}}
-                                    </option>
-                                </div> -->
-                                <!-- <ng-container *ngIf="selectedType">
-                                    <option *ngFor="let type of cameraTypesList" [value]="type">{{cameraTypes[type]}}
-                                    </option>
-                                </ng-container> -->
-                            </select>
+                        <label>Select {{ RegisterSensor.value.typeName }} type
+                          <select class="form-control" data-container="body" formControlName="subtypeName">
+                              <option *ngFor="let type of subtypesList" [value]="type">
+                                  {{type}}
+                              </option>
+                          </select>
                         </label>
                         <br>
 

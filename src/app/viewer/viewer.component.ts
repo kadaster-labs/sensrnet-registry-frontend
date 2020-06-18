@@ -45,6 +45,7 @@ export class ViewerComponent implements OnInit {
   sensorCategoriesList: string[];
   sensorTypes = TypeSensor;
   sensorTypesList: string[];
+  subtypesList: string[];
   beaconTypes = TypeBeacon;
   beaconTypesList: string[];
   cameraTypes = TypeCamera;
@@ -67,7 +68,6 @@ export class ViewerComponent implements OnInit {
   locationFeature = Feature;
   locationList = ["Select Location", "Confirm", "Clear"]
 
-  selectedType: 'Beacon';
   public showInfo = false;
 
   private vectorSource: VectorSource;
@@ -86,6 +86,7 @@ export class ViewerComponent implements OnInit {
     documentation: new FormControl('', Validators.required),
     location: new FormControl({}, Validators.required),
     typeName: new FormControl('', Validators.required),
+    subtypeName: new FormControl('', Validators.required),
     theme: new FormControl('', Validators.required)
   });
 
@@ -159,7 +160,7 @@ export class ViewerComponent implements OnInit {
     this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
     this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
     this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);
-    
+
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
@@ -276,6 +277,7 @@ export class ViewerComponent implements OnInit {
     });
 
     this.addFindMeButton();
+    this.onFormChanges();
   }
 
   handleEvent(event: SearchComponentEvent) {
@@ -543,6 +545,25 @@ export class ViewerComponent implements OnInit {
     } else {
       alert('Geolocation is not supported by this browser.');
     }
+  }
+
+  private onFormChanges() {
+    this.RegisterSensor.get('typeName').valueChanges.subscribe((category: Category) => {
+      switch (category) {
+        case Category.Beacon:
+          this.subtypesList = this.beaconTypesList;
+          break;
+        case Category.Camera:
+          this.subtypesList = this.cameraTypesList;
+          break;
+        case Category.Sensor:
+          this.subtypesList = this.sensorTypesList;
+          break;
+        default:
+          this.subtypesList = [];
+          break;
+      }
+    });
   }
 
   private addFindMeButton() {
