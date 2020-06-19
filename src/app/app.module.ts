@@ -2,6 +2,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { GgcMapModule } from 'generieke-geo-componenten-map';
 import { GgcSearchModule } from 'generieke-geo-componenten-search';
@@ -18,6 +19,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { RegisterComponent } from './register/register.component';
 import { ViewerComponent } from './viewer/viewer.component';
+import { SensorUpdateComponent } from './sensor-update/sensor-update.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { ViewerComponent } from './viewer/viewer.component';
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
+    SensorUpdateComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +40,7 @@ import { ViewerComponent } from './viewer/viewer.component';
     GgcDatasetTreeModule,
     GgcDatasetLegendModule,
     HttpClientModule,
+    NgbModule,
   ],
   providers: [
     DataService,
