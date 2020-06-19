@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  apiUrl: 'http://sensrnet-test.westeurope.cloudapp.azure.com/api',
+  production: true,
 };
