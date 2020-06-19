@@ -72,7 +72,7 @@
                         <br>
 
                         <label>Select category
-                            <select data-container="body" class="form-control selectpicker" formControlName="typeName">
+                            <select data-container="body" class="form-control" formControlName="typeName">
                                 <option *ngFor="let type of sensorCategoriesList" [value]="type">
                                     {{sensorCategories[type]}}
                                 </option>
@@ -185,31 +185,31 @@
                             <tbody>
                                 <tr>
                                     <td><b>Name</b></td>
-                                    <td><i>{{ activeFeatureInfo?.name }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.name }}</i></td>
                                 </tr>
                                 <tr>
                                     <td><b>Sensortype</b></td>
-                                    <td><i>{{ activeFeatureInfo?.typeName }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.typeName }}</i></td>
                                 </tr>
                                 <tr>
                                     <td><b>Active</b></td>
-                                    <td><i>{{ activeFeatureInfo?.active }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.active }}</i></td>
                                 </tr>
                                 <tr>
                                     <td><b>Aim</b></td>
-                                    <td><i>{{ activeFeatureInfo?.aim }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.aim }}</i></td>
                                 </tr>
                                 <tr>
                                     <td><b>Description</b></td>
-                                    <td><i>{{ activeFeatureInfo?.description }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.description }}</i></td>
                                 </tr>
                                 <tr>
                                     <td><b>Manufacturer</b></td>
-                                    <td><i>{{ activeFeatureInfo?.manufacturer }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.manufacturer }}</i></td>
                                 </tr>
                                 <tr>
                                     <td><b>Theme</b></td>
-                                    <td><i>{{ activeFeatureInfo?.theme }}</i></td>
+                                    <td><i>{{ activeFeatureInfo[0]?.theme }}</i></td>
                                 </tr>
                             </tbody>
                         </table>
