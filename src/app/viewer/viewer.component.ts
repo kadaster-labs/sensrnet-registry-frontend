@@ -1,3 +1,4 @@
+import { Theme as SensorTheme } from './../model/bodies/sensorTheme';
 import { sensorInfo } from './../model/bodies/sensorInfo';
 import { Component, OnInit } from '@angular/core';
 import { SearchComponentEvent } from 'generieke-geo-componenten-search';
@@ -18,7 +19,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Cluster } from 'ol/source';
-import { Circle as CircleStyle, Style, Fill, Text, Icon } from 'ol/style';
+import { Circle as CircleStyle, Style, Fill, Text, Icon, Circle } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import Feature from 'ol/Feature';
 import { ISensor } from '../model/bodies/sensor-body';
@@ -26,11 +27,14 @@ import { Theme, Dataset, DatasetTreeEvent } from 'generieke-geo-componenten-data
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
-import { TypeName } from '../model/bodies/sensorType-body';
+import { Category, TypeSensor, TypeCamera, TypeBeacon } from '../model/bodies/sensorTypes';
 import { EventType } from '../model/events/event-type';
 import { environment } from 'src/environments/environment';
 import Point from 'ol/geom/Point';
 import Control from 'ol/control/Control';
+import { Overlay } from 'ol';
+import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
+import SelectCluster from 'ol-ext/interaction/SelectCluster';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -40,10 +44,20 @@ export class ViewerComponent implements OnInit {
   title = 'SensRNet'
   mapName = 'srn';
 
-  types: any[];
-  sensorTypes = TypeName;
+  sensorCategories = Category;
+  sensorCategoriesList: string[];
+  sensorTypes = TypeSensor;
+  sensorTypesList: string[];
+  subtypesList: string[];
+  beaconTypes = TypeBeacon;
+  beaconTypesList: string[];
+  cameraTypes = TypeCamera;
+  cameraTypesList: string[];
+  sensorThemes = SensorTheme;
+  sensorThemesList: string[];
 
   currentMapResolution: number = undefined;
+  currentZoomlevel: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
   activeDatasets: Dataset[] = [];
@@ -54,13 +68,17 @@ export class ViewerComponent implements OnInit {
   highlightSource: VectorSource;
   selectLocationLayer: VectorLayer;
   selectLocationSource: VectorSource;
+  clusterLayer: AnimatedCluster;
+  overlay: Overlay
   selectLocation = false;
   locationFeature = Feature;
   locationList = ["Select Location", "Confirm", "Clear"]
 
+  public showInfo = false;
+
   private vectorSource: VectorSource;
-  private vectorLayer: VectorLayer;
   private clusterSource: Cluster;
+  private selectCluster: SelectCluster;
 
   public registerOwnerSent = false;
   public registerSensorSent = false;
@@ -74,6 +92,8 @@ export class ViewerComponent implements OnInit {
     documentation: new FormControl('', Validators.required),
     location: new FormControl({}, Validators.required),
     typeName: new FormControl('', Validators.required),
+    subtypeName: new FormControl('', Validators.required),
+    theme: new FormControl('', Validators.required)
   });
 
   UpdateSensor = new FormGroup({
@@ -141,7 +161,12 @@ export class ViewerComponent implements OnInit {
       }
     );
 
-    this.types = Object.keys(this.sensorTypes).filter(String);
+    this.sensorCategoriesList = Object.keys(this.sensorCategories).filter(String);
+    this.sensorThemesList = Object.keys(this.sensorThemes).filter(String);
+    this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
+    this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
+    this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);
+
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
@@ -153,90 +178,143 @@ export class ViewerComponent implements OnInit {
         type: 'FeatureCollection',
       });
 
-      this.vectorSource = new VectorSource({
-        features,
-      });
-      this.clusterSource = new Cluster({
-        distance: 50,
-        source: this.vectorSource
-      });
-
       const styleCache = {}
 
-      this.vectorLayer = new VectorLayer({
-        source: this.clusterSource,
-        // rewrite this function
-        style: function (feature) {
-          let numberOfFeatures = feature.get('features').length
-          let style: Style
+      let styleCluster = function (feature) {
+        let numberOfFeatures = feature.get('features').length
+        let style: Style
 
-          if (numberOfFeatures === 1) {
+        if (numberOfFeatures === 1) {
+          let active = feature.get('features')[0].values_.active
+          let sensorType = feature.get('features')[0].values_.typeName[0]
+          if (!active) {
+            numberOfFeatures = 'inactive' + sensorType
+            style = styleCache[numberOfFeatures]
+          }
+          else {
+            numberOfFeatures = 'active' + sensorType
+            style = styleCache[numberOfFeatures]
+          }
+        }
+        else {
+          style = styleCache[numberOfFeatures]
+        }
+        if (!style) {
+          if (typeof numberOfFeatures === 'string') {
             let active = feature.get('features')[0].values_.active
             let sensorType = feature.get('features')[0].values_.typeName[0]
             if (!active) {
-              numberOfFeatures = 'inactive' + sensorType
-              style = styleCache[numberOfFeatures]
-            }
-            else {
-              numberOfFeatures = 'active' + sensorType
-              style = styleCache[numberOfFeatures]
-            }
-          }
-          else {
-            style = styleCache[numberOfFeatures]
-          }
-          if (!style) {
-            if (typeof numberOfFeatures === 'string') {
-              let active = feature.get('features')[0].values_.active
-              let sensorType = feature.get('features')[0].values_.typeName[0]
-              if (!active) {
-                style = new Style({
-                  image: new Icon({
-                    opacity: 0.25,
-                    scale: 0.35,
-                    src: `/assets/icons/${sensorType}.png`,
-                  })
-                });
-              }
-              else {
-                style = new Style({
-                  image: new Icon({
-                    opacity: 0.9,
-                    scale: 0.35,
-                    src: `/assets/icons/${sensorType}.png`,
-                  })
-                });
-              }
+              style = new Style({
+                image: new Icon({
+                  opacity: 0.25,
+                  scale: 0.25,
+                  src: `/assets/icons/${sensorType}.png`,
+                })
+              });
             }
             else {
               style = new Style({
-                image: new CircleStyle({
-                  radius: 25,
-                  stroke: new Stroke({
-                    color: '#ffffff',
-                    width: 2
-                  }),
-                  fill: new Fill({
-                    color: 'rgba(19, 65, 115, 0.9)'
-                  })
-                }),
-                text: new Text({
-                  text: numberOfFeatures.toString(),
-                  font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
-                  fill: new Fill({
-                    color: '#ffffff'
-                  }),
-                  textAlign: 'center'
+                image: new Icon({
+                  opacity: 0.9,
+                  scale: 0.25,
+                  src: `/assets/icons/${sensorType}.png`,
                 })
-              })
+              });
             }
-            styleCache[numberOfFeatures] = style;
           }
-          return style;
+          else {
+            style = new Style({
+              image: new CircleStyle({
+                radius: 15,
+                fill: new Fill({
+                  color: 'rgba(19, 65, 115, 0.9)'
+                })
+              }),
+              text: new Text({
+                text: numberOfFeatures.toString(),
+                font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
+                fill: new Fill({
+                  color: '#ffffff'
+                }),
+                textAlign: 'center'
+              })
+            })
+          }
+          styleCache[numberOfFeatures] = style;
         }
+        return style;
+      }
+
+      let styleSelectedCluster = function () {
+        let style1 = new Style({
+          image: new Circle({
+            radius: 8,
+            fill: new Fill({
+              color: 'rgba(19, 65, 115, 0.9)'
+            })
+          })
+          // ,
+          // stroke: new Stroke({
+          //   color: '#000000',
+          //   width: 0.5
+          // }),
+        });
+        return style1
+      }
+
+      this.vectorSource = new VectorSource({
+        features,
       });
-      this.vectorLayer.setZIndex(10);
-      this.mapService.getMap(this.mapName).addLayer(this.vectorLayer);
+
+      this.clusterSource = new Cluster({
+        distance: 40,
+        source: this.vectorSource
+      });
+
+      this.clusterLayer = new AnimatedCluster({
+        name: 'Cluster',
+        source: this.clusterSource,
+        style: styleCluster
+      });
+
+      this.clusterLayer.setZIndex(10);
+      this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
+
+      this.selectCluster = new SelectCluster({
+        pointRadius: 20,
+        featureStyle: styleSelectedCluster,
+        style: styleCluster
+      });
+
+      this.mapService.getMap(this.mapName).addInteraction(this.selectCluster)
+      
+      this.selectCluster.getFeatures().on(['add'], (event) => {
+        this.removeHighlight()
+        let features_ = event.element.get('features');
+        if (features_.length == 1) {
+          var feature = features_[0];
+          let geometry = new Feature({
+            geometry: feature.values_.geometry
+          })
+          let feature_ = new sensorInfo(
+            feature.get("name"),
+            feature.get("typeName"),
+            feature.get("active"),
+            feature.get("aim"),
+            feature.get("description"),
+            feature.get("manufacturer"),
+            feature.get("theme")
+          )
+          this.activeFeatureInfo = feature_
+          this.showInfo = true;
+          this.highlightFeature(geometry)
+        }
+        if (features_.length > 1) {
+          this.removeHighlight()
+          this.showInfo = false
+          this.activeFeatureInfo = null;
+        }
+      })
     });
 
     // subscribe to sensor events
@@ -258,6 +336,7 @@ export class ViewerComponent implements OnInit {
     });
 
     this.addFindMeButton();
+    this.onFormChanges();
   }
 
   handleEvent(event: SearchComponentEvent) {
@@ -266,6 +345,9 @@ export class ViewerComponent implements OnInit {
 
   handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
+    this.currentZoomlevel = map.getView().getZoom();
+    // console.log(this.currentZoomlevel)
+
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
     }
@@ -274,35 +356,44 @@ export class ViewerComponent implements OnInit {
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD)
       this.removeHighlight()
 
-      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
-        const features = data.getProperties().features;
-        if (features.length === 1) {
-          const firstFeature = features[0]
-          const feature = new sensorInfo(
-            firstFeature.values_.name,
-            firstFeature.values_.typeName,
-            firstFeature.values_.active,
-            firstFeature.values_.aim,
-            firstFeature.values_.description,
-            firstFeature.values_.manufacturer
-          )
-          const geometry = new Feature({
-            geometry: firstFeature.values_.geometry
-          })
+      // this.removeHighlight()
+      // this.activeFeatureInfo = []
+      // this.showInfo = false
 
-          this.highlightFeature(geometry)
-          this.activeFeatureInfo = feature
-        }
-        else {
-          this.activeFeatureInfo = null
-          this.removeHighlight()
-        }
-      },
-        {
-          layerFilter: function (layer) {
-            return layer.getProperties().source instanceof Cluster;
-          }
-        });
+      // map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
+      // const features = data.getProperties().features;
+      // const zoomlevel = map.getView().getZoom()
+      // if (features.length === 1) {
+      //   console.log(features)
+      //   const feature = features[0]
+      //   const geometry = new Feature({
+      //     geometry: feature.values_.geometry
+      //   })
+      //   this.highlightFeature(geometry)
+      //   this.activeFeatureInfo.push(this.featureToSensorInfo(feature))
+      //   this.showInfo = true;
+      // }
+      // else if (features.length > 1) {
+      //   // if (zoomlevel > 19) {
+      //     // nasty solution...
+      //     const geometry = new Feature({
+      //       geometry: features[0].values_.geometry
+      //     })
+      //     this.highlightFeature(geometry)
+      //     let features_ = features.map((feature: Feature) => this.featureToSensorInfo(feature))
+      //     this.activeFeatureInfo = features_
+      //     this.showInfo = true;
+      //   }
+      //   // clusters not on the same place
+      //   else {
+      //   // }
+      // }
+      // },
+      //   {
+      //     layerFilter: function (layer) {
+      //       return layer.getProperties().source instanceof Cluster;
+      //     }
+      //   });
 
       if (this.selectLocation === true) {
         this.removeLocationFeatures()
@@ -358,9 +449,23 @@ export class ViewerComponent implements OnInit {
         aim: newSensor.aim,
         description: newSensor.description,
         manufacturer: newSensor.manufacturer,
+        theme: newSensor.theme,
       },
       type: 'Feature',
     };
+  }
+
+  featureToSensorInfo(feature: Feature) {
+    const s_info = new sensorInfo(
+      feature.get("name"),
+      feature.get("typeName"),
+      feature.get("active"),
+      feature.get("aim"),
+      feature.get("description"),
+      feature.get("manufacturer"),
+      feature.get("theme")
+    )
+    return s_info
   }
 
   get form() {
@@ -405,9 +510,10 @@ export class ViewerComponent implements OnInit {
   clearLocationLayer() {
     this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
-  }
+    console.log(this.showInfo)
+    console.log(this.activeFeatureInfo)  }
 
-  private highlightFeature(feature: Feature) {
+  highlightFeature(feature: Feature) {
     this.highlightSource = new VectorSource({
       features: [feature]
     });
@@ -415,7 +521,7 @@ export class ViewerComponent implements OnInit {
       source: this.highlightSource,
       style: [new Style({
         image: new CircleStyle({
-          radius: 22,
+          radius: 20,
           stroke: new Stroke({
             color: '#FF0000 ',
             width: 1,
@@ -435,7 +541,7 @@ export class ViewerComponent implements OnInit {
     this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
   }
 
-  private removeHighlight() {
+  removeHighlight() {
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
   }
 
@@ -451,6 +557,7 @@ export class ViewerComponent implements OnInit {
       name: this.RegisterSensor.value.name,
       dataStreams: this.RegisterSensor.value.dataStreams || [],
       typeName: this.RegisterSensor.value.typeName || [],
+      theme: this.RegisterSensor.value.theme || [],
     };
 
     this.httpClient.post(`${environment.apiUrl}/Sensor`, sensor, {}).subscribe((data: any) => {
@@ -515,6 +622,25 @@ export class ViewerComponent implements OnInit {
     }
   }
 
+  private onFormChanges() {
+    this.RegisterSensor.get('typeName').valueChanges.subscribe((category: Category) => {
+      switch (category) {
+        case Category.Beacon:
+          this.subtypesList = this.beaconTypesList;
+          break;
+        case Category.Camera:
+          this.subtypesList = this.cameraTypesList;
+          break;
+        case Category.Sensor:
+          this.subtypesList = this.sensorTypesList;
+          break;
+        default:
+          this.subtypesList = [];
+          break;
+      }
+    });
+  }
+
   private addFindMeButton() {
     const locate = document.createElement('div');
     locate.className = 'ol-control ol-unselectable locate';
@@ -526,7 +652,7 @@ export class ViewerComponent implements OnInit {
     this.mapService.getMap('srn').addControl(new Control({
       element: locate,
     }));
-    console.log(this.mapService.getMap().getControls());
+    // console.log(this.mapService.getMap().getControls());
   }
 
   logout() {

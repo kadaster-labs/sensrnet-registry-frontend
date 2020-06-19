@@ -71,12 +71,33 @@
                         </label>
                         <br>
 
-                        <label>Select type of sensor
-                            <select class="form-control" formControlName="typeName">
-                                <option *ngFor="let type of types" [value]="type">{{sensorTypes[type]}}</option>
+                        <label>Select category
+                            <select data-container="body" class="form-control" formControlName="typeName">
+                                <option *ngFor="let type of sensorCategoriesList" [value]="type">
+                                    {{sensorCategories[type]}}
+                                </option>
                             </select>
                         </label>
                         <br>
+
+                        <label>Select {{ RegisterSensor.value.typeName }} type
+                          <select class="form-control" data-container="body" formControlName="subtypeName">
+                              <option *ngFor="let type of subtypesList" [value]="type">
+                                  {{type}}
+                              </option>
+                          </select>
+                        </label>
+                        <br>
+
+                        <label>Select theme
+                            <br>
+                            <select class="form-control selectpicker" multiple data-selected-text-format="count > 3"
+                                formControlName="theme">
+                                <option *ngFor="let type of sensorThemesList" [value]="type">{{sensorThemes[type]}}
+                            </select>
+                        </label>
+                        <br>
+
                         <br>
                         <button class="btn" type="button" (click)="SelectLocationOn()"> Select location </button>
                         <!-- <button class="btn" type="button" (click)="SelectLocationOff()"> Confirm </button> -->
@@ -157,34 +178,38 @@
             </div>
             <div id="info">
                 <div class="row" id="info-background">
-                    <a id="info-header" role="button" data-toggle="collapse" data-target="#infoForm"><span
-                            class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Feature info</a>
-                    <div class="collapse col-lg-12" id="infoForm">
+                    <a id="info-header" role="button"><span class="glyphicon glyphicon-info-sign"
+                            aria-hidden="true"></span> Feature info</a>
+                    <div [ngClass]="{'show': showInfo}" class="collapse col-lg-12" id="infoForm">
                         <table class="table table-hover">
                             <tbody>
                                 <tr>
-                                    <td><b>Name</b></td>
-                                    <td><i>{{ activeFeatureInfo?.name }}</i></td>
+                                    <td><strong>Name</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.name }}</em></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Sensortype</b></td>
-                                    <td><i>{{ activeFeatureInfo?.typeName }}</i></td>
+                                    <td><strong>Sensortype</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.typeName }}</em></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Active</b></td>
-                                    <td><i>{{ activeFeatureInfo?.active }}</i></td>
+                                    <td><strong>Active</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.active }}</em></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Aim</b></td>
-                                    <td><i>{{ activeFeatureInfo?.aim }}</i></td>
+                                    <td><strong>Aim</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.aim }}</em></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Description</b></td>
-                                    <td><i>{{ activeFeatureInfo?.description }}</i></td>
+                                    <td><strong>Description</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.description }}</em></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Manufacturer</b></td>
-                                    <td><i>{{ activeFeatureInfo?.manufacturer }}</i></td>
+                                    <td><strong>Manufacturer</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.manufacturer }}</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Theme</strong></td>
+                                    <td><em>{{ activeFeatureInfo?.theme }}</em></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -196,7 +221,7 @@
 
     <div class="row">
         <div class="backgroundmap">
-            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)"></ggc-map>
+            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
                 [url]="dataset.services[0].url" [getFeatureInfoOnSingleclick]="true"
                 [layer]="dataset.services[0].layers[0].technicalName" [mapName]="mapName"
