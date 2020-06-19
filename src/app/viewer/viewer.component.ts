@@ -57,12 +57,13 @@ export class ViewerComponent implements OnInit {
   sensorThemesList: string[];
 
   currentMapResolution: number = undefined;
+  currentZoomlevel: number = undefined;
   dataTabFeatureInfo: FeatureInfoCollection[];
   currentTabFeatureInfo: FeatureInfoCollection;
   activeDatasets: Dataset[] = [];
   activeWmtsDatasets: Dataset[] = [];
   activeWmsDatasets: Dataset[] = [];
-  activeFeatureInfo: sensorInfo[] = [];
+  activeFeatureInfo: sensorInfo;
   highlightLayer: VectorLayer;
   highlightSource: VectorSource;
   selectLocationLayer: VectorLayer;
@@ -76,7 +77,6 @@ export class ViewerComponent implements OnInit {
   public showInfo = false;
 
   private vectorSource: VectorSource;
-  private vectorLayer: VectorLayer;
   private clusterSource: Cluster;
   private selectCluster: SelectCluster;
 
@@ -246,18 +246,18 @@ export class ViewerComponent implements OnInit {
       }
 
       let styleSelectedCluster = function () {
-        var img = new Circle({
-          radius: 8,
-          fill: new Fill({
-            color: 'rgba(19, 65, 115, 0.9)'
+        let style1 = new Style({
+          image: new Circle({
+            radius: 8,
+            fill: new Fill({
+              color: 'rgba(19, 65, 115, 0.9)'
+            })
           })
-        });
-        var style1 = new Style({
-          image: img,
-          stroke: new Stroke({
-            color: '#000000',
-            width: 0.5
-          }),
+          // ,
+          // stroke: new Stroke({
+          //   color: '#000000',
+          //   width: 0.5
+          // }),
         });
         return style1
       }
@@ -280,16 +280,41 @@ export class ViewerComponent implements OnInit {
       this.clusterLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
 
-      console.log(this.mapService.getMap(this.mapName))
-
       this.selectCluster = new SelectCluster({
-        pointRadius: 30,
-        spiral: true,
+        pointRadius: 20,
         featureStyle: styleSelectedCluster,
         style: styleCluster
       });
 
-      this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
+      this.mapService.getMap(this.mapName).addInteraction(this.selectCluster)
+      
+      this.selectCluster.getFeatures().on(['add'], (event) => {
+        this.removeHighlight()
+        let features = event.element.get('features');
+        if (features.length == 1) {
+          var feature = features[0];
+          let geometry = new Feature({
+            geometry: feature.values_.geometry
+          })
+          let feature_ = new sensorInfo(
+            feature.get("name"),
+            feature.get("typeName"),
+            feature.get("active"),
+            feature.get("aim"),
+            feature.get("description"),
+            feature.get("manufacturer"),
+            feature.get("theme")
+          )
+          this.activeFeatureInfo = feature_
+          this.showInfo = true;
+          this.highlightFeature(geometry)
+        }
+        if (features.length > 1) {
+          this.removeHighlight()
+          this.showInfo = false
+          this.activeFeatureInfo = null;
+        }
+      })
     });
 
     // subscribe to sensor events
@@ -320,7 +345,8 @@ export class ViewerComponent implements OnInit {
 
   handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
-    console.log(this.currentMapResolution = map.getView().getZoom());
+    this.currentZoomlevel = map.getView().getZoom();
+    // console.log(this.currentZoomlevel)
 
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
@@ -329,45 +355,45 @@ export class ViewerComponent implements OnInit {
       const mapCoordinateRD = mapEvent.value.coordinate
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD)
       this.removeHighlight()
-      this.activeFeatureInfo = []
-      this.showInfo = false
 
-      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
-        const features = data.getProperties().features;
-        const zoomlevel = map.getView().getZoom()
-        if (features.length === 1) {
-          const feature = features[0]
-          const geometry = new Feature({
-            geometry: feature.values_.geometry
-          })
-          this.highlightFeature(geometry)
-          this.activeFeatureInfo.push(this.featureToSensorInfo(feature))
-          console.log(this.activeFeatureInfo)
-          this.showInfo = true;
-        }
+      // this.removeHighlight()
+      // this.activeFeatureInfo = []
+      // this.showInfo = false
 
-        else if (features.length > 1) {
-          if (zoomlevel > 19) {
-            // nasty solution...
-            const geometry = new Feature({
-              geometry: features[0].values_.geometry
-            })
-            this.highlightFeature(geometry)
-            let features_ = features.map((feature: Feature) => this.featureToSensorInfo(feature))
-            this.activeFeatureInfo = features_
-            console.log(this.activeFeatureInfo)
-            this.showInfo = true;
-          }
-          // clusters not on the same place
-          else {
-          }
-        }
-      },
-        {
-          layerFilter: function (layer) {
-            return layer.getProperties().source instanceof Cluster;
-          }
-        });
+      // map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
+      // const features = data.getProperties().features;
+      // const zoomlevel = map.getView().getZoom()
+      // if (features.length === 1) {
+      //   console.log(features)
+      //   const feature = features[0]
+      //   const geometry = new Feature({
+      //     geometry: feature.values_.geometry
+      //   })
+      //   this.highlightFeature(geometry)
+      //   this.activeFeatureInfo.push(this.featureToSensorInfo(feature))
+      //   this.showInfo = true;
+      // }
+      // else if (features.length > 1) {
+      //   // if (zoomlevel > 19) {
+      //     // nasty solution...
+      //     const geometry = new Feature({
+      //       geometry: features[0].values_.geometry
+      //     })
+      //     this.highlightFeature(geometry)
+      //     let features_ = features.map((feature: Feature) => this.featureToSensorInfo(feature))
+      //     this.activeFeatureInfo = features_
+      //     this.showInfo = true;
+      //   }
+      //   // clusters not on the same place
+      //   else {
+      //   // }
+      // }
+      // },
+      //   {
+      //     layerFilter: function (layer) {
+      //       return layer.getProperties().source instanceof Cluster;
+      //     }
+      //   });
 
       if (this.selectLocation === true) {
         this.removeLocationFeatures()
@@ -484,9 +510,10 @@ export class ViewerComponent implements OnInit {
   clearLocationLayer() {
     this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
-  }
+    console.log(this.showInfo)
+    console.log(this.activeFeatureInfo)  }
 
-  private highlightFeature(feature: Feature) {
+  highlightFeature(feature: Feature) {
     this.highlightSource = new VectorSource({
       features: [feature]
     });
@@ -514,7 +541,7 @@ export class ViewerComponent implements OnInit {
     this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
   }
 
-  private removeHighlight() {
+  removeHighlight() {
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
   }
 
@@ -625,7 +652,7 @@ export class ViewerComponent implements OnInit {
     this.mapService.getMap('srn').addControl(new Control({
       element: locate,
     }));
-    console.log(this.mapService.getMap().getControls());
+    // console.log(this.mapService.getMap().getControls());
   }
 
   logout() {
