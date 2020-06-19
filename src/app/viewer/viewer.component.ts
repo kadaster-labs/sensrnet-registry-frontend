@@ -32,6 +32,7 @@ import { EventType } from '../model/events/event-type';
 import { environment } from 'src/environments/environment';
 import Point from 'ol/geom/Point';
 import Control from 'ol/control/Control';
+import { SensorService, IRegisterSensorBody } from '../services/sensor.service';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -45,7 +46,7 @@ export class ViewerComponent implements OnInit {
   sensorCategoriesList: string[];
   sensorTypes = TypeSensor;
   sensorTypesList: string[];
-  subtypesList: string[];
+  typeDetailsList: string[];
   beaconTypes = TypeBeacon;
   beaconTypesList: string[];
   cameraTypes = TypeCamera;
@@ -77,16 +78,26 @@ export class ViewerComponent implements OnInit {
   public registerOwnerSent = false;
   public registerSensorSent = false;
 
+  public selectedSensor: ISensor;
+  public paneSensorRegisterActive = false;
+  public paneSensorUpdateActive = false;
+  public paneOwnerRegisterActive = false;
+
   RegisterSensor = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(6)]),
     aim: new FormControl(''),
     description: new FormControl(''),
     manufacturer: new FormControl('', Validators.required),
     active: new FormControl(''),
-    documentation: new FormControl('', Validators.required),
-    location: new FormControl({}, Validators.required),
+    documentationUrl: new FormControl('', Validators.required),
+    location: new FormGroup({
+      latitude: new FormControl(0, [Validators.required]),
+      longitude: new FormControl(0, [Validators.required]),
+      height: new FormControl(0, [Validators.required]),
+      baseObjectId: new FormControl('non-empty'),
+    }),
     typeName: new FormControl('', Validators.required),
-    subtypeName: new FormControl('', Validators.required),
+    typeDetailsName: new FormControl('', Validators.required),
     theme: new FormControl('', Validators.required)
   });
 
@@ -96,7 +107,7 @@ export class ViewerComponent implements OnInit {
     description: new FormControl(''),
     manufacturer: new FormControl(''),
     active: new FormControl(''),
-    documentation: new FormControl(''),
+    documentationUrl: new FormControl(''),
     typeName: new FormControl(''),
     location: new FormControl('')
   });
@@ -121,8 +132,6 @@ export class ViewerComponent implements OnInit {
   private mapCoordinateWGS84: [];
   private mapCoordinateRD: [];
 
-  private sensors = [];
-
   currentOwner: Owner;
 
   myLayers: Theme[];
@@ -142,6 +151,7 @@ export class ViewerComponent implements OnInit {
     private httpClient: HttpClient,
     public mapService: MapService,
     private dataService: DataService,
+    private sensorService: SensorService,
   ) {
     this.authenticationService.currentOwner.subscribe(x => this.currentOwner = x);
   }
@@ -164,7 +174,7 @@ export class ViewerComponent implements OnInit {
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
       console.log(`Received ${sensors.length} sensors`);
-      this.sensors = sensors;
+      console.log(sensors);
       const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
 
       const features: Array<Feature> = (new GeoJSON()).readFeatures({
@@ -191,7 +201,7 @@ export class ViewerComponent implements OnInit {
 
           if (numberOfFeatures === 1) {
             let active = feature.get('features')[0].values_.active
-            let sensorType = feature.get('features')[0].values_.typeName[0]
+            let sensorType = feature.get('features')[0].values_.typeName
             if (!active) {
               numberOfFeatures = 'inactive' + sensorType
               style = styleCache[numberOfFeatures]
@@ -207,7 +217,7 @@ export class ViewerComponent implements OnInit {
           if (!style) {
             if (typeof numberOfFeatures === 'string') {
               let active = feature.get('features')[0].values_.active
-              let sensorType = feature.get('features')[0].values_.typeName[0]
+              let sensorType = feature.get('features')[0].values_.typeName
               if (!active) {
                 style = new Style({
                   image: new Icon({
@@ -259,12 +269,10 @@ export class ViewerComponent implements OnInit {
     });
 
     // subscribe to sensor events
-    const sensorCreated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
-    sensorCreated$.subscribe((newSensor: ISensor) => {
+    const sensorRegistered$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
+    sensorRegistered$.subscribe((newSensor: ISensor) => {
       console.log(`Socket.io heard that a new SensorCreated event was fired`);
       console.log(newSensor);
-
-      this.sensors.push(newSensor);
 
       const feature: object = this.sensorToFeature(newSensor);
 
@@ -276,8 +284,58 @@ export class ViewerComponent implements OnInit {
       this.vectorSource.addFeatures(newFeatures);
     });
 
+    // subscribe to sensor events
+    const sensorUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorUpdated);
+    sensorUpdated$.subscribe((newSensor: ISensor) => {
+      console.log(`Socket.io heard that a Updated event was fired`);
+      console.log(newSensor);
+    });
+
+    // subscribe to sensor events
+    const sensorActivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorActivated);
+    sensorActivated$.subscribe((newSensor: ISensor) => {
+      console.log(`Socket.io heard that a Activated event was fired`);
+      this.updateSensor(newSensor);
+    });
+
+    // subscribe to sensor events
+    const sensorDeactivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorDeactivated);
+    sensorDeactivated$.subscribe((newSensor: ISensor) => {
+      console.log(`Socket.io heard that a Deactivated event was fired`);
+      this.updateSensor(newSensor);
+    });
+
+    // subscribe to sensor events
+    const sensorLocationUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRelocated);
+    sensorLocationUpdated$.subscribe((newSensor: ISensor) => {
+      console.log(`Socket.io heard that a LocationUpdated event was fired`);
+      this.updateSensor(newSensor);
+    });
+
     this.addFindMeButton();
     this.onFormChanges();
+  }
+
+  updateSensor(updatedSensor: ISensor) {
+    const props = this.sensorToFeatureProperties(updatedSensor);
+
+    // update map
+    const sensor = this.vectorSource.getFeatureById(updatedSensor._id);
+    sensor.setProperties(props);
+
+    // update feature info
+    this.activeFeatureInfo = new sensorInfo(
+      updatedSensor.name,
+      updatedSensor.typeName,
+      updatedSensor.active,
+      updatedSensor.aim,
+      updatedSensor.description,
+      updatedSensor.manufacturer,
+      updatedSensor.theme,
+    );
+
+    // update sensor update pane
+    this.selectedSensor = updatedSensor;
   }
 
   handleEvent(event: SearchComponentEvent) {
@@ -314,6 +372,7 @@ export class ViewerComponent implements OnInit {
             geometry: firstFeature.values_.geometry
           })
           this.highlightFeature(geometry)
+          this.selectedSensor = firstFeature.values_.sensor;
           this.activeFeatureInfo = feature
           this.showInfo = true;
         }
@@ -333,10 +392,10 @@ export class ViewerComponent implements OnInit {
         this.removeLocationFeatures()
         this.RegisterSensor.patchValue({
           location: {
-            baseObjectId: 'IDK',
             height: 0,
             latitude: mapCoordinateWGS84[1],
             longitude: mapCoordinateWGS84[0],
+            baseObjectId: 'non-empty',
           }
         })
         const locationFeature = new Feature({
@@ -369,6 +428,19 @@ export class ViewerComponent implements OnInit {
     }
   }
 
+  private sensorToFeatureProperties(sensor: ISensor) {
+    return {
+      sensor,
+      name: sensor.name,
+      typeName: sensor.typeName,
+      active: sensor.active,
+      aim: sensor.aim,
+      description: sensor.description,
+      manufacturer: sensor.manufacturer,
+      theme: sensor.theme,
+    }
+  }
+
   private sensorToFeature(newSensor: ISensor): object {
     return {
       geometry: {
@@ -376,15 +448,7 @@ export class ViewerComponent implements OnInit {
         type: 'Point',
       },
       id: newSensor._id,
-      properties: {
-        name: newSensor.name,
-        typeName: newSensor.typeName,
-        active: newSensor.active,
-        aim: newSensor.aim,
-        description: newSensor.description,
-        manufacturer: newSensor.manufacturer,
-        theme: newSensor.theme,
-      },
+      properties: this.sensorToFeatureProperties(newSensor),
       type: 'Feature',
     };
   }
@@ -433,7 +497,6 @@ export class ViewerComponent implements OnInit {
   }
 
   clearLocationLayer() {
-    console.log(this.selectedType)
     this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
   }
@@ -467,35 +530,40 @@ export class ViewerComponent implements OnInit {
   }
 
   private removeHighlight() {
+    if (this.paneSensorUpdateActive) { this.togglePane('SensorUpdate'); }
+    this.selectedSensor = undefined;
+
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
+    console.log('remove highlight');
+    this.selectedSensor = null;
   }
 
-  submitCreateSensor() {
-    console.warn(this.RegisterSensor.value);
-    const sensor: object = {
+  async submitRegisterSensor() {
+    console.log(`posting ${this.RegisterSensor.value}`);
+    // TODO: perform extra validation
+    const sensor: IRegisterSensorBody = {
+      typeName: this.RegisterSensor.value.typeName,
+      location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
+      dataStreams: this.RegisterSensor.value.dataStreams || [],
+
       active: this.RegisterSensor.value.active || false,
       aim: this.RegisterSensor.value.aim,
       description: this.RegisterSensor.value.description,
-      documentation: this.RegisterSensor.value.documentation,
-      location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
+      documentationUrl: this.RegisterSensor.value.documentationUrl,
       manufacturer: this.RegisterSensor.value.manufacturer,
       name: this.RegisterSensor.value.name,
-      dataStreams: this.RegisterSensor.value.dataStreams || [],
-      typeName: this.RegisterSensor.value.typeName || [],
       theme: this.RegisterSensor.value.theme || [],
     };
 
-    this.httpClient.post(`${environment.apiUrl}/Sensor`, sensor, {}).subscribe((data: any) => {
-      console.log(`Sensor was succesfully posted, received id ${data.sensorId}`);
-      this.clearLocationLayer()
+    try {
+      const result = await this.sensorService.register(sensor);
 
-      this.registerSensorSent = true;
-      setTimeout(() => {
-        this.registerSensorSent = false;
-      }, 2500);
-    }, err => {
-      console.log(err);
-    });
+      console.log(`Sensor was succesfully posted, received id ${result}`);
+      this.clearLocationLayer();
+      this.togglePane('SensorRegister');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   submitCreateOwner() {
@@ -521,6 +589,31 @@ export class ViewerComponent implements OnInit {
     }, err => {
       console.log(err);
     });
+  }
+
+  public togglePane(pane: string) {
+    switch (pane) {
+      case 'SensorRegister':
+        this.paneSensorRegisterActive = !this.paneSensorRegisterActive;
+        this.paneSensorUpdateActive = false;
+        this.paneOwnerRegisterActive = false;
+        break;
+      case 'SensorUpdate':
+        this.paneSensorRegisterActive = false;
+        this.paneSensorUpdateActive = !this.paneSensorUpdateActive;
+        this.paneOwnerRegisterActive = false;
+        break;
+      case 'OwnerRegister':
+        this.paneSensorRegisterActive = false;
+        this.paneSensorUpdateActive = false;
+        this.paneOwnerRegisterActive = !this.paneOwnerRegisterActive;
+        break;
+      default:
+        this.paneSensorRegisterActive = false;
+        this.paneSensorUpdateActive = false;
+        this.paneOwnerRegisterActive = false;
+        break;
+    }
   }
 
   private zoomToPoint(point: Point) {
@@ -551,16 +644,16 @@ export class ViewerComponent implements OnInit {
     this.RegisterSensor.get('typeName').valueChanges.subscribe((category: Category) => {
       switch (category) {
         case Category.Beacon:
-          this.subtypesList = this.beaconTypesList;
+          this.typeDetailsList = this.beaconTypesList;
           break;
         case Category.Camera:
-          this.subtypesList = this.cameraTypesList;
+          this.typeDetailsList = this.cameraTypesList;
           break;
         case Category.Sensor:
-          this.subtypesList = this.sensorTypesList;
+          this.typeDetailsList = this.sensorTypesList;
           break;
         default:
-          this.subtypesList = [];
+          this.typeDetailsList = [];
           break;
       }
     });

@@ -8,16 +8,16 @@
                     aria-expanded="false">Owner<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <!-- <li><a role="button" data-toggle="collapse" data-target="#registerOwnerForm">Register owner</a></li> -->
-                    <li><a>Update owner</a></li>
+                    <li><a role="button" (click)="togglePane('OwnerUpdate')">Update owner</a></li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Sensor<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a role="button" data-toggle="collapse" data-target="#registerSensorForm">Register sensor</a>
+                    <li><a role="button" (click)="togglePane('SensorRegister')">Register sensor</a>
                     </li>
-                    <li><a>Update sensor</a></li>
+                    <li><a role="button" (click)="togglePane('SensorUpdate')">Update sensor</a></li>
                 </ul>
             </li>
             <li class="dropdown">
@@ -32,11 +32,11 @@
     </div>
 
     <div class="row">
-        <div class="collapse col-lg-12" id="registerSensorForm">
+        <div id="registerSensorForm" [ngbCollapse]="!paneSensorRegisterActive" class="col-lg-12 app-form">
             <div class="form-inside">
-                <form [formGroup]="RegisterSensor" (ngSubmit)="submitCreateSensor()">
+                <form [formGroup]="RegisterSensor" (ngSubmit)="submitRegisterSensor()">
                     <div class="input-group">
-                        <label> Name
+                        <label> Name <span class="required">*</span>
                             <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
                                 [ngClass]="{ 'is-invalid': (form.name.dirty || form.name.touched) && form.name.errors }">
                             <div *ngIf="(form.name.dirty || form.name.touched) && form.name.errors"
@@ -56,7 +56,7 @@
                                 placeholder="Describe the sensor"></textarea>
                         </label>
                         <br>
-                        <label> Manufacturer
+                        <label> Manufacturer <span class="required">*</span>
                             <input class="form-control" type="text" formControlName="manufacturer"
                                 placeholder="Enter name of the manufacturer">
                         </label>
@@ -65,13 +65,13 @@
                             <input type="checkbox" formControlName="active"> Active
                         </label>
                         <br>
-                        <label> Documentation
-                            <input class="form-control" type="url" formControlName="documentation"
-                                placeholder="url of documentation">
+                        <label> Documentation URL <span class="required">*</span>
+                            <input class="form-control" type="url" formControlName="documentationUrl"
+                                placeholder="url of documentationUrl">
                         </label>
                         <br>
 
-                        <label>Select category
+                        <label>Select category <span class="required">*</span>
                             <select data-container="body" class="form-control selectpicker" formControlName="typeName">
                                 <option *ngFor="let type of sensorCategoriesList" [value]="type">
                                     {{sensorCategories[type]}}
@@ -80,16 +80,16 @@
                         </label>
                         <br>
 
-                        <label>Select {{ RegisterSensor.value.typeName }} type
-                          <select class="form-control" data-container="body" formControlName="subtypeName">
-                              <option *ngFor="let type of subtypesList" [value]="type">
+                        <label>Select {{ RegisterSensor.value.typeName }} type  <span class="required">*</span>
+                          <select class="form-control" data-container="body" formControlName="typeDetailsName">
+                              <option *ngFor="let type of typeDetailsList" [value]="type">
                                   {{type}}
                               </option>
                           </select>
                         </label>
                         <br>
 
-                        <label>Select theme
+                        <label>Select theme <span class="required">*</span>
                             <br>
                             <select class="form-control selectpicker" multiple data-selected-text-format="count > 3"
                                 formControlName="theme">
@@ -101,7 +101,7 @@
                         <br>
                         <button class="btn" type="button" (click)="SelectLocationOn()"> Select location </button>
                         <!-- <button class="btn" type="button" (click)="SelectLocationOff()"> Confirm </button> -->
-                        <button class="btn" type="button" (click)="clearLocationLayer()"> Clear </button>
+                        <button class="btn" type="button" (click)="clearLocationLayer()"> Clear </button> <span class="required">*</span>
                         <br>
                         <hr>
                         <button class="btn btn-primary btn-lg" type="submit"
@@ -115,7 +115,15 @@
     </div>
 
     <div class="row">
-        <div class="collapse col-lg-12" id="registerOwnerForm">
+      <div id="updateSensorForm" [ngbCollapse]="!paneSensorUpdateActive" class="col-lg-12 app-form">
+        <div class="form-inside">
+          <app-sensor-update [sensor]="selectedSensor"></app-sensor-update>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+        <div id="registerOwnerForm" [ngbCollapse]="!paneOwnerRegisterActive" class="collapse col-lg-12 app-form">
             <div class="form-inside">
                 <form [formGroup]="RegisterOwner" (ngSubmit)="submitCreateOwner()">
                     <div class="input-group">
