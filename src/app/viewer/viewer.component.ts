@@ -107,30 +107,12 @@ export class ViewerComponent implements OnInit {
     theme: new FormControl('', Validators.required)
   });
 
-  UpdateSensor = new FormGroup({
-    name: new FormControl(''),
-    aim: new FormControl(''),
-    description: new FormControl(''),
-    manufacturer: new FormControl(''),
-    active: new FormControl(''),
-    documentationUrl: new FormControl(''),
-    typeName: new FormControl(''),
-    location: new FormControl('')
-  });
-
   RegisterOwner = new FormGroup({
     companyName: new FormControl(''),
     email: new FormControl(''),
     name: new FormControl(''),
     publicName: new FormControl(''),
     website: new FormControl(''),
-  });
-
-  UpdateOwner = new FormGroup({
-    organisation: new FormControl(''),
-    website: new FormControl(''),
-    contactPublic: new FormControl(''),
-    contactPerson: new FormControl(''),
   });
 
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs'
@@ -316,6 +298,7 @@ export class ViewerComponent implements OnInit {
             feature.get("theme")
           )
           this.activeFeatureInfo = feature_
+          this.selectedSensor = feature.values_.sensor;
           this.showInfo = true;
           this.highlightFeature(geometry)
         }

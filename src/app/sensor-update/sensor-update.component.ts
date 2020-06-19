@@ -64,17 +64,19 @@ export class SensorUpdateComponent implements OnInit, OnChanges {
   }
 
   public async submit() {
+    const newValues = this.SensorUpdate.value;
     const sensor = {
-      active: this.SensorUpdate.value.active || false,
-      aim: this.SensorUpdate.value.aim,
-      description: this.SensorUpdate.value.description,
-      documentationUrl: this.SensorUpdate.value.documentationUrl,
-      location: this.SensorUpdate.value.location,
-      manufacturer: this.SensorUpdate.value.manufacturer,
-      name: this.SensorUpdate.value.name,
-      dataStreams: this.SensorUpdate.value.dataStreams,
-      typeName: this.SensorUpdate.value.typeName,
-      theme: this.SensorUpdate.value.theme,
+      typeName: Array.isArray(newValues.typeName) ? newValues.typeName[0] : newValues.typeName,
+      location: newValues.location,
+      dataStreams: newValues.dataStreams,
+
+      active: newValues.active || false,
+      aim: newValues.aim,
+      description: newValues.description !== '' ? newValues.description : undefined,
+      documentationUrl: newValues.documentationUrl !== '' ? newValues.documentationUrl : undefined,
+      manufacturer: newValues.manufacturer,
+      name: newValues.name,
+      theme: newValues.theme,
     };
 
     try {
