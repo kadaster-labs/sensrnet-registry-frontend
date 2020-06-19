@@ -530,12 +530,9 @@ export class ViewerComponent implements OnInit {
   }
 
   private removeHighlight() {
-    if (this.paneSensorUpdateActive) { this.togglePane('SensorUpdate'); }
-    this.selectedSensor = undefined;
-
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
     console.log('remove highlight');
-    this.selectedSensor = null;
+    this.selectedSensor = undefined;
   }
 
   async submitRegisterSensor() {
