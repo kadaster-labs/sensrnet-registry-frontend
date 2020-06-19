@@ -290,9 +290,9 @@ export class ViewerComponent implements OnInit {
       
       this.selectCluster.getFeatures().on(['add'], (event) => {
         this.removeHighlight()
-        let features = event.element.get('features');
-        if (features.length == 1) {
-          var feature = features[0];
+        let features_ = event.element.get('features');
+        if (features_.length == 1) {
+          var feature = features_[0];
           let geometry = new Feature({
             geometry: feature.values_.geometry
           })
@@ -309,7 +309,7 @@ export class ViewerComponent implements OnInit {
           this.showInfo = true;
           this.highlightFeature(geometry)
         }
-        if (features.length > 1) {
+        if (features_.length > 1) {
           this.removeHighlight()
           this.showInfo = false
           this.activeFeatureInfo = null;
