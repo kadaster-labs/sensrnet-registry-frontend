@@ -1,4 +1,4 @@
-# Viewer
+# SensRNet Registry Frontend
 
 This is the frontend repo of SensRNet. 
 
