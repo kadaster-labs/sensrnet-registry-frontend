@@ -22,7 +22,18 @@ export class AuthenticationService {
 
   public login(username, password) {
     return this.http.post<any>(`${environment.apiUrl}/auth/login`, { username, password })
-      .pipe(map((user) => {
+      .pipe(map((data) => {
+        const user: Owner = new Owner(
+          data.id,
+          data.email,
+          data.password,
+          data.name,
+          data.organization,
+          data.phone,
+          data.website,
+          data.access_token,
+        );
+
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentOwner', JSON.stringify(user));
         this.currentOwnerSubject.next(user);

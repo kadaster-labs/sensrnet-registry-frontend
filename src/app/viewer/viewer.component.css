@@ -9,6 +9,12 @@
   border-radius: 0px;
 }
 
+.navbar h3 {
+  margin-left: 15px;
+  margin-right: 15px;
+  color: white;
+}
+
 .logo {
   position: absolute;
   z-index: 10;
@@ -72,7 +78,6 @@ td {
 }
 
 .form-control {
-  width: 24vw;
   border-radius: 4px !important;
 }
 
@@ -125,15 +130,27 @@ label {
   font-weight: normal;
 }
 
-input {
+input[type="text"] {
   height: 2em;
-  font-size: 1em;
   padding-left: 0.4em;
 }
 
 textarea {
   font-size: 1em;
   padding-left: 0.4em;
+}
+
+.form-check-input {
+  margin-right: 0.5em;
+}
+
+.form-group.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.form-group.row label {
+  margin-right: 1em;
 }
 
 input::placeholder, textarea::placeholder {

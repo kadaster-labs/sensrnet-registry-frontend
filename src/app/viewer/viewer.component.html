@@ -1,8 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <ul class="col-lg-12 nav nav-pills navbar">
-            <a class="navbar-brand">SensRNet
-                Registration App</a>
+            <h3>SensRNet Registration App</h3>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Owner<span class="caret"></span></a>
@@ -32,94 +31,112 @@
     </div>
 
     <div class="row">
-        <div id="registerSensorForm" [ngbCollapse]="!paneSensorRegisterActive" class="col-lg-12 app-form">
-            <div class="form-inside">
-                <form [formGroup]="RegisterSensor" (ngSubmit)="submitRegisterSensor()">
-                    <div class="input-group">
-                        <label> Name <span class="required">*</span>
-                            <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
-                                [ngClass]="{ 'is-invalid': (form.name.dirty || form.name.touched) && form.name.errors }">
-                            <div *ngIf="(form.name.dirty || form.name.touched) && form.name.errors"
-                                class="invalid-input">
-                                <span *ngIf="form.name.errors.required">Name is required</span>
-                                <span *ngIf="form.name.errors.minlength">Name must be at least 6 characters</span>
-                            </div>
-                        </label>
-                        <br>
-                        <label> Aim
-                            <input class="form-control" type="text" formControlName="aim"
-                                placeholder="Aim of the sensor">
-                        </label>
-                        <br>
-                        <label> Description
-                            <textarea class="form-control" type="text" formControlName="description"
-                                placeholder="Describe the sensor"></textarea>
-                        </label>
-                        <br>
-                        <label> Manufacturer <span class="required">*</span>
-                            <input class="form-control" type="text" formControlName="manufacturer"
-                                placeholder="Enter name of the manufacturer">
-                        </label>
-                        <br>
-                        <label>
-                            <input type="checkbox" formControlName="active"> Active
-                        </label>
-                        <br>
-                        <label> Documentation URL <span class="required">*</span>
-                            <input class="form-control" type="url" formControlName="documentationUrl"
-                                placeholder="url of documentationUrl">
-                        </label>
-                        <br>
-
-                        <label>Select category <span class="required">*</span>
-                            <select data-container="body" class="form-control" formControlName="typeName">
-                                <option *ngFor="let type of sensorCategoriesList" [value]="type">
-                                    {{sensorCategories[type]}}
-                                </option>
-                            </select>
-                        </label>
-                        <br>
-
-                        <label>Select {{ RegisterSensor.value.typeName }} type  <span class="required">*</span>
-                          <select class="form-control" data-container="body" formControlName="typeDetailsName">
-                              <option *ngFor="let type of typeDetailsList" [value]="type">
-                                  {{type}}
-                              </option>
-                          </select>
-                        </label>
-                        <br>
-
-                        <label>Select theme <span class="required">*</span>
-                            <br>
-                            <select class="form-control selectpicker" multiple data-selected-text-format="count > 3"
-                                formControlName="theme">
-                                <option *ngFor="let type of sensorThemesList" [value]="type">{{sensorThemes[type]}}
-                            </select>
-                        </label>
-                        <br>
-
-                        <br>
-                        <button class="btn" type="button" (click)="SelectLocationOn()"> Select location </button>
-                        <!-- <button class="btn" type="button" (click)="SelectLocationOff()"> Confirm </button> -->
-                        <button class="btn" type="button" (click)="clearLocationLayer()"> Clear </button> <span class="required">*</span>
-                        <br>
-                        <hr>
-                        <button class="btn btn-primary btn-lg" type="submit"
-                            [disabled]="!RegisterSensor.valid">Register</button>
-                        <span class="glyphicon alert-success" aria-hidden="true"
-                            [ngClass]="{'glyphicon-check': registerSensorSent}"></span>
+        <div id="registerSensorForm" [ngbCollapse]="!paneSensorRegisterActive" class="app-form pl-1 pr-1">
+            <form [formGroup]="RegisterSensor" (ngSubmit)="submitRegisterSensor()">
+                <div class="form-group">
+                    <label> Name <span class="required">*</span>
+                    </label>
+                    <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
+                        [ngClass]="{ 'is-invalid': (form.name.dirty || form.name.touched) && form.name.errors }">
+                    <div *ngIf="(form.name.dirty || form.name.touched || registerSensorSubmitted) && form.name.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.name.errors.required">Name is required</span>
+                        <span *ngIf="form.name.errors.minlength">Name must be at least 6 characters</span>
                     </div>
-                </form>
-            </div>
+                </div>
+                <div class="form-group">
+                    <label for="aim">Aim</label>
+                    <input type="text" class="form-control" formControlName="aim" placeholder="Aim of the sensor">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" type="text" formControlName="description"
+                        placeholder="Describe the sensor"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="manufacturer"> Manufacturer <span class="required">*</span></label>
+                    <input class="form-control" type="text" formControlName="manufacturer"
+                        placeholder="Enter name of the manufacturer">
+                    <div *ngIf="(form.manufacturer.dirty || form.manufacturer.touched || registerSensorSubmitted) && form.manufacturer.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.manufacturer.errors.required">Manufacturer is required</span>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" formControlName="active">
+                    <label class="form-check-label" for="active">
+                        Active
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="documentationUrl">Documentation URL <span class="required">*</span></label>
+                    <input class="form-control" type="url" formControlName="documentationUrl"
+                        placeholder="url of documentationUrl">
+                    <div *ngIf="(form.documentationUrl.dirty || form.documentationUrl.touched || registerSensorSubmitted) && form.documentationUrl.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.documentationUrl.errors.required">Documentation is required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="typeName">Select category <span class="required">*</span></label>
+                    <select data-container="body" class="form-control" formControlName="typeName">
+                        <option *ngFor="let type of sensorCategoriesList" [value]="type">
+                            {{sensorCategories[type]}}
+                        </option>
+                    </select>
+                    <div *ngIf="(form.typeName.dirty || form.typeName.touched || registerSensorSubmitted) && form.typeName.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.typeName.errors.required">Type is required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="typeDetailsName">Select {{ RegisterSensor.value.typeName }} type <span
+                            class="required">*</span></label>
+                    <select class="form-control" data-container="body" formControlName="typeDetailsName">
+                        <option *ngFor="let type of typeDetailsList" [value]="type">
+                            {{type}}
+                        </option>
+                    </select>
+                    <div *ngIf="(form.typeDetailsName.dirty || form.typeDetailsName.touched || registerSensorSubmitted) && form.typeDetailsName.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.typeDetailsName.errors.required">Type details are required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="theme">Select theme <span class="required">*</span></label>
+                    <select class="form-control selectpicker" multiple data-selected-text-format="count > 3"
+                        formControlName="theme">
+                        <option *ngFor="let type of sensorThemesList" [value]="type">{{sensorThemes[type]}}
+                    </select>
+                    <div *ngIf="(form.theme.dirty || form.theme.touched || registerSensorSubmitted) && form.theme.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.theme.errors.required">Theme is required</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="location">Select Location <span class="required">*</span></label>
+                    <button type="button" class="btn btn-sm" (click)="SelectLocationOn()"> Select </button>
+                    <div *ngIf="(form.location.dirty || form.location.touched || registerSensorSubmitted) && form.location.errors"
+                        class="invalid-input">
+                        <span *ngIf="form.location.errors.required">Location is required</span>
+                    </div>
+                </div>
+                <hr>
+                <button class="btn btn-primary btn-lg" type="submit">
+                    Register
+                </button>
+                <span class="glyphicon alert-success" aria-hidden="true"
+                    [ngClass]="{'glyphicon-check': registerSensorSent}"></span>
+            </form>
         </div>
     </div>
 
     <div class="row">
-      <div id="updateSensorForm" [ngbCollapse]="!paneSensorUpdateActive" class="col-lg-12 app-form">
-        <div class="form-inside">
-          <app-sensor-update [sensor]="selectedSensor"></app-sensor-update>
+        <div id="updateSensorForm" [ngbCollapse]="!paneSensorUpdateActive" class="col-lg-12 app-form">
+            <div class="form-inside">
+                <app-sensor-update [sensor]="selectedSensor"></app-sensor-update>
+            </div>
         </div>
-      </div>
     </div>
 
     <div class="row">
@@ -187,7 +204,8 @@
             <div id="info">
                 <div class="row" id="info-background">
                     <a id="info-header" role="button"><span class="glyphicon glyphicon-info-sign"
-                            aria-hidden="true"></span> Feature info</a>
+                            aria-hidden="true"></span>
+                        Feature info</a>
                     <div [ngClass]="{'show': showInfo}" class="collapse col-lg-12" id="infoForm">
                         <table class="table table-hover">
                             <tbody>
@@ -231,17 +249,15 @@
         <div class="backgroundmap">
             <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
-                [url]="dataset.services[0].url" [getFeatureInfoOnSingleclick]="true"
-                [layer]="dataset.services[0].layers[0].technicalName" [mapName]="mapName"
-                [minResolution]="dataset.services[0].layers[0].minResolution"
+                [url]="dataset.services[0].url" [layer]="dataset.services[0].layers[0].technicalName"
+                [mapName]="mapName" [minResolution]="dataset.services[0].layers[0].minResolution"
                 [maxResolution]="dataset.services[0].layers[0].maxResolution"
                 [zIndex]="dataset.services[0].layers[0].zIndex"
                 [attributions]="dataset.services[0].layers[0].attributions">
             </ggc-wmts-layer>
             <ggc-wms-layer *ngFor="let dataset of activeWmsDatasets" [layerName]="dataset.services[0].layers[0].name"
                 [url]="dataset.services[0].url" [layers]="dataset.services[0].layers[0].technicalName"
-                [mapName]="mapName" [getFeatureInfoOnSingleclick]="true"
-                [attributions]="dataset.services[0].layers[0].attributions"
+                [mapName]="mapName" [attributions]="dataset.services[0].layers[0].attributions"
                 [minResolution]="dataset.services[0].layers[0].minResolution"
                 [maxResolution]="dataset.services[0].layers[0].maxResolution"
                 [zIndex]="dataset.services[0].layers[0].zIndex">
