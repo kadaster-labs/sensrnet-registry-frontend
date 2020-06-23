@@ -8,7 +8,7 @@ describe('SensorUpdateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SensorUpdateComponent ]
+      declarations: [ SensorUpdateComponent ],
     })
     .compileComponents();
   }));
