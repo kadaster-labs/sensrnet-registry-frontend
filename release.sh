@@ -13,7 +13,7 @@ az acr login --name sensrnetregistry
 # ensure we're up to date
 git pull
 # bump version
-npm version patch
+npm version patch --git-tag-version=false
 
 VERSION=$(node -pe "require('./package.json').version")
 echo "version: $VERSION"
