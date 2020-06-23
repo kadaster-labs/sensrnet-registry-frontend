@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
@@ -346,14 +346,13 @@ export class ViewerComponent implements OnInit {
       this.updateSensor(newSensor);
     });
 
-    this.addFindMeButton();
+    // this.addFindMeButton();
     this.onFormChanges();
   }
 
-
   private locationValidator(g: FormGroup) {
     return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
-      {'required': true};
+      {required: true};
   }
 
   public updateSensor(updatedSensor: ISensor) {
