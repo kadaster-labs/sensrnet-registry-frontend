@@ -85,23 +85,7 @@ export class ViewerComponent implements OnInit {
 
   public registerSensorSubmitted = false;
 
-  public RegisterSensor = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    aim: new FormControl(''),
-    description: new FormControl(''),
-    manufacturer: new FormControl('', Validators.required),
-    active: new FormControl(''),
-    documentationUrl: new FormControl('', Validators.required),
-    location: new FormGroup({
-      latitude: new FormControl(undefined, [Validators.required]),
-      longitude: new FormControl(undefined, [Validators.required]),
-      height: new FormControl(undefined, [Validators.required]),
-      baseObjectId: new FormControl('non-empty'),
-    }, this.locationValidator),
-    typeName: new FormControl('', Validators.required),
-    typeDetailsName: new FormControl('', Validators.required),
-    theme: new FormControl('', Validators.required),
-  });
+  public RegisterSensor: FormGroup;
 
   public RegisterOwner = new FormGroup({
     companyName: new FormControl(''),
@@ -346,11 +330,32 @@ export class ViewerComponent implements OnInit {
       this.updateSensor(newSensor);
     });
 
+    this.newRegisterSensorForm();
     this.addFindMeButton();
     this.onFormChanges();
   }
 
-  public locationValidator(g: FormGroup) {
+  private newRegisterSensorForm() {
+    this.RegisterSensor = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      aim: new FormControl(''),
+      description: new FormControl(''),
+      manufacturer: new FormControl('', Validators.required),
+      active: new FormControl(''),
+      documentationUrl: new FormControl('', Validators.required),
+      location: new FormGroup({
+        latitude: new FormControl(undefined, [Validators.required]),
+        longitude: new FormControl(undefined, [Validators.required]),
+        height: new FormControl(undefined, [Validators.required]),
+        baseObjectId: new FormControl('non-empty'),
+      }, this.locationValidator),
+      typeName: new FormControl('', Validators.required),
+      typeDetailsName: new FormControl('', Validators.required),
+      theme: new FormControl('', Validators.required),
+    });
+  }
+
+  private locationValidator(g: FormGroup) {
     return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
       {'required': true};
   }
@@ -662,7 +667,11 @@ export class ViewerComponent implements OnInit {
       active = !this.paneSensorRegisterActive;
     }
 
-    if (!active) {
+    if (active) {
+      // Behavior when pane is opened
+      this.newRegisterSensorForm();
+    } else {
+      // Behavior when pane is closed
       this.clearLocationLayer();
     }
 
