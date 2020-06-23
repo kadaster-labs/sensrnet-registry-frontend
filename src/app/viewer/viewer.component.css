@@ -1,26 +1,36 @@
 .navbar {
   position: absolute;
   z-index: 20;
-  width: 27vw;
-  height: 13vh;
+  width: 100%;
+  height: 50px;
   background-color: rgba(19, 65, 115, 0.8);
   box-shadow: 0 10px 10px -5px grey;
   padding: 0px 0px 0px 0px;
   border-radius: 0px;
+  margin-bottom: 0;
 }
 
-.navbar h3 {
-  margin-left: 15px;
-  margin-right: 15px;
+.navbar-brand {
+  font-weight: normal;
+  font-size: 30px;
+  height: 40px;
   color: white;
+  margin-top: 5px;
+}
+
+.navbar .header {
+  margin: 7px 15px;
+  color: white;
+  float: left;
+  font-size: 24px;
 }
 
 .logo {
   position: absolute;
   z-index: 10;
-  left: 90vw;
+  right: 0;
   padding: 0px 0px 0px 0px;
-  margin: 9px 0px 0px 0px;
+  margin: 59px 9px;
 }
 
 td {
@@ -33,12 +43,15 @@ td {
 
 .app-form {
   position: absolute;
-  top: 14vh;
-  height: 86vh;
-  z-index: 10;
+  top: 50px;
+  height: calc(100vh - 50px);
+  z-index: 20;
   width: 27vw;
+  min-width: 250px;
   background-color: #ffffff;
   box-shadow: 0 10px 10px -5px grey;
+  overflow: auto;
+  padding: 2em 0;
 }
 
 #right-form {
@@ -98,20 +111,16 @@ td {
   font-style: normal;
 }
 
-.navbar-brand {
-  font-weight: normal;
-  font-size: 30px;
-  height: 40px;
-  color: white;
-  margin-top: 5px;
-}
-
 .dropdown {
   margin-top: 5px;
 }
 
 .dropdown-toggle {
   color: white;
+}
+
+form div button {
+  box-shadow: none;
 }
 
 .open > .dropdown-toggle,

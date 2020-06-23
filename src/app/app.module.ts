@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
 import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
 import { GgcMapModule } from 'generieke-geo-componenten-map';
@@ -39,6 +40,7 @@ import { ViewerComponent } from './viewer/viewer.component';
     GgcDatasetLegendModule,
     HttpClientModule,
     NgbModule,
+    NgMultiSelectDropDownModule.forRoot(),
   ],
   providers: [
     DataService,

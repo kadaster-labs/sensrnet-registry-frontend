@@ -16,6 +16,7 @@ import VectorSource from 'ol/source/Vector';
 import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
@@ -54,6 +55,12 @@ export class ViewerComponent implements OnInit {
   public cameraTypesList: string[];
   public sensorThemes = SensorTheme;
   public sensorThemesList: string[];
+  public dropdownSettings: IDropdownSettings = {
+    singleSelection: false,
+    itemsShowLimit: 2,
+    allowSearchFilter: false,
+    enableCheckAll: false,
+  };
 
   public currentMapResolution: number = undefined;
   public currentZoomlevel: number = undefined;
@@ -100,7 +107,7 @@ export class ViewerComponent implements OnInit {
     }, this.locationValidator),
     typeName: new FormControl('', Validators.required),
     typeDetailsName: new FormControl('', Validators.required),
-    theme: new FormControl('', Validators.required),
+    theme: new FormControl([], Validators.required),
   });
 
   public RegisterOwner = new FormGroup({
@@ -751,6 +758,20 @@ export class ViewerComponent implements OnInit {
           break;
       }
     });
+  }
+
+  public onSelectTheme(event) {
+    const control: AbstractControl = this.RegisterSensor.controls.theme;
+    const themes = control.value;
+    themes.push(event);
+    control.setValue(themes);
+  }
+
+  public onDeselectTheme(event) {
+    const control: AbstractControl = this.RegisterSensor.controls.theme;
+    let themes = control.value;
+    themes = themes.filter((theme: string) => theme !== event);
+    control.setValue(themes);
   }
 
   private addFindMeButton() {
