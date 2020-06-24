@@ -31,7 +31,7 @@
     </div>
 
     <div class="row">
-        <div id="registerSensorForm" [ngbCollapse]="!paneSensorRegisterActive" class="app-form pl-1 pr-1">
+        <div id="registerSensorForm" [ngbCollapse]="!paneSensorRegisterActive" class="app-form">
             <h3>Register Sensor</h3>
             <hr>
             <form [formGroup]="RegisterSensor" (ngSubmit)="submitRegisterSensor()">
@@ -113,7 +113,6 @@
                         class="invalid-input">
                         <span *ngIf="form.theme.errors.required">Theme is required</span>
                     </div>
-
                 </div>
                 <div class="form-group row">
                     <label for="location">Select Location <span class="required">*</span></label>

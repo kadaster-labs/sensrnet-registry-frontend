@@ -766,7 +766,7 @@ export class ViewerComponent implements OnInit {
 
   public onSelectTheme(event) {
     const control: AbstractControl = this.RegisterSensor.controls.theme;
-    const themes = control.value;
+    const themes = control.value || [];  // form.reset() sets field to null, instead of emptying the array
     themes.push(event);
     control.setValue(themes);
   }

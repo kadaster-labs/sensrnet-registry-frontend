@@ -51,13 +51,13 @@ td {
   position: absolute;
   top: 50px;
   height: calc(100vh - 50px);
-  z-index: 20;
+  z-index: 10;
   width: 27vw;
   min-width: 250px;
   background-color: #ffffff;
   box-shadow: 0 10px 10px -5px grey;
   overflow: auto;
-  padding: 2em 0;
+  padding: 2em 1em;
 }
 
 #right-form {
