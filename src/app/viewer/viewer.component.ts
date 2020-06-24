@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
@@ -16,6 +16,7 @@ import VectorSource from 'ol/source/Vector';
 import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
@@ -54,6 +55,12 @@ export class ViewerComponent implements OnInit {
   public cameraTypesList: string[];
   public sensorThemes = SensorTheme;
   public sensorThemesList: string[];
+  public dropdownSettings: IDropdownSettings = {
+    singleSelection: false,
+    itemsShowLimit: 2,
+    allowSearchFilter: false,
+    enableCheckAll: false,
+  };
 
   public currentMapResolution: number = undefined;
   public currentZoomlevel: number = undefined;
@@ -100,7 +107,7 @@ export class ViewerComponent implements OnInit {
     }, this.locationValidator),
     typeName: new FormControl('', Validators.required),
     typeDetailsName: new FormControl('', Validators.required),
-    theme: new FormControl('', Validators.required),
+    theme: new FormControl([], Validators.required),
   });
 
   public RegisterOwner = new FormGroup({
@@ -350,7 +357,7 @@ export class ViewerComponent implements OnInit {
     this.onFormChanges();
   }
 
-  private locationValidator(g: FormGroup) {
+  public locationValidator(g: FormGroup) {
     return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
       {required: true};
   }
@@ -665,6 +672,7 @@ export class ViewerComponent implements OnInit {
     if (active) {
       // Behavior when pane is opened
       this.RegisterSensor.reset();
+      this.registerSensorSubmitted = false;
     } else {
       // Behavior when pane is closed
       this.clearLocationLayer();
@@ -755,6 +763,20 @@ export class ViewerComponent implements OnInit {
           break;
       }
     });
+  }
+
+  public onSelectTheme(event) {
+    const control: AbstractControl = this.RegisterSensor.controls.theme;
+    const themes = control.value || [];  // form.reset() sets field to null, instead of emptying the array
+    themes.push(event);
+    control.setValue(themes);
+  }
+
+  public onDeselectTheme(event) {
+    const control: AbstractControl = this.RegisterSensor.controls.theme;
+    let themes = control.value;
+    themes = themes.filter((theme: string) => theme !== event);
+    control.setValue(themes);
   }
 
   private addFindMeButton() {
