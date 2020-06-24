@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
@@ -359,7 +359,7 @@ export class ViewerComponent implements OnInit {
 
   public locationValidator(g: FormGroup) {
     return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
-      {'required': true};
+      {required: true};
   }
 
   public updateSensor(updatedSensor: ISensor) {
@@ -672,6 +672,7 @@ export class ViewerComponent implements OnInit {
     if (active) {
       // Behavior when pane is opened
       this.RegisterSensor.reset();
+      this.registerSensorSubmitted = false;
     } else {
       // Behavior when pane is closed
       this.clearLocationLayer();
