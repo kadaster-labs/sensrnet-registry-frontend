@@ -41,24 +41,24 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="contactEmail">E-mail (customer contact center)</label> <span class="required">*</span>
+                        <label for="contactEmail">Public e-mail</label> <span class="required">*</span>
                         <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactEmail.errors }" />
                         <div *ngIf="submitted && f.contactEmail.errors" class="invalid-feedback">
-                            <div *ngIf="f.contactEmail.errors.required">E-mail is required</div>
+                            <div *ngIf="f.contactEmail.errors.required">Public e-mail is required</div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="contactPhone">Phone number (customer contact center)</label> <span class="required">*</span>
+                        <label for="contactPhone">Public phone number</label> <span class="required">*</span>
                         <input type="text" formControlName="contactPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactPhone.errors }" />
                         <div *ngIf="submitted && f.contactPhone.errors" class="invalid-feedback">
-                            <div *ngIf="f.contactPhone.errors.required">Phone number is required</div>
+                            <div *ngIf="f.contactPhone.errors.required">Public phone number is required</div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="website">Site with information about website</label> <span class="required">*</span>
+                        <label for="website">Website</label> <span class="required">*</span>
                         <input type="text" formControlName="website" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.website.errors }" />
                         <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
-                            <div *ngIf="f.website.errors.required">Site is required</div>
+                            <div *ngIf="f.website.errors.required">Website is required</div>
                         </div>
                     </div>
                     <div class="form-group">

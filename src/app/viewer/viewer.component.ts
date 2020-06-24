@@ -353,7 +353,7 @@ export class ViewerComponent implements OnInit {
       this.updateSensor(newSensor);
     });
 
-    this.addFindMeButton();
+    // this.addFindMeButton();
     this.onFormChanges();
   }
 
@@ -669,7 +669,11 @@ export class ViewerComponent implements OnInit {
       active = !this.paneSensorRegisterActive;
     }
 
-    if (!active) {
+    if (active) {
+      // Behavior when pane is opened
+      this.RegisterSensor.reset();
+    } else {
+      // Behavior when pane is closed
       this.clearLocationLayer();
     }
 
