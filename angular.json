@@ -33,10 +33,6 @@
               }
             ],
             "styles": [
-              "./node_modules/kadaster-huisstijl/dist/css/kadaster-huisstijl.css",
-              "./node_modules/bootstrap-select/dist/css/bootstrap-select.min.css",
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/ol/ol.css",
               "src/styles.scss"
             ],
             "scripts": [

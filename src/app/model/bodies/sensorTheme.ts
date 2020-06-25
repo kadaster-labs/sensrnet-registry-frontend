@@ -1,4 +1,4 @@
-export enum Theme {
+export enum SensorTheme {
     Wheather = 'Wheather',
     NatureAndEnvironment = 'NatureAndEnvironment',
     Waste = 'Waste',

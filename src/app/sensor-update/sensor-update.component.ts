@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ISensor } from '../model/bodies/sensor-body';
 import { ILocationBody, IUpdateSensorBody, SensorService } from '../services/sensor.service';
 
@@ -10,18 +10,7 @@ import { ILocationBody, IUpdateSensorBody, SensorService } from '../services/sen
 })
 export class SensorUpdateComponent implements OnInit, OnChanges {
 
-  public SensorUpdate = new FormGroup({
-    name: new FormControl(),
-    aim: new FormControl(),
-    description: new FormControl(),
-    manufacturer: new FormControl(),
-    active: new FormControl(),
-    documentationUrl: new FormControl(),
-    location: new FormControl([Validators.required]),
-    typeName: new FormControl([Validators.required]),
-    typeDetailsName: new FormControl(),
-    theme: new FormControl(),
-  });
+  public SensorUpdate: FormGroup;
 
   public sensorUpdateSent = false;
 
@@ -30,7 +19,19 @@ export class SensorUpdateComponent implements OnInit, OnChanges {
 
   constructor(
     private readonly sensorService: SensorService,
+    private readonly fb: FormBuilder,
   ) {
+    this.SensorUpdate = this.fb.group({
+      name: new FormControl(),
+      aim: new FormControl(),
+      description: new FormControl(),
+      manufacturer: new FormControl(),
+      active: new FormControl(),
+      documentationUrl: new FormControl(),
+      location: [],
+      type: [],
+      theme: [],
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -42,10 +43,17 @@ export class SensorUpdateComponent implements OnInit, OnChanges {
       manufacturer: selectedSensor.manufacturer || '',
       active: selectedSensor.active || false,
       documentationUrl: selectedSensor.documentationUrl || '',
-      location: selectedSensor.location || {},
-      typeName: selectedSensor.typeName || '',
-      typeDetailsName: selectedSensor.typeDetailsName || '',
-      theme: selectedSensor.theme || '',
+      location: {
+        latitude: selectedSensor.location ? selectedSensor.location.coordinates[1] : 0,
+        longitude: selectedSensor.location ? selectedSensor.location.coordinates[0] : 0,
+        height: selectedSensor.location ? selectedSensor.location.coordinates[2] : 0,
+        baseObjectId:  'non-empty',
+      },
+      type: {
+        typeName: selectedSensor.typeName ? selectedSensor.typeName[0] : '',
+        typeDetails: selectedSensor.typeDetailsName || '',
+      },
+      theme: { value: selectedSensor.theme || [] },
     });
   }
 

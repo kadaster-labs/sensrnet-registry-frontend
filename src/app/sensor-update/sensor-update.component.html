@@ -1,75 +1,45 @@
 <h3>Update Sensor</h3>
 <hr>
 <form [formGroup]="SensorUpdate" (ngSubmit)="submit()">
-    <div class="input-group">
-        <label> Name
-            <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
-                [ngClass]="{ 'is-invalid': (SensorUpdate.value.name.dirty || SensorUpdate.value.name.touched) && SensorUpdate.value.name.errors }">
-            <div *ngIf="(SensorUpdate.value.name.dirty || SensorUpdate.value.name.touched) && SensorUpdate.value.name.errors"
-                class="invalid-input">
-                <span *ngIf="SensorUpdate.value.name.errors.required">Name is required</span>
-                <span *ngIf="SensorUpdate.value.name.errors.minlength">Name must be at least 6 characters</span>
-            </div>
+    <label> Name
+        <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
+            [ngClass]="{ 'is-invalid': (SensorUpdate.value.name.dirty || SensorUpdate.value.name.touched) && SensorUpdate.value.name.errors }">
+        <div *ngIf="(SensorUpdate.value.name.dirty || SensorUpdate.value.name.touched) && SensorUpdate.value.name.errors"
+            class="invalid-input">
+            <span *ngIf="SensorUpdate.value.name.errors.required">Name is required</span>
+            <span *ngIf="SensorUpdate.value.name.errors.minlength">Name must be at least 6 characters</span>
+        </div>
+    </label>
+    <br>
+    <label> Aim
+        <input class="form-control" type="text" formControlName="aim" placeholder="Aim of the sensor">
+    </label>
+    <br>
+    <label> Description
+        <textarea class="form-control" type="text" formControlName="description"
+            placeholder="Describe the sensor"></textarea>
+    </label>
+    <br>
+    <label> Manufacturer
+        <input class="form-control" type="text" formControlName="manufacturer"
+            placeholder="Enter name of the manufacturer">
+    </label>
+    <br>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" formControlName="active">
+        <label class="form-check-label" for="active">
+            Active
         </label>
-        <br>
-        <label> Aim
-            <input class="form-control" type="text" formControlName="aim" placeholder="Aim of the sensor">
-        </label>
-        <br>
-        <label> Description
-            <textarea class="form-control" type="text" formControlName="description"
-                placeholder="Describe the sensor"></textarea>
-        </label>
-        <br>
-        <label> Manufacturer
-            <input class="form-control" type="text" formControlName="manufacturer"
-                placeholder="Enter name of the manufacturer">
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" formControlName="active"> Active
-        </label>
-        <br>
-        <label> Documentation URL
-            <input class="form-control" type="url" formControlName="documentationUrl"
-                placeholder="url of documentationUrl">
-        </label>
-        <br>
-        <!--
-      <label>Select category
-          <select data-container="body" class="form-control selectpicker" formControlName="typeName">
-              <option *ngFor="let type of sensorCategoriesList" [value]="type">
-                  {{sensorCategories[type]}}
-              </option>
-          </select>
-      </label>
-      <br>
-
-      <label>Select {{ RegisterSensor.value.typeName }} type
-        <select class="form-control selectpicker" data-container="body" formControlName="subtypeName">
-            <option *ngFor="let type of beaconTypesList" [value]="type">
-                {{type}}
-            </option>
-        </select>
-      </label>
-      <br>
-
-      <label>Select theme
-          <br>
-          <select class="form-control selectpicker" multiple data-selected-text-format="count > 3"
-              formControlName="theme">
-              <option *ngFor="let type of sensorThemesList" [value]="type">{{sensorThemes[type]}}
-          </select>
-      </label>
-      <br> -->
-
-        <br>
-        <!-- <button class="btn" type="button" (click)="selectLocationOn()"> Select location </button> -->
-        <!-- <button class="btn" type="button" (click)="clearLocationLayer()"> Clear </button> -->
-        <!-- <br> -->
-        <hr>
-        <button class="btn btn-primary btn-lg" type="submit" [disabled]="!SensorUpdate.valid">Update</button>
-        <span class="glyphicon alert-success" aria-hidden="true"
-            [ngClass]="{'glyphicon-check': sensorUpdateSent}"></span>
     </div>
+    <label> Documentation URL
+        <input class="form-control" type="url" formControlName="documentationUrl" placeholder="url of documentationUrl">
+    </label>
+    <br>
+    <app-sensor-type formControlName="type"></app-sensor-type>
+    <!-- <app-sensor-theme formControlName="theme"></app-sensor-theme> -->
+    <app-sensor-location formControlName="location"></app-sensor-location>
+    <hr>
+    <pre>{{ SensorUpdate.value | json }}</pre>
+    <button class="btn btn-primary btn-lg" type="submit" [disabled]="!SensorUpdate.valid">Update</button>
+    <span class="glyphicon alert-success" aria-hidden="true" [ngClass]="{'glyphicon-check': sensorUpdateSent}"></span>
 </form>

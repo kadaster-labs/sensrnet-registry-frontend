@@ -8,6 +8,26 @@
   padding: 0px 0px 0px 0px;
   border-radius: 0px;
   margin-bottom: 0;
+  justify-content: flex-start;
+
+  .header {
+    margin: 7px 15px;
+    color: white;
+    float: left;
+    font-size: 24px;
+  }
+
+  h3 {
+    margin-left: 15px;
+    margin-right: 15px;
+    color: white;
+  }
+
+  .logout {
+    a:after {
+      content: none;
+   }
+  }
 }
 
 .navbar-brand {
@@ -16,19 +36,6 @@
   height: 40px;
   color: white;
   margin-top: 5px;
-}
-
-.navbar .header {
-  margin: 7px 15px;
-  color: white;
-  float: left;
-  font-size: 24px;
-}
-
-.navbar h3 {
-  margin-left: 15px;
-  margin-right: 15px;
-  color: white;
 }
 
 .logo {
@@ -86,6 +93,10 @@ td {
   padding-bottom: 10px;
   padding-right: 10px;
   margin-right: 0px;
+}
+
+#searchForm {
+  padding-right: 7em !important;
 }
 
 #layers, #search, #info {
@@ -153,19 +164,6 @@ input[type="text"] {
 textarea {
   font-size: 1em;
   padding-left: 0.4em;
-}
-
-.form-check-input {
-  margin-right: 0.5em;
-}
-
-.form-group.row {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.form-group.row label {
-  margin-right: 1em;
 }
 
 input::placeholder, textarea::placeholder {

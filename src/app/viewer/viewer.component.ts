@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
@@ -26,41 +26,21 @@ import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 
 import { AuthenticationService } from '../services/authentication.service';
 
-import { environment } from '../../environments/environment';
 import { ISensor } from '../model/bodies/sensor-body';
-import { Category, TypeBeacon, TypeCamera, TypeSensor } from '../model/bodies/sensorTypes';
 import { EventType } from '../model/events/event-type';
 import { Owner } from '../model/owner';
 import { DataService } from '../services/data.service';
-import { IRegisterSensorBody, SensorService } from '../services/sensor.service';
+import { SensorService } from '../services/sensor.service';
 import { SensorInfo } from './../model/bodies/sensorInfo';
-import { Theme as SensorTheme } from './../model/bodies/sensorTheme';
+import { LocationService } from '../services/location.service';
 
 @Component({
   templateUrl: './viewer.component.html',
-  styleUrls: ['./viewer.component.css'],
+  styleUrls: ['./viewer.component.scss'],
 })
 export class ViewerComponent implements OnInit {
   public title = 'SensRNet';
   public mapName = 'srn';
-
-  public sensorCategories = Category;
-  public sensorCategoriesList: string[];
-  public sensorTypes = TypeSensor;
-  public sensorTypesList: string[];
-  public typeDetailsList: string[];
-  public beaconTypes = TypeBeacon;
-  public beaconTypesList: string[];
-  public cameraTypes = TypeCamera;
-  public cameraTypesList: string[];
-  public sensorThemes = SensorTheme;
-  public sensorThemesList: string[];
-  public dropdownSettings: IDropdownSettings = {
-    singleSelection: false,
-    itemsShowLimit: 2,
-    allowSearchFilter: false,
-    enableCheckAll: false,
-  };
 
   public currentMapResolution: number = undefined;
   public currentZoomlevel: number = undefined;
@@ -82,41 +62,10 @@ export class ViewerComponent implements OnInit {
   private clusterSource: Cluster;
   private selectCluster: SelectCluster;
 
-  public registerOwnerSent = false;
-  public registerSensorSent = false;
-
   public selectedSensor: ISensor;
   public paneSensorRegisterActive = false;
   public paneSensorUpdateActive = false;
   public paneOwnerRegisterActive = false;
-
-  public registerSensorSubmitted = false;
-
-  public RegisterSensor = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    aim: new FormControl(''),
-    description: new FormControl(''),
-    manufacturer: new FormControl('', Validators.required),
-    active: new FormControl(''),
-    documentationUrl: new FormControl('', Validators.required),
-    location: new FormGroup({
-      latitude: new FormControl(undefined, [Validators.required]),
-      longitude: new FormControl(undefined, [Validators.required]),
-      height: new FormControl(undefined, [Validators.required]),
-      baseObjectId: new FormControl('non-empty'),
-    }, this.locationValidator),
-    typeName: new FormControl('', Validators.required),
-    typeDetailsName: new FormControl('', Validators.required),
-    theme: new FormControl([], Validators.required),
-  });
-
-  public RegisterOwner = new FormGroup({
-    companyName: new FormControl(''),
-    email: new FormControl(''),
-    name: new FormControl(''),
-    publicName: new FormControl(''),
-    website: new FormControl(''),
-  });
 
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
@@ -143,6 +92,7 @@ export class ViewerComponent implements OnInit {
     public mapService: MapService,
     private dataService: DataService,
     private sensorService: SensorService,
+    private locationService: LocationService,
   ) {
     this.authenticationService.currentOwner.subscribe((x) => this.currentOwner = x);
   }
@@ -155,12 +105,6 @@ export class ViewerComponent implements OnInit {
       (error) => {
       },
     );
-
-    this.sensorCategoriesList = Object.keys(this.sensorCategories).filter(String);
-    this.sensorThemesList = Object.keys(this.sensorThemes).filter(String);
-    this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
-    this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
-    this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);
 
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
@@ -354,12 +298,6 @@ export class ViewerComponent implements OnInit {
     });
 
     // this.addFindMeButton();
-    this.onFormChanges();
-  }
-
-  public locationValidator(g: FormGroup) {
-    return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
-      {required: true};
   }
 
   public updateSensor(updatedSensor: ISensor) {
@@ -442,21 +380,18 @@ export class ViewerComponent implements OnInit {
       //     }
       //   });
 
-      if (this.selectLocation === true) {
-        this.removeLocationFeatures();
-        this.RegisterSensor.patchValue({
-          location: {
-            height: 0,
-            latitude: mapCoordinateWGS84[1],
-            longitude: mapCoordinateWGS84[0],
-            baseObjectId: 'non-empty',
-          },
-        });
-        const locationFeature = new Feature({
-          geometry: new Point(mapCoordinateRD),
-        });
-        this.setLocation(locationFeature);
-      }
+      this.locationService.setLocation({
+        type: 'Point',
+        coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
+        baseObjectId: 'iets'
+      });
+
+      // Dit is wanneer geselecteerde locatie wijzigd, listener daarop!
+      // this.removeLocationFeatures();
+      // const locationFeature = new Feature({
+      //   geometry: new Point(mapCoordinateRD),
+      // });
+      // this.setLocation(locationFeature);
     }
   }
 
@@ -518,10 +453,6 @@ export class ViewerComponent implements OnInit {
       feature.get('theme'),
     );
     return info;
-  }
-
-  get form() {
-    return this.RegisterSensor.controls;
   }
 
   public changeOpenInfo() {
@@ -604,66 +535,6 @@ export class ViewerComponent implements OnInit {
     this.selectedSensor = undefined;
   }
 
-  public async submitRegisterSensor() {
-    this.registerSensorSubmitted = true;
-
-    // stop here if form is invalid
-    if (this.RegisterSensor.invalid) {
-      return;
-    }
-
-    console.log(`posting ${this.RegisterSensor.value}`);
-    // TODO: perform extra validation
-    const sensor: IRegisterSensorBody = {
-      typeName: this.RegisterSensor.value.typeName,
-      location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
-      dataStreams: this.RegisterSensor.value.dataStreams || [],
-
-      active: this.RegisterSensor.value.active || false,
-      aim: this.RegisterSensor.value.aim,
-      description: this.RegisterSensor.value.description,
-      documentationUrl: this.RegisterSensor.value.documentationUrl,
-      manufacturer: this.RegisterSensor.value.manufacturer,
-      name: this.RegisterSensor.value.name,
-      theme: this.RegisterSensor.value.theme || [],
-    };
-
-    try {
-      const result = await this.sensorService.register(sensor);
-
-      console.log(`Sensor was succesfully posted, received id ${result}`);
-      this.clearLocationLayer();
-      this.togglePane('SensorRegister');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  public submitCreateOwner() {
-    console.log('Create owner');
-
-    console.warn(this.RegisterOwner.value);
-    const owner: object = {
-      companyName: this.RegisterOwner.value.companyName,
-      email: this.RegisterOwner.value.email,
-      name: this.RegisterOwner.value.name,
-      publicName: this.RegisterOwner.value.publicName,
-      ssoId: 'local',
-      website: this.RegisterOwner.value.website,
-    };
-
-    this.httpClient.post(`${environment.apiUrl}/Owner`, owner, {}).subscribe((data: any) => {
-      console.log(`Owner was succesfully posted, received id ${data.ownerId}`);
-
-      this.registerOwnerSent = true;
-      setTimeout(() => {
-        this.registerOwnerSent = false;
-      }, 2500);
-    }, (err) => {
-      console.log(err);
-    });
-  }
-
   private toggleSensorRegisterPane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorRegisterActive;
@@ -671,8 +542,8 @@ export class ViewerComponent implements OnInit {
 
     if (active) {
       // Behavior when pane is opened
-      this.RegisterSensor.reset();
-      this.registerSensorSubmitted = false;
+      // this.RegisterSensor.reset();
+      // this.registerSensorSubmitted = false;
     } else {
       // Behavior when pane is closed
       this.clearLocationLayer();
@@ -744,39 +615,6 @@ export class ViewerComponent implements OnInit {
     } else {
       alert('Geolocation is not supported by this browser.');
     }
-  }
-
-  private onFormChanges() {
-    this.RegisterSensor.get('typeName').valueChanges.subscribe((category: Category) => {
-      switch (category) {
-        case Category.Beacon:
-          this.typeDetailsList = this.beaconTypesList;
-          break;
-        case Category.Camera:
-          this.typeDetailsList = this.cameraTypesList;
-          break;
-        case Category.Sensor:
-          this.typeDetailsList = this.sensorTypesList;
-          break;
-        default:
-          this.typeDetailsList = [];
-          break;
-      }
-    });
-  }
-
-  public onSelectTheme(event) {
-    const control: AbstractControl = this.RegisterSensor.controls.theme;
-    const themes = control.value || [];  // form.reset() sets field to null, instead of emptying the array
-    themes.push(event);
-    control.setValue(themes);
-  }
-
-  public onDeselectTheme(event) {
-    const control: AbstractControl = this.RegisterSensor.controls.theme;
-    let themes = control.value;
-    themes = themes.filter((theme: string) => theme !== event);
-    control.setValue(themes);
   }
 
   private addFindMeButton() {

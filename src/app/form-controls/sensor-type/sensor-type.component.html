@@ -1,0 +1,27 @@
+<div [formGroup]="form" class="form-group">
+    <div class="form-group">
+        <label for="typeName">Select category <span class="required">*</span></label>
+        <select data-container="body" class="form-control" formControlName="typeName">
+            <option *ngFor="let type of sensorCategoriesList" [value]="type">
+                {{sensorCategories[type]}}
+            </option>
+        </select>
+        <div *ngIf="(form.controls.typeName.dirty || form.controls.typeName.touched) && form.controls.typeName.errors"
+            class="invalid-input">
+            <span *ngIf="form.controls.typeName.errors.required">Type is required</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="typeDetails">Select {{ form.controls.typeName.value }} type <span
+                class="required">*</span></label>
+        <select class="form-control" data-container="body" formControlName="typeDetails">
+            <option *ngFor="let type of typeDetailsList" [value]="type">
+                {{type}}
+            </option>
+        </select>
+        <div *ngIf="(form.controls.typeDetails.dirty || form.controls.typeDetails.touched ) && form.controls.typeDetails.errors"
+            class="invalid-input">
+            <span *ngIf="form.controls.typeDetails.errors.required">Type details are required</span>
+        </div>
+    </div>
+</div>
