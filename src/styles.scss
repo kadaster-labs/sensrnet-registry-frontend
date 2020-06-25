@@ -1,3 +1,7 @@
+@import "../node_modules/kadaster-huisstijl/dist/css/kadaster-huisstijl.css";
+@import "../node_modules/bootstrap-select/dist/css/bootstrap-select.min.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
 .ol-overlaycontainer-stopevent .ol-zoom {
   top: auto;
   right: .5em;
@@ -22,4 +26,4 @@
 
 .ggc-dt-theme {
     padding-left: 0px !important;
-  }
+}

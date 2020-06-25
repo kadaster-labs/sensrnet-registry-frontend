@@ -1,7 +1,9 @@
 import { Observable, Subscriber } from 'rxjs';
 import * as io from 'socket.io-client';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class DataService {
   private url = `${environment.apiUrl}`;
   private socket: SocketIOClient.Socket;
