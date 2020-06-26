@@ -3,10 +3,11 @@ $body-bg: white;
 $font-size-base: 1.25rem;
 
 // Bootstrap and its default variables
-@import "../node_modules/bootstrap/scss/bootstrap.scss";
-
-@import "../node_modules/bootstrap-select/dist/css/bootstrap-select.min.css";
 @import "../node_modules/kadaster-huisstijl/dist/css/kadaster-huisstijl.css";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+$fa-font-path: "../node_modules/font-awesome/fonts";
+@import "../node_modules/font-awesome/scss/font-awesome.scss";
+@import "../node_modules/bootstrap-select/dist/css/bootstrap-select.min.css";
 @import "../node_modules/ol/ol.css";
 
 .ol-overlaycontainer-stopevent .ol-zoom {

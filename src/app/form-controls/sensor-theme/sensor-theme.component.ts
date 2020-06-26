@@ -20,7 +20,7 @@ export interface SensorThemeFormValues {
 @Component({
   selector: 'app-sensor-theme',
   templateUrl: './sensor-theme.component.html',
-  styleUrls: ['./sensor-theme.component.css'],
+  styleUrls: ['./sensor-theme.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

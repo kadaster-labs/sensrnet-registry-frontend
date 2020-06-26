@@ -13,3 +13,18 @@ label {
 .form-check-label {
   margin-left: 5px;
 }
+
+.form-group {
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+
+    label {
+      margin-right: 1em;
+    }
+  }
+}
+
+.required {
+  color: red;
+}

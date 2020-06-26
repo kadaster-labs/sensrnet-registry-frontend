@@ -1,84 +1,85 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit, ElementRef, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { IRegisterSensorBody, SensorService } from '../services/sensor.service';
+import { LocationService } from '../services/location.service';
 
 @Component({
   selector: 'app-sensor-register',
   templateUrl: './sensor-register.component.html',
-  styleUrls: ['./sensor-register.component.css'],
+  styleUrls: ['./sensor-register.component.scss'],
 })
-export class SensorRegisterComponent implements OnInit {
+export class SensorRegisterComponent implements OnInit, OnChanges {
+
+  @Input()
+  public active = false;
 
   constructor(
+    private readonly locationService: LocationService,
     private readonly sensorService: SensorService,
     private readonly formBuilder: FormBuilder,
   ) {
   }
 
-  get form() {
-    return this.RegisterSensor.controls;
+  get f() {
+    return this.form.controls;
   }
 
-  public RegisterSensor: FormGroup;
+  public form: FormGroup;
 
-  public registerSensorSubmitted = false;
-  public registerSensorSent = false;
+  public submitted = false;
 
   public ngOnInit() {
-    this.RegisterSensor = this.formBuilder.group({
-      name: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      aim: new FormControl(''),
-      description: new FormControl(''),
-      manufacturer: new FormControl('', Validators.required),
-      active: new FormControl(''),
-      documentationUrl: new FormControl('', Validators.required),
+    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(6)]],
+      aim: '',
+      description: '',
+      manufacturer: ['', Validators.required],
+      active: '',
+      documentationUrl: ['', [Validators.required, Validators.pattern(reg)]],
       location: [],
       type: [],
       theme: [],
     });
   }
 
-  public onSensorChange(event) {
-    console.log('sensor changed');
-    console.log(event);
+  public ngOnChanges(changes: SimpleChanges) {
+    if (!changes.active.previousValue && changes.active.currentValue) {
+      this.form.reset();
+    }
   }
 
-  public selectLocationOn() {
-  }
-
-  public clearLocationLayer() {
-  }
-
-  public async submitRegisterSensor() {
-    this.registerSensorSubmitted = true;
+  public async submit() {
+    this.submitted = true;
 
     // stop here if form is invalid
-    if (this.RegisterSensor.invalid) {
+    if (this.form.invalid) {
       return;
     }
 
-    console.log(`posting ${this.RegisterSensor.value}`);
+    console.log(`posting ${this.form.value}`);
     // TODO: perform extra validation
     const sensor: IRegisterSensorBody = {
-      typeName: this.RegisterSensor.value.typeName,
-      location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
-      dataStreams: this.RegisterSensor.value.dataStreams || [],
+      typeName: this.form.value.type.typeName,
+      location: this.form.value.location || {},
+      dataStreams: this.form.value.dataStreams || [],
 
-      active: this.RegisterSensor.value.active || false,
-      aim: this.RegisterSensor.value.aim,
-      description: this.RegisterSensor.value.description,
-      documentationUrl: this.RegisterSensor.value.documentationUrl,
-      manufacturer: this.RegisterSensor.value.manufacturer,
-      name: this.RegisterSensor.value.name,
-      theme: this.RegisterSensor.value.theme.value || [],
+      active: this.form.value.active || false,
+      aim: this.form.value.aim,
+      description: this.form.value.description,
+      documentationUrl: this.form.value.documentationUrl,
+      manufacturer: this.form.value.manufacturer,
+      name: this.form.value.name,
+      theme: this.form.value.theme.value || [],
+      typeDetails: this.form.value.type.typeDetails || '',
     };
 
     try {
       const result = await this.sensorService.register(sensor);
 
       console.log(`Sensor was succesfully posted, received id ${result}`);
-      this.clearLocationLayer();
-      // this.togglePane('SensorRegister');
+      this.locationService.showLocation(null);
     } catch (error) {
       console.log(error);
     }

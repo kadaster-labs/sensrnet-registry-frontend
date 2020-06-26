@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
@@ -8,7 +8,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { OwnerService } from '../services/owner.service';
 
 @Component({
-  styleUrls: ['./register.component.css'],
+  styleUrls: ['./register.component.scss'],
   templateUrl: 'register.component.html',
 })
 export class RegisterComponent implements OnInit {
@@ -30,16 +30,18 @@ export class RegisterComponent implements OnInit {
   }
 
   public ngOnInit() {
+    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
     this.registerForm = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
 
       name: ['', Validators.required],
       role: ['', Validators.required],
       organization: ['', Validators.required],
-      contactEmail: ['', Validators.required],
+      contactEmail: ['', [Validators.required, Validators.email]],
       contactPhone: ['', Validators.required],
-      website: ['', Validators.required],
+      website: ['', [Validators.required, Validators.pattern(reg)]],
     });
   }
 

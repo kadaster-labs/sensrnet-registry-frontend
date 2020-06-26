@@ -1,12 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
 
 import { Overlay } from 'ol';
-import Control from 'ol/control/Control';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
@@ -16,7 +14,6 @@ import VectorSource from 'ol/source/Vector';
 import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
@@ -30,9 +27,9 @@ import { ISensor } from '../model/bodies/sensor-body';
 import { EventType } from '../model/events/event-type';
 import { Owner } from '../model/owner';
 import { DataService } from '../services/data.service';
-import { SensorService } from '../services/sensor.service';
 import { SensorInfo } from './../model/bodies/sensorInfo';
 import { LocationService } from '../services/location.service';
+import Geometry from 'ol/geom/Geometry';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -69,8 +66,6 @@ export class ViewerComponent implements OnInit {
 
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
-  private mapCoordinateWGS84: [];
-  private mapCoordinateRD: [];
 
   public currentOwner: Owner;
 
@@ -91,7 +86,6 @@ export class ViewerComponent implements OnInit {
     private httpClient: HttpClient,
     public mapService: MapService,
     private dataService: DataService,
-    private sensorService: SensorService,
     private locationService: LocationService,
   ) {
     this.authenticationService.currentOwner.subscribe((x) => this.currentOwner = x);
@@ -102,7 +96,7 @@ export class ViewerComponent implements OnInit {
       (data) => {
         this.myLayers = data as Theme[];
       },
-      (error) => {
+      () => {
       },
     );
 
@@ -269,11 +263,11 @@ export class ViewerComponent implements OnInit {
       this.vectorSource.addFeatures(newFeatures);
     });
 
-    // subscribe to sensor events
+    // subscribe to sensor location events
     const sensorUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorUpdated);
     sensorUpdated$.subscribe((newSensor: ISensor) => {
       console.log(`Socket.io heard that a Updated event was fired`);
-      console.log(newSensor);
+      this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
@@ -297,6 +291,21 @@ export class ViewerComponent implements OnInit {
       this.updateSensor(newSensor);
     });
 
+    this.locationService.showLocation$.subscribe((sensor) => {
+      this.removeLocationFeatures();
+
+      if (!sensor) {
+        this.clearLocationLayer();
+        this.toggleSensorRegisterPane(false);
+        return;
+      }
+
+      const locationFeature = new Feature({
+        geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
+      });
+      this.setLocation(locationFeature);
+    })
+
     // this.addFindMeButton();
   }
 
@@ -306,6 +315,13 @@ export class ViewerComponent implements OnInit {
     // update map
     const sensor = this.vectorSource.getFeatureById(updatedSensor._id);
     sensor.setProperties(props);
+    const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
+      updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
+    ]));
+    sensor.setGeometry(geom);
+    this.removeHighlight();
+    this.clearLocationLayer();
+    this.highlightFeature(sensor);
 
     // update feature info
     this.activeFeatureInfo = new SensorInfo(
@@ -337,9 +353,12 @@ export class ViewerComponent implements OnInit {
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
       const mapCoordinateRD = mapEvent.value.coordinate;
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
-      this.removeHighlight();
-      this.activeFeatureInfo = null;
-      this.showInfo = false;
+
+      if (!this.paneSensorUpdateActive) {
+        this.removeHighlight();
+        this.activeFeatureInfo = null;
+        this.showInfo = false;
+      }
 
       // this.removeHighlight()
       // this.activeFeatureInfo = []
@@ -385,13 +404,6 @@ export class ViewerComponent implements OnInit {
         coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
         baseObjectId: 'iets'
       });
-
-      // Dit is wanneer geselecteerde locatie wijzigd, listener daarop!
-      // this.removeLocationFeatures();
-      // const locationFeature = new Feature({
-      //   geometry: new Point(mapCoordinateRD),
-      // });
-      // this.setLocation(locationFeature);
     }
   }
 
@@ -455,18 +467,6 @@ export class ViewerComponent implements OnInit {
     return info;
   }
 
-  public changeOpenInfo() {
-    this.showInfo = !this.showInfo;
-  }
-
-  public SelectLocationOn() {
-    this.selectLocation = true;
-  }
-
-  public SelectLocationOff() {
-    this.selectLocation = false;
-  }
-
   private setLocation(feature: Feature) {
     this.selectLocationSource = new VectorSource({
       features: [feature],
@@ -495,13 +495,13 @@ export class ViewerComponent implements OnInit {
   }
 
   public clearLocationLayer() {
-    this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
     console.log(this.showInfo);
     console.log(this.activeFeatureInfo);
   }
 
   public highlightFeature(feature: Feature) {
+    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
     this.highlightSource = new VectorSource({
       features: [feature],
     });
@@ -535,24 +535,19 @@ export class ViewerComponent implements OnInit {
     this.selectedSensor = undefined;
   }
 
-  private toggleSensorRegisterPane(active?: boolean): void {
+  public toggleSensorRegisterPane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorRegisterActive;
     }
 
-    if (active) {
-      // Behavior when pane is opened
-      // this.RegisterSensor.reset();
-      // this.registerSensorSubmitted = false;
-    } else {
-      // Behavior when pane is closed
+    if (!active) {
       this.clearLocationLayer();
     }
 
     this.paneSensorRegisterActive = active;
   }
 
-  private toggleSensorUpdatePane(active?: boolean): void {
+  public toggleSensorUpdatePane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorUpdateActive;
     }
@@ -560,7 +555,7 @@ export class ViewerComponent implements OnInit {
     this.paneSensorUpdateActive = active;
   }
 
-  private toggleOwnerRegisterPane(active?: boolean): void {
+  public toggleOwnerRegisterPane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorUpdateActive;
     }
@@ -607,29 +602,7 @@ export class ViewerComponent implements OnInit {
     this.zoomToPoint(point);
   }
 
-  private findMe() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
-        this.zoomToPosition(position);
-      });
-    } else {
-      alert('Geolocation is not supported by this browser.');
-    }
-  }
 
-  private addFindMeButton() {
-    const locate = document.createElement('div');
-    locate.className = 'ol-control ol-unselectable locate';
-    locate.innerHTML = '<button title="Locate me">◎</button>';
-    locate.addEventListener('click', () => {
-      this.findMe();
-    });
-
-    this.mapService.getMap('srn').addControl(new Control({
-      element: locate,
-    }));
-    // console.log(this.mapService.getMap().getControls());
-  }
 
   public logout() {
     this.authenticationService.logout();

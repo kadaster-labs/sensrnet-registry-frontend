@@ -25,6 +25,7 @@
     "bootstrap": "^4.5.0",
     "bootstrap-select": "^1.13.17",
     "core-js": "^2.6.11",
+    "font-awesome": "^4.7.0",
     "generieke-geo-componenten-dataset-legend": "^4.0.1",
     "generieke-geo-componenten-dataset-tree": "^4.1.0",
     "generieke-geo-componenten-feature-info": "^6.0.0",

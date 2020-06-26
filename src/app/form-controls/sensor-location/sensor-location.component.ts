@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, forwardRef, OnDestroy } from '@angular/core';
 import { LocationService } from '../../services/location.service';
 import { ISensorLocation } from '../../model/bodies/location';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -50,13 +50,12 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
   constructor(
     private readonly locationService: LocationService,
     private readonly formBuilder: FormBuilder,
-    private ref: ChangeDetectorRef,
   ) {
     this.form = this.formBuilder.group({
-      height: 0,
-      latitude: 0,
-      longitude: 0,
-      baseObjectId: '',
+      height: [null, Validators.required],
+      latitude: [null, Validators.required],
+      longitude: [null, Validators.required],
+      baseObjectId: [null, Validators.required],
     });
 
     this.subscriptions.push(
@@ -71,14 +70,14 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
       if (this.selectLocation === true) {
         this.location = location;
         console.log(`location set to ${JSON.stringify(this.location)}`);
-        setTimeout(() => {
-          this.form.setValue({
-              height: location.coordinates[2],
-              latitude: location.coordinates[0],
-              longitude: location.coordinates[1],
-              baseObjectId: 'non-empty',
-          });
-        }, 0);
+        this.form.setValue({
+            height: location.coordinates[2],
+            latitude: location.coordinates[0],
+            longitude: location.coordinates[1],
+            baseObjectId: 'non-empty',
+        });
+
+        this.locationService.showLocation(location);
 
         this.selectLocation = false;
       }

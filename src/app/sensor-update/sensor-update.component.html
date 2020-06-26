@@ -1,45 +1,56 @@
 <h3>Update Sensor</h3>
 <hr>
-<form [formGroup]="SensorUpdate" (ngSubmit)="submit()">
-    <label> Name
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group">
+        <label> Name <span class="required">*</span>
+        </label>
         <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
-            [ngClass]="{ 'is-invalid': (SensorUpdate.value.name.dirty || SensorUpdate.value.name.touched) && SensorUpdate.value.name.errors }">
-        <div *ngIf="(SensorUpdate.value.name.dirty || SensorUpdate.value.name.touched) && SensorUpdate.value.name.errors"
+            [ngClass]="{ 'is-invalid': (f.name.dirty || f.name.touched) && f.name.errors }">
+        <div *ngIf="(f.name.dirty || f.name.touched || sensorUpdateSent) && f.name.errors"
             class="invalid-input">
-            <span *ngIf="SensorUpdate.value.name.errors.required">Name is required</span>
-            <span *ngIf="SensorUpdate.value.name.errors.minlength">Name must be at least 6 characters</span>
+            <span *ngIf="f.name.errors.required">Name is required</span>
+            <span *ngIf="f.name.errors.minlength">Name must be at least 6 characters</span>
         </div>
-    </label>
-    <br>
-    <label> Aim
-        <input class="form-control" type="text" formControlName="aim" placeholder="Aim of the sensor">
-    </label>
-    <br>
-    <label> Description
+    </div>
+    <div class="form-group">
+        <label for="aim">Aim</label>
+        <input type="text" class="form-control" formControlName="aim" placeholder="Aim of the sensor">
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
         <textarea class="form-control" type="text" formControlName="description"
             placeholder="Describe the sensor"></textarea>
-    </label>
-    <br>
-    <label> Manufacturer
+    </div>
+    <div class="form-group">
+        <label for="manufacturer"> Manufacturer <span class="required">*</span></label>
         <input class="form-control" type="text" formControlName="manufacturer"
             placeholder="Enter name of the manufacturer">
-    </label>
-    <br>
+        <div *ngIf="(f.manufacturer.dirty || f.manufacturer.touched || sensorUpdateSent) && f.manufacturer.errors"
+            class="invalid-input">
+            <span *ngIf="f.manufacturer.errors.required">Manufacturer is required</span>
+        </div>
+    </div>
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" formControlName="active">
         <label class="form-check-label" for="active">
             Active
         </label>
     </div>
-    <label> Documentation URL
-        <input class="form-control" type="url" formControlName="documentationUrl" placeholder="url of documentationUrl">
-    </label>
-    <br>
+    <div class="form-group">
+        <label for="documentationUrl">Documentation URL <span class="required">*</span></label>
+        <input class="form-control" type="url" formControlName="documentationUrl"
+            placeholder="url of documentation">
+        <div *ngIf="(f.documentationUrl.dirty || f.documentationUrl.touched || sensorUpdateSent) && f.documentationUrl.errors"
+            class="invalid-input">
+            <span *ngIf="f.documentationUrl.errors.required">Documentation is required</span>
+            <span *ngIf="f.documentationUrl.errors.pattern">Not a valid URL</span>
+        </div>
+    </div>
+    <app-sensor-location formControlName="location"></app-sensor-location>
     <app-sensor-type formControlName="type"></app-sensor-type>
     <!-- <app-sensor-theme formControlName="theme"></app-sensor-theme> -->
-    <app-sensor-location formControlName="location"></app-sensor-location>
     <hr>
-    <pre>{{ SensorUpdate.value | json }}</pre>
-    <button class="btn btn-primary btn-lg" type="submit" [disabled]="!SensorUpdate.valid">Update</button>
-    <span class="glyphicon alert-success" aria-hidden="true" [ngClass]="{'glyphicon-check': sensorUpdateSent}"></span>
+    <!-- <pre>{{ form.value | json }}</pre> -->
+    <button class="btn btn-primary btn-lg" type="submit">Update</button>
+    <button type="button" class="btn btn-lg" (click)="close()">Close</button>
 </form>

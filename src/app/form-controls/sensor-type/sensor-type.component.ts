@@ -11,7 +11,7 @@ export interface SensorTypeFormValues {
 @Component({
   selector: 'app-sensor-type',
   templateUrl: './sensor-type.component.html',
-  styleUrls: ['./sensor-type.component.sass'],
+  styleUrls: ['./sensor-type.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
