@@ -304,7 +304,7 @@ export class ViewerComponent implements OnInit {
         geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
       });
       this.setLocation(locationFeature);
-    })
+    });
 
     // this.addFindMeButton();
   }
@@ -595,12 +595,12 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  private zoomToPosition(position: Position) {
-    const coords = [position.coords.longitude, position.coords.latitude];
-    const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
-    const point = new Point(coordsRD);
-    this.zoomToPoint(point);
-  }
+  // private zoomToPosition(position: Position) {
+  //   const coords = [position.coords.longitude, position.coords.latitude];
+  //   const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
+  //   const point = new Point(coordsRD);
+  //   this.zoomToPoint(point);
+  // }
 
 
 
