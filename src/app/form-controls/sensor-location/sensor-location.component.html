@@ -1,10 +1,12 @@
 <div [formGroup]="form" class="form-group">
     <div class="row">
         <label for="location">Select Location <span class="required">*</span></label>
-        <button type="button" class="btn btn-sm" (click)="selectLocation = true">
-            Select
+        <button type="button" class="btn btn-sm btn-outline-secondary" [ngClass]="{ 'btn-outline-success': form.valid }" (click)="selectLocation = true">
+            Select on map
             <i *ngIf="form.valid" class="far fa-check-square" aria-hidden="true"></i>
         </button>
-
+    </div>
+    <div *ngIf="(!form.valid && submitted)" class="row invalid-input">
+        Location is required
     </div>
 </div>

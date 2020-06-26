@@ -1,27 +1,27 @@
 <div [formGroup]="form" class="form-group">
     <div class="form-group">
         <label for="typeName">Select category <span class="required">*</span></label>
-        <select data-container="body" class="form-control" formControlName="typeName">
+        <select data-container="body" class="form-control" formControlName="typeName"
+            [ngClass]="{ 'is-invalid': submitted && f.typeName.errors }">
             <option *ngFor="let type of sensorCategoriesList" [value]="type">
                 {{sensorCategories[type]}}
             </option>
         </select>
-        <div *ngIf="(form.controls.typeName.dirty || form.controls.typeName.touched) && form.controls.typeName.errors"
-            class="invalid-input">
-            <span *ngIf="form.controls.typeName.errors.required">Type is required</span>
+        <div *ngIf="(f.typeName.dirty || f.typeName.touched || submitted) && f.typeName.errors" class="invalid-input">
+            <span *ngIf="f.typeName.errors.required">Type is required</span>
         </div>
     </div>
     <div class="form-group">
-        <label for="typeDetails">Select {{ form.controls.typeName.value }} type <span
-                class="required">*</span></label>
-        <select class="form-control" data-container="body" formControlName="typeDetails">
+        <label for="typeDetails">Select {{ f.typeName.value }} type <span class="required">*</span></label>
+        <select class="form-control" data-container="body" formControlName="typeDetails"
+            [ngClass]="{ 'is-invalid': submitted && f.typeDetails.errors }">
             <option *ngFor="let type of typeDetailsList" [value]="type">
                 {{type}}
             </option>
         </select>
-        <div *ngIf="(form.controls.typeDetails.dirty || form.controls.typeDetails.touched ) && form.controls.typeDetails.errors"
+        <div *ngIf="(f.typeDetails.dirty || f.typeDetails.touched || submitted) && f.typeDetails.errors"
             class="invalid-input">
-            <span *ngIf="form.controls.typeDetails.errors.required">Type details are required</span>
+            <span *ngIf="f.typeDetails.errors.required">Type details are required</span>
         </div>
     </div>
 </div>

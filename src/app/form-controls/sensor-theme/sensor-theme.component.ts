@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -38,6 +38,9 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 
+  @Input()
+  public submitted: boolean;
+
   get value(): SensorThemeFormValues {
     return this.form.value;
   }
@@ -47,8 +50,6 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
     this.form.setValue(value);
     this.onChange(value);
     this.onTouched();
-
-    this.cdf.detectChanges();
   }
 
   public sensorThemes = SensorTheme;
@@ -62,7 +63,6 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private cdf: ChangeDetectorRef,
   ) {
     this.form = this.formBuilder.group({
       value: new FormControl([], Validators.required),
@@ -77,6 +77,10 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
         this.onTouched();
       }),
     );
+  }
+
+  public get f() {
+    return this.form.controls;
   }
 
   public ngOnDestroy() {
@@ -97,6 +101,7 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
 
     if (value === null) {
       this.form.reset();
+      this.form.markAsPristine();
     }
   }
 

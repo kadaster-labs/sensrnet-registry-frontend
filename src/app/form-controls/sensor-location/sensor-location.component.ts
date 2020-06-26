@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnDestroy } from '@angular/core';
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
 import { LocationService } from '../../services/location.service';
 import { ISensorLocation } from '../../model/bodies/location';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -35,6 +35,9 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
   public selectLocation = false;
 
   private location: ISensorLocation;
+
+  @Input()
+  public submitted: boolean;
 
   get value(): SensorLocationFormValues {
     return this.form.value;

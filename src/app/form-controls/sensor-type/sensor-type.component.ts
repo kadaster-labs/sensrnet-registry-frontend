@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnDestroy } from '@angular/core';
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 import { Category, TypeSensor, TypeBeacon, TypeCamera } from '../../model/bodies/sensorTypes';
 import { Subscription } from 'rxjs';
@@ -28,6 +28,9 @@ export interface SensorTypeFormValues {
 export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
+
+  @Input()
+  public submitted: boolean;
 
   public sensorCategories = Category;
   public sensorCategoriesList: string[];
@@ -71,6 +74,16 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
 
     this.onFormChanges();
   }
+
+  get f() {
+    return this.form.controls;
+  }
+
+  // public ngOnChange(changes: SimpleChanges) {
+  //   if (changes.submitted) {
+  //     this.formSubmitted = changes.submitted;
+  //   }
+  // }
 
 
   private onFormChanges() {

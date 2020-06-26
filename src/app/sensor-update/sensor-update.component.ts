@@ -1,9 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ISensor } from '../model/bodies/sensor-body';
-import { ILocationBody, IUpdateSensorBody, SensorService } from '../services/sensor.service';
-import { tick } from '@angular/core/testing';
-import { LocationService } from '../services/location.service';
+import { IUpdateSensorBody, SensorService } from '../services/sensor.service';
 
 @Component({
   selector: 'app-sensor-update',
@@ -21,7 +19,6 @@ export class SensorUpdateComponent implements OnChanges {
   @Output() public closePane = new EventEmitter<void>();
 
   constructor(
-    private readonly locationService: LocationService,
     private readonly sensorService: SensorService,
     private readonly formBuilder: FormBuilder,
   ) {
@@ -69,7 +66,6 @@ export class SensorUpdateComponent implements OnChanges {
     // }
   }
 
-  // convenience getter for easy access to form fields
   get f() {
     return this.form.controls;
   }

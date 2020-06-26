@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { IRegisterSensorBody, SensorService } from '../services/sensor.service';
 import { LocationService } from '../services/location.service';
