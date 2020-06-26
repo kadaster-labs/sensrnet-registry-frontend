@@ -76,12 +76,17 @@ export class SensorUpdateComponent implements OnChanges {
   }
 
   public async submit() {
+    if (!this.form.valid) {
+      return;
+    }
+
     const newValues =  this.form.value;
     const sensor = {
       typeName: newValues.type.typeName,
       location: newValues.location,
       dataStreams: newValues.dataStreams,
 
+      typeDetails: { subType: newValues.type.typeDetails },
       active: newValues.active || false,
       aim: newValues.aim,
       description: newValues.description !== '' ? newValues.description : undefined,
@@ -110,6 +115,7 @@ export class SensorUpdateComponent implements OnChanges {
         manufacturer: sensor.manufacturer,
         name: sensor.name,
         typeName: sensor.typeName,
+        typeDetails: sensor.typeDetails,
         theme: sensor.theme,
       };
       const result = await this.sensorService.updateDetails(this.sensor._id, details);

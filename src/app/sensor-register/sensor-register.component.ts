@@ -72,7 +72,7 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
       manufacturer: this.form.value.manufacturer,
       name: this.form.value.name,
       theme: this.form.value.theme.value || [],
-      typeDetails: this.form.value.type.typeDetails || '',
+      typeDetails: { subType: this.form.value.type.typeDetails || '' },
     };
 
     try {

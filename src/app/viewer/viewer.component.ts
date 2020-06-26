@@ -300,6 +300,10 @@ export class ViewerComponent implements OnInit {
         return;
       }
 
+      if (!this.paneSensorRegisterActive && !this.paneSensorUpdateActive) {
+        return;
+      }
+
       const locationFeature = new Feature({
         geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
       });
