@@ -38,7 +38,8 @@
 
     <div class="row">
         <div id="updateSensorForm" [ngbCollapse]="!paneSensorUpdateActive" class="col-lg-12 app-form">
-            <app-sensor-update [sensor]="selectedSensor" (closePane)="toggleSensorUpdatePane(false)"></app-sensor-update>
+            <app-sensor-update [sensor]="selectedSensor" [active]="paneSensorUpdateActive"
+                (closePane)="toggleSensorUpdatePane(false)"></app-sensor-update>
         </div>
     </div>
 
@@ -49,8 +50,7 @@
                     <a id="search-header" role="button" data-toggle="collapse" data-target="#searchForm"><span
                             class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a>
                     <div class="collapse col-lg-12" id="searchForm">
-                        <ggc-search (searchComponentEventEmitter)="handleEvent($event)"
-                        [classSearchButton]="'fa fa-search'" [classClearButton]="'fa fa-times'">></ggc-search>
+                        <ggc-search (searchComponentEventEmitter)="handleEvent($event)"></ggc-search>
                     </div>
                 </div>
             </div>

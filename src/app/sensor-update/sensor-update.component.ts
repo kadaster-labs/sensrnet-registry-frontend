@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ISensor } from '../model/bodies/sensor-body';
 import { IUpdateSensorBody, SensorService } from '../services/sensor.service';
+import { LocationService } from '../services/location.service';
 
 @Component({
   selector: 'app-sensor-update',
@@ -21,6 +22,7 @@ export class SensorUpdateComponent implements OnChanges {
   constructor(
     private readonly sensorService: SensorService,
     private readonly formBuilder: FormBuilder,
+    private readonly locationService: LocationService,
   ) {
     const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -38,32 +40,37 @@ export class SensorUpdateComponent implements OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    const selectedSensor = changes.sensor.currentValue ? changes.sensor.currentValue : {};
-    this.form.setValue({
-      name: selectedSensor.name || '',
-      aim: selectedSensor.aim || '',
-      description: selectedSensor.description || '',
-      manufacturer: selectedSensor.manufacturer || '',
-      active: selectedSensor.active || false,
-      documentationUrl: selectedSensor.documentationUrl || '',
-      location: {
-        latitude: selectedSensor.location ? selectedSensor.location.coordinates[1] : null,
-        longitude: selectedSensor.location ? selectedSensor.location.coordinates[0] : null,
-        height: selectedSensor.location ? selectedSensor.location.coordinates[2] : null,
-        baseObjectId: selectedSensor.baseObjectId || 'non-empty',
-      },
-      type: {
-        typeName: selectedSensor.typeName ? selectedSensor.typeName[0] : '',
-        typeDetails: selectedSensor.typeDetails ? selectedSensor.typeDetails[0].subType : '',
-      },
-      theme: { value: selectedSensor.theme || [] },
-    });
+    if (changes.sensor) {
+      const selectedSensor = changes.sensor.currentValue ? changes.sensor.currentValue : {};
+      this.form.setValue({
+        name: selectedSensor.name || '',
+        aim: selectedSensor.aim || '',
+        description: selectedSensor.description || '',
+        manufacturer: selectedSensor.manufacturer || '',
+        active: selectedSensor.active || false,
+        documentationUrl: selectedSensor.documentationUrl || '',
+        location: {
+          latitude: selectedSensor.location ? selectedSensor.location.coordinates[1] : null,
+          longitude: selectedSensor.location ? selectedSensor.location.coordinates[0] : null,
+          height: selectedSensor.location ? selectedSensor.location.coordinates[2] : null,
+          baseObjectId: selectedSensor.baseObjectId || 'non-empty',
+        },
+        type: {
+          typeName: selectedSensor.typeName ? selectedSensor.typeName[0] : '',
+          typeDetails: selectedSensor.typeDetails ? selectedSensor.typeDetails[0].subType : '',
+        },
+        theme: { value: selectedSensor.theme || [] },
+      });
+    }
 
-    // if (changes.active.previousValue && !changes.active.currentValue) {
-    //   // clear form if pane get closed
-    //   this.form.reset();
-    //   this.locationService.showLocation(null);
-    // }
+    if (changes.active) {
+      if (changes.active.previousValue && !changes.active.currentValue) {
+        // clear form if pane get closed
+        console.log('clear form');
+        this.form.reset();
+        this.locationService.showLocation(null);
+      }
+    }
   }
 
   get f() {
