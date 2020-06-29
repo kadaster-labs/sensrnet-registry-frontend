@@ -1,12 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
 
 import { Overlay } from 'ol';
-import Control from 'ol/control/Control';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
@@ -16,7 +14,6 @@ import VectorSource from 'ol/source/Vector';
 import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
@@ -26,41 +23,21 @@ import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 
 import { AuthenticationService } from '../services/authentication.service';
 
-import { environment } from '../../environments/environment';
 import { ISensor } from '../model/bodies/sensor-body';
-import { Category, TypeBeacon, TypeCamera, TypeSensor } from '../model/bodies/sensorTypes';
 import { EventType } from '../model/events/event-type';
 import { Owner } from '../model/owner';
 import { DataService } from '../services/data.service';
-import { IRegisterSensorBody, SensorService } from '../services/sensor.service';
 import { SensorInfo } from './../model/bodies/sensorInfo';
-import { Theme as SensorTheme } from './../model/bodies/sensorTheme';
+import { LocationService } from '../services/location.service';
+import Geometry from 'ol/geom/Geometry';
 
 @Component({
   templateUrl: './viewer.component.html',
-  styleUrls: ['./viewer.component.css'],
+  styleUrls: ['./viewer.component.scss'],
 })
 export class ViewerComponent implements OnInit {
   public title = 'SensRNet';
   public mapName = 'srn';
-
-  public sensorCategories = Category;
-  public sensorCategoriesList: string[];
-  public sensorTypes = TypeSensor;
-  public sensorTypesList: string[];
-  public typeDetailsList: string[];
-  public beaconTypes = TypeBeacon;
-  public beaconTypesList: string[];
-  public cameraTypes = TypeCamera;
-  public cameraTypesList: string[];
-  public sensorThemes = SensorTheme;
-  public sensorThemesList: string[];
-  public dropdownSettings: IDropdownSettings = {
-    singleSelection: false,
-    itemsShowLimit: 2,
-    allowSearchFilter: false,
-    enableCheckAll: false,
-  };
 
   public currentMapResolution: number = undefined;
   public currentZoomlevel: number = undefined;
@@ -82,46 +59,13 @@ export class ViewerComponent implements OnInit {
   private clusterSource: Cluster;
   private selectCluster: SelectCluster;
 
-  public registerOwnerSent = false;
-  public registerSensorSent = false;
-
   public selectedSensor: ISensor;
   public paneSensorRegisterActive = false;
   public paneSensorUpdateActive = false;
   public paneOwnerRegisterActive = false;
 
-  public registerSensorSubmitted = false;
-
-  public RegisterSensor = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    aim: new FormControl(''),
-    description: new FormControl(''),
-    manufacturer: new FormControl('', Validators.required),
-    active: new FormControl(''),
-    documentationUrl: new FormControl('', Validators.required),
-    location: new FormGroup({
-      latitude: new FormControl(undefined, [Validators.required]),
-      longitude: new FormControl(undefined, [Validators.required]),
-      height: new FormControl(undefined, [Validators.required]),
-      baseObjectId: new FormControl('non-empty'),
-    }, this.locationValidator),
-    typeName: new FormControl('', Validators.required),
-    typeDetailsName: new FormControl('', Validators.required),
-    theme: new FormControl([], Validators.required),
-  });
-
-  public RegisterOwner = new FormGroup({
-    companyName: new FormControl(''),
-    email: new FormControl(''),
-    name: new FormControl(''),
-    publicName: new FormControl(''),
-    website: new FormControl(''),
-  });
-
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
-  private mapCoordinateWGS84: [];
-  private mapCoordinateRD: [];
 
   public currentOwner: Owner;
 
@@ -142,7 +86,7 @@ export class ViewerComponent implements OnInit {
     private httpClient: HttpClient,
     public mapService: MapService,
     private dataService: DataService,
-    private sensorService: SensorService,
+    private locationService: LocationService,
   ) {
     this.authenticationService.currentOwner.subscribe((x) => this.currentOwner = x);
   }
@@ -152,15 +96,9 @@ export class ViewerComponent implements OnInit {
       (data) => {
         this.myLayers = data as Theme[];
       },
-      (error) => {
+      () => {
       },
     );
-
-    this.sensorCategoriesList = Object.keys(this.sensorCategories).filter(String);
-    this.sensorThemesList = Object.keys(this.sensorThemes).filter(String);
-    this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
-    this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
-    this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);
 
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
@@ -325,11 +263,11 @@ export class ViewerComponent implements OnInit {
       this.vectorSource.addFeatures(newFeatures);
     });
 
-    // subscribe to sensor events
+    // subscribe to sensor location events
     const sensorUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorUpdated);
     sensorUpdated$.subscribe((newSensor: ISensor) => {
       console.log(`Socket.io heard that a Updated event was fired`);
-      console.log(newSensor);
+      this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
@@ -353,13 +291,26 @@ export class ViewerComponent implements OnInit {
       this.updateSensor(newSensor);
     });
 
-    // this.addFindMeButton();
-    this.onFormChanges();
-  }
+    this.locationService.showLocation$.subscribe((sensor) => {
+      this.removeLocationFeatures();
 
-  public locationValidator(g: FormGroup) {
-    return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
-      {required: true};
+      if (!sensor) {
+        this.clearLocationLayer();
+        this.toggleSensorRegisterPane(false);
+        return;
+      }
+
+      if (!this.paneSensorRegisterActive && !this.paneSensorUpdateActive) {
+        return;
+      }
+
+      const locationFeature = new Feature({
+        geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
+      });
+      this.setLocation(locationFeature);
+    });
+
+    // this.addFindMeButton();
   }
 
   public updateSensor(updatedSensor: ISensor) {
@@ -368,6 +319,13 @@ export class ViewerComponent implements OnInit {
     // update map
     const sensor = this.vectorSource.getFeatureById(updatedSensor._id);
     sensor.setProperties(props);
+    const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
+      updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
+    ]));
+    sensor.setGeometry(geom);
+    this.removeHighlight();
+    this.clearLocationLayer();
+    this.highlightFeature(sensor);
 
     // update feature info
     this.activeFeatureInfo = new SensorInfo(
@@ -399,9 +357,12 @@ export class ViewerComponent implements OnInit {
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
       const mapCoordinateRD = mapEvent.value.coordinate;
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
-      this.removeHighlight();
-      this.activeFeatureInfo = null;
-      this.showInfo = false;
+
+      if (!this.paneSensorUpdateActive) {
+        this.removeHighlight();
+        this.activeFeatureInfo = null;
+        this.showInfo = false;
+      }
 
       // this.removeHighlight()
       // this.activeFeatureInfo = []
@@ -442,21 +403,11 @@ export class ViewerComponent implements OnInit {
       //     }
       //   });
 
-      if (this.selectLocation === true) {
-        this.removeLocationFeatures();
-        this.RegisterSensor.patchValue({
-          location: {
-            height: 0,
-            latitude: mapCoordinateWGS84[1],
-            longitude: mapCoordinateWGS84[0],
-            baseObjectId: 'non-empty',
-          },
-        });
-        const locationFeature = new Feature({
-          geometry: new Point(mapCoordinateRD),
-        });
-        this.setLocation(locationFeature);
-      }
+      this.locationService.setLocation({
+        type: 'Point',
+        coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
+        baseObjectId: 'iets'
+      });
     }
   }
 
@@ -520,22 +471,6 @@ export class ViewerComponent implements OnInit {
     return info;
   }
 
-  get form() {
-    return this.RegisterSensor.controls;
-  }
-
-  public changeOpenInfo() {
-    this.showInfo = !this.showInfo;
-  }
-
-  public SelectLocationOn() {
-    this.selectLocation = true;
-  }
-
-  public SelectLocationOff() {
-    this.selectLocation = false;
-  }
-
   private setLocation(feature: Feature) {
     this.selectLocationSource = new VectorSource({
       features: [feature],
@@ -564,13 +499,13 @@ export class ViewerComponent implements OnInit {
   }
 
   public clearLocationLayer() {
-    this.SelectLocationOff();
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
     console.log(this.showInfo);
     console.log(this.activeFeatureInfo);
   }
 
   public highlightFeature(feature: Feature) {
+    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
     this.highlightSource = new VectorSource({
       features: [feature],
     });
@@ -604,84 +539,19 @@ export class ViewerComponent implements OnInit {
     this.selectedSensor = undefined;
   }
 
-  public async submitRegisterSensor() {
-    this.registerSensorSubmitted = true;
-
-    // stop here if form is invalid
-    if (this.RegisterSensor.invalid) {
-      return;
-    }
-
-    console.log(`posting ${this.RegisterSensor.value}`);
-    // TODO: perform extra validation
-    const sensor: IRegisterSensorBody = {
-      typeName: this.RegisterSensor.value.typeName,
-      location: this.RegisterSensor.value.location || { x: 0, y: 0, z: 0 },
-      dataStreams: this.RegisterSensor.value.dataStreams || [],
-
-      active: this.RegisterSensor.value.active || false,
-      aim: this.RegisterSensor.value.aim,
-      description: this.RegisterSensor.value.description,
-      documentationUrl: this.RegisterSensor.value.documentationUrl,
-      manufacturer: this.RegisterSensor.value.manufacturer,
-      name: this.RegisterSensor.value.name,
-      theme: this.RegisterSensor.value.theme || [],
-    };
-
-    try {
-      const result = await this.sensorService.register(sensor);
-
-      console.log(`Sensor was succesfully posted, received id ${result}`);
-      this.clearLocationLayer();
-      this.togglePane('SensorRegister');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  public submitCreateOwner() {
-    console.log('Create owner');
-
-    console.warn(this.RegisterOwner.value);
-    const owner: object = {
-      companyName: this.RegisterOwner.value.companyName,
-      email: this.RegisterOwner.value.email,
-      name: this.RegisterOwner.value.name,
-      publicName: this.RegisterOwner.value.publicName,
-      ssoId: 'local',
-      website: this.RegisterOwner.value.website,
-    };
-
-    this.httpClient.post(`${environment.apiUrl}/Owner`, owner, {}).subscribe((data: any) => {
-      console.log(`Owner was succesfully posted, received id ${data.ownerId}`);
-
-      this.registerOwnerSent = true;
-      setTimeout(() => {
-        this.registerOwnerSent = false;
-      }, 2500);
-    }, (err) => {
-      console.log(err);
-    });
-  }
-
-  private toggleSensorRegisterPane(active?: boolean): void {
+  public toggleSensorRegisterPane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorRegisterActive;
     }
 
-    if (active) {
-      // Behavior when pane is opened
-      this.RegisterSensor.reset();
-      this.registerSensorSubmitted = false;
-    } else {
-      // Behavior when pane is closed
+    if (!active) {
       this.clearLocationLayer();
     }
 
     this.paneSensorRegisterActive = active;
   }
 
-  private toggleSensorUpdatePane(active?: boolean): void {
+  public toggleSensorUpdatePane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorUpdateActive;
     }
@@ -689,7 +559,7 @@ export class ViewerComponent implements OnInit {
     this.paneSensorUpdateActive = active;
   }
 
-  private toggleOwnerRegisterPane(active?: boolean): void {
+  public toggleOwnerRegisterPane(active?: boolean): void {
     if (active === undefined) {
       active = !this.paneSensorUpdateActive;
     }
@@ -729,69 +599,14 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  private zoomToPosition(position: Position) {
-    const coords = [position.coords.longitude, position.coords.latitude];
-    const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
-    const point = new Point(coordsRD);
-    this.zoomToPoint(point);
-  }
+  // private zoomToPosition(position: Position) {
+  //   const coords = [position.coords.longitude, position.coords.latitude];
+  //   const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
+  //   const point = new Point(coordsRD);
+  //   this.zoomToPoint(point);
+  // }
 
-  private findMe() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
-        this.zoomToPosition(position);
-      });
-    } else {
-      alert('Geolocation is not supported by this browser.');
-    }
-  }
 
-  private onFormChanges() {
-    this.RegisterSensor.get('typeName').valueChanges.subscribe((category: Category) => {
-      switch (category) {
-        case Category.Beacon:
-          this.typeDetailsList = this.beaconTypesList;
-          break;
-        case Category.Camera:
-          this.typeDetailsList = this.cameraTypesList;
-          break;
-        case Category.Sensor:
-          this.typeDetailsList = this.sensorTypesList;
-          break;
-        default:
-          this.typeDetailsList = [];
-          break;
-      }
-    });
-  }
-
-  public onSelectTheme(event) {
-    const control: AbstractControl = this.RegisterSensor.controls.theme;
-    const themes = control.value || [];  // form.reset() sets field to null, instead of emptying the array
-    themes.push(event);
-    control.setValue(themes);
-  }
-
-  public onDeselectTheme(event) {
-    const control: AbstractControl = this.RegisterSensor.controls.theme;
-    let themes = control.value;
-    themes = themes.filter((theme: string) => theme !== event);
-    control.setValue(themes);
-  }
-
-  private addFindMeButton() {
-    const locate = document.createElement('div');
-    locate.className = 'ol-control ol-unselectable locate';
-    locate.innerHTML = '<button title="Locate me">◎</button>';
-    locate.addEventListener('click', () => {
-      this.findMe();
-    });
-
-    this.mapService.getMap('srn').addControl(new Control({
-      element: locate,
-    }));
-    // console.log(this.mapService.getMap().getControls());
-  }
 
   public logout() {
     this.authenticationService.logout();

@@ -1,0 +1,10 @@
+<div [formGroup]="form" class="form-group">
+    <label for="theme">Select theme <span class="required">*</span></label>
+    <ng-multiselect-dropdown formControlName="value" [placeholder]="'Choose the theme'" [data]="sensorThemesList"
+        [settings]="dropdownSettings" id="theme" class="is-invalid">
+    </ng-multiselect-dropdown>
+    <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors"
+        class="invalid-input">
+        <span *ngIf="f.value.errors.required">Theme is required</span>
+    </div>
+</div>

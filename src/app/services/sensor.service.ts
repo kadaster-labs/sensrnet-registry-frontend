@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { ISensor } from '../model/bodies/sensor-body';
-import { Theme } from '../model/bodies/sensorTheme';
+import { SensorTheme } from '../model/bodies/sensorTheme';
 
 export interface ILocationBody {
   longitude: number;
@@ -40,7 +40,7 @@ export interface IRegisterSensorBody {
   active?: boolean;
   observationArea?: object;
   documentationUrl?: string;
-  theme?: Theme;
+  theme?: SensorTheme;
   typeDetails?: object;
 }
 
@@ -51,7 +51,7 @@ export interface IUpdateSensorBody {
   manufacturer?: string;
   observationArea?: object;
   documentationUrl?: string;
-  theme?: Theme[];
+  theme?: SensorTheme[];
   typeName?: string;
   typeDetails?: object;
 }

@@ -1,82 +1,106 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ISensor } from '../model/bodies/sensor-body';
-import { ILocationBody, IUpdateSensorBody, SensorService } from '../services/sensor.service';
+import { IUpdateSensorBody, SensorService } from '../services/sensor.service';
+import { LocationService } from '../services/location.service';
 
 @Component({
   selector: 'app-sensor-update',
   templateUrl: './sensor-update.component.html',
-  styleUrls: ['./sensor-update.component.css'],
+  styleUrls: ['./sensor-update.component.scss'],
 })
-export class SensorUpdateComponent implements OnInit, OnChanges {
+export class SensorUpdateComponent implements OnChanges {
 
-  public SensorUpdate = new FormGroup({
-    name: new FormControl(),
-    aim: new FormControl(),
-    description: new FormControl(),
-    manufacturer: new FormControl(),
-    active: new FormControl(),
-    documentationUrl: new FormControl(),
-    location: new FormControl([Validators.required]),
-    typeName: new FormControl([Validators.required]),
-    typeDetailsName: new FormControl(),
-    theme: new FormControl(),
-  });
+  public form: FormGroup;
 
   public sensorUpdateSent = false;
 
-  @Input()
-  public sensor: ISensor;
+  @Input() public sensor: ISensor;
+  @Input() public active: boolean;
+  @Output() public closePane = new EventEmitter<void>();
 
   constructor(
     private readonly sensorService: SensorService,
+    private readonly formBuilder: FormBuilder,
+    private readonly locationService: LocationService,
   ) {
-  }
+    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
-  public ngOnChanges(changes: SimpleChanges) {
-    const selectedSensor = changes.sensor.currentValue ? changes.sensor.currentValue : {};
-    this.SensorUpdate.setValue({
-      name: selectedSensor.name || '',
-      aim: selectedSensor.aim || '',
-      description: selectedSensor.description || '',
-      manufacturer: selectedSensor.manufacturer || '',
-      active: selectedSensor.active || false,
-      documentationUrl: selectedSensor.documentationUrl || '',
-      location: selectedSensor.location || {},
-      typeName: selectedSensor.typeName || '',
-      typeDetailsName: selectedSensor.typeDetailsName || '',
-      theme: selectedSensor.theme || '',
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(6)]],
+      aim: '',
+      description: '',
+      manufacturer: ['', Validators.required],
+      active: '',
+      documentationUrl: ['', [Validators.required, Validators.pattern(reg)]],
+      location: [],
+      type: [],
+      theme: [],
     });
   }
 
-  public ngOnInit() {
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.sensor) {
+      const selectedSensor = changes.sensor.currentValue ? changes.sensor.currentValue : {};
+      this.form.setValue({
+        name: selectedSensor.name || '',
+        aim: selectedSensor.aim || '',
+        description: selectedSensor.description || '',
+        manufacturer: selectedSensor.manufacturer || '',
+        active: selectedSensor.active || false,
+        documentationUrl: selectedSensor.documentationUrl || '',
+        location: {
+          latitude: selectedSensor.location ? selectedSensor.location.coordinates[1] : null,
+          longitude: selectedSensor.location ? selectedSensor.location.coordinates[0] : null,
+          height: selectedSensor.location ? selectedSensor.location.coordinates[2] : null,
+          baseObjectId: selectedSensor.baseObjectId || 'non-empty',
+        },
+        type: {
+          typeName: selectedSensor.typeName ? selectedSensor.typeName[0] : '',
+          typeDetails: selectedSensor.typeDetails ? selectedSensor.typeDetails[0].subType : '',
+        },
+        theme: { value: selectedSensor.theme || [] },
+      });
+    }
+
+    if (changes.active) {
+      if (changes.active.previousValue && !changes.active.currentValue) {
+        // clear form if pane get closed
+        console.log('clear form');
+        this.form.reset();
+        this.locationService.showLocation(null);
+      }
+    }
   }
 
-  public onSensorChange(event) {
-    console.log('sensor changed');
-    console.log(event);
+  get f() {
+    return this.form.controls;
   }
 
-  public selectLocationOn() {
-  }
-
-  public clearLocationLayer() {
+  public close() {
+    console.log('close');
+    this.closePane.emit();
   }
 
   public async submit() {
-    const newValues = this.SensorUpdate.value;
+    if (!this.form.valid) {
+      return;
+    }
+
+    const newValues =  this.form.value;
     const sensor = {
-      typeName: Array.isArray(newValues.typeName) ? newValues.typeName[0] : newValues.typeName,
+      typeName: newValues.type.typeName,
       location: newValues.location,
       dataStreams: newValues.dataStreams,
 
+      typeDetails: { subType: newValues.type.typeDetails },
       active: newValues.active || false,
       aim: newValues.aim,
       description: newValues.description !== '' ? newValues.description : undefined,
       documentationUrl: newValues.documentationUrl !== '' ? newValues.documentationUrl : undefined,
       manufacturer: newValues.manufacturer,
       name: newValues.name,
-      theme: newValues.theme,
+      theme: newValues.theme.value,
     };
 
     try {
@@ -98,6 +122,7 @@ export class SensorUpdateComponent implements OnInit, OnChanges {
         manufacturer: sensor.manufacturer,
         name: sensor.name,
         typeName: sensor.typeName,
+        typeDetails: sensor.typeDetails,
         theme: sensor.theme,
       };
       const result = await this.sensorService.updateDetails(this.sensor._id, details);
@@ -109,13 +134,7 @@ export class SensorUpdateComponent implements OnInit, OnChanges {
     // TODO: only if location was changed
     if (sensor.location) {
       try {
-        const location: ILocationBody = {
-          latitude: sensor.location.coordinates[1],
-          longitude: sensor.location.coordinates[0],
-          height: sensor.location.coordinates[2],
-          baseObjectId: sensor.location.baseObjectId,
-        };
-        await this.sensorService.updateLocation(this.sensor._id, location);
+        await this.sensorService.updateLocation(this.sensor._id, sensor.location);
       } catch (error) {
         console.error(error);
       }

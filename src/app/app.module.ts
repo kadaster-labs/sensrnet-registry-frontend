@@ -1,6 +1,6 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,6 +20,10 @@ import { RegisterComponent } from './register/register.component';
 import { SensorUpdateComponent } from './sensor-update/sensor-update.component';
 import { DataService } from './services/data.service';
 import { ViewerComponent } from './viewer/viewer.component';
+import { SensorRegisterComponent } from './sensor-register/sensor-register.component';
+import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
+import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
+import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
 
 @NgModule({
   declarations: [
@@ -29,11 +33,16 @@ import { ViewerComponent } from './viewer/viewer.component';
     LoginComponent,
     RegisterComponent,
     SensorUpdateComponent,
+    SensorRegisterComponent,
+    SensorThemeComponent,
+    SensorLocationComponent,
+    SensorTypeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     GgcMapModule.forRoot(),
     GgcSearchModule,
     GgcDatasetTreeModule,

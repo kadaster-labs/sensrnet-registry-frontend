@@ -5,7 +5,11 @@
   "projects": {
     "viewer": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "sass"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -29,11 +33,7 @@
               }
             ],
             "styles": [
-              "./node_modules/kadaster-huisstijl/dist/css/kadaster-huisstijl.css",
-              "./node_modules/bootstrap-select/dist/css/bootstrap-select.min.css",
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/ol/ol.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
@@ -100,7 +100,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
