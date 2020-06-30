@@ -2,7 +2,6 @@ import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { SensorTheme } from '../../model/bodies/sensorTheme';
 
 // describes what the return value of the form control will look like
@@ -10,13 +9,6 @@ export interface SensorThemeFormValues {
   value: SensorTheme[];
 }
 
-/**
- * This component doesn't work as desired yet. When changing the model externally, the change is not reflected in the
- * template. The component we use is ng-multiselect-dropdown, which uses the onPush ChangeDetection strategy. For now,
- * disable theme changing. See if it can be circumvented, otherwise, ditch/fork component
- *
- * https://github.com/angular/angular/issues/10816
- */
 @Component({
   selector: 'app-sensor-theme',
   templateUrl: './sensor-theme.component.html',
@@ -54,12 +46,6 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
 
   public sensorThemes = SensorTheme;
   public sensorThemesList: string[];
-  public dropdownSettings: IDropdownSettings = {
-    singleSelection: false,
-    itemsShowLimit: 2,
-    allowSearchFilter: false,
-    enableCheckAll: false,
-  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -103,6 +89,8 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
       this.form.reset();
       this.form.markAsPristine();
     }
+
+    ($('.selectpicker') as any).selectpicker('refresh');
   }
 
   public registerOnTouched(fn) {
