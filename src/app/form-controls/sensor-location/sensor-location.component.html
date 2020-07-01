@@ -10,9 +10,6 @@
     <label for="Height">Height <span class="required">*</span></label>
     <input class="form-control" type="number" value="0" formControlName="height" placeholder="Enter Heigth (m)"
         [ngClass]="{ 'is-invalid': submitted && f.height.errors }">
-    <!-- <div *ngIf="(f.height.dirty || f.height.touched || submitted) && f.height.errors" class="invalid-input">
-        <span class="required-text" *ngIf="f.height.errors.required">Height is required</span>
-    </div> -->
     <span class="required-text" *ngIf="(!form.valid && submitted)">
         Location and Height are required
     </span>
