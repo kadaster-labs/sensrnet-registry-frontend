@@ -39,6 +39,10 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
   @Input()
   public submitted: boolean;
 
+  get f() {
+    return this.form.controls;
+  }
+
   get value(): SensorLocationFormValues {
     return this.form.value;
   }
@@ -72,6 +76,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     this.locationService.location$.subscribe(location => {
       if (this.selectLocation === true) {
         this.location = location;
+        console.log(location)
         console.log(`location set to ${JSON.stringify(this.location)}`);
         this.form.setValue({
             height: location.coordinates[2],

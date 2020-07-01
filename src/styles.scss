@@ -44,3 +44,7 @@ $fa-font-path: "../node_modules/font-awesome/fonts";
 .required {
   color: red;
 }
+
+button[type="submit"] {
+  margin-right: 20px;
+}
