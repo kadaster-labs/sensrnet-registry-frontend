@@ -182,11 +182,6 @@ export class ViewerComponent implements OnInit {
               color: 'rgba(19, 65, 115, 0.9)',
             }),
           }),
-          // ,
-          // stroke: new Stroke({
-          //   color: '#000000',
-          //   width: 0.5
-          // }),
         });
         return style1;
       };
@@ -238,6 +233,7 @@ export class ViewerComponent implements OnInit {
           this.selectedSensor = feature.values_.sensor;
           this.showInfo = true;
           this.highlightFeature(geometry);
+          console.log(this.highlightFeature)
         }
         if (activeFeatures.length > 1) {
           this.removeHighlight();
@@ -363,45 +359,6 @@ export class ViewerComponent implements OnInit {
         this.activeFeatureInfo = null;
         this.showInfo = false;
       }
-
-      // this.removeHighlight()
-      // this.activeFeatureInfo = []
-      // this.showInfo = false
-
-      // map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
-      // const features = data.getProperties().features;
-      // const zoomlevel = map.getView().getZoom()
-      // if (features.length === 1) {
-      //   console.log(features)
-      //   const feature = features[0]
-      //   const geometry = new Feature({
-      //     geometry: feature.values_.geometry
-      //   })
-      //   this.highlightFeature(geometry)
-      //   this.activeFeatureInfo.push(this.featureToSensorInfo(feature))
-      //   this.showInfo = true;
-      // }
-      // else if (features.length > 1) {
-      //   // if (zoomlevel > 19) {
-      //     // nasty solution...
-      //     const geometry = new Feature({
-      //       geometry: features[0].values_.geometry
-      //     })
-      //     this.highlightFeature(geometry)
-      //     let features_ = features.map((feature: Feature) => this.featureToSensorInfo(feature))
-      //     this.activeFeatureInfo = features_
-      //     this.showInfo = true;
-      //   }
-      //   // clusters not on the same place
-      //   else {
-      //   // }
-      // }
-      // },
-      //   {
-      //     layerFilter: function (layer) {
-      //       return layer.getProperties().source instanceof Cluster;
-      //     }
-      //   });
 
       this.locationService.setLocation({
         type: 'Point',

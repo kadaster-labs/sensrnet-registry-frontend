@@ -12,26 +12,35 @@ $fa-font-path: "../node_modules/font-awesome/fonts";
 
 .ol-overlaycontainer-stopevent .ol-zoom {
   top: auto;
-  right: .5em;
-  bottom: .5em;
+  right: 0.5em;
+  bottom: 0.5em;
   left: auto;
 }
 
 .ol-overlaycontainer-stopevent .ol-rotate {
   top: auto;
-  right: .5em;
+  right: 0.5em;
   bottom: 6.1em;
   left: auto;
 }
 
 .ol-overlaycontainer-stopevent .locate {
   top: auto;
-  right: .5em;
+  right: 0.5em;
   bottom: 4.1em;
   left: auto;
 }
 
-
 .ggc-dt-theme {
-    padding-left: 0px !important;
+  padding-left: 0px !important;
+}
+
+.required-text {
+  color: red;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.required {
+  color: red;
 }
