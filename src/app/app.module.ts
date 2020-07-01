@@ -24,6 +24,7 @@ import { SensorRegisterComponent } from './sensor-register/sensor-register.compo
 import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
+import { OwnerUpdateComponent } from './owner-update/owner-update.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.com
     SensorThemeComponent,
     SensorLocationComponent,
     SensorTypeComponent,
+    OwnerUpdateComponent,
   ],
   imports: [
     BrowserModule,

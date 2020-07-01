@@ -2,14 +2,14 @@
     <div class="row">
         <ul class="col-lg-12 nav nav-pills navbar">
             <span class="header">SensRNet Registration App</span>
-            <!-- <li class="dropdown">
+            <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Owner</a>
                 <ul class="dropdown-menu">
-                    <! -- <li><a role="button" data-toggle="collapse" data-target="#registerOwnerForm">Register owner</a></li> -- >
+                    <!-- <li><a role="button" data-toggle="collapse" data-target="#registerOwnerForm">Register owner</a></li> -->
                     <li><a role="button" (click)="togglePane('OwnerUpdate')">Update owner</a></li>
                 </ul>
-            </li> -->
+            </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Sensor</a>
@@ -31,13 +31,20 @@
     </div>
 
     <div class="row">
-        <div id="registerSensorForm" [ngbCollapse]="!paneSensorRegisterActive" class="app-form">
+        <div [ngbCollapse]="!paneOwnerUpdateActive" class="app-form">
+            <app-owner-update [active]="paneOwnerUpdateActive" (closePane)="toggleOwnerUpdatePane(false)">
+            </app-owner-update>
+        </div>
+    </div>
+
+    <div class="row">
+        <div [ngbCollapse]="!paneSensorRegisterActive" class="app-form">
             <app-sensor-register [active]="paneSensorRegisterActive"></app-sensor-register>
         </div>
     </div>
 
     <div class="row">
-        <div id="updateSensorForm" [ngbCollapse]="!paneSensorUpdateActive" class="col-lg-12 app-form">
+        <div [ngbCollapse]="!paneSensorUpdateActive" class="app-form">
             <app-sensor-update [sensor]="selectedSensor" [active]="paneSensorUpdateActive"
                 (closePane)="toggleSensorUpdatePane(false)"></app-sensor-update>
         </div>

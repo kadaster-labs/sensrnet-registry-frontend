@@ -62,12 +62,10 @@ export class ViewerComponent implements OnInit {
   public selectedSensor: ISensor;
   public paneSensorRegisterActive = false;
   public paneSensorUpdateActive = false;
-  public paneOwnerRegisterActive = false;
+  public paneOwnerUpdateActive = false;
 
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
-
-  public currentOwner: Owner;
 
   public myLayers: Theme[];
   public hideTreeDataset = false;
@@ -87,9 +85,7 @@ export class ViewerComponent implements OnInit {
     public mapService: MapService,
     private dataService: DataService,
     private locationService: LocationService,
-  ) {
-    this.authenticationService.currentOwner.subscribe((x) => this.currentOwner = x);
-  }
+  ) {}
 
   public ngOnInit(): void {
     this.httpClient.get('/assets/layers.json').subscribe(
@@ -516,12 +512,12 @@ export class ViewerComponent implements OnInit {
     this.paneSensorUpdateActive = active;
   }
 
-  public toggleOwnerRegisterPane(active?: boolean): void {
+  public toggleOwnerUpdatePane(active?: boolean): void {
     if (active === undefined) {
-      active = !this.paneSensorUpdateActive;
+      active = !this.paneOwnerUpdateActive;
     }
 
-    this.paneOwnerRegisterActive = active;
+    this.paneOwnerUpdateActive = active;
   }
 
   public togglePane(pane: string) {
@@ -529,22 +525,22 @@ export class ViewerComponent implements OnInit {
       case 'SensorRegister':
         this.toggleSensorRegisterPane();
         this.toggleSensorUpdatePane(false);
-        this.toggleOwnerRegisterPane(false);
+        this.toggleOwnerUpdatePane(false);
         break;
       case 'SensorUpdate':
         this.toggleSensorRegisterPane(false);
         this.toggleSensorUpdatePane();
-        this.toggleOwnerRegisterPane(false);
+        this.toggleOwnerUpdatePane(false);
         break;
-      case 'OwnerRegister':
+      case 'OwnerUpdate':
         this.toggleSensorRegisterPane(false);
         this.toggleSensorUpdatePane(false);
-        this.toggleOwnerRegisterPane();
+        this.toggleOwnerUpdatePane();
         break;
       default:
         this.toggleSensorRegisterPane(false);
         this.toggleSensorUpdatePane(false);
-        this.toggleOwnerRegisterPane(false);
+        this.toggleOwnerUpdatePane(false);
         break;
     }
   }
