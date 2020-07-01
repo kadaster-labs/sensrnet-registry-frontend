@@ -6,8 +6,7 @@
         </label>
         <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
             [ngClass]="{ 'is-invalid': (f.name.dirty || f.name.touched) && f.name.errors }">
-        <div *ngIf="(f.name.dirty || f.name.touched || sensorUpdateSent) && f.name.errors"
-            class="invalid-input">
+        <div *ngIf="(f.name.dirty || f.name.touched || sensorUpdateSent) && f.name.errors" class="invalid-input">
             <span class="required-text" *ngIf="f.name.errors.required">Name is required</span>
             <span class="required-text" *ngIf="f.name.errors.minlength">Name must be at least 6 characters</span>
         </div>
@@ -49,7 +48,7 @@
     </div>
     <app-sensor-location formControlName="location"></app-sensor-location>
     <app-sensor-type formControlName="type"></app-sensor-type>
-    <!-- <app-sensor-theme formControlName="theme"></app-sensor-theme> -->
+    <app-sensor-theme formControlName="theme"></app-sensor-theme>
     <hr>
     <!-- <pre>{{ form.value | json }}</pre> -->
     <button class="btn btn-primary btn-lg" type="submit">Update</button>

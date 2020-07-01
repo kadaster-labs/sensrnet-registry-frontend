@@ -108,7 +108,13 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Theme</strong></td>
-                                    <td><em>{{ activeFeatureInfo?.theme }}</em></td>
+                                    <td><em>
+                                        <ul>
+                                            <li *ngFor="let item of activeFeatureInfo?.theme">
+                                                    {{item}}
+                                            </li>
+                                        </ul>
+                                    </em></td>
                                 </tr>
                             </tbody>
                         </table>

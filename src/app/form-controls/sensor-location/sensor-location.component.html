@@ -13,7 +13,7 @@
     <!-- <div *ngIf="(f.height.dirty || f.height.touched || submitted) && f.height.errors" class="invalid-input">
         <span class="required-text" *ngIf="f.height.errors.required">Height is required</span>
     </div> -->
-    <div *ngIf="(!form.valid && submitted)" class="row invalid-input">
+    <div class="required-text" *ngIf="(!form.valid && submitted)" class="row invalid-input">
         Location and Height are required
     </div>
 </div>
