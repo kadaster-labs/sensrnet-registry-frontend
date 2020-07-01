@@ -79,7 +79,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
         console.log(location)
         console.log(`location set to ${JSON.stringify(this.location)}`);
         this.form.setValue({
-            height: location.coordinates[2],
+            height: this.form.get('height').value,
             latitude: location.coordinates[0],
             longitude: location.coordinates[1],
             baseObjectId: 'non-empty',

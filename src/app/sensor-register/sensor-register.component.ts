@@ -50,6 +50,10 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
     }
   }
 
+  public close() {
+    this.form.reset();
+  }
+
   public async submit() {
     this.submitted = true;
 
