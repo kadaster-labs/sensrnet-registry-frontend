@@ -1,6 +1,7 @@
 <h3>Update Sensor</h3>
 <hr>
 <form [formGroup]="form" (ngSubmit)="submit()">
+    <app-sensor-type formControlName="type"></app-sensor-type>
     <div class="form-group">
         <label> Name <span class="required">*</span>
         </label>
@@ -47,7 +48,6 @@
         </div>
     </div>
     <app-sensor-location formControlName="location"></app-sensor-location>
-    <app-sensor-type formControlName="type"></app-sensor-type>
     <app-sensor-theme formControlName="theme"></app-sensor-theme>
     <hr>
     <!-- <pre>{{ form.value | json }}</pre> -->

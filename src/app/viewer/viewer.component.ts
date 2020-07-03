@@ -200,11 +200,12 @@ export class ViewerComponent implements OnInit {
       this.clusterLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
 
+
       this.selectCluster = new SelectCluster({
-        pointRadius: 20,
+        pointRadius: 40,
         featureStyle: styleSelectedCluster,
-        style: styleCluster,
-      });
+        style: styleCluster
+      });      
 
       this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
 
@@ -229,7 +230,6 @@ export class ViewerComponent implements OnInit {
           this.selectedSensor = feature.values_.sensor;
           this.showInfo = true;
           this.highlightFeature(geometry);
-          console.log(this.highlightFeature)
         }
         if (activeFeatures.length > 1) {
           this.removeHighlight();
@@ -341,7 +341,14 @@ export class ViewerComponent implements OnInit {
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
     this.currentZoomlevel = map.getView().getZoom();
-    // console.log(this.currentZoomlevel)
+    
+    // if (this.currentZoomlevel > 15) {
+    //   this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
+    // }
+    // else {
+    //   this.mapService.getMap(this.mapName).removeInteraction(this.selectCluster)
+    //   console.log(this.currentZoomlevel)
+    // }
 
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
@@ -488,7 +495,6 @@ export class ViewerComponent implements OnInit {
 
   public removeHighlight() {
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
-    console.log('remove highlight');
     this.selectedSensor = undefined;
   }
 

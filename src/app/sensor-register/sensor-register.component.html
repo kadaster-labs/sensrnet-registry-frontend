@@ -1,6 +1,7 @@
 <h3>Register Sensor</h3>
 <hr>
 <form [formGroup]="form" (ngSubmit)="submit()">
+    <app-sensor-type formControlName="type" [submitted]="submitted" (sensorCategory)="setName($event)"></app-sensor-type>
     <div class="form-group">
         <label> Name <span class="required">*</span>
         </label>
@@ -49,7 +50,6 @@
         </div>
     </div>
     <app-sensor-location formControlName="location" [submitted]="submitted"></app-sensor-location>
-    <app-sensor-type formControlName="type" [submitted]="submitted"></app-sensor-type>
     <app-sensor-theme formControlName="theme" [submitted]="submitted"></app-sensor-theme>
     <hr>
     <button class="btn btn-primary btn-lg" type="submit"> Register </button>
