@@ -35,10 +35,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="organization">Organization name</label> <span class="required">*</span>
-                        <input type="text" formControlName="organization" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.organization.errors }" />
-                        <div *ngIf="submitted && f.organization.errors" class="invalid-feedback">
-                            <div *ngIf="f.organization.errors.required">Organization is required</div>
+                        <label for="organisationName">Organisation name</label> <span class="required">*</span>
+                        <input type="text" formControlName="organisationName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.organisationName.errors }" />
+                        <div *ngIf="submitted && f.organisationName.errors" class="invalid-feedback">
+                            <div *ngIf="f.organisationName.errors.required">Organisation is required</div>
                         </div>
                     </div>
                     <div class="form-group">

@@ -4,9 +4,13 @@ export class Owner {
     public email: string,
     public password: string,
     public name: string,
-    public organization: string,
-    public phone: string,
+    public organisationName: string,
+    public contactEmail: string,
+    public contactPhone: string,
     public website: string,
-    public accessToken: string,
+    // tslint:disable-next-line: variable-name
+    public access_token: string,
+    // tslint:disable-next-line: variable-name
+    public expires_in: number,
   ) { }
 }

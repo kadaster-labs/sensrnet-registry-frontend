@@ -602,10 +602,8 @@ export class ViewerComponent implements OnInit {
   //   this.zoomToPoint(point);
   // }
 
-
-
-  public logout() {
-    this.authenticationService.logout();
+  public async logout() {
+    await this.authenticationService.logout();
     this.router.navigate(['/login']);
   }
 }
