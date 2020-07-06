@@ -116,9 +116,8 @@ export class ViewerComponent implements OnInit {
       const styleCache = {};
 
       const styleCluster = (feature) => {
-        let features = feature.get('features')
-        let numberOfFeatures = features.length;
-        const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
+        let features_ = feature.get('features')
+        let numberOfFeatures = features_.length;
         let style: Style;
 
         if (numberOfFeatures === 1) {
@@ -188,20 +187,20 @@ export class ViewerComponent implements OnInit {
 
         if (feature.values_.selectclusterfeature === true && zoomLevel > 15) {
           let active = feature.get('features')[0].values_.active;
-          let sensorType = feature.get('features')[0].values_.typeName[0];;
+          let sensorType = feature.get('features')[0].values_.typeName[0];
           let style: Style;
 
           if (!active) {
             numberOfFeatures = 'inactive' + sensorType;
             style = styleCache[numberOfFeatures];
-          } if (active) {
+          } 
+          if (active) {
             numberOfFeatures = 'active' + sensorType;
             style = styleCache[numberOfFeatures];
           }
 
           if (!style) {
             if (typeof numberOfFeatures === 'string') {
-              let sensorType = feature.get('features')[0].values_.typeName;
               if (!active) {
                 style = new Style({
                   image: new Icon({
@@ -386,14 +385,6 @@ export class ViewerComponent implements OnInit {
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
     this.currentZoomlevel = map.getView().getZoom();
-
-    // if (this.currentZoomlevel > 15) {
-    //   this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
-    // }
-    // else {
-    //   this.mapService.getMap(this.mapName).removeInteraction(this.selectCluster)
-    //   console.log(this.currentZoomlevel)
-    // }
 
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
