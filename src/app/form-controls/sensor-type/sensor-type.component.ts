@@ -112,8 +112,8 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
     });
 
     this.form.get('typeDetails').valueChanges.subscribe((category: Category) => {
-      this.sensorType.emit(this.form.get('typeDetails').value)
-    })
+      this.sensorType.emit(this.form.get('typeDetails').value);
+    });
   }
 
   public ngOnDestroy() {

@@ -45,7 +45,7 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
   }
 
   setName(item: string) {
-    this.form.controls['name'].setValue(item);
+    this.form.controls.name.setValue(item);
   }
 
   public ngOnChanges(changes: SimpleChanges) {

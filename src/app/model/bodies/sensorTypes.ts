@@ -31,3 +31,4 @@ export enum TypeCamera {
 export enum TypeBeacon {
     NavigationBeacon = 'NavigationBeacon',
 }
+

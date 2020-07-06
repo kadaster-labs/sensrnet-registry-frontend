@@ -116,8 +116,8 @@ export class ViewerComponent implements OnInit {
       const styleCache = {};
 
       const styleCluster = (feature) => {
-        let features_ = feature.get('features')
-        let numberOfFeatures = features_.length;
+        const FEATURES_ = feature.get('features');
+        let numberOfFeatures = FEATURES_.length;
         let style: Style;
 
         if (numberOfFeatures === 1) {
@@ -182,18 +182,18 @@ export class ViewerComponent implements OnInit {
       };
 
       const styleSelectedCluster = (feature) => {
-        let zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
+        const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
         let numberOfFeatures;
 
         if (feature.values_.selectclusterfeature === true && zoomLevel > 15) {
-          let active = feature.get('features')[0].values_.active;
-          let sensorType = feature.get('features')[0].values_.typeName[0];
+          const active = feature.get('features')[0].values_.active;
+          const sensorType = feature.get('features')[0].values_.typeName[0];
           let style: Style;
 
           if (!active) {
             numberOfFeatures = 'inactive' + sensorType;
             style = styleCache[numberOfFeatures];
-          } 
+          }
           if (active) {
             numberOfFeatures = 'active' + sensorType;
             style = styleCache[numberOfFeatures];

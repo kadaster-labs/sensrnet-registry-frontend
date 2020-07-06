@@ -38,7 +38,7 @@
                         <label for="organisationName">Organisation name</label> <span class="required">*</span>
                         <input type="text" formControlName="organisationName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.organisationName.errors }" />
                         <div *ngIf="submitted && f.organisationName.errors" class="invalid-feedback">
-                            <div *ngIf="f.organisationName.errors.required">Organisation is required</div>
+                            <div class="required-text" *ngIf="f.organisationName.errors.required">Organisation is required</div>
                         </div>
                     </div>
                     <div class="form-group">
