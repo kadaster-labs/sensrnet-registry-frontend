@@ -89,7 +89,7 @@ export class ViewerComponent implements OnInit {
     public mapService: MapService,
     private dataService: DataService,
     private locationService: LocationService,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     console.log(this.environment);
@@ -116,7 +116,8 @@ export class ViewerComponent implements OnInit {
       const styleCache = {};
 
       const styleCluster = (feature) => {
-        let numberOfFeatures = feature.get('features').length;
+        const FEATURES_ = feature.get('features');
+        let numberOfFeatures = FEATURES_.length;
         let style: Style;
 
         if (numberOfFeatures === 1) {
@@ -129,7 +130,9 @@ export class ViewerComponent implements OnInit {
             numberOfFeatures = 'active' + sensorType;
             style = styleCache[numberOfFeatures];
           }
-        } else {
+        }
+
+        else {
           style = styleCache[numberOfFeatures];
         }
         if (!style) {
@@ -153,7 +156,9 @@ export class ViewerComponent implements OnInit {
                 }),
               });
             }
-          } else {
+          }
+
+          else {
             style = new Style({
               image: new CircleStyle({
                 radius: 15,
@@ -176,21 +181,48 @@ export class ViewerComponent implements OnInit {
         return style;
       };
 
-      const styleSelectedCluster = () => {
-        const style1 = new Style({
-          image: new Circle({
-            radius: 8,
-            fill: new Fill({
-              color: 'rgba(19, 65, 115, 0.9)',
-            }),
-          }),
-          // ,
-          // stroke: new Stroke({
-          //   color: '#000000',
-          //   width: 0.5
-          // }),
-        });
-        return style1;
+      const styleSelectedCluster = (feature) => {
+        const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
+        let numberOfFeatures;
+
+        if (feature.values_.selectclusterfeature === true && zoomLevel > 15) {
+          const active = feature.get('features')[0].values_.active;
+          const sensorType = feature.get('features')[0].values_.typeName[0];
+          let style: Style;
+
+          if (!active) {
+            numberOfFeatures = 'inactive' + sensorType;
+            style = styleCache[numberOfFeatures];
+          }
+          if (active) {
+            numberOfFeatures = 'active' + sensorType;
+            style = styleCache[numberOfFeatures];
+          }
+
+          if (!style) {
+            if (typeof numberOfFeatures === 'string') {
+              if (!active) {
+                style = new Style({
+                  image: new Icon({
+                    opacity: 0.25,
+                    scale: 0.25,
+                    src: `/assets/icons/${sensorType}.png`,
+                  }),
+                });
+              } else {
+                style = new Style({
+                  image: new Icon({
+                    opacity: 0.9,
+                    scale: 0.25,
+                    src: `/assets/icons/${sensorType}.png`,
+                  }),
+                });
+              }
+            }
+            styleCache[numberOfFeatures] = style;
+          }
+          return style;
+        }
       };
 
       this.vectorSource = new VectorSource({
@@ -212,9 +244,9 @@ export class ViewerComponent implements OnInit {
       this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
 
       this.selectCluster = new SelectCluster({
-        pointRadius: 20,
+        pointRadius: 40,
         featureStyle: styleSelectedCluster,
-        style: styleCluster,
+        style: styleCluster
       });
 
       this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
@@ -353,7 +385,6 @@ export class ViewerComponent implements OnInit {
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
     this.currentZoomlevel = map.getView().getZoom();
-    // console.log(this.currentZoomlevel)
 
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
@@ -367,45 +398,6 @@ export class ViewerComponent implements OnInit {
         this.activeFeatureInfo = null;
         this.showInfo = false;
       }
-
-      // this.removeHighlight()
-      // this.activeFeatureInfo = []
-      // this.showInfo = false
-
-      // map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
-      // const features = data.getProperties().features;
-      // const zoomlevel = map.getView().getZoom()
-      // if (features.length === 1) {
-      //   console.log(features)
-      //   const feature = features[0]
-      //   const geometry = new Feature({
-      //     geometry: feature.values_.geometry
-      //   })
-      //   this.highlightFeature(geometry)
-      //   this.activeFeatureInfo.push(this.featureToSensorInfo(feature))
-      //   this.showInfo = true;
-      // }
-      // else if (features.length > 1) {
-      //   // if (zoomlevel > 19) {
-      //     // nasty solution...
-      //     const geometry = new Feature({
-      //       geometry: features[0].values_.geometry
-      //     })
-      //     this.highlightFeature(geometry)
-      //     let features_ = features.map((feature: Feature) => this.featureToSensorInfo(feature))
-      //     this.activeFeatureInfo = features_
-      //     this.showInfo = true;
-      //   }
-      //   // clusters not on the same place
-      //   else {
-      //   // }
-      // }
-      // },
-      //   {
-      //     layerFilter: function (layer) {
-      //       return layer.getProperties().source instanceof Cluster;
-      //     }
-      //   });
 
       this.locationService.setLocation({
         type: 'Point',
@@ -504,8 +496,6 @@ export class ViewerComponent implements OnInit {
 
   public clearLocationLayer() {
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
-    console.log(this.showInfo);
-    console.log(this.activeFeatureInfo);
   }
 
   public highlightFeature(feature: Feature) {
@@ -539,7 +529,6 @@ export class ViewerComponent implements OnInit {
 
   public removeHighlight() {
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
-    console.log('remove highlight');
     this.selectedSensor = undefined;
   }
 

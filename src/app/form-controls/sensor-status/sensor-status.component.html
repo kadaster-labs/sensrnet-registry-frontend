@@ -15,6 +15,6 @@
         </div>
     </div>
     <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors" class="invalid-input">
-        <span *ngIf="f.value.errors.required">Status is required</span>
+        <span class="required-text" *ngIf="f.value.errors.required">Status is required</span>
     </div>
 </div>

@@ -6,6 +6,6 @@
         </option>
     </select>
     <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors" class="invalid-input">
-        <span *ngIf="f.value.errors.required">Theme is required</span>
+        <span class="required-text" *ngIf="f.value.errors.required">Theme is required</span>
     </div>
 </div>

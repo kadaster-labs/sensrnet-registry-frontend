@@ -44,10 +44,19 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
     });
   }
 
+  setName(item: string) {
+    this.form.controls.name.setValue(item);
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (!changes.active.previousValue && changes.active.currentValue) {
       this.form.reset();
+      this.submitted = false;
     }
+  }
+
+  public close() {
+    this.form.reset();
   }
 
   public async submit() {

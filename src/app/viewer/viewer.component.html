@@ -23,11 +23,11 @@
                 <a class="dropdown-toggle" (click)="logout()" role="button" aria-haspopup="true"
                     aria-expanded="false">Logout</a>
             </li>
-        </ul>
 
-        <div class="logo">
-            <img src="assets\SensRNet-logo.png" width="145px" class="image">
-        </div>
+            <div class="logo">
+                <img alt="logo "src="assets\SensRNet-logo.png" width="150px" class="image">
+            </div>
+        </ul>
     </div>
 
     <div *ngIf="!environment.isReadonly" class="row">
@@ -108,7 +108,15 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Theme</strong></td>
-                                    <td><em>{{ activeFeatureInfo?.theme }}</em></td>
+                                    <td>
+                                        <em>
+                                            <ul style="list-style-type: circle">
+                                                <li *ngFor="let item of activeFeatureInfo?.theme">
+                                                    {{item}}
+                                                </li>
+                                            </ul>
+                                        </em>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
