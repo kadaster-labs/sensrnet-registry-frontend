@@ -6,7 +6,7 @@ import { Owner } from '../model/owner';
 @Component({
   selector: 'app-owner-update',
   templateUrl: './owner-update.component.html',
-  styleUrls: ['./owner-update.component.sass']
+  styleUrls: ['./owner-update.component.scss']
 })
 export class OwnerUpdateComponent implements OnInit, OnChanges {
 

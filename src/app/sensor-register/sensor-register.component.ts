@@ -65,7 +65,7 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
       location: this.form.value.location || {},
       dataStreams: this.form.value.dataStreams || [],
 
-      active: this.form.value.active || false,
+      active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings (i.e. "true") to boolean
       aim: this.form.value.aim,
       description: this.form.value.description,
       documentationUrl: this.form.value.documentationUrl,
