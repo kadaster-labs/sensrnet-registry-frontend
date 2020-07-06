@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
       name: ['', Validators.required],
       role: ['', Validators.required],
-      organization: ['', Validators.required],
+      organisationName: ['', Validators.required],
       contactEmail: ['', [Validators.required, Validators.email]],
       contactPhone: ['', Validators.required],
       website: ['', [Validators.required, Validators.pattern(reg)]],
@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
           this.router.navigate(['/login']);
         },
         (error) => {
-          this.alertService.error(error);
+          this.alertService.error(error.error.error);
           this.loading = false;
         });
   }

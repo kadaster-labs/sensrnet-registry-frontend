@@ -9,6 +9,13 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="organisationName">Organisation name</label> <span class="required">*</span>
+        <input type="text" formControlName="organisationName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.organisationName.errors }" />
+        <div *ngIf="submitted && f.organisationName.errors" class="invalid-feedback">
+            <div *ngIf="f.organisationName.errors.required">Organisation name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="contactEmail">Public e-mail</label> <span class="required">*</span>
         <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactEmail.errors }" />
         <div *ngIf="submitted && f.contactEmail.errors" class="invalid-feedback">
