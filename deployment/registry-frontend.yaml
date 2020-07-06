@@ -1,10 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.19.0 (f63a961c)
-  creationTimestamp: null
   labels:
     app: registry-frontend
   name: registry-frontend
@@ -17,15 +13,16 @@ spec:
   strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.19.0 (f63a961c)
-      creationTimestamp: null
       labels:
         app: registry-frontend
     spec:
       containers:
-      - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
+      - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:0.0.8
+        env:
+        - name: APP_PROJECT
+          value: "gemeente-a"
+        - name: APP_CONFIGURATION
+          value: "production"
         name: registry-frontend
         ports:
         - containerPort: 4200
@@ -36,10 +33,6 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.19.0 (f63a961c)
-  creationTimestamp: null
   labels:
     app: registry-frontend
   name: registry-frontend
@@ -62,8 +55,7 @@ metadata:
     traefik.ingress.kubernetes.io/preserve-host: "true"
 spec:
   rules:
-  - host: sensrnet-test.westeurope.cloudapp.azure.com
-    http:
+  - http:
       paths:
       - backend:
           serviceName: registry-frontend
