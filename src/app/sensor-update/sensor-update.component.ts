@@ -40,14 +40,14 @@ export class SensorUpdateComponent implements OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.sensor) {
+    if (changes.sensor && changes.sensor.currentValue) {
       const selectedSensor = changes.sensor.currentValue ? changes.sensor.currentValue : {};
       this.form.setValue({
         name: selectedSensor.name || '',
         aim: selectedSensor.aim || '',
         description: selectedSensor.description || '',
         manufacturer: selectedSensor.manufacturer || '',
-        active: selectedSensor.active || false,
+        active: { value: selectedSensor.active.toString() || false },
         documentationUrl: selectedSensor.documentationUrl || '',
         location: {
           latitude: selectedSensor.location ? selectedSensor.location.coordinates[1] : null,
@@ -104,9 +104,10 @@ export class SensorUpdateComponent implements OnChanges {
     };
 
     try {
-      if (sensor.active === true && !this.sensor.active) {
+      const active: boolean = JSON.parse(sensor.active.value); // "true" -> true, case insensitive
+      if (active === true && !this.sensor.active) {
         await this.sensorService.activate(this.sensor._id);
-      } else if (sensor.active === false && this.sensor.active) {
+      } else if (active === false && this.sensor.active) {
         await this.sensorService.deactivate(this.sensor._id);
       }
     } catch (error) {
