@@ -51,6 +51,7 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     if (!changes.active.previousValue && changes.active.currentValue) {
       this.form.reset();
+      this.submitted = false;
     }
   }
 

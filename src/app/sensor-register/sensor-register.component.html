@@ -1,7 +1,7 @@
 <h3>Register Sensor</h3>
 <hr>
 <form [formGroup]="form" (ngSubmit)="submit()">
-    <app-sensor-type formControlName="type" [submitted]="submitted" (sensorCategory)="setName($event)"></app-sensor-type>
+    <app-sensor-type formControlName="type" [submitted]="submitted" (sensorType)="setName($event)"></app-sensor-type>
     <div class="form-group">
         <label> Name <span class="required">*</span>
         </label>

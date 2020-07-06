@@ -31,7 +31,7 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
 
   @Input()
   public submitted: boolean;
-  @Output() sensorCategory = new EventEmitter<string>();
+  @Output() sensorType = new EventEmitter<string>();
 
   public sensorCategories = Category;
   public sensorCategoriesList: string[];
@@ -95,8 +95,6 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
         typeDetails: '',
       });
 
-      this.sensorCategory.emit(category);
-
       switch (category) {
         case Category.Beacon:
           this.typeDetailsList = this.beaconTypesList;
@@ -112,14 +110,18 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
           break;
       }
     });
-  }
+
+    this.form.get('typeDetails').valueChanges.subscribe((category: Category) => {
+      this.sensorType.emit(this.form.get('typeDetails').value)
+    })
+  };
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  public onChange: any = () => {};
-  public onTouched: any = () => {};
+  public onChange: any = () => { };
+  public onTouched: any = () => { };
 
   public registerOnChange(fn) {
     this.onChange = fn;

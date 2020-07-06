@@ -85,7 +85,7 @@ export class ViewerComponent implements OnInit {
     public mapService: MapService,
     private dataService: DataService,
     private locationService: LocationService,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.httpClient.get('/assets/layers.json').subscribe(
@@ -110,7 +110,9 @@ export class ViewerComponent implements OnInit {
       const styleCache = {};
 
       const styleCluster = (feature) => {
-        let numberOfFeatures = feature.get('features').length;
+        let features = feature.get('features')
+        let numberOfFeatures = features.length;
+        const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
         let style: Style;
 
         if (numberOfFeatures === 1) {
@@ -123,7 +125,9 @@ export class ViewerComponent implements OnInit {
             numberOfFeatures = 'active' + sensorType;
             style = styleCache[numberOfFeatures];
           }
-        } else {
+        }
+
+        else {
           style = styleCache[numberOfFeatures];
         }
         if (!style) {
@@ -147,7 +151,9 @@ export class ViewerComponent implements OnInit {
                 }),
               });
             }
-          } else {
+          }
+
+          else {
             style = new Style({
               image: new CircleStyle({
                 radius: 15,
@@ -170,16 +176,48 @@ export class ViewerComponent implements OnInit {
         return style;
       };
 
-      const styleSelectedCluster = () => {
-        const style1 = new Style({
-          image: new Circle({
-            radius: 8,
-            fill: new Fill({
-              color: 'rgba(19, 65, 115, 0.9)',
-            }),
-          }),
-        });
-        return style1;
+      const styleSelectedCluster = (feature) => {
+        let zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
+        let numberOfFeatures;
+
+        if (feature.values_.selectclusterfeature === true && zoomLevel > 15) {
+          let active = feature.get('features')[0].values_.active;
+          let sensorType = feature.get('features')[0].values_.typeName[0];;
+          let style: Style;
+
+          if (!active) {
+            numberOfFeatures = 'inactive' + sensorType;
+            style = styleCache[numberOfFeatures];
+          } if (active) {
+            numberOfFeatures = 'active' + sensorType;
+            style = styleCache[numberOfFeatures];
+          }
+
+          if (!style) {
+            if (typeof numberOfFeatures === 'string') {
+              let sensorType = feature.get('features')[0].values_.typeName;
+              if (!active) {
+                style = new Style({
+                  image: new Icon({
+                    opacity: 0.25,
+                    scale: 0.25,
+                    src: `/assets/icons/${sensorType}.png`,
+                  }),
+                });
+              } else {
+                style = new Style({
+                  image: new Icon({
+                    opacity: 0.9,
+                    scale: 0.25,
+                    src: `/assets/icons/${sensorType}.png`,
+                  }),
+                });
+              }
+            }
+            styleCache[numberOfFeatures] = style;
+          }
+          return style;
+        }
       };
 
       this.vectorSource = new VectorSource({
@@ -200,12 +238,11 @@ export class ViewerComponent implements OnInit {
       this.clusterLayer.setZIndex(10);
       this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
 
-
       this.selectCluster = new SelectCluster({
         pointRadius: 40,
         featureStyle: styleSelectedCluster,
         style: styleCluster
-      });      
+      });
 
       this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
 
@@ -341,7 +378,7 @@ export class ViewerComponent implements OnInit {
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
     this.currentZoomlevel = map.getView().getZoom();
-    
+
     // if (this.currentZoomlevel > 15) {
     //   this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
     // }
@@ -460,8 +497,6 @@ export class ViewerComponent implements OnInit {
 
   public clearLocationLayer() {
     this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
-    console.log(this.showInfo);
-    console.log(this.activeFeatureInfo);
   }
 
   public highlightFeature(feature: Feature) {
