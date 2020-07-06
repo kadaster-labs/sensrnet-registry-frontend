@@ -21,12 +21,7 @@
         <textarea class="form-control" type="text" formControlName="description"
             placeholder="Describe the sensor"></textarea>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" formControlName="active">
-        <label class="form-check-label" for="active">
-            Sensor active
-        </label>
-    </div>
+    <app-sensor-status formControlName="active"></app-sensor-status>
     <hr>
     <div class="form-group">
         <label for="manufacturer"> Manufacturer <span class="required">*</span></label>
