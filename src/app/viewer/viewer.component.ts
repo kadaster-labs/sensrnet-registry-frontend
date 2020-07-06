@@ -30,6 +30,8 @@ import { DataService } from '../services/data.service';
 import { SensorInfo } from './../model/bodies/sensorInfo';
 import { LocationService } from '../services/location.service';
 import Geometry from 'ol/geom/Geometry';
+import { environment } from '../../environments/environment';
+import Control from 'ol/control/Control';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -38,6 +40,8 @@ import Geometry from 'ol/geom/Geometry';
 export class ViewerComponent implements OnInit {
   public title = 'SensRNet';
   public mapName = 'srn';
+
+  public environment = environment;
 
   public currentMapResolution: number = undefined;
   public currentZoomlevel: number = undefined;
@@ -88,6 +92,8 @@ export class ViewerComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    console.log(this.environment);
+
     this.httpClient.get('/assets/layers.json').subscribe(
       (data) => {
         this.myLayers = data as Theme[];
@@ -306,7 +312,9 @@ export class ViewerComponent implements OnInit {
       this.setLocation(locationFeature);
     });
 
-    // this.addFindMeButton();
+    if (environment.clientName === 'Local') {
+      this.addFindMeButton();
+    }
   }
 
   public updateSensor(updatedSensor: ISensor) {
@@ -595,12 +603,35 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  // private zoomToPosition(position: Position) {
-  //   const coords = [position.coords.longitude, position.coords.latitude];
-  //   const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
-  //   const point = new Point(coordsRD);
-  //   this.zoomToPoint(point);
-  // }
+  private zoomToPosition(position: Position) {
+    const coords = [position.coords.longitude, position.coords.latitude];
+    const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
+    const point = new Point(coordsRD);
+    this.zoomToPoint(point);
+  }
+
+  private findMe() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        this.zoomToPosition(position);
+      });
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  }
+
+  private addFindMeButton() {
+    const locate = document.createElement('div');
+    locate.className = 'ol-control ol-unselectable locate';
+    locate.innerHTML = '<button title="Locate me">◎</button>';
+    locate.addEventListener('click', () => {
+      this.findMe();
+    });
+
+    this.mapService.getMap('srn').addControl(new Control({
+      element: locate,
+    }));
+  }
 
   public async logout() {
     await this.authenticationService.logout();

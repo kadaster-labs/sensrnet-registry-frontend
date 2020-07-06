@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   styleUrls: ['./login.component.scss'],
@@ -16,6 +17,8 @@ export class LoginComponent implements OnInit {
   public submitted = false;
   public returnUrl: string;
 
+  public environment = environment;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -25,6 +28,11 @@ export class LoginComponent implements OnInit {
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentOwnerValue) {
+      this.router.navigate(['/']);
+    }
+
+    // redirect if app is in readonly mode
+    if (this.environment.isReadonly) {
       this.router.navigate(['/']);
     }
   }

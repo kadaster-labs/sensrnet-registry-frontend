@@ -30,11 +30,11 @@ export class OwnerUpdateComponent implements OnInit, OnChanges {
     const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
     this.form = this.formBuilder.group({
-      name: [this.currentOwner.name, Validators.required],
-      organisationName: [this.currentOwner.organisationName, Validators.required],
-      contactPhone: [this.currentOwner.contactPhone, Validators.required],
-      contactEmail: [this.currentOwner.contactEmail, [Validators.required, Validators.email]],
-      website: [this.currentOwner.website, [Validators.required, Validators.pattern(reg)]],
+      name: [this.currentOwner ? this.currentOwner.name : '', Validators.required],
+      organisationName: [this.currentOwner ? this.currentOwner.organisationName : '', Validators.required],
+      contactPhone: [this.currentOwner ? this.currentOwner.contactPhone : '', Validators.required],
+      contactEmail: [this.currentOwner ? this.currentOwner.contactEmail : '', [Validators.required, Validators.email]],
+      website: [this.currentOwner ? this.currentOwner.website : '', [Validators.required, Validators.pattern(reg)]],
     });
   }
 
