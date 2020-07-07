@@ -4,7 +4,6 @@ metadata:
   labels:
     app: registry-frontend
   name: registry-frontend
-  namespace: sensrnet-frontend
 spec:
   ports:
   - port: 80
