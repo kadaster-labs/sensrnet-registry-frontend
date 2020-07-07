@@ -1,0 +1,11 @@
+<div [formGroup]="form" class="form-group">
+    <label for="theme">Select theme <span class="required">*</span></label>
+    <select formControlName="value" class="form-control selectpicker" multiple>
+        <option *ngFor="let type of sensorThemesList" [value]="type">
+            {{ type }}
+        </option>
+    </select>
+    <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors" class="invalid-input">
+        <span class="required-text" *ngIf="f.value.errors.required">Theme is required</span>
+    </div>
+</div>

@@ -1,12 +1,11 @@
+import { ISensorLocation } from './location';
+
 export interface ISensor {
   _id: string;
   nodeId: string;
   ownerIds?: Array<string>;
   name?: string;
-  location: {
-      type: 'Point',
-      coordinates: Array<number>,
-  };
+  location: ISensorLocation;
   baseObjectId: string;
   dataStreams?: Array<any>;
   aim?: string;

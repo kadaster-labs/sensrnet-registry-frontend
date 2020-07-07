@@ -1,4 +1,4 @@
-# Viewer
+# SensRNet Registry Frontend
 
 This is the frontend repo of SensRNet. 
 
@@ -11,7 +11,7 @@ Prerequisites:
 Commands:
 - Set registry: 'npm config set registry https://dev-brm.cs.kadaster.nl/artifactory/api/npm/npm-registry/'
 - Run: 'npm install'
-- Run: 'ng serve' (for a dev server. Navigate to "http://localhost:4200/". The app will automatically reload if you change any of the source files)
+- Run: 'npm run start' (for a dev server. Navigate to "http://localhost:4200/". The app will automatically reload if you change any of the source files)
 
 ## local development server with docker:
 
@@ -21,6 +21,17 @@ Prerequisites:
 Commands: 
 - Run: docker-compose build
 - Run: docker-compose up
+
+## Simulating different nodes
+During the development of the walking skeleton, we wanted to show how multiple environment can work toegether. For this purpose, the app has been setup as a white label app.
+For different 'costumers' we can define different environment variables and stylesheets.
+You can run the different scenarios as follows:
+Commands:
+- `ng serve --project=gemeente-a`
+- `ng serve --project=gemeente-b`
+- `ng serve --project=viewer`
+
+Building for deployment is then adding an additional flag `--configuration=production`.
 
 ## Find Us
 

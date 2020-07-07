@@ -5,9 +5,10 @@ import { first } from 'rxjs/operators';
 
 import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { environment } from '../../environments/environment';
 
 @Component({
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
   templateUrl: 'login.component.html',
 })
 export class LoginComponent implements OnInit {
@@ -15,6 +16,8 @@ export class LoginComponent implements OnInit {
   public loading = false;
   public submitted = false;
   public returnUrl: string;
+
+  public environment = environment;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,6 +28,11 @@ export class LoginComponent implements OnInit {
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentOwnerValue) {
+      this.router.navigate(['/']);
+    }
+
+    // redirect if app is in readonly mode
+    if (this.environment.isReadonly) {
       this.router.navigate(['/']);
     }
   }
@@ -61,7 +69,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         (error) => {
-          this.alertService.error(error);
+          this.alertService.error(error.error.message);
           this.loading = false;
         });
   }

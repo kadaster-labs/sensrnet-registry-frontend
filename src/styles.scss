@@ -1,0 +1,53 @@
+// Your variable overrides
+$body-bg: white;
+$font-size-base: 1.25rem;
+
+// Load client specific theme
+@import 'theme';
+
+// Bootstrap and its default variables
+@import "kadaster-huisstijl/dist/css/kadaster-huisstijl.css";
+@import "bootstrap/scss/bootstrap.scss";
+$fa-font-path: "font-awesome/fonts";
+@import "font-awesome/scss/font-awesome.scss";
+@import "bootstrap-select/dist/css/bootstrap-select.min.css";
+@import "ol/ol.css";
+
+.ol-overlaycontainer-stopevent .ol-zoom {
+  top: auto;
+  right: 0.5em;
+  bottom: 0.5em;
+  left: auto;
+}
+
+.ol-overlaycontainer-stopevent .ol-rotate {
+  top: auto;
+  right: 0.5em;
+  bottom: 6.1em;
+  left: auto;
+}
+
+.ol-overlaycontainer-stopevent .locate {
+  top: auto;
+  right: 0.5em;
+  bottom: 4.1em;
+  left: auto;
+}
+
+.ggc-dt-theme {
+  padding-left: 0px !important;
+}
+
+.required-text {
+  color: red;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.required {
+  color: red;
+}
+
+button[type="submit"] {
+  margin-right: 20px;
+}
