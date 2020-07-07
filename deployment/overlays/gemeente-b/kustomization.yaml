@@ -3,5 +3,5 @@ resources:
 configMapGenerator:
 - name: env-config
   literals:
-  - APP_PROJECT=gemeente-b
-  - APP_CONFIGURATION=production
+  - PROJECT=gemeente-b
+  - CONFIGURATION=production

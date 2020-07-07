@@ -18,6 +18,17 @@ spec:
       containers:
       - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
         name: registry-frontend
+        env:
+        - name: PROJECT
+          valueFrom:
+            configMapKeyRef:
+              name: env-config
+              key: PROJECT
+        - name: CONFIGURATION
+          valueFrom:
+            configMapKeyRef:
+              name: env-config
+              key: CONFIGURATION
         ports:
         - containerPort: 4200
         resources: {}
