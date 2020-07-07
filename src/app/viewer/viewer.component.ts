@@ -4,15 +4,16 @@ import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
 
-import { Overlay } from 'ol';
+import { Overlay, View } from 'ol';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import { Cluster } from 'ol/source';
-import VectorSource from 'ol/source/Vector';
+import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
+import { extend } from 'ol/extent';
 
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
@@ -32,6 +33,8 @@ import { LocationService } from '../services/location.service';
 import Geometry from 'ol/geom/Geometry';
 import { environment } from '../../environments/environment';
 import Control from 'ol/control/Control';
+import { Extent } from 'ol/extent';
+import { FitOptions } from 'ol/View';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -73,6 +76,8 @@ export class ViewerComponent implements OnInit {
 
   public myLayers: Theme[];
   public hideTreeDataset = false;
+
+  public clusterMaxZoom = 15;
 
   public iconCollapsed = 'fas fa-chevron-right';
   public iconExpanded = 'fas fa-chevron-left';
@@ -185,7 +190,7 @@ export class ViewerComponent implements OnInit {
         const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
         let numberOfFeatures;
 
-        if (feature.values_.selectclusterfeature === true && zoomLevel > 15) {
+        if (feature.values_.selectclusterfeature === true && zoomLevel > this.clusterMaxZoom) {
           const active = feature.get('features')[0].values_.active;
           const sensorType = feature.get('features')[0].values_.typeName[0];
           let style: Style;
@@ -403,6 +408,35 @@ export class ViewerComponent implements OnInit {
         type: 'Point',
         coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
         baseObjectId: 'iets'
+      });
+
+      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data, layer) => {
+        const features = data.getProperties().features;
+
+        // check if feature is a cluster with multiple features
+        if (features.length < 2) {
+          return;
+        }
+
+        // determine extent for new view
+        const extent: Extent = features[0].getGeometry().getExtent().slice(0) as Extent;
+        features.forEach((f: Feature) => { extend(extent, f.getGeometry().getExtent()); });
+
+        // if we're already zoomed in, zoom in no more. Setting maxZoom in fit() also does this to some extent, however,
+        // in that case the camera is also centered. Returning early here also prevents the unnecessary panning.
+        if (map.getView().getZoom() > this.clusterMaxZoom) {
+          return;
+        }
+
+        const size = this.mapService.getMap(this.mapName).getSize();  // [width, height]
+        const fitOptions: FitOptions = {
+          duration: 750,
+          maxZoom: this.clusterMaxZoom + 1,
+          padding: [size[1] * 0.2, size[0] * 0.2, size[1] * 0.2, size[0] * 0.2],  // up, right, down, left
+          size,
+        };
+
+        this.mapService.getMap(this.mapName).getView().fit(extent, fitOptions);
       });
     }
   }
