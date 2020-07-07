@@ -1,0 +1,7 @@
+resources:
+- ../../base
+configMapGenerator:
+- name: env-config
+  literals:
+  - APP_PROJECT=gemeente-a
+  - APP_CONFIGURATION=production
