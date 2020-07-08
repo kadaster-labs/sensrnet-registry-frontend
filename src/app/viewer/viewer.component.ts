@@ -87,6 +87,9 @@ export class ViewerComponent implements OnInit {
 
   public iconDir = '/assets/icons/';
 
+  color_node_a = '0, 120, 54'
+  color_node_b = '227, 37, 39'
+
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -123,7 +126,7 @@ export class ViewerComponent implements OnInit {
       const styleCluster = (feature) => {
         const FEATURES_ = feature.get('features');
         let numberOfFeatures = FEATURES_.length;
-        let style: Style;
+        let style: Style[];
 
         if (numberOfFeatures === 1) {
           const active = feature.get('features')[0].values_.active;
@@ -144,27 +147,51 @@ export class ViewerComponent implements OnInit {
           if (typeof numberOfFeatures === 'string') {
             const active = feature.get('features')[0].values_.active;
             const sensorType = feature.get('features')[0].values_.typeName;
+            const node_id = feature.get('features')[0].values_.nodeId;
             if (!active) {
-              style = new Style({
+              style = [new Style({
+                image: new CircleStyle({
+                  radius: 15,
+                  fill: new Fill({
+                    color: this.getNodeColor(node_id, 0.25),
+                  }),
+                  stroke: new Stroke({
+                    color: '#fff',
+                    width: 1.5
+                  })
+                })
+              }), new Style({
                 image: new Icon({
-                  opacity: 0.25,
                   scale: 0.25,
-                  src: `/assets/icons/${sensorType}.png`,
-                }),
-              });
-            } else {
-              style = new Style({
+                  src: `/assets/icons/${sensorType}_op.png`
+                })
+              })
+              ];
+            }
+            else {
+              style = [new Style({
+                image: new CircleStyle({
+                  radius: 15,
+                  fill: new Fill({
+                    color: this.getNodeColor(node_id, 0.9),
+                  }),
+                  stroke: new Stroke({
+                    color: '#fff',
+                    width: 1.5
+                  })
+                })
+              }), new Style({
                 image: new Icon({
                   opacity: 0.9,
                   scale: 0.25,
-                  src: `/assets/icons/${sensorType}.png`,
+                  src: `/assets/icons/${sensorType}_op.png`,
                 }),
-              });
+              })];
             }
           }
 
           else {
-            style = new Style({
+            style = [new Style({
               image: new CircleStyle({
                 radius: 15,
                 fill: new Fill({
@@ -179,7 +206,7 @@ export class ViewerComponent implements OnInit {
                 }),
                 textAlign: 'center',
               }),
-            });
+            })];
           }
           styleCache[numberOfFeatures] = style;
         }
@@ -187,13 +214,15 @@ export class ViewerComponent implements OnInit {
       };
 
       const styleSelectedCluster = (feature) => {
+        console.log(feature)
         const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
         let numberOfFeatures;
 
         if (feature.values_.selectclusterfeature === true && zoomLevel > this.clusterMaxZoom) {
           const active = feature.get('features')[0].values_.active;
           const sensorType = feature.get('features')[0].values_.typeName[0];
-          let style: Style;
+          const node_id = feature.get('features')[0].values_.nodeId;
+          let style: Style[];
 
           if (!active) {
             numberOfFeatures = 'inactive' + sensorType;
@@ -207,24 +236,47 @@ export class ViewerComponent implements OnInit {
           if (!style) {
             if (typeof numberOfFeatures === 'string') {
               if (!active) {
-                style = new Style({
+                style = [new Style({
+                  image: new CircleStyle({
+                    radius: 15,
+                    fill: new Fill({
+                      color: this.getNodeColor(node_id, 0.25),
+                    }),
+                    stroke: new Stroke({
+                      color: '#fff',
+                      width: 1.5
+                    })
+                  })
+                }), new Style({
                   image: new Icon({
-                    opacity: 0.25,
                     scale: 0.25,
-                    src: `/assets/icons/${sensorType}.png`,
-                  }),
-                });
-              } else {
-                style = new Style({
+                    src: `/assets/icons/${sensorType}_op.png`
+                  })
+                })
+                ];
+              }
+              else {
+                style = [new Style({
+                  image: new CircleStyle({
+                    radius: 15,
+                    fill: new Fill({
+                      color: this.getNodeColor(node_id, 0.9),
+                    }),
+                    stroke: new Stroke({
+                      color: '#fff',
+                      width: 1.5
+                    })
+                  })
+                }), new Style({
                   image: new Icon({
                     opacity: 0.9,
                     scale: 0.25,
-                    src: `/assets/icons/${sensorType}.png`,
+                    src: `/assets/icons/${sensorType}_op.png`,
                   }),
-                });
+                })];
               }
+              styleCache[numberOfFeatures] = style;
             }
-            styleCache[numberOfFeatures] = style;
           }
           return style;
         }
@@ -235,7 +287,7 @@ export class ViewerComponent implements OnInit {
       });
 
       this.clusterSource = new Cluster({
-        distance: 40,
+        distance: 20,
         source: this.vectorSource,
       });
 
@@ -351,6 +403,15 @@ export class ViewerComponent implements OnInit {
 
     if (environment.clientName === 'Local') {
       this.addFindMeButton();
+    }
+  }
+
+  public getNodeColor(nodeid: string, opacity: number) {
+    if (nodeid === "node_1") {
+      return `rgb( ${this.color_node_a}, ${opacity})`
+    }
+    if (nodeid === "node_2") {
+      return `rgb( ${this.color_node_b}, ${opacity})`
     }
   }
 
@@ -473,6 +534,7 @@ export class ViewerComponent implements OnInit {
       description: sensor.description,
       manufacturer: sensor.manufacturer,
       theme: sensor.theme,
+      nodeId: sensor.nodeId
     };
   }
 
