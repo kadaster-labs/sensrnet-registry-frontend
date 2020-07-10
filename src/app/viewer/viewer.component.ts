@@ -225,7 +225,6 @@ export class ViewerComponent implements OnInit {
           // console.log('Old resolution', event.oldValue);
           // console.log('New resolution', event.target.get(event.key));
           
-
           if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
             console.log("test")
             const active = feature.get('features')[0].values_.active;
