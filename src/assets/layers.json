@@ -45,7 +45,7 @@
         "services": [
           {
             "type": "wms",
-            "url": "https://geodata.nationaalgeoregister.nl/bag/wms",
+            "url": "https://geodata.nationaalgeoregister.nl/bag/wms/v1_1",
             "layers": [
               {
                 "name": "Panden",
