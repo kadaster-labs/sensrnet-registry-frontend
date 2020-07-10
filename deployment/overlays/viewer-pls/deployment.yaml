@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-frontend
+spec:
+  selector:
+    matchLabels:
+      app: registry-frontend
+  template:
+    spec:
+      containers:
+      - image: acrsensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
+        name: registry-frontend
+        resources: {}
