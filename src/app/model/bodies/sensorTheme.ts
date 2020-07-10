@@ -1,5 +1,5 @@
 export enum SensorTheme {
-    Wheather = 'Wheather',
+    Weather = 'Weather',
     NatureAndEnvironment = 'NatureAndEnvironment',
     Waste = 'Waste',
     Safety = 'Safety',
