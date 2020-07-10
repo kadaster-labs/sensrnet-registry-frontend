@@ -124,8 +124,9 @@ export class ViewerComponent implements OnInit {
 
       const styleCache = {};
 
-      const styleCluster = (feature, event) => {
-        console.log(event)
+      const styleCluster = (feature, resolution) => {
+        console.log(this.mapService.getMap(this.mapName).getView().getZoom())
+        console.log(resolution)
         const FEATURES_ = feature.get('features');
         let numberOfFeatures = FEATURES_.length;
         let style: Style[];
@@ -226,7 +227,6 @@ export class ViewerComponent implements OnInit {
           // console.log('New resolution', event.target.get(event.key));
           
           if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
-            console.log("test")
             const active = feature.get('features')[0].values_.active;
             const sensorType = feature.get('features')[0].values_.typeName[0];
             const node_id = feature.get('features')[0].values_.nodeId;
@@ -298,13 +298,13 @@ export class ViewerComponent implements OnInit {
 
       this.clusterSource = new Cluster({
         distance: 40,
-        source: this.vectorSource,
+        source: this.vectorSource
       });
 
       this.clusterLayer = new AnimatedCluster({
         name: 'Cluster',
         source: this.clusterSource,
-        // style: styleCluster,
+        style: styleCluster,
       });
 
       this.clusterLayer.setZIndex(10);
@@ -508,7 +508,6 @@ export class ViewerComponent implements OnInit {
           size,
         };
         this.mapService.getMap(this.mapName).getView().fit(extent, fitOptions);
-        this.currentZoomlevel = this.mapService.getMap(this.mapName).getView().getZoom();
       });
     }
   }
