@@ -17,8 +17,7 @@ RUN npm install
 
 COPY src/ src/
 COPY angular.json ./
-COPY tsconfig.json ./
-COPY tsconfig.app.json ./
+COPY tsconfig*.json ./
 COPY scripts/entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 
