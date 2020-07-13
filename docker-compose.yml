@@ -1,4 +1,9 @@
-version: '3'
+version: '3.7'
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
 
 services:
   registry-frontend:
@@ -6,3 +11,9 @@ services:
         context: "."
     ports:
       - 4200:4200
+    environment:
+      - PROJECT=dev
+      - CONFIGURATION=production
+      - PROXY_CONFIG=src/proxy.conf.json
+    networks:
+      - backend
