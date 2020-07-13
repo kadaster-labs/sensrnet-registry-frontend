@@ -506,7 +506,8 @@ export class ViewerComponent implements OnInit {
       description: sensor.description,
       manufacturer: sensor.manufacturer,
       theme: sensor.theme,
-      nodeId: this.mockNodeId()
+      nodeId: sensor.nodeId
+      // nodeId: this.mockNodeId()
     };
   }
 
