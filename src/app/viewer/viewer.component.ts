@@ -26,7 +26,6 @@ import { AuthenticationService } from '../services/authentication.service';
 
 import { ISensor } from '../model/bodies/sensor-body';
 import { EventType } from '../model/events/event-type';
-import { Owner } from '../model/owner';
 import { DataService } from '../services/data.service';
 import { SensorInfo } from './../model/bodies/sensorInfo';
 import { LocationService } from '../services/location.service';

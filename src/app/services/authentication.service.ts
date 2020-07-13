@@ -22,7 +22,7 @@ export class AuthenticationService {
     return this.currentOwnerSubject.value;
   }
 
-  public login(username, password) {
+  public login(username: string, password: string) {
     return this.http.post<any>(`${environment.apiUrl}/auth/login`, { username, password })
       .pipe(map((data) => {
 
@@ -32,7 +32,7 @@ export class AuthenticationService {
 
         // TODO: In early test phases we conceptually combined users and owners. This leads to the creation of both on
         // register, but only the user is returned. Therefore, an additional request is necessary for retrieving the
-        // saved owner information. Ideally this would be seperated.
+        // saved owner information. Ideally this would be separated.
         this.getOwner();
 
         return data;
@@ -58,7 +58,7 @@ export class AuthenticationService {
   public getOwner(): void {
     console.log('getOwner');
     this.http.get<Owner>(`${environment.apiUrl}/Owner/`)
-      .subscribe((data) => {
+      .subscribe((data: any) => {
         let owner: Owner = JSON.parse(localStorage.getItem('currentOwner'));
 
         const partialUser = {
