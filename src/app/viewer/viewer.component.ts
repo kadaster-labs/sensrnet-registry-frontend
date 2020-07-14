@@ -4,17 +4,16 @@ import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
 
-import { Overlay, View } from 'ol';
+import { Overlay } from 'ol';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import { Cluster } from 'ol/source';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
-import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import VectorSource from 'ol/source/Vector';
+import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import { extend } from 'ol/extent';
-
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
@@ -34,6 +33,7 @@ import { environment } from '../../environments/environment';
 import Control from 'ol/control/Control';
 import { Extent } from 'ol/extent';
 import { FitOptions } from 'ol/View';
+import { Category } from '../model/bodies/sensorTypes';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -86,6 +86,9 @@ export class ViewerComponent implements OnInit {
 
   public iconDir = '/assets/icons/';
 
+  COLOR_NODE_GEMEENTE_A = '0, 120, 54';
+  COLOR_NODE_GEMEENTE_B = '227, 37, 39';
+
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -96,8 +99,6 @@ export class ViewerComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    console.log(this.environment);
-
     this.httpClient.get('/assets/layers.json').subscribe(
       (data) => {
         this.myLayers = data as Theme[];
@@ -108,122 +109,139 @@ export class ViewerComponent implements OnInit {
 
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
-      console.log(`Received ${sensors.length} sensors`);
-      console.log(sensors);
       const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
-
       const features: Array<Feature> = (new GeoJSON()).readFeatures({
         features: featuresData,
         type: 'FeatureCollection',
       });
 
       const styleCache = {};
+      const nodeIds = [...new Set(features.map(item => item.get('nodeId')))];
+      const sensorTypes = Object.keys(Category).filter(String);
+      const activeTypes = [true, false];
+
+      for (const item of nodeIds) {
+        for (const item1 of sensorTypes) {
+          for (const item2 of activeTypes) {
+            switch (item2) {
+              case true:
+                const styleNameActive = item + '_' + item1 + '_active';
+                const styleactive = [new Style({
+                  image: new CircleStyle({
+                    radius: 15,
+                    fill: new Fill({
+                      color: this.getNodeColor(item, 0.9),
+                    }),
+                    stroke: new Stroke({
+                      color: '#fff',
+                      width: 1.5
+                    })
+                  })
+                }), new Style({
+                  image: new Icon({
+                    scale: 0.25,
+                    src: `/assets/icons/${item1}_op.png`
+                  })
+                })
+                ];
+                styleCache[styleNameActive] = styleactive;
+                break;
+
+              case false:
+                const styleNameInactive = item + '_' + item1 + '_inactive';
+                const styleinactive = [new Style({
+                  image: new CircleStyle({
+                    radius: 15,
+                    fill: new Fill({
+                      color: this.getNodeColor(item, 0.25),
+                    }),
+                    stroke: new Stroke({
+                      color: '#fff',
+                      width: 1.5
+                    })
+                  })
+                }), new Style({
+                  image: new Icon({
+                    scale: 0.25,
+                    src: `/assets/icons/${item1}_op.png`
+                  })
+                })
+                ];
+                styleCache[styleNameInactive] = styleinactive;
+                break;
+            }
+          }
+        }
+      }
+
+      for (const style of Object.values(styleCache)) {
+        for (const item of Object.values(style)) {
+          item.getImage().load();
+        }
+      }
 
       const styleCluster = (feature) => {
         const FEATURES_ = feature.get('features');
         let numberOfFeatures = FEATURES_.length;
-        let style: Style;
+        let style: Style[];
 
         if (numberOfFeatures === 1) {
           const active = feature.get('features')[0].values_.active;
           const sensorType = feature.get('features')[0].values_.typeName[0];
+          const nodeId = feature.get('features')[0].values_.nodeId;
+
           if (!active) {
-            numberOfFeatures = 'inactive' + sensorType;
+            numberOfFeatures = nodeId + '_' + sensorType + '_inactive';
             style = styleCache[numberOfFeatures];
           } else {
-            numberOfFeatures = 'active' + sensorType;
+            numberOfFeatures = nodeId + '_' + sensorType + '_active';
             style = styleCache[numberOfFeatures];
           }
         }
-
         else {
           style = styleCache[numberOfFeatures];
         }
-        if (!style) {
-          if (typeof numberOfFeatures === 'string') {
-            const active = feature.get('features')[0].values_.active;
-            const sensorType = feature.get('features')[0].values_.typeName;
-            if (!active) {
-              style = new Style({
-                image: new Icon({
-                  opacity: 0.25,
-                  scale: 0.25,
-                  src: `/assets/icons/${sensorType}.png`,
-                }),
-              });
-            } else {
-              style = new Style({
-                image: new Icon({
-                  opacity: 0.9,
-                  scale: 0.25,
-                  src: `/assets/icons/${sensorType}.png`,
-                }),
-              });
-            }
-          }
 
-          else {
-            style = new Style({
-              image: new CircleStyle({
-                radius: 15,
-                fill: new Fill({
-                  color: 'rgba(19, 65, 115, 0.9)',
-                }),
+        if (!style) {
+          style = [new Style({
+            image: new CircleStyle({
+              radius: 15,
+              fill: new Fill({
+                color: 'rgba(19, 65, 115, 0.9)',
               }),
-              text: new Text({
-                text: numberOfFeatures.toString(),
-                font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
-                fill: new Fill({
-                  color: '#ffffff',
-                }),
-                textAlign: 'center',
+            }),
+            text: new Text({
+              text: numberOfFeatures.toString(),
+              font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
+              fill: new Fill({
+                color: '#ffffff',
               }),
-            });
-          }
+              textAlign: 'center',
+            }),
+          })];
           styleCache[numberOfFeatures] = style;
         }
         return style;
       };
 
       const styleSelectedCluster = (feature) => {
-        const zoomLevel: number = this.mapService.getMap(this.mapName).getView().getZoom();
-        let numberOfFeatures;
+        let styleFeatures;
+        const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
 
-        if (feature.values_.selectclusterfeature === true && zoomLevel > this.clusterMaxZoom) {
+        if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
           const active = feature.get('features')[0].values_.active;
           const sensorType = feature.get('features')[0].values_.typeName[0];
-          let style: Style;
+          const nodeid = feature.get('features')[0].values_.nodeId;
+
+          let style: Style[];
 
           if (!active) {
-            numberOfFeatures = 'inactive' + sensorType;
-            style = styleCache[numberOfFeatures];
+            styleFeatures = nodeid + '_' + sensorType + '_inactive';
+            style = styleCache[styleFeatures];
           }
           if (active) {
-            numberOfFeatures = 'active' + sensorType;
-            style = styleCache[numberOfFeatures];
-          }
-
-          if (!style) {
-            if (typeof numberOfFeatures === 'string') {
-              if (!active) {
-                style = new Style({
-                  image: new Icon({
-                    opacity: 0.25,
-                    scale: 0.25,
-                    src: `/assets/icons/${sensorType}.png`,
-                  }),
-                });
-              } else {
-                style = new Style({
-                  image: new Icon({
-                    opacity: 0.9,
-                    scale: 0.25,
-                    src: `/assets/icons/${sensorType}.png`,
-                  }),
-                });
-              }
-            }
-            styleCache[numberOfFeatures] = style;
+            styleFeatures = nodeid + '_' + sensorType + '_active';
+            style = styleCache[styleFeatures];
           }
           return style;
         }
@@ -235,7 +253,7 @@ export class ViewerComponent implements OnInit {
 
       this.clusterSource = new Cluster({
         distance: 40,
-        source: this.vectorSource,
+        source: this.vectorSource
       });
 
       this.clusterLayer = new AnimatedCluster({
@@ -288,11 +306,7 @@ export class ViewerComponent implements OnInit {
     // subscribe to sensor events
     const sensorRegistered$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
     sensorRegistered$.subscribe((newSensor: ISensor) => {
-      console.log(`Socket.io heard that a new SensorCreated event was fired`);
-      console.log(newSensor);
-
       const feature: object = this.sensorToFeature(newSensor);
-
       const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
         features: [feature],
         type: 'FeatureCollection',
@@ -304,28 +318,24 @@ export class ViewerComponent implements OnInit {
     // subscribe to sensor location events
     const sensorUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorUpdated);
     sensorUpdated$.subscribe((newSensor: ISensor) => {
-      console.log(`Socket.io heard that a Updated event was fired`);
       this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
     const sensorActivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorActivated);
     sensorActivated$.subscribe((newSensor: ISensor) => {
-      console.log(`Socket.io heard that a Activated event was fired`);
       this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
     const sensorDeactivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorDeactivated);
     sensorDeactivated$.subscribe((newSensor: ISensor) => {
-      console.log(`Socket.io heard that a Deactivated event was fired`);
       this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
     const sensorLocationUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRelocated);
     sensorLocationUpdated$.subscribe((newSensor: ISensor) => {
-      console.log(`Socket.io heard that a LocationUpdated event was fired`);
       this.updateSensor(newSensor);
     });
 
@@ -348,8 +358,20 @@ export class ViewerComponent implements OnInit {
       this.setLocation(locationFeature);
     });
 
-    if (environment.clientName === 'Local') {
+    if (environment.clientName === 'Local' || environment.apiUrl.startsWith('https')) {
       this.addFindMeButton();
+    }
+  }
+
+  public getNodeColor(nodeid: string, opacity: number) {
+    if (nodeid === 'node-gemeente-a') {
+      return `rgb( ${this.COLOR_NODE_GEMEENTE_A}, ${opacity})`;
+    }
+    if (nodeid === 'node-gemeente-b') {
+      return `rgb( ${this.COLOR_NODE_GEMEENTE_B}, ${opacity})`;
+    }
+    else {
+      return `rgb(19, 65, 115, ${opacity})`;
     }
   }
 
@@ -388,10 +410,10 @@ export class ViewerComponent implements OnInit {
 
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
-    this.currentZoomlevel = map.getView().getZoom();
 
     if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
       this.currentMapResolution = map.getView().getResolution();
+      this.currentZoomlevel = this.mapService.getMap(this.mapName).getView().getZoom();
     }
     if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
       const mapCoordinateRD = mapEvent.value.coordinate;
@@ -429,12 +451,11 @@ export class ViewerComponent implements OnInit {
 
         const size = this.mapService.getMap(this.mapName).getSize();  // [width, height]
         const fitOptions: FitOptions = {
-          duration: 750,
+          duration: 1000,
           maxZoom: this.clusterMaxZoom + 1,
           padding: [size[1] * 0.2, size[0] * 0.2, size[1] * 0.2, size[0] * 0.2],  // up, right, down, left
           size,
         };
-
         this.mapService.getMap(this.mapName).getView().fit(extent, fitOptions);
       });
     }
@@ -472,6 +493,8 @@ export class ViewerComponent implements OnInit {
       description: sensor.description,
       manufacturer: sensor.manufacturer,
       theme: sensor.theme,
+      nodeId: sensor.nodeId
+      // nodeId: this.mockNodeId()
     };
   }
 
@@ -485,6 +508,18 @@ export class ViewerComponent implements OnInit {
       properties: this.sensorToFeatureProperties(newSensor),
       type: 'Feature',
     };
+  }
+
+  private mockNodeId(): string {
+    const random = Math.random() < 0.5;
+    switch (random) {
+      case true:
+        return 'node-gemeente-a';
+        break;
+      case false:
+        return 'node-gemeente-b';
+        break;
+    }
   }
 
   public featureToSensorInfo(feature: Feature) {

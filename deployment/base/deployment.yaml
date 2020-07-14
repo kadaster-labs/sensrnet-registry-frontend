@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: registry-frontend
+  name: registry-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-frontend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: registry-frontend
+    spec:
+      containers:
+      - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
+        name: registry-frontend
+        env:
+        - name: PROJECT
+          valueFrom:
+            configMapKeyRef:
+              name: env-config
+              key: PROJECT
+        - name: CONFIGURATION
+          valueFrom:
+            configMapKeyRef:
+              name: env-config
+              key: CONFIGURATION
+        ports:
+        - containerPort: 4200
+        resources: {}
+      restartPolicy: Always
+status: {}

@@ -25,7 +25,7 @@
             </li>
 
             <div class="logo">
-                <img alt="logo "src="assets\SensRNet-logo.png" width="150px" class="image">
+                <img alt="logo " src="assets\SensRNet-logo.png" width="150px" class="image">
             </div>
         </ul>
     </div>
@@ -129,6 +129,7 @@
     <div class="row">
         <div class="backgroundmap">
             <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
+            <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
                 [url]="dataset.services[0].url" [layer]="dataset.services[0].layers[0].technicalName"
                 [mapName]="mapName" [minResolution]="dataset.services[0].layers[0].minResolution"
@@ -143,6 +144,11 @@
                 [maxResolution]="dataset.services[0].layers[0].maxResolution"
                 [zIndex]="dataset.services[0].layers[0].zIndex">
             </ggc-wms-layer>
+            <ggc-map-details-container>
+                <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
+                <ggc-scale-denominator [mapName]="'srn'"></ggc-scale-denominator>
+                <ggc-scale-line [mapName]="'srn'"></ggc-scale-line>
+            </ggc-map-details-container>
         </div>
     </div>
 </div>
