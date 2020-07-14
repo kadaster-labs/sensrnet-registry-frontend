@@ -102,8 +102,6 @@ export class ViewerComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    // console.log(this.environment);
-
     this.httpClient.get('/assets/layers.json').subscribe(
       (data) => {
         this.myLayers = data as Theme[];
@@ -114,10 +112,7 @@ export class ViewerComponent implements OnInit {
 
     this.dataService.connect();
     this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
-      // console.log(`Received ${sensors.length} sensors`);
-      // console.log(sensors);
       const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
-
       const features: Array<Feature> = (new GeoJSON()).readFeatures({
         features: featuresData,
         type: 'FeatureCollection',
@@ -314,11 +309,7 @@ export class ViewerComponent implements OnInit {
     // subscribe to sensor events
     const sensorRegistered$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
     sensorRegistered$.subscribe((newSensor: ISensor) => {
-      // console.log(`Socket.io heard that a new SensorCreated event was fired`);
-      // console.log(newSensor);
-
       const feature: object = this.sensorToFeature(newSensor);
-
       const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
         features: [feature],
         type: 'FeatureCollection',
@@ -330,28 +321,24 @@ export class ViewerComponent implements OnInit {
     // subscribe to sensor location events
     const sensorUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorUpdated);
     sensorUpdated$.subscribe((newSensor: ISensor) => {
-      // console.log(`Socket.io heard that a Updated event was fired`);
       this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
     const sensorActivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorActivated);
     sensorActivated$.subscribe((newSensor: ISensor) => {
-      // console.log(`Socket.io heard that a Activated event was fired`);
       this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
     const sensorDeactivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorDeactivated);
     sensorDeactivated$.subscribe((newSensor: ISensor) => {
-      // console.log(`Socket.io heard that a Deactivated event was fired`);
       this.updateSensor(newSensor);
     });
 
     // subscribe to sensor events
     const sensorLocationUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRelocated);
     sensorLocationUpdated$.subscribe((newSensor: ISensor) => {
-      // console.log(`Socket.io heard that a LocationUpdated event was fired`);
       this.updateSensor(newSensor);
     });
 
