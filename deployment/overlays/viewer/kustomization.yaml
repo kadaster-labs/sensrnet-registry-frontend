@@ -1,0 +1,8 @@
+resources:
+- ../../base
+configMapGenerator:
+- name: env-config
+  namespace: sensrnet-frontend
+  literals:
+  - PROJECT=viewer
+  - CONFIGURATION=production

@@ -6,3 +6,6 @@ services:
         context: "."
     ports:
       - 4200:4200
+    environment:
+      - APP_PROJECT=gemeente-a
+      - APP_CONFIGURATION=production

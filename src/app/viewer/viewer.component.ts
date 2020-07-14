@@ -358,7 +358,7 @@ export class ViewerComponent implements OnInit {
       this.setLocation(locationFeature);
     });
 
-    if (environment.clientName === 'Local') {
+    if (environment.clientName === 'Local' || environment.apiUrl.startsWith('https')) {
       this.addFindMeButton();
     }
   }
