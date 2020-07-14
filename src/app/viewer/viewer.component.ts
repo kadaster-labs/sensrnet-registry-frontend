@@ -199,10 +199,10 @@ export class ViewerComponent implements OnInit {
           const nodeId = feature.get('features')[0].values_.nodeId;
 
           if (!active) {
-            numberOfFeatures = nodeId + '_' + sensorType + '_active';
+            numberOfFeatures = nodeId + '_' + sensorType + '_inactive';
             style = styleCache[numberOfFeatures];
           } else {
-            numberOfFeatures = nodeId + '_' + sensorType + '_inactive';
+            numberOfFeatures = nodeId + '_' + sensorType + '_active';
             style = styleCache[numberOfFeatures];
           }
         }
@@ -233,7 +233,7 @@ export class ViewerComponent implements OnInit {
       };
 
       const styleSelectedCluster = (feature) => {
-        let numberOfFeatures;
+        let styleFeatures;
         const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
 
         if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
@@ -243,15 +243,13 @@ export class ViewerComponent implements OnInit {
 
           let style: Style[];
 
-          console.log(active);
-
           if (!active) {
-            numberOfFeatures = nodeid + '_' + sensorType + '_inactive';
-            style = styleCache[numberOfFeatures];
+            styleFeatures = nodeid + '_' + sensorType + '_inactive';
+            style = styleCache[styleFeatures];
           }
           if (active) {
-            numberOfFeatures = nodeid + '_' + sensorType + '_active';
-            style = styleCache[numberOfFeatures];
+            styleFeatures = nodeid + '_' + sensorType + '_active';
+            style = styleCache[styleFeatures];
           }
           return style;
         }
