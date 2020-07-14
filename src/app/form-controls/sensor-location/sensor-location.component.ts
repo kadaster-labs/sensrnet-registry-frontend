@@ -103,15 +103,15 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
   public onChange: any = () => {};
   public onTouched: any = () => {};
 
-  public registerOnChange(fn) {
+  public registerOnChange(fn: any) {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn) {
+  public registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
-  public writeValue(value) {
+  public writeValue(value: SensorLocationFormValues) {
     if (value) {
       this.value = value;
     }

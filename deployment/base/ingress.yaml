@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: registry-frontend-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/preserve-host: "true"
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: registry-frontend
+          servicePort: 80
+        path: /

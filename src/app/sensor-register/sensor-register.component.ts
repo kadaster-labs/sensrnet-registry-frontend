@@ -87,7 +87,7 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
     try {
       const result = await this.sensorService.register(sensor);
 
-      console.log(`Sensor was succesfully posted, received id ${result}`);
+      console.log(`Sensor was successfully posted, received id ${result}`);
       this.locationService.showLocation(null);
     } catch (error) {
       console.log(error);

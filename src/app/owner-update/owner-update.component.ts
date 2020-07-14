@@ -79,7 +79,7 @@ export class OwnerUpdateComponent implements OnInit, OnChanges {
     try {
       await this.authenticationService.updateOwner(this.form.value).toPromise();
 
-      console.log('Owner was succesfully updated');
+      console.log('Owner was successfully updated');
       this.success = true;
     } catch (error) {
       console.log(error);

@@ -76,11 +76,11 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
   public onChange: any = () => {};
   public onTouched: any = () => {};
 
-  public registerOnChange(fn) {
+  public registerOnChange(fn: any) {
     this.onChange = fn;
   }
 
-  public writeValue(value) {
+  public writeValue(value: SensorThemeFormValues) {
     if (value) {
       this.value = value;
     }
@@ -93,7 +93,7 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
     ($('.selectpicker') as any).selectpicker('refresh');
   }
 
-  public registerOnTouched(fn) {
+  public registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
