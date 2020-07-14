@@ -5,7 +5,7 @@ export enum Category {
 }
 
 export enum TypeSensor {
-    WeatherStation = 'WeatherStation',
+    WheatherStation = 'WheatherStation',
     WindGauge = 'WindGauge',
     WasteContainers = 'WasteContainers',
     FineDustSensor = 'FineDustSensor',
@@ -25,10 +25,9 @@ export enum TypeSensor {
 export enum TypeCamera {
     EnvironmentalZone = 'EnvironmentalZone',
     SecurityCamera = 'SecurityCamera',
-    TrafficFlashlight = 'TrafficFlashlight',
+    TraphicFlashlight = 'TraphicFlashlight',
 }
 
 export enum TypeBeacon {
     NavigationBeacon = 'NavigationBeacon',
 }
-

@@ -243,6 +243,8 @@ export class ViewerComponent implements OnInit {
 
           let style: Style[];
 
+          console.log(active);
+
           if (!active) {
             numberOfFeatures = nodeid + '_' + sensorType + '_inactive';
             style = styleCache[numberOfFeatures];
