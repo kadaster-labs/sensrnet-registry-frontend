@@ -6,3 +6,5 @@ configMapGenerator:
   literals:
   - PROJECT=dev
   - CONFIGURATION=production
+patchesStrategicMerge:
+- deployment.yaml
