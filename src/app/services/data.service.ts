@@ -22,7 +22,7 @@ export class DataService {
       path: '/api/socket.io',
     });
 
-    this.socket.on('connect', (socket) => {
+    this.socket.on('connect', (socket: any) => {
       console.log('Socket.io connected');
     });
   }

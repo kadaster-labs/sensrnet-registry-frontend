@@ -1,4 +1,3 @@
-# Author: Maarten Hoekstra (KKN), edited by Jeroen Grift for SensRNet
 FROM node:12
 
 ARG http_proxy="http://ssl-proxy.cs.kadaster.nl:8080"
@@ -12,15 +11,15 @@ WORKDIR /viewer
 
 ADD VERSION .
 
-COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
-
 COPY package*.json ./
-
-RUN npm config set registry https://dev-brm.cs.kadaster.nl/artifactory/api/npm/npm-registry/
+COPY .npmrc ./
 RUN npm install
 
-COPY . .
+COPY src/ src/
+COPY angular.json ./
+COPY tsconfig*.json ./
+COPY scripts/entrypoint.sh entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 EXPOSE 4200
 

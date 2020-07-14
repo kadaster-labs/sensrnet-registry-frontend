@@ -8,8 +8,6 @@ $font-size-base: 1.25rem;
 // Bootstrap and its default variables
 @import "kadaster-huisstijl/dist/css/kadaster-huisstijl.css";
 @import "bootstrap/scss/bootstrap.scss";
-$fa-font-path: "font-awesome/fonts";
-@import "font-awesome/scss/font-awesome.scss";
 @import "bootstrap-select/dist/css/bootstrap-select.min.css";
 @import "ol/ol.css";
 
@@ -63,4 +61,3 @@ button[type="submit"] {
   padding-bottom: 3px;
   font-weight: 400;
 }
-

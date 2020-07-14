@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
 
     const currentOwner = this.authenticationService.currentOwnerValue;
     if (currentOwner) {
-      // authorised so return true
+      // authorized so return true
       return true;
     }
 

@@ -127,7 +127,7 @@ export class SensorUpdateComponent implements OnChanges {
         theme: sensor.theme,
       };
       const result = await this.sensorService.updateDetails(this.sensor._id, details);
-      console.log(`Sensor was succesfully updated, received id ${result}`);
+      console.log(`Sensor was successfully updated, received id ${result}`);
     } catch (error) {
       console.error(error);
     }
