@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 import proj4 from 'proj4';
 import { Observable } from 'rxjs';
 
-import { Overlay, View } from 'ol';
+import { Overlay } from 'ol';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import { Cluster } from 'ol/source';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
-import { Circle, Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import VectorSource from 'ol/source/Vector';
+import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import { extend } from 'ol/extent';
 
@@ -26,7 +26,6 @@ import { AuthenticationService } from '../services/authentication.service';
 
 import { ISensor } from '../model/bodies/sensor-body';
 import { EventType } from '../model/events/event-type';
-import { Owner } from '../model/owner';
 import { DataService } from '../services/data.service';
 import { SensorInfo } from './../model/bodies/sensorInfo';
 import { LocationService } from '../services/location.service';
@@ -79,7 +78,6 @@ export class ViewerComponent implements OnInit {
   public hideTreeDataset = false;
 
   public clusterMaxZoom = 15;
-  public clusterMaxResolution = 0.1;
 
   public iconCollapsed = 'fas fa-chevron-right';
   public iconExpanded = 'fas fa-chevron-left';
@@ -520,10 +518,6 @@ export class ViewerComponent implements OnInit {
         return 'node-gemeente-b';
         break;
     }
-  }
-
-  private createStyle() {
-
   }
 
   public featureToSensorInfo(feature: Feature) {
