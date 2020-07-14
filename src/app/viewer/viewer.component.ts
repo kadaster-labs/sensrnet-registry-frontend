@@ -14,7 +14,6 @@ import VectorSource from 'ol/source/Vector';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import { extend } from 'ol/extent';
-
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
