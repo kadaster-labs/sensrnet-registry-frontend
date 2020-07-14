@@ -370,6 +370,9 @@ export class ViewerComponent implements OnInit {
     if (nodeid === 'node-gemeente-b') {
       return `rgb( ${this.COLOR_NODE_GEMEENTE_B}, ${opacity})`;
     }
+    else {
+      return `rgb(19, 65, 115, ${opacity})`;
+    }
   }
 
   public updateSensor(updatedSensor: ISensor) {
