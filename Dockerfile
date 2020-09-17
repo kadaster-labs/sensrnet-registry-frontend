@@ -23,19 +23,19 @@ COPY angular.json ./
 # Second Stage : Setup command to run your app using lightweight node image
 FROM node:12-alpine
 
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 
-WORKDIR /app
+WORKDIR /home/node/app
 
-COPY VERSION .
+COPY --chown=node:node VERSION .
+COPY --chown=node:node scripts/entrypoint.sh entrypoint.sh
+COPY --chown=node:node --from=builder /app/. ./
 
-COPY scripts/entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
-
-COPY --from=builder /app/. ./
+USER node
 
 RUN npm i @angular/cli
 
 EXPOSE 4200
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/home/node/app/entrypoint.sh"]
 CMD ["run"]
