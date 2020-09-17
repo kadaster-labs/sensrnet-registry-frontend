@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -ex
 
@@ -17,5 +17,3 @@ if [ ! -z "${PROXY_CONFIG}" ]; then
 fi
 
 exec npx ng serve --host 0.0.0.0 --disable-host-check $args
-
-
