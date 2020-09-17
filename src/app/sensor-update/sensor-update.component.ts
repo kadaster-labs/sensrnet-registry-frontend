@@ -57,7 +57,7 @@ export class SensorUpdateComponent implements OnChanges {
         },
         type: {
           typeName: selectedSensor.typeName ? selectedSensor.typeName[0] : '',
-          typeDetails: selectedSensor.typeDetails ? selectedSensor.typeDetails[0].subType : '',
+          typeDetails: selectedSensor.typeDetails ? selectedSensor.typeDetails.subType : '',
         },
         theme: { value: selectedSensor.theme || [] },
       });
