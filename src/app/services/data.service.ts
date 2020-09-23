@@ -3,7 +3,6 @@ import * as io from 'socket.io-client';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Owner} from "../model/owner";
 
 @Injectable({
   providedIn: 'root',
