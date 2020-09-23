@@ -1,0 +1,15 @@
+<div class="row">
+    <ul class="col-lg-12 nav nav-pills navbar">
+        <a routerLink="" class="header text-decoration-none">SensRNet Registration App</a>
+        <li *ngIf="!environment.isReadonly">
+            <a role="button" routerLink="/owner-update">Owner</a>
+        </li>
+        <li *ngIf="!environment.isReadonly" class="dropdown logout">
+            <a class="dropdown-toggle" (click)="logout()" role="button" aria-haspopup="true"
+                aria-expanded="false">Logout</a>
+        </li>
+        <div class="logo">
+            <img alt="logo " src="assets\SensRNet-logo.png" width="150px" class="image">
+        </div>
+    </ul>
+</div>

@@ -25,6 +25,8 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
 import { OwnerUpdateComponent } from './owner-update/owner-update.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
+import { NavBarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { SensorStatusComponent } from './form-controls/sensor-status/sensor-stat
     SensorTypeComponent,
     OwnerUpdateComponent,
     SensorStatusComponent,
+    NavBarComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

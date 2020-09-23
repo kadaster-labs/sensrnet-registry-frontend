@@ -26,7 +26,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ISensor } from '../model/bodies/sensor-body';
 import { EventType } from '../model/events/event-type';
 import { DataService } from '../services/data.service';
-import { SensorInfo } from './../model/bodies/sensorInfo';
+import { SensorInfo } from '../model/bodies/sensorInfo';
 import { LocationService } from '../services/location.service';
 import Geometry from 'ol/geom/Geometry';
 import { environment } from '../../environments/environment';

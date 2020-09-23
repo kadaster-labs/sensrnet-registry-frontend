@@ -1,23 +1,27 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
+import { AlertService } from "../services/alert.service";
 
 @Component({
   selector: 'app-owner-update',
   templateUrl: './owner-update.component.html',
   styleUrls: ['./owner-update.component.scss']
 })
-export class OwnerUpdateComponent implements OnInit, OnChanges {
+export class OwnerUpdateComponent implements OnInit {
 
   @Input() public active = false;
   @Output() public closePane = new EventEmitter<void>();
+
   public form: FormGroup;
   public submitted = false;
-  public success = false;
   public currentOwner: Owner;
 
   constructor(
+    private router: Router,
+    private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly authenticationService: AuthenticationService,
   ) {}
@@ -36,59 +40,45 @@ export class OwnerUpdateComponent implements OnInit, OnChanges {
       contactEmail: [this.currentOwner ? this.currentOwner.contactEmail : '', [Validators.required, Validators.email]],
       website: [this.currentOwner ? this.currentOwner.website : '', [Validators.required, Validators.pattern(reg)]],
     });
+
+    this.initFormFields();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.active) {
-      this.authenticationService.getOwner();
-      this.authenticationService.currentOwner.subscribe((owner: Owner) => {
-        this.currentOwner = owner;
+  initFormFields(): void {
+    this.authenticationService.getOwner();
+    this.authenticationService.currentOwner.subscribe((owner: Owner) => {
+      this.currentOwner = owner;
 
-        if (!owner || !this.form) {
-          return;
-        }
+      if (!owner || !this.form) {
+        return;
+      }
 
-        this.form.setValue({
-          name: this.currentOwner.name,
-          organisationName: this.currentOwner.organisationName,
-          contactPhone: this.currentOwner.contactPhone,
-          contactEmail: this.currentOwner.contactEmail,
-          website: this.currentOwner.website,
-        });
+      this.form.setValue({
+        name: this.currentOwner.name,
+        organisationName: this.currentOwner.organisationName,
+        contactPhone: this.currentOwner.contactPhone,
+        contactEmail: this.currentOwner.contactEmail,
+        website: this.currentOwner.website,
       });
-    }
-
-    if (changes.active.previousValue && !changes.active.currentValue) {
-      this.submitted = false;
-      this.success = false;
-      this.form.markAsPristine();
-    }
+    });
   }
 
   public async submit() {
     this.submitted = true;
-    this.success = false;
 
-    // stop here if form is invalid
-    if (this.form.invalid) {
-      return;
-    }
+    if (!this.form.invalid) {
+      console.log(`posting ${this.form.value}`);
 
-    console.log(`posting ${this.form.value}`);
-
-    try {
-      await this.authenticationService.updateOwner(this.form.value).toPromise();
-
-      console.log('Owner was successfully updated');
-      this.success = true;
-    } catch (error) {
-      console.log(error);
-      this.success = false;
+      try {
+        await this.authenticationService.updateOwner(this.form.value).toPromise();
+        this.alertService.success('Updated owner');
+      } catch (error) {
+        this.alertService.error(error.message);
+      }
     }
   }
 
-  public close() {
-    console.log('close');
-    this.closePane.emit();
+  public async close() {
+    await this.router.navigate(['']);
   }
 }
