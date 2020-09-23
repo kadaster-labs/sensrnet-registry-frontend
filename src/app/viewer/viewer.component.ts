@@ -1,39 +1,38 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import proj4 from 'proj4';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
-import { Overlay } from 'ol';
+import {Overlay} from 'ol';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
-import { Cluster } from 'ol/source';
+import {Cluster} from 'ol/source';
 import VectorSource from 'ol/source/Vector';
-import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { extend } from 'ol/extent';
+import {extend, Extent} from 'ol/extent';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
-import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
-import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
-import { SearchComponentEvent } from 'generieke-geo-componenten-search';
+import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
+import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
+import {SearchComponentEvent} from 'generieke-geo-componenten-search';
 
-import { AuthenticationService } from '../services/authentication.service';
+import {AuthenticationService} from '../services/authentication.service';
 
-import { ISensor } from '../model/bodies/sensor-body';
-import { EventType } from '../model/events/event-type';
-import { DataService } from '../services/data.service';
-import { SensorInfo } from '../model/bodies/sensorInfo';
-import { LocationService } from '../services/location.service';
+import {ISensor} from '../model/bodies/sensor-body';
+import {EventType} from '../model/events/event-type';
+import {DataService} from '../services/data.service';
+import {SensorInfo} from '../model/bodies/sensorInfo';
+import {LocationService} from '../services/location.service';
 import Geometry from 'ol/geom/Geometry';
-import { environment } from '../../environments/environment';
+import {environment} from '../../environments/environment';
 import Control from 'ol/control/Control';
-import { Extent } from 'ol/extent';
-import { FitOptions } from 'ol/View';
-import { Category } from '../model/bodies/sensorTypes';
+import {FitOptions} from 'ol/View';
+import {Category} from '../model/bodies/sensorTypes';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -96,212 +95,209 @@ export class ViewerComponent implements OnInit {
     public mapService: MapService,
     private dataService: DataService,
     private locationService: LocationService,
-  ) { }
+  ) {}
 
-  public ngOnInit(): void {
-    this.httpClient.get('/assets/layers.json').subscribe(
-      (data) => {
-        this.myLayers = data as Theme[];
-      },
-      () => {
-      },
-    );
+  public initializeMap(sensors) {
+    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+    const features: Array<Feature> = (new GeoJSON()).readFeatures({
+      features: featuresData,
+      type: 'FeatureCollection',
+    });
 
-    this.dataService.connect();
-    this.dataService.subscribeTo('Sensors').subscribe((sensors: Array<ISensor>) => {
-      const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
-      const features: Array<Feature> = (new GeoJSON()).readFeatures({
-        features: featuresData,
-        type: 'FeatureCollection',
-      });
+    const styleCache = {};
+    const nodeIds = [...new Set(features.map(item => item.get('nodeId')))];
+    const sensorTypes = Object.keys(Category).filter(String);
+    const activeTypes = [true, false];
 
-      const styleCache = {};
-      const nodeIds = [...new Set(features.map(item => item.get('nodeId')))];
-      const sensorTypes = Object.keys(Category).filter(String);
-      const activeTypes = [true, false];
-
-      for (const item of nodeIds) {
-        for (const item1 of sensorTypes) {
-          for (const item2 of activeTypes) {
-            switch (item2) {
-              case true:
-                const styleNameActive = item + '_' + item1 + '_active';
-                const styleactive = [new Style({
-                  image: new CircleStyle({
-                    radius: 15,
-                    fill: new Fill({
-                      color: this.getNodeColor(item, 0.9),
-                    }),
-                    stroke: new Stroke({
-                      color: '#fff',
-                      width: 1.5
-                    })
-                  })
-                }), new Style({
-                  image: new Icon({
-                    scale: 0.25,
-                    src: `/assets/icons/${item1}_op.png`
+    for (const item of nodeIds) {
+      for (const item1 of sensorTypes) {
+        for (const item2 of activeTypes) {
+          switch (item2) {
+            case true:
+              const styleNameActive = item + '_' + item1 + '_active';
+              const styleactive = [new Style({
+                image: new CircleStyle({
+                  radius: 15,
+                  fill: new Fill({
+                    color: this.getNodeColor(item, 0.9),
+                  }),
+                  stroke: new Stroke({
+                    color: '#fff',
+                    width: 1.5
                   })
                 })
-                ];
-                styleCache[styleNameActive] = styleactive;
-                break;
+              }), new Style({
+                image: new Icon({
+                  scale: 0.25,
+                  src: `/assets/icons/${item1}_op.png`
+                })
+              })
+              ];
+              styleCache[styleNameActive] = styleactive;
+              break;
 
-              case false:
-                const styleNameInactive = item + '_' + item1 + '_inactive';
-                const styleinactive = [new Style({
-                  image: new CircleStyle({
-                    radius: 15,
-                    fill: new Fill({
-                      color: this.getNodeColor(item, 0.25),
-                    }),
-                    stroke: new Stroke({
-                      color: '#fff',
-                      width: 1.5
-                    })
-                  })
-                }), new Style({
-                  image: new Icon({
-                    scale: 0.25,
-                    src: `/assets/icons/${item1}_op.png`
+            case false:
+              const styleNameInactive = item + '_' + item1 + '_inactive';
+              const styleinactive = [new Style({
+                image: new CircleStyle({
+                  radius: 15,
+                  fill: new Fill({
+                    color: this.getNodeColor(item, 0.25),
+                  }),
+                  stroke: new Stroke({
+                    color: '#fff',
+                    width: 1.5
                   })
                 })
-                ];
-                styleCache[styleNameInactive] = styleinactive;
-                break;
-            }
+              }), new Style({
+                image: new Icon({
+                  scale: 0.25,
+                  src: `/assets/icons/${item1}_op.png`
+                })
+              })
+              ];
+              styleCache[styleNameInactive] = styleinactive;
+              break;
           }
         }
       }
+    }
 
-      for (const style of Object.values(styleCache)) {
-        for (const item of Object.values(style)) {
-          item.getImage().load();
-        }
+    for (const style of Object.values(styleCache)) {
+      for (const item of Object.values(style)) {
+        item.getImage().load();
       }
+    }
 
-      const styleCluster = (feature) => {
-        const FEATURES_ = feature.get('features');
-        let numberOfFeatures = FEATURES_.length;
-        let style: Style[];
+    const styleCluster = (feature) => {
+      const FEATURES_ = feature.get('features');
+      let numberOfFeatures = FEATURES_.length;
+      let style: Style[];
 
-        if (numberOfFeatures === 1) {
-          const active = feature.get('features')[0].values_.active;
-          const sensorType = feature.get('features')[0].values_.typeName[0];
-          const nodeId = feature.get('features')[0].values_.nodeId;
+      if (numberOfFeatures === 1) {
+        const active = feature.get('features')[0].values_.active;
+        const sensorType = feature.get('features')[0].values_.typeName[0];
+        const nodeId = feature.get('features')[0].values_.nodeId;
 
-          if (!active) {
-            numberOfFeatures = nodeId + '_' + sensorType + '_inactive';
-            style = styleCache[numberOfFeatures];
-          } else {
-            numberOfFeatures = nodeId + '_' + sensorType + '_active';
-            style = styleCache[numberOfFeatures];
-          }
-        }
-        else {
+        if (!active) {
+          numberOfFeatures = nodeId + '_' + sensorType + '_inactive';
+          style = styleCache[numberOfFeatures];
+        } else {
+          numberOfFeatures = nodeId + '_' + sensorType + '_active';
           style = styleCache[numberOfFeatures];
         }
+      }
+      else {
+        style = styleCache[numberOfFeatures];
+      }
 
-        if (!style) {
-          style = [new Style({
-            image: new CircleStyle({
-              radius: 15,
-              fill: new Fill({
-                color: 'rgba(19, 65, 115, 0.9)',
-              }),
+      if (!style) {
+        style = [new Style({
+          image: new CircleStyle({
+            radius: 15,
+            fill: new Fill({
+              color: 'rgba(19, 65, 115, 0.9)',
             }),
-            text: new Text({
-              text: numberOfFeatures.toString(),
-              font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
-              fill: new Fill({
-                color: '#ffffff',
-              }),
-              textAlign: 'center',
+          }),
+          text: new Text({
+            text: numberOfFeatures.toString(),
+            font: 'bold 11px "Helvetica Neue", Helvetica,Arial, sans-serif',
+            fill: new Fill({
+              color: '#ffffff',
             }),
-          })];
-          styleCache[numberOfFeatures] = style;
+            textAlign: 'center',
+          }),
+        })];
+        styleCache[numberOfFeatures] = style;
+      }
+      return style;
+    };
+
+    const styleSelectedCluster = (feature) => {
+      let styleFeatures;
+      const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
+
+      if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
+        const active = feature.get('features')[0].values_.active;
+        const sensorType = feature.get('features')[0].values_.typeName[0];
+        const nodeid = feature.get('features')[0].values_.nodeId;
+
+        let style: Style[];
+
+        if (!active) {
+          styleFeatures = nodeid + '_' + sensorType + '_inactive';
+          style = styleCache[styleFeatures];
+        }
+        if (active) {
+          styleFeatures = nodeid + '_' + sensorType + '_active';
+          style = styleCache[styleFeatures];
         }
         return style;
-      };
+      }
+    };
 
-      const styleSelectedCluster = (feature) => {
-        let styleFeatures;
-        const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
-
-        if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
-          const active = feature.get('features')[0].values_.active;
-          const sensorType = feature.get('features')[0].values_.typeName[0];
-          const nodeid = feature.get('features')[0].values_.nodeId;
-
-          let style: Style[];
-
-          if (!active) {
-            styleFeatures = nodeid + '_' + sensorType + '_inactive';
-            style = styleCache[styleFeatures];
-          }
-          if (active) {
-            styleFeatures = nodeid + '_' + sensorType + '_active';
-            style = styleCache[styleFeatures];
-          }
-          return style;
-        }
-      };
-
-      this.vectorSource = new VectorSource({
-        features,
-      });
-
-      this.clusterSource = new Cluster({
-        distance: 40,
-        source: this.vectorSource
-      });
-
-      this.clusterLayer = new AnimatedCluster({
-        name: 'Cluster',
-        source: this.clusterSource,
-        style: styleCluster,
-      });
-
-      this.clusterLayer.setZIndex(10);
-      this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
-
-      this.selectCluster = new SelectCluster({
-        pointRadius: 40,
-        featureStyle: styleSelectedCluster,
-        style: styleCluster
-      });
-
-      this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
-
-      this.selectCluster.getFeatures().on(['add'], (event) => {
-        this.removeHighlight();
-        const activeFeatures = event.element.get('features');
-        if (activeFeatures.length === 1) {
-          const feature = activeFeatures[0];
-          const geometry = new Feature({
-            geometry: feature.values_.geometry,
-          });
-          const activeFeature = new SensorInfo(
-            feature.get('name'),
-            feature.get('typeName'),
-            feature.get('active'),
-            feature.get('aim'),
-            feature.get('description'),
-            feature.get('manufacturer'),
-            feature.get('theme'),
-          );
-          this.activeFeatureInfo = activeFeature;
-          this.selectedSensor = feature.values_.sensor;
-          this.showInfo = true;
-          this.highlightFeature(geometry);
-        }
-        if (activeFeatures.length > 1) {
-          this.removeHighlight();
-          this.showInfo = false;
-          this.activeFeatureInfo = null;
-        }
-      });
+    this.vectorSource = new VectorSource({
+      features,
     });
+
+    this.clusterSource = new Cluster({
+      distance: 40,
+      source: this.vectorSource
+    });
+
+    this.clusterLayer = new AnimatedCluster({
+      name: 'Cluster',
+      source: this.clusterSource,
+      style: styleCluster,
+    });
+
+    this.clusterLayer.setZIndex(10);
+    this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
+
+    this.selectCluster = new SelectCluster({
+      pointRadius: 40,
+      featureStyle: styleSelectedCluster,
+      style: styleCluster
+    });
+
+    this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
+
+    this.selectCluster.getFeatures().on(['add'], (event) => {
+      this.removeHighlight();
+      const activeFeatures = event.element.get('features');
+      if (activeFeatures.length === 1) {
+        const feature = activeFeatures[0];
+        const geometry = new Feature({
+          geometry: feature.values_.geometry,
+        });
+        this.activeFeatureInfo = new SensorInfo(
+          feature.get('name'),
+          feature.get('typeName'),
+          feature.get('active'),
+          feature.get('aim'),
+          feature.get('description'),
+          feature.get('manufacturer'),
+          feature.get('theme'),
+        );
+        this.selectedSensor = feature.values_.sensor;
+        this.showInfo = true;
+        this.highlightFeature(geometry);
+      }
+      if (activeFeatures.length > 1) {
+        this.removeHighlight();
+        this.showInfo = false;
+        this.activeFeatureInfo = null;
+      }
+    });
+  }
+
+  public async ngOnInit(): Promise<void> {
+    this.httpClient.get('/assets/layers.json').subscribe(
+      (data) => { this.myLayers = data as Theme[] }, () => {},
+    );
+
+    const sensors = await this.dataService.getSensors();
+    this.initializeMap(sensors);
 
     // subscribe to sensor events
     const sensorRegistered$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
@@ -620,35 +616,19 @@ export class ViewerComponent implements OnInit {
     this.paneSensorUpdateActive = active;
   }
 
-  public toggleOwnerUpdatePane(active?: boolean): void {
-    if (active === undefined) {
-      active = !this.paneOwnerUpdateActive;
-    }
-
-    this.paneOwnerUpdateActive = active;
-  }
-
   public togglePane(pane: string) {
     switch (pane) {
       case 'SensorRegister':
         this.toggleSensorRegisterPane();
         this.toggleSensorUpdatePane(false);
-        this.toggleOwnerUpdatePane(false);
         break;
       case 'SensorUpdate':
         this.toggleSensorRegisterPane(false);
         this.toggleSensorUpdatePane();
-        this.toggleOwnerUpdatePane(false);
-        break;
-      case 'OwnerUpdate':
-        this.toggleSensorRegisterPane(false);
-        this.toggleSensorUpdatePane(false);
-        this.toggleOwnerUpdatePane();
         break;
       default:
         this.toggleSensorRegisterPane(false);
         this.toggleSensorUpdatePane(false);
-        this.toggleOwnerUpdatePane(false);
         break;
     }
   }

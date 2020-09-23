@@ -26,13 +26,6 @@
     </div>
 
     <div *ngIf="!environment.isReadonly" class="row">
-        <div [ngbCollapse]="!paneOwnerUpdateActive" class="app-form">
-            <app-owner-update [active]="paneOwnerUpdateActive" (closePane)="toggleOwnerUpdatePane(false)">
-            </app-owner-update>
-        </div>
-    </div>
-
-    <div *ngIf="!environment.isReadonly" class="row">
         <div [ngbCollapse]="!paneSensorRegisterActive" class="app-form">
             <app-sensor-register [active]="paneSensorRegisterActive"></app-sensor-register>
         </div>

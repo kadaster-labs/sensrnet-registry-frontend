@@ -2,13 +2,23 @@ import { Observable, Subscriber } from 'rxjs';
 import * as io from 'socket.io-client';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {Owner} from "../model/owner";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class DataService {
   private url = `${environment.apiUrl}`;
   private socket: SocketIOClient.Socket;
 
-  constructor() { }
+  private observables = {};
+
+  constructor(
+    private readonly http: HttpClient,
+  ) {
+    this.connect();
+  }
 
   public connect() {
     // socket.io-client expects the url to be in the form of host/namespace. This doesn't work when the backend has the
@@ -22,7 +32,7 @@ export class DataService {
       path: '/api/socket.io',
     });
 
-    this.socket.on('connect', (socket: any) => {
+    this.socket.on('connect', () => {
       console.log('Socket.io connected');
     });
   }
@@ -32,10 +42,15 @@ export class DataService {
   }
 
   public subscribeTo<T>(namespace: string = '/'): Observable<T> {
-    return new Observable((observer: Subscriber<T>) => {
-      this.socket.on(namespace, (message: T) => {
-        observer.next(message);
+    if (!this.observables[namespace]) {
+      this.observables[namespace] = new Observable((observer: Subscriber<T>) => {
+        this.socket.on(namespace, (message: T) => observer.next(message));
       });
-    });
+    }
+    return this.observables[namespace];
+  }
+
+  public async getSensors() {
+    return this.http.get(`${environment.apiUrl}/Sensor/`).toPromise();
   }
 }
