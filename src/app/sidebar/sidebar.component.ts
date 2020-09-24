@@ -18,6 +18,6 @@ export class SidebarComponent {
   }
 
   public initOwnerSideBar() {
-    this.navItems.push({icon: "fas fa-edit", text: "Edit", route: "/owner-update"});
+    this.navItems.push({icon: 'fas fa-edit', text: 'Edit', route: '/owner-update'});
   }
 }

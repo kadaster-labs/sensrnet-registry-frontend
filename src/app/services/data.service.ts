@@ -81,8 +81,4 @@ export class DataService {
     }
     return this.observables[namespace];
   }
-
-  public async getSensors() {
-    return this.http.get(`${environment.apiUrl}/Sensor/`).toPromise();
-  }
 }

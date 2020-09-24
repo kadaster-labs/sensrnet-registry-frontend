@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Owner } from '../model/owner';
-import { AlertService } from "../services/alert.service";
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-owner-update',

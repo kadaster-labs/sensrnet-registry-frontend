@@ -33,6 +33,7 @@ import {environment} from '../../environments/environment';
 import Control from 'ol/control/Control';
 import {FitOptions} from 'ol/View';
 import {Category} from '../model/bodies/sensorTypes';
+import {SensorService} from '../services/sensor.service';
 
 @Component({
   templateUrl: './viewer.component.html',
@@ -94,6 +95,7 @@ export class ViewerComponent implements OnInit {
     private httpClient: HttpClient,
     public mapService: MapService,
     private dataService: DataService,
+    private sensorService: SensorService,
     private locationService: LocationService,
   ) {}
 
@@ -293,11 +295,11 @@ export class ViewerComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.httpClient.get('/assets/layers.json').subscribe(
-      (data) => { this.myLayers = data as Theme[] }, () => {},
+      (data) => { this.myLayers = data as Theme[]; }, () => {},
     );
 
     this.dataService.connect();
-    const sensors = await this.dataService.getSensors();
+    const sensors = await this.sensorService.getAll();
     this.initializeMap(sensors);
 
     // subscribe to sensor events
@@ -673,6 +675,6 @@ export class ViewerComponent implements OnInit {
 
   public async logout() {
     await this.authenticationService.logout();
-    this.router.navigate(['/login']);
+    await this.router.navigate(['/login']);
   }
 }
