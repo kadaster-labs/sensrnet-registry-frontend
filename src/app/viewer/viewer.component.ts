@@ -296,6 +296,7 @@ export class ViewerComponent implements OnInit {
       (data) => { this.myLayers = data as Theme[] }, () => {},
     );
 
+    this.dataService.connect();
     const sensors = await this.dataService.getSensors();
     this.initializeMap(sensors);
 
