@@ -3,14 +3,14 @@
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="sidebar-link" routerLink="">
-                    <i class="fas fa-map-marked-alt"></i>
+                    <em class="fas fa-map-marked-alt"></em>
                     <span class="ml-3 side-text">Map</span>
                 </a>
             </li>
             <li class="nav-item" *ngFor="let item of navItems">
                 <a class="sidebar-link" routerLink="{{ item.route }}" routerLinkActive="active-link"
                    [routerLinkActiveOptions]="{exact:true}">
-                    <i class="{{ item.icon }}"></i>
+                    <em class="{{ item.icon }}"></em>
                     <span class="ml-3 side-text">{{ item.text }}</span>
                 </a>
             </li>
