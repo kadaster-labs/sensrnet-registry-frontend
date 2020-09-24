@@ -69,6 +69,9 @@ Deployment is done in an Azure Kubernetes Service (AKS) cluster. For releases, r
 Once the images are available in the container registry, deployment can be done (on Kubernetes) by using Kustomize and the desired config, i.e.
 `kustomize build deployment/overlays/gemeente-a | kubectl apply -f -`
 
+## Internationalization + Localization
+A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with `ng xi18n --output-path src/locale`. This file can be duplicated for each extra language and its duplications can be translated using standard translation tools, for example Poedit. Then, during building, Angular generates alternative sites for each language, exposing them under different URL path, for example /nl/ for Dutch. 
+
 ## Find Us
 
 * [GitHub](https://github.com/kadaster-labs/sensrnet-home)
