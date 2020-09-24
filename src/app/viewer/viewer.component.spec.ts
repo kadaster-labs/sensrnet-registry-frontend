@@ -14,19 +14,19 @@ describe('ViewerComponent', () => {
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
+  xit('should create the app', () => {
     const fixture = TestBed.createComponent(ViewerComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'viewer'`, () => {
+  xit('should have as title viewer', () => {
     const fixture = TestBed.createComponent(ViewerComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('viewer');
   });
 
-  it('should render title', () => {
+  xit('should render title', () => {
     const fixture = TestBed.createComponent(ViewerComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
