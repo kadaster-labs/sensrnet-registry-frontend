@@ -1,11 +1,18 @@
 <nav class="sidebar">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
-            <li class="nav-item" *ngFor="let item of navItems">
-                <a class="sidebar-link" routerLink="{{ item['route'] }}" routerLinkActive="active-link"
-                   [routerLinkActiveOptions]="{exact:true}">
-                    <em class="{{ item['icon'] }}"></em>
-                    <span class="ml-3 side-text">{{ item['text'] }}</span>
+            <li class="nav-item">
+                <a class="sidebar-link" routerLink="/owner" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-edit"></em>
+                    <span class="ml-3 side-text">Edit Owner</span>
+                </a>
+                <a class="sidebar-link" routerLink="/sensor" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-plus-square"></em>
+                    <span class="ml-3 side-text">Register Sensor</span>
+                </a>
+                <a class="sidebar-link" routerLink="/sensor/update" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-pen"></em>
+                    <span class="ml-3 side-text">Edit Sensor</span>
                 </a>
             </li>
         </ul>

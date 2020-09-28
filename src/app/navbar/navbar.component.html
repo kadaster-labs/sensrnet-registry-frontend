@@ -1,20 +1,23 @@
-<nav class="row navbar navbar-expand-md">
-    <a routerLink="" class="header text-decoration-none">SensRNet Registration App</a>
-    <ul class="navbar-nav mr-auto nav nav-pills">
-        <li *ngIf="!environment.isReadonly">
-            <a role="button" routerLink="/owner" routerLinkActive="active">Owner</a>
-        </li>
-        <li *ngIf="!environment.isReadonly">
-            <a role="button" routerLink="/sensor" routerLinkActive="active">Sensor</a>
+<nav class="navbar navbar-expand-md navbar-fixed-top" [ngClass]="locationClass">
+    <ul class="navbar-nav nav-pills ml-4 mr-4 mt-0">
+        <li>
+            <a routerLink="" class="navbar-header mx-4 text-decoration-none">
+                SensRNet Registration App
+            </a>
         </li>
     </ul>
-    <ul class="navbar-nav ml-auto nav nav-pills">
-        <li *ngIf="!environment.isReadonly" class="dropdown logout">
-            <a class="dropdown-toggle" (click)="logout()" role="button" aria-haspopup="true"
-               aria-expanded="false">Logout</a>
+    <ul class="navbar-nav mr-auto nav nav-pills mt-1">
+        <li *ngIf="!environment.isReadonly">
+            <a role="button" routerLink="/owner" routerLinkActive="active">
+                Menu
+            </a>
         </li>
-        <li class="nav-item">
-            <img src="/assets/SensRNet-logo.png" alt="" class="d-inline-block mb-1" height="50">
+    </ul>
+    <ul class="navbar-nav ml-auto nav nav-pills mr-4 mt-1">
+        <li *ngIf="!environment.isReadonly" class="dropdown logout">
+            <a class="dropdown-toggle" (click)="logout()" role="button" aria-haspopup="true" aria-expanded="false">
+                Logout
+            </a>
         </li>
     </ul>
 </nav>

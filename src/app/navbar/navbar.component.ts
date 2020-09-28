@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from '../services/authentication.service';
 
@@ -9,6 +9,9 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavBarComponent {
+
+  @Input() locationClass;
+
   public environment = environment;
 
   constructor(
