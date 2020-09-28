@@ -56,7 +56,8 @@
                 <app-sensor-location formControlName="location" [submitted]="submitted"></app-sensor-location>
                 <app-sensor-theme formControlName="theme" [submitted]="submitted"></app-sensor-theme>
                 <hr>
-                <button class="btn btn-primary btn-lg" type="submit"> Register </button>
+                <button class="btn btn-primary btn-lg mr-3 mb-2" type="submit">Register</button>
+                <button type="button" class="btn btn-lg mb-2" (click)="close()">Close</button>
             </form>
         </div>
         <div class="col-5" style="height: 88vh; max-height: 88vh">

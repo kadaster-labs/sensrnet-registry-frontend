@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/cor
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { IRegisterSensorBody, SensorService } from '../services/sensor.service';
 import { LocationService } from '../services/location.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sensor-register',
@@ -14,6 +15,7 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
   public active = false;
 
   constructor(
+    private router: Router,
     private readonly locationService: LocationService,
     private readonly sensorService: SensorService,
     private readonly formBuilder: FormBuilder,
@@ -55,8 +57,8 @@ export class SensorRegisterComponent implements OnInit, OnChanges {
     }
   }
 
-  public close() {
-    this.form.reset();
+  public async close() {
+    await this.router.navigate(['']);
   }
 
   public async submit() {

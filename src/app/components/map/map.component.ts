@@ -1,8 +1,8 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
-import {Router} from '@angular/router';
 import proj4 from 'proj4';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 import Overlay from 'ol/Overlay';
 import Feature from 'ol/Feature';
@@ -51,8 +51,8 @@ export class MapComponent implements OnInit {
     private sensorService: SensorService,
     private locationService: LocationService,
   ) {}
-  public mapName = 'srn';
 
+  public mapName = 'srn';
   public environment = environment;
 
   public currentMapResolution: number = undefined;
@@ -486,15 +486,7 @@ export class MapComponent implements OnInit {
         image: new CircleStyle({
           radius: 20,
           stroke: new Stroke({
-            color: '#FF0000 ',
-            width: 1,
-          }),
-        }),
-      }), new Style({
-        image: new CircleStyle({
-          radius: 25,
-          stroke: new Stroke({
-            color: '#FF0000 ',
+            color: '#FF0000',
             width: 2,
           }),
         }),
