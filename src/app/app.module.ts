@@ -27,6 +27,7 @@ import { OwnerUpdateComponent } from './owner-update/owner-update.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { MapComponent } from './components/map/map.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     OwnerUpdateComponent,
     SensorStatusComponent,
     NavBarComponent,
-    SidebarComponent
+    SidebarComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,

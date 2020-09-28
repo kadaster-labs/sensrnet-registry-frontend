@@ -1,0 +1,84 @@
+<div class="container-fluid h-100">
+
+    <div class="row">
+        <ggc-search (searchComponentEventEmitter)="handleEvent($event)"
+                    placeholderTextAndAriaLabel="Zoeken in SensRNet"
+                    id="search" class="p-0 m-0" [style.top]="searchBarHeight"></ggc-search>
+
+        <ggc-dataset-tree [themes]="myLayers"
+                          (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
+                          [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"
+                          [iconExpanded]="iconExpanded" [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked"
+                          [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"
+                          id="layers" class="p-0 m-0"></ggc-dataset-tree>
+
+        <div id="popup" class="ol-popup bg-white border rounded" style="display: none">
+            <table *ngIf="showInfo" class="table table-bordered table-striped mb-0">
+                <tbody>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td><em>{{ activeFeatureInfo?.name }}</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensortype</strong></td>
+                        <td><em>{{ activeFeatureInfo?.typeName }}</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Active</strong></td>
+                        <td><em>{{ activeFeatureInfo?.active }}</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aim</strong></td>
+                        <td><em>{{ activeFeatureInfo?.aim }}</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Description</strong></td>
+                        <td><em>{{ activeFeatureInfo?.description }}</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manufacturer</strong></td>
+                        <td><em>{{ activeFeatureInfo?.manufacturer }}</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Theme</strong></td>
+                        <td>
+                            <em>
+                                <ul style="list-style-type: circle">
+                                    <li *ngFor="let item of activeFeatureInfo?.theme">
+                                        {{item}}
+                                    </li>
+                                </ul>
+                            </em>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row h-100">
+        <div class="backgroundmap h-100">
+            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
+            <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
+            <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
+                [url]="dataset.services[0].url" [layer]="dataset.services[0].layers[0].technicalName"
+                [mapName]="mapName" [minResolution]="dataset.services[0].layers[0].minResolution"
+                [maxResolution]="dataset.services[0].layers[0].maxResolution"
+                [zIndex]="dataset.services[0].layers[0].zIndex"
+                [attributions]="dataset.services[0].layers[0].attributions">
+            </ggc-wmts-layer>
+            <ggc-wms-layer *ngFor="let dataset of activeWmsDatasets" [layerName]="dataset.services[0].layers[0].name"
+                [url]="dataset.services[0].url" [layers]="dataset.services[0].layers[0].technicalName"
+                [mapName]="mapName" [attributions]="dataset.services[0].layers[0].attributions"
+                [minResolution]="dataset.services[0].layers[0].minResolution"
+                [maxResolution]="dataset.services[0].layers[0].maxResolution"
+                [zIndex]="dataset.services[0].layers[0].zIndex">
+            </ggc-wms-layer>
+            <ggc-map-details-container>
+                <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
+                <ggc-scale-denominator [mapName]="'srn'"></ggc-scale-denominator>
+                <ggc-scale-line [mapName]="'srn'"></ggc-scale-line>
+            </ggc-map-details-container>
+        </div>
+    </div>
+</div>

@@ -14,10 +14,17 @@ export class SidebarComponent {
   ) {
     if (this.router.url.startsWith('/owner')){
       this.initOwnerSideBar();
+    } else if (this.router.url.startsWith('/sensor')) {
+      this.initSensorSideBar();
     }
   }
 
   public initOwnerSideBar() {
-    this.navItems.push({icon: 'fas fa-edit', text: 'Edit', route: '/owner-update'});
+    this.navItems.push({icon: 'fas fa-edit', text: 'Edit', route: '/owner'});
+  }
+
+  public initSensorSideBar() {
+    this.navItems.push({icon: 'fas fa-plus-square', text: 'Register', route: '/sensor'});
+    this.navItems.push({icon: 'fas fa-edit', text: 'Edit', route: '/sensor/update'});
   }
 }
