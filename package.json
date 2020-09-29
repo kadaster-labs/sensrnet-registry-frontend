@@ -5,11 +5,10 @@
     "ng": "ng",
     "start": "ng serve --proxy-config src/proxy.conf.json",
     "build": "ng build --prod",
-    "test": "ng test",
-    "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "e2e:ci": "ng e2e --protractor-config=e2e/protractor-ci.conf.js"
+    "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
+    "pree2e": "webdriver-manager update --versions.chrome 73.0.3683.75",
+    "e2e": "ng e2e --webdriver-update=false"
   },
   "private": true,
   "dependencies": {

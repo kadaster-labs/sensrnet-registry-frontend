@@ -8,9 +8,9 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  xit('should display welcome message', () => {
+  it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('viewer app is running!');
+    expect(page.getTitleText()).toEqual('Welcome to SensRNet');
   });
 
   afterEach(async () => {
