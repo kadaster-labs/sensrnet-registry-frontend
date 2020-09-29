@@ -1,15 +1,10 @@
 @import "../../styles";
 
 .sidebar-link {
-  color: $theme-color-text !important;
-  background-color: #eee;
-}
-
-.sidebar-link:hover {
-  color: $theme-color-text !important;
-  background-color: $theme-color-primary !important;
+  color: #606060;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .active-link {
-  background-color: $theme-color-primary !important;
+  color: #007bff !Important;
 }

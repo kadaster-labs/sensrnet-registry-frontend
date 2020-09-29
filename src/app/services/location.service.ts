@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { BehaviorSubject, Observable } from 'rxjs';
-
 import { ISensorLocation } from '../model/bodies/location';
 
 @Injectable({
@@ -41,5 +39,9 @@ export class LocationService {
     let currentLocation = this.locationMarker.getValue();
     currentLocation = location;
     this.locationMarker.next(location);
+  }
+
+  hideLocation() {
+    this.locationMarker.next(null);
   }
 }

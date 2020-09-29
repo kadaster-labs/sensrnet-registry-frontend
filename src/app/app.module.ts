@@ -16,18 +16,19 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { SensorUpdateComponent } from './sensor-update/sensor-update.component';
+import { SensorUpdateComponent } from './forms/sensor-update/sensor-update.component';
 import { DataService } from './services/data.service';
 import { ViewerComponent } from './viewer/viewer.component';
-import { SensorRegisterComponent } from './sensor-register/sensor-register.component';
+import { SensorRegisterComponent } from './forms/sensor-register/sensor-register.component';
 import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
-import { OwnerUpdateComponent } from './owner-update/owner-update.component';
+import { OwnerUpdateComponent } from './forms/owner-update/owner-update.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MapComponent } from './components/map/map.component';
+import { SensorsViewComponent } from './forms/sensors-view/sensors-view.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { MapComponent } from './components/map/map.component';
     NavBarComponent,
     SidebarComponent,
     MapComponent,
+    SensorsViewComponent,
   ],
   imports: [
     BrowserModule,

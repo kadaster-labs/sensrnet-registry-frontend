@@ -24,15 +24,20 @@
     font-weight: bolder;
   }
 
-  .nav > li > a {
+  .navbar-header:hover, .navbar-header:active, .navbar-header:focus {
+    color: #808080 !important;
+  }
+
+  .navbar-menu-item {
     color: #606060;
     font-size: 18px;
     font-weight: bold;
   }
 
-  .nav > li > a:hover, .nav > li > a::selection {
+  .navbar-menu-item:hover, .navbar-menu-item:active, .navbar-menu-item:focus {
     border-radius: 10px !important;
-    background-color: white !important;
+    color: #808080 !important;
+    background-color: rgba(0, 0, 0, 0) !important;
   }
 
   .logout {

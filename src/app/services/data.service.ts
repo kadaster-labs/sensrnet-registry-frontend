@@ -1,10 +1,10 @@
-import {Observable, Subscriber} from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import * as io from 'socket.io-client';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {AuthenticationService} from "./authentication.service";
-import {Router} from "@angular/router";
+import { HttpClient } from '@angular/common/http';
+import { AuthenticationService } from './authentication.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -32,17 +32,18 @@ export class DataService {
 
       const connectionOptions = {
         path: '/api/socket.io',
+        transportOptions: undefined,
       };
 
       const currentOwner = this.authenticationService.currentOwnerValue;
       if (currentOwner) {
-        connectionOptions['transportOptions'] = {
+        connectionOptions.transportOptions = {
           polling: {
             extraHeaders: {
               Authorization: `Bearer ${currentOwner.access_token}`,
             }
           }
-        }
+        };
       }
 
       this.socket = io(conn, connectionOptions);
@@ -57,7 +58,7 @@ export class DataService {
         this.disconnect();
         await this.authenticationService.logout();
         await this.router.navigate(['/login']);
-      })
+      });
     }
   }
 
@@ -74,11 +75,8 @@ export class DataService {
   }
 
   public subscribeTo<T>(namespace: string = '/'): Observable<T> {
-    if (!this.observables[namespace]) {
-      this.observables[namespace] = new Observable((observer: Subscriber<T>) => {
-        this.socket.on(namespace, (message: T) => observer.next(message));
-      });
-    }
-    return this.observables[namespace];
+    return new Observable((observer: Subscriber<T>) => {
+      this.socket.on(namespace, (message: T) => observer.next(message));
+    });
   }
 }

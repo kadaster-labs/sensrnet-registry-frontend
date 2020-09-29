@@ -1,5 +1,4 @@
 <div class="container-fluid h-100">
-
     <div class="row">
         <ggc-search (searchComponentEventEmitter)="handleEvent($event)"
                     placeholderTextAndAriaLabel="Zoeken in SensRNet"
@@ -12,11 +11,11 @@
                           [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"
                           id="layers" class="p-0 m-0"></ggc-dataset-tree>
 
-        <div id="popup" class="ol-popup bg-white border rounded" style="display: none">
-            <table *ngIf="showInfo" class="table table-bordered table-striped mb-0">
+        <div id="popup" class="ol-popup bg-white border-0 hidden">
+            <table *ngIf="showInfo" class="table table-bordered table-striped table-sm mb-0">
                 <thead>
                     <tr>
-                        <th scope="col">Property</th>
+                        <th scope="col">Attribute</th>
                         <th scope="col">Value</th>
                     </tr>
                 </thead>
@@ -48,22 +47,19 @@
                     <tr>
                         <td><strong>Theme</strong></td>
                         <td>
-                            <em>
-                                <ul style="list-style-type: circle">
-                                    <li *ngFor="let item of activeFeatureInfo?.theme">
-                                        {{item}}
-                                    </li>
-                                </ul>
-                            </em>
+                            <ul style="list-style-type: circle">
+                                <li *ngFor="let item of activeFeatureInfo?.theme">
+                                    <em>{{item}}</em>
+                                </li>
+                            </ul>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
     <div class="row h-100">
-        <div class="backgroundmap h-100">
+        <div class="map h-100">
             <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
             <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"

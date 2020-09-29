@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { ISensor } from '../model/bodies/sensor-body';
-import { IUpdateSensorBody, SensorService } from '../services/sensor.service';
+import { ISensor } from '../../model/bodies/sensor-body';
+import { IUpdateSensorBody, SensorService } from '../../services/sensor.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -72,7 +72,6 @@ export class SensorUpdateComponent {
     }
 
     const newValues = this.form.value;
-    console.log(newValues);
     const sensor = {
       typeName: newValues.type.typeName,
       location: newValues.location,

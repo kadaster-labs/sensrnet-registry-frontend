@@ -1,44 +1,45 @@
 import proj4 from 'proj4';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 
 import Overlay from 'ol/Overlay';
 import Feature from 'ol/Feature';
-import GeoJSON from 'ol/format/GeoJSON';
 import Point from 'ol/geom/Point';
-import VectorLayer from 'ol/layer/Vector';
-import {Cluster} from 'ol/source';
-import VectorSource from 'ol/source/Vector';
-import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
+import { Cluster } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
-import {extend, Extent} from 'ol/extent';
+import { FitOptions } from 'ol/View';
+import GeoJSON from 'ol/format/GeoJSON';
+import Geometry from 'ol/geom/Geometry';
+import Control from 'ol/control/Control';
+import VectorLayer from 'ol/layer/Vector';
+import { extend, Extent } from 'ol/extent';
+import VectorSource from 'ol/source/Vector';
+import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 
-import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
-import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
-import {SearchComponentEvent} from 'generieke-geo-componenten-search';
+import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
+import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
+import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 
-import {ISensor} from '../../model/bodies/sensor-body';
-import {EventType} from '../../model/events/event-type';
-import {DataService} from '../../services/data.service';
-import {SensorInfo} from '../../model/bodies/sensorInfo';
-import {LocationService} from '../../services/location.service';
-import Geometry from 'ol/geom/Geometry';
-import {environment} from '../../../environments/environment';
-import Control from 'ol/control/Control';
-import {FitOptions} from 'ol/View';
-import {Category} from '../../model/bodies/sensorTypes';
-import {SensorService} from '../../services/sensor.service';
+import { ISensor } from '../../model/bodies/sensor-body';
+import { DataService } from '../../services/data.service';
+import { SensorInfo } from '../../model/bodies/sensorInfo';
+import { LocationService } from '../../services/location.service';
+
+import { environment } from '../../../environments/environment';
+import { Category } from '../../model/bodies/sensorTypes';
+import { SensorService } from '../../services/sensor.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
 
   @Input() searchBarHeight;
   @Output() sensorSelected = new EventEmitter();
@@ -50,10 +51,14 @@ export class MapComponent implements OnInit {
     private dataService: DataService,
     private sensorService: SensorService,
     private locationService: LocationService,
-  ) {}
+    private authService: AuthenticationService,
+  ) {
+    this.locationService.hideLocation();
+  }
 
   public mapName = 'srn';
   public environment = environment;
+  public subscriptions = [];
 
   public currentMapResolution: number = undefined;
   public currentZoomlevel: number = undefined;
@@ -89,8 +94,8 @@ export class MapComponent implements OnInit {
   public iconChecked = 'far fa-check-square';
   public iconInfoUrl = 'fas fa-info-circle';
 
-  COLOR_NODE_GEMEENTE_A = '0, 120, 54';
-  COLOR_NODE_GEMEENTE_B = '227, 37, 39';
+  COLOR_MY_SENSOR = '19, 65, 115';
+  COLOR_NOT_MY_SENSOR =  '0, 120, 54';
 
   private static sensorToFeatureProperties(sensor: ISensor) {
     return {
@@ -106,25 +111,15 @@ export class MapComponent implements OnInit {
     };
   }
 
-  public initializeMap(sensors) {
-    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
-    const features: Array<Feature> = (new GeoJSON()).readFeatures({
-      features: featuresData,
-      type: 'FeatureCollection',
-    });
-
+  public getStyleCache() {
     const styleCache = {};
-    const nodeIds = Array.from(new Set(features.map(item => item.get('nodeId'))));
-    const sensorTypes = Object.keys(Category).filter(String);
-    const activeTypes = [true, false];
-
-    for (const item of nodeIds) {
-      for (const item1 of sensorTypes) {
-        for (const item2 of activeTypes) {
+    for (const item of [true, false]) {
+      for (const item1 of Object.keys(Category).filter(String)) {
+        for (const item2 of [true, false]) {
           switch (item2) {
             case true:
               const styleNameActive = item + '_' + item1 + '_active';
-              const styleactive = [new Style({
+              const styleActive = [new Style({
                 image: new CircleStyle({
                   radius: 15,
                   fill: new Fill({
@@ -142,12 +137,16 @@ export class MapComponent implements OnInit {
                 })
               })
               ];
-              styleCache[styleNameActive] = styleactive;
+
+              for (const style of Object.values(styleActive)) {
+                style.getImage().load();
+              }
+              styleCache[styleNameActive] = styleActive;
               break;
 
             case false:
               const styleNameInactive = item + '_' + item1 + '_inactive';
-              const styleinactive = [new Style({
+              const styleInActive = [new Style({
                 image: new CircleStyle({
                   radius: 15,
                   fill: new Fill({
@@ -165,34 +164,46 @@ export class MapComponent implements OnInit {
                 })
               })
               ];
-              styleCache[styleNameInactive] = styleinactive;
+
+              for (const style of Object.values(styleInActive)) {
+                style.getImage().load();
+              }
+              styleCache[styleNameInactive] = styleInActive;
+
               break;
           }
         }
       }
     }
 
-    for (const style of Object.values(styleCache)) {
-      for (const item of Object.values(style)) {
-        item.getImage().load();
-      }
-    }
+    return styleCache;
+  }
 
+  public initializeMap(sensors) {
+    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+    const features: Array<Feature> = new GeoJSON().readFeatures({
+      features: featuresData,
+      type: 'FeatureCollection',
+    });
+
+    const styleCache = this.getStyleCache();
     const styleCluster = (feature) => {
-      const FEATURES_ = feature.get('features');
-      let numberOfFeatures = FEATURES_.length;
       let style: Style[];
 
+      const FEATURES_ = feature.get('features');
+      let numberOfFeatures = FEATURES_.length;
       if (numberOfFeatures === 1) {
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
-        const nodeId = feature.get('features')[0].values_.nodeId;
+
+        const owner = this.authService.currentOwnerValue;
+        const isOwner = feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id);
 
         if (!active) {
-          numberOfFeatures = nodeId + '_' + sensorType + '_inactive';
+          numberOfFeatures = isOwner + '_' + sensorType + '_inactive';
           style = styleCache[numberOfFeatures];
         } else {
-          numberOfFeatures = nodeId + '_' + sensorType + '_active';
+          numberOfFeatures = isOwner + '_' + sensorType + '_active';
           style = styleCache[numberOfFeatures];
         }
       } else {
@@ -218,25 +229,26 @@ export class MapComponent implements OnInit {
         })];
         styleCache[numberOfFeatures] = style;
       }
+
       return style;
     };
 
     const styleSelectedCluster = (feature) => {
       let styleFeatures;
       const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
-
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
+        const owner = this.authService.currentOwnerValue;
+
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
-        const nodeid = feature.get('features')[0].values_.nodeId;
+        const isOwner = feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id);
 
         let style: Style[];
-
         if (active) {
-          styleFeatures = nodeid + '_' + sensorType + '_active';
+          styleFeatures = isOwner + '_' + sensorType + '_active';
           style = styleCache[styleFeatures];
         } else {
-          styleFeatures = nodeid + '_' + sensorType + '_inactive';
+          styleFeatures = isOwner + '_' + sensorType + '_inactive';
           style = styleCache[styleFeatures];
         }
 
@@ -245,7 +257,7 @@ export class MapComponent implements OnInit {
     };
 
     this.vectorSource = new VectorSource({
-      features,
+      features
     });
 
     this.clusterSource = new Cluster({
@@ -264,8 +276,8 @@ export class MapComponent implements OnInit {
 
     this.selectCluster = new SelectCluster({
       pointRadius: 40,
+      style: styleCluster,
       featureStyle: styleSelectedCluster,
-      style: styleCluster
     });
 
     this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
@@ -277,6 +289,7 @@ export class MapComponent implements OnInit {
 
     this.selectCluster.getFeatures().on(['add'], (event) => {
       this.removeHighlight();
+
       const activeFeatures = event.element.get('features');
       if (activeFeatures.length === 1) {
         const feature = activeFeatures[0];
@@ -294,7 +307,6 @@ export class MapComponent implements OnInit {
         );
         this.selectedSensor = feature.values_.sensor;
         this.sensorSelected.emit(this.selectedSensor);
-
         this.setShowInfo(feature.values_.geometry.flatCoordinates);
 
         this.highlightFeature(geometry);
@@ -306,25 +318,19 @@ export class MapComponent implements OnInit {
     });
   }
 
-  public setShowInfo(coordinate) {
-    if (coordinate) {
+  public setShowInfo(coordinates) {
+    if (coordinates) {
       this.showInfo = true;
-      this.popupOverlay.setPosition(coordinate);
-      this.popupOverlay.getElement().style.display = 'block';
+      this.popupOverlay.setPosition(coordinates);
+      this.popupOverlay.getElement().classList.remove('hidden');
     } else {
       this.showInfo = false;
-      this.popupOverlay.getElement().style.display = 'none';
+      this.popupOverlay.getElement().classList.add('hidden');
     }
   }
 
-  public getNodeColor(nodeid: string, opacity: number) {
-    if (nodeid === 'node-gemeente-a') {
-      return `rgb( ${this.COLOR_NODE_GEMEENTE_A}, ${opacity})`;
-    } else if (nodeid === 'node-gemeente-b') {
-      return `rgb( ${this.COLOR_NODE_GEMEENTE_B}, ${opacity})`;
-    } else {
-      return `rgb(19, 65, 115, ${opacity})`;
-    }
+  public getNodeColor(ownerType: boolean, opacity: number) {
+    return ownerType ? `rgb( ${this.COLOR_MY_SENSOR}, ${opacity})` : `rgb( ${this.COLOR_NOT_MY_SENSOR}, ${opacity})`;
   }
 
   public updateSensor(updatedSensor: ISensor) {
@@ -370,9 +376,9 @@ export class MapComponent implements OnInit {
       const mapCoordinateRD = mapEvent.value.coordinate;
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
 
+      this.setShowInfo(null);
       this.removeHighlight();
       this.activeFeatureInfo = null;
-      this.setShowInfo(null);
 
       this.locationService.setLocation({
         type: 'Point',
@@ -539,67 +545,48 @@ export class MapComponent implements OnInit {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.httpClient.get('/assets/layers.json').subscribe(
-      (data) => { this.myLayers = data as Theme[]; },
-      () => {},
-    );
-
-    this.dataService.connect();
-    const sensors = await this.sensorService.getAll();
+    const sensors = await this.sensorService.getSensors(false);
     this.initializeMap(sensors);
 
-    // subscribe to sensor events
-    const sensorRegistered$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRegistered);
-    sensorRegistered$.subscribe((newSensor: ISensor) => {
+    this.dataService.connect();
+
+    this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
+      this.myLayers = data as Theme[];
+    }, () => {}));
+
+    const { onRegister, onUpdate } = await this.sensorService.subscribe();
+
+    this.subscriptions.push(onRegister.subscribe((newSensor: ISensor) => {
       const feature: object = this.sensorToFeature(newSensor);
-      const newFeatures: Array<Feature> = (new GeoJSON()).readFeatures({
-        features: [feature],
-        type: 'FeatureCollection',
-      });
+      const newFeature = new GeoJSON().readFeature(feature);
+      this.vectorSource.addFeature(newFeature);
+    }));
 
-      this.vectorSource.addFeatures(newFeatures);
-    });
+    this.subscriptions.push(onUpdate.subscribe((updatedSensor: ISensor) => {
+      this.updateSensor(updatedSensor);
+    }));
 
-    // subscribe to sensor location events
-    const sensorUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorUpdated);
-    sensorUpdated$.subscribe((newSensor: ISensor) => {
-      this.updateSensor(newSensor);
-    });
-
-    // subscribe to sensor events
-    const sensorActivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorActivated);
-    sensorActivated$.subscribe((newSensor: ISensor) => {
-      this.updateSensor(newSensor);
-    });
-
-    // subscribe to sensor events
-    const sensorDeactivated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorDeactivated);
-    sensorDeactivated$.subscribe((newSensor: ISensor) => {
-      this.updateSensor(newSensor);
-    });
-
-    // subscribe to sensor events
-    const sensorLocationUpdated$: Observable<ISensor> = this.dataService.subscribeTo<ISensor>(EventType.SensorRelocated);
-    sensorLocationUpdated$.subscribe((newSensor: ISensor) => {
-      this.updateSensor(newSensor);
-    });
-
-    this.locationService.showLocation$.subscribe((sensor) => {
+    this.subscriptions.push(this.locationService.showLocation$.subscribe((sensor) => {
       this.removeLocationFeatures();
 
-      if (!sensor) {
+      if (sensor) {
+        const locationFeature = new Feature({
+          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
+        });
+        this.setLocation(locationFeature);
+      } else {
         this.clearLocationLayer();
-        return;
       }
-
-      const locationFeature = new Feature({
-        geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
-      });
-      this.setLocation(locationFeature);
-    });
+    }));
 
     if (environment.clientName === 'Local' || environment.apiUrl.startsWith('https')) {
       this.addFindMeButton();
+    }
+  }
+
+  ngOnDestroy(): void {
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
     }
   }
 }

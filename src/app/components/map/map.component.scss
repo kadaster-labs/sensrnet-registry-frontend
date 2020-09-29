@@ -1,115 +1,33 @@
 @import "../../../styles";
 
-td {
-  border-top: 0px !important;
-}
-
-#category {
-  z-index: 100 !important;
-}
-
-.app-form {
+#search {
+  left: 2vw;
+  width: 17em;
+  z-index: 100;
   position: absolute;
-  top: 50px;
-  height: calc(100vh - 50px);
-  z-index: 10;
-  width: 27vw;
-  min-width: 250px;
-  background-color: #ffffff;
-  box-shadow: 0 10px 10px -5px grey;
-  overflow: auto;
-  padding: 2em 1em;
+  background-color: white;
 }
 
 #layers {
-  padding-right: 5em !important;
-  position: absolute;
   right: 1vw;
-  width: 200px;
   bottom: 6vh;
   z-index: 100;
-}
-
-.feature-info {
+  width: 200px;
   position: absolute;
-  z-index: 20;
-  width: 30vw;
-  top: 20vh;
+  padding-right: 5em !important;
 }
 
-.backgroundmap {
+.map {
   width: 100vw;
   height: 100vh;
-}
-
-.dropdown-menu {
-  font-size: 14px;
-  font-style: normal;
-}
-
-
-.dropdown-toggle {
-  color: white;
-}
-
-form div button {
-  box-shadow: none;
-}
-
-.open > .dropdown-toggle,
-.dropdown-toggle:hover {
-  color: rgb(19, 65, 115);
-}
-
-td {
-  border-top: 0px !important;
-}
-
-label {
-  margin-top: 5px;
-  color: #000000;
-  font-style: normal;
-  font-weight: normal;
-}
-
-input[type="text"] {
-  height: 2em;
-  padding-left: 0.4em;
-}
-
-textarea {
-  font-size: 1em;
-  padding-left: 0.4em;
-}
-
-input::placeholder, textarea::placeholder {
-  font-weight: lighter;
-  font-style: oblique;
-  font-size: 12px;
-}
-
-.invalid-input {
-  color: #FF0000;
-  font-weight: lighter;
-  font-style: italic;
-  font-size: 10px;
-}
-
-.required {
-  color: red;
 }
 
 .h-100 {
   height: 100%;
 }
 
-#search {
-  background-color: white;
-  padding-right: 5em !important;
-  position: absolute;
-  left: 2vw;
-  width: 20em;
-  z-index: 100;
+.hidden {
+  display: none;
 }
 
 ::ng-deep ggc-search {
@@ -121,6 +39,9 @@ input::placeholder, textarea::placeholder {
       border: 1.5px solid #A9A9A9 !important;
     }
     div {
+      button > span {
+        margin: 0 !important;
+      }
       button:first-child {
         width: 3.5em !important;
         height: 3em !important;
@@ -128,7 +49,6 @@ input::placeholder, textarea::placeholder {
         box-shadow: 0 0 !important;
         border: 1.5px solid #A9A9A9 !important;
       }
-
       button:first-child + button {
         width: 3.5em !important;
         height: 3em !important;
@@ -140,10 +60,20 @@ input::placeholder, textarea::placeholder {
       }
     }
   }
+  ul {
+    overflow-x: auto;
+  }
 }
 
 ::ng-deep ggc-dataset-tree {
   div > button {
+    color: #606060 !important;
     background-color: rgba(0, 0, 0, 0) !important;
+  }
+}
+
+::ng-deep ggc-layer-selector {
+  div {
+    background-color: white !important;
   }
 }
