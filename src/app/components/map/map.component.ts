@@ -190,7 +190,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const sensorType = feature.get('features')[0].values_.typeName[0];
 
         const owner = this.connectionService.currentOwnerValue;
-        const isOwner = feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id);
+        const isOwner = owner ? feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id) : false;
 
         if (!active) {
           numberOfFeatures = `${isOwner}_${sensorType}_inactive`;
