@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { AlertService } from '../services/alert.service';
-import { AuthenticationService } from '../services/authentication.service';
+import { ConnectionService } from '../services/connection.service';
 import { OwnerService } from '../services/owner.service';
 
 @Component({
@@ -19,12 +19,12 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private connectionService: ConnectionService,
     private ownerService: OwnerService,
     private alertService: AlertService,
   ) {
     // redirect to viewer if already logged in
-    if (this.authenticationService.currentOwnerValue) {
+    if (this.connectionService.currentOwnerValue) {
       this.router.navigate(['/']);
     }
   }

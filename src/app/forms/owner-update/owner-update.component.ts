@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication.service';
+import { ConnectionService } from '../../services/connection.service';
 import { Owner } from '../../model/owner';
 import { AlertService } from '../../services/alert.service';
 
@@ -23,7 +23,7 @@ export class OwnerUpdateComponent implements OnInit {
     private router: Router,
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
-    private readonly authenticationService: AuthenticationService,
+    private readonly connectionService: ConnectionService,
   ) {}
 
   get f() {
@@ -45,8 +45,8 @@ export class OwnerUpdateComponent implements OnInit {
   }
 
   initFormFields(): void {
-    this.authenticationService.getOwner();
-    this.authenticationService.currentOwner.subscribe((owner: Owner) => {
+    this.connectionService.getOwner();
+    this.connectionService.currentOwner.subscribe((owner: Owner) => {
       this.currentOwner = owner;
 
       if (!owner || !this.form) {
@@ -70,7 +70,7 @@ export class OwnerUpdateComponent implements OnInit {
       console.log(`posting ${this.form.value}`);
 
       try {
-        await this.authenticationService.updateOwner(this.form.value).toPromise();
+        await this.connectionService.updateOwner(this.form.value).toPromise();
         this.alertService.success('Updated owner');
       } catch (error) {
         this.alertService.error(error.message);

@@ -1,21 +1,27 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { Owner } from '../model/owner';
+import * as io from 'socket.io-client';
+import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService {
-  private currentOwnerSubject: BehaviorSubject<Owner>;
+export class ConnectionService {
+  private url = `${environment.apiUrl}`;
+  private socket: SocketIOClient.Socket;
+
   public currentOwner: Observable<Owner>;
+  private currentOwnerSubject: BehaviorSubject<Owner>;
 
   constructor(
+    private router: Router,
     private readonly http: HttpClient,
   ) {
     this.currentOwnerSubject = new BehaviorSubject<Owner>(JSON.parse(localStorage.getItem('currentOwner')));
     this.currentOwner = this.currentOwnerSubject.asObservable();
+    this.connectSocket();
   }
 
   public get currentOwnerValue(): Owner {
@@ -34,6 +40,7 @@ export class AuthenticationService {
         // register, but only the user is returned. Therefore, an additional request is necessary for retrieving the
         // saved owner information. Ideally this would be separated.
         this.getOwner();
+        this.connectSocket();
 
         return data;
       }));
@@ -42,7 +49,6 @@ export class AuthenticationService {
   public refreshAccessToken(): Observable<Owner> {
     return this.http.post<any>(`${environment.apiUrl}/auth/refresh`, null)
       .pipe(map((data) => {
-
         const user: Owner = { ...this.currentOwnerValue, ...data };
 
         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -83,7 +89,7 @@ export class AuthenticationService {
 
   public updateOwner(user: Owner): Observable<Owner> {
     return this.http.put(`${environment.apiUrl}/Owner/`, user)
-      .pipe(map((data) => {
+      .pipe(map(() => {
         let owner: Owner = JSON.parse(localStorage.getItem('currentOwner'));
 
         owner = { ...owner, ...user };
@@ -97,10 +103,62 @@ export class AuthenticationService {
   public async logout() {
     localStorage.removeItem('currentOwner');
     this.currentOwnerSubject.next(null);
+
     try {
       await this.http.post<void>(`${environment.apiUrl}/auth/logout`, null).toPromise();
     } catch (error) {
       console.error('Something went wrong on logout', error);
     }
+  }
+
+  public connectSocket() {
+    if (!this.socket) {
+      const namespace = 'sensor';
+      const host = this.url.substring(0, this.url.lastIndexOf('/'));  // strip the /api part
+
+      const connectionOptions = {
+        path: '/api/socket.io',
+        transportOptions: undefined,
+      };
+
+      const currentOwner = this.currentOwnerValue;
+      if (currentOwner) {
+        connectionOptions.transportOptions = {
+          polling: {
+            extraHeaders: {
+              Authorization: `Bearer ${currentOwner.access_token}`,
+            }
+          }
+        };
+      }
+
+      const url = `${host}/${namespace}`;
+      this.socket = io(url, connectionOptions);
+
+      this.socket.on('connect', () => {
+        console.log('Socket.io connected.');
+      });
+
+      this.socket.on('disconnect', async () => {
+        console.log('Socket.io disconnected.');
+
+        await this.disconnectSocket();
+        await this.logout();
+        await this.router.navigate(['/login']);
+      });
+    }
+  }
+
+  public async disconnectSocket() {
+    if (this.socket) {
+      await this.socket.close();
+      this.socket = null;
+    }
+  }
+
+  public subscribeTo<T>(namespace: string = '/'): Observable<T> {
+    return new Observable((observer: Subscriber<T>) => {
+      this.socket.on(namespace, (message: T) => observer.next(message));
+    });
   }
 }

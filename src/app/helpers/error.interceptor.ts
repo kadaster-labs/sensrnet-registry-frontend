@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 
-import { AuthenticationService } from '../services/authentication.service';
+import { ConnectionService } from '../services/connection.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -14,16 +14,16 @@ export class ErrorInterceptor implements HttpInterceptor {
   );
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private connectionService: ConnectionService,
     private router: Router,
   ) { }
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    return next.handle(request).pipe(catchError((error) => {
+    return next.handle(request).pipe(catchError(async (error) => {
       if (request.url.includes('login') || request.url.includes('refresh')) {
 
         if (request.url.includes('refresh')) {
-          this.authenticationService.logout();
+          await this.connectionService.logout();
         }
 
         return throwError(error);
@@ -39,7 +39,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           take(1),
           switchMap(() => {
             // refresh token
-            const currentOwner = this.authenticationService.currentOwnerValue;
+            const currentOwner = this.connectionService.currentOwnerValue;
             if (currentOwner && currentOwner.access_token) {
               request = request.clone({
                 setHeaders: {
@@ -56,7 +56,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
         this.refreshSubject.next(null);
 
-        return this.authenticationService
+        return this.connectionService
           .refreshAccessToken()
           .pipe(
             switchMap((token: any) => {
@@ -65,7 +65,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.refreshSubject.next(token);
 
               // add authorization header with jwt token if available
-              const currentOwner = this.authenticationService.currentOwnerValue;
+              const currentOwner = this.connectionService.currentOwnerValue;
               if (currentOwner && currentOwner.access_token) {
                 request = request.clone({
                   setHeaders: {
@@ -76,11 +76,12 @@ export class ErrorInterceptor implements HttpInterceptor {
 
               return next.handle(request);
             }),
-            catchError((authError: any) => {
+            catchError(async (authError: any) => {
               this.refreshInProgress = false;
 
-              this.authenticationService.logout();
-              this.router.navigate(['/login']);
+              await this.connectionService.disconnectSocket();
+              await this.connectionService.logout();
+              await this.router.navigate(['/login']);
 
               return throwError(authError);
             })

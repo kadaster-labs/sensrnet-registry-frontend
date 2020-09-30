@@ -15,24 +15,21 @@ import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
 import { extend, Extent } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
+import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
+import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 
-import SelectCluster from 'ol-ext/interaction/SelectCluster';
-import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
-
+import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
 import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
-import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 
 import { ISensor } from '../../model/bodies/sensor-body';
-import { DataService } from '../../services/data.service';
-import { SensorInfo } from '../../model/bodies/sensorInfo';
-import { LocationService } from '../../services/location.service';
-
-import { environment } from '../../../environments/environment';
 import { Category } from '../../model/bodies/sensorTypes';
+import { SensorInfo } from '../../model/bodies/sensorInfo';
 import { SensorService } from '../../services/sensor.service';
-import { AuthenticationService } from '../../services/authentication.service';
+import { environment } from '../../../environments/environment';
+import { LocationService } from '../../services/location.service';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-map',
@@ -46,37 +43,36 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private httpClient: HttpClient,
     public mapService: MapService,
-    private dataService: DataService,
+    private httpClient: HttpClient,
     private sensorService: SensorService,
     private locationService: LocationService,
-    private authService: AuthenticationService,
+    private connectionService: ConnectionService,
   ) {
-    this.locationService.hideLocation();
+    this.locationService.hideLocationMarker();
   }
 
   public mapName = 'srn';
-  public environment = environment;
   public subscriptions = [];
-
-  public currentMapResolution: number = undefined;
-  public currentZoomlevel: number = undefined;
-  public activeWmtsDatasets: Dataset[] = [];
-  public activeWmsDatasets: Dataset[] = [];
-  public activeFeatureInfo: SensorInfo;
-  public highlightLayer: VectorLayer;
-  public highlightSource: VectorSource;
-  public selectLocationLayer: VectorLayer;
-  public selectLocationSource: VectorSource;
-  public clusterLayer: AnimatedCluster;
-  public popupOverlay: Overlay;
+  public environment = environment;
 
   public showInfo = false;
 
-  private vectorSource: VectorSource;
+  public popupOverlay: Overlay;
   private clusterSource: Cluster;
+  private vectorSource: VectorSource;
+  public highlightLayer: VectorLayer;
   private selectCluster: SelectCluster;
+  public highlightSource: VectorSource;
+  public clusterLayer: AnimatedCluster;
+  public activeFeatureInfo: SensorInfo;
+  public selectLocationLayer: VectorLayer;
+  public selectLocationSource: VectorSource;
+
+  public activeWmsDatasets: Dataset[] = [];
+  public activeWmtsDatasets: Dataset[] = [];
+  public currentZoomlevel: number = undefined;
+  public currentMapResolution: number = undefined;
 
   public selectedSensor: ISensor;
 
@@ -93,9 +89,6 @@ export class MapComponent implements OnInit, OnDestroy {
   public iconUnchecked = 'far fa-square';
   public iconChecked = 'far fa-check-square';
   public iconInfoUrl = 'fas fa-info-circle';
-
-  COLOR_MY_SENSOR = '19, 65, 115';
-  COLOR_NOT_MY_SENSOR =  '0, 120, 54';
 
   private static sensorToFeatureProperties(sensor: ISensor) {
     return {
@@ -179,7 +172,7 @@ export class MapComponent implements OnInit, OnDestroy {
     return styleCache;
   }
 
-  public initializeMap(sensors) {
+  public initMap(sensors) {
     const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
     const features: Array<Feature> = new GeoJSON().readFeatures({
       features: featuresData,
@@ -196,14 +189,14 @@ export class MapComponent implements OnInit, OnDestroy {
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
 
-        const owner = this.authService.currentOwnerValue;
+        const owner = this.connectionService.currentOwnerValue;
         const isOwner = feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id);
 
         if (!active) {
-          numberOfFeatures = isOwner + '_' + sensorType + '_inactive';
+          numberOfFeatures = `${isOwner}_${sensorType}_inactive`;
           style = styleCache[numberOfFeatures];
         } else {
-          numberOfFeatures = isOwner + '_' + sensorType + '_active';
+          numberOfFeatures = `${isOwner}_${sensorType}_active`;
           style = styleCache[numberOfFeatures];
         }
       } else {
@@ -237,7 +230,7 @@ export class MapComponent implements OnInit, OnDestroy {
       let styleFeatures;
       const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
-        const owner = this.authService.currentOwnerValue;
+        const owner = this.connectionService.currentOwnerValue;
 
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
@@ -245,10 +238,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
         let style: Style[];
         if (active) {
-          styleFeatures = isOwner + '_' + sensorType + '_active';
+          styleFeatures = `${isOwner}_${sensorType}_active`;
           style = styleCache[styleFeatures];
         } else {
-          styleFeatures = isOwner + '_' + sensorType + '_inactive';
+          styleFeatures = `${isOwner}_${sensorType}_inactive`;
           style = styleCache[styleFeatures];
         }
 
@@ -271,21 +264,22 @@ export class MapComponent implements OnInit, OnDestroy {
       style: styleCluster,
     });
 
+    const map = this.mapService.getMap(this.mapName);
     this.clusterLayer.setZIndex(10);
-    this.mapService.getMap(this.mapName).addLayer(this.clusterLayer);
+    map.addLayer(this.clusterLayer);
 
     this.selectCluster = new SelectCluster({
       pointRadius: 40,
       style: styleCluster,
       featureStyle: styleSelectedCluster,
     });
-
-    this.mapService.getMap(this.mapName).addInteraction(this.selectCluster);
+    map.addInteraction(this.selectCluster);
 
     this.popupOverlay = new Overlay({
-      element: document.getElementById('popup'), autoPan: false,
+      autoPan: false,
+      element: document.getElementById('popup')
     });
-    this.mapService.getMap(this.mapName).addOverlay(this.popupOverlay);
+    map.addOverlay(this.popupOverlay);
 
     this.selectCluster.getFeatures().on(['add'], (event) => {
       this.removeHighlight();
@@ -330,7 +324,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public getNodeColor(ownerType: boolean, opacity: number) {
-    return ownerType ? `rgb( ${this.COLOR_MY_SENSOR}, ${opacity})` : `rgb( ${this.COLOR_NOT_MY_SENSOR}, ${opacity})`;
+    return ownerType ? `rgb(19, 65, 115, ${opacity})` : `rgb(0, 120, 54, ${opacity})`;
   }
 
   public updateSensor(updatedSensor: ISensor) {
@@ -383,7 +377,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.locationService.setLocation({
         type: 'Point',
         coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
-        baseObjectId: 'iets'
+        baseObjectId: 'placeholder'
       });
 
       map.forEachFeatureAtPixel(mapEvent.value.pixel, (data) => {
@@ -546,9 +540,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public async ngOnInit(): Promise<void> {
     const sensors = await this.sensorService.getSensors(false);
-    this.initializeMap(sensors);
-
-    this.dataService.connect();
+    this.initMap(sensors);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
       this.myLayers = data as Theme[];

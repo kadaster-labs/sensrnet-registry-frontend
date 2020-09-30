@@ -41,7 +41,7 @@ export class LocationService {
     this.locationMarker.next(location);
   }
 
-  hideLocation() {
+  hideLocationMarker() {
     this.locationMarker.next(null);
   }
 }

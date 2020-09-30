@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ISensor } from '../model/bodies/sensor-body';
 import { SensorTheme } from '../model/bodies/sensorTheme';
 import { environment } from '../../environments/environment';
-import { DataService } from './data.service';
+import { ConnectionService } from './connection.service';
 import { EventType } from '../model/events/event-type';
 
 export interface ILocationBody {
@@ -75,16 +75,16 @@ export class SensorService {
 
   constructor(
     private http: HttpClient,
-    private dataService: DataService,
+    private connectionService: ConnectionService,
   ) {}
 
   public async subscribe() {
     if (!this.sensorCreated$ && !this.sensorUpdated$) {
-      const sensorUpdated$ = this.dataService.subscribeTo(EventType.SensorUpdated);
-      const sensorRegistered$ = this.dataService.subscribeTo(EventType.SensorRegistered);
-      const sensorActivated$ = await this.dataService.subscribeTo(EventType.SensorActivated);
-      const sensorDeactivated$ = await this.dataService.subscribeTo(EventType.SensorDeactivated);
-      const sensorLocationUpdated$ = await this.dataService.subscribeTo(EventType.SensorRelocated);
+      const sensorUpdated$ = this.connectionService.subscribeTo(EventType.SensorUpdated);
+      const sensorRegistered$ = this.connectionService.subscribeTo(EventType.SensorRegistered);
+      const sensorActivated$ = await this.connectionService.subscribeTo(EventType.SensorActivated);
+      const sensorDeactivated$ = await this.connectionService.subscribeTo(EventType.SensorDeactivated);
+      const sensorLocationUpdated$ = await this.connectionService.subscribeTo(EventType.SensorRelocated);
 
       this.sensorCreated$ = new Observable((observer: Subscriber<ISensor>) => {
         sensorRegistered$.subscribe((sensor: ISensor) => {

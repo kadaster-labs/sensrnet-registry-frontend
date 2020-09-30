@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import {Component, Input} from '@angular/core';
 import { environment } from '../../environments/environment';
-import { AuthenticationService } from '../services/authentication.service';
+import { ConnectionService } from '../services/connection.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,11 +16,12 @@ export class NavBarComponent {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private connectionService: ConnectionService,
   ) {}
 
   public async logout() {
-    await this.authenticationService.logout();
+    await this.connectionService.disconnectSocket();
+    await this.connectionService.logout();
     await this.router.navigate(['/login']);
   }
 }
