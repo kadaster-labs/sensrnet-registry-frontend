@@ -1,6 +1,6 @@
 FROM node:12.18
 
-WORKDIR /opt/protractor
+WORKDIR /app
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="nointeractive" \
