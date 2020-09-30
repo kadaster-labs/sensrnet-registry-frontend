@@ -8,15 +8,8 @@
     </ul>
     <ul class="navbar-nav mr-auto nav nav-pills mt-1">
         <li *ngIf="!environment.isReadonly">
-            <a role="button" class="navbar-menu-item" routerLink="/owner" routerLinkActive="active">
+            <a role="button" class="navbar-menu-item" (click)="toggleMenu()" routerLinkActive="active">
                 Menu
-            </a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto nav nav-pills mr-4 mt-1">
-        <li *ngIf="!environment.isReadonly" class="dropdown logout">
-            <a class="dropdown-toggle navbar-menu-item" (click)="logout()" role="button" aria-haspopup="true" aria-expanded="false">
-                Logout
             </a>
         </li>
     </ul>

@@ -71,6 +71,7 @@ export class OwnerUpdateComponent implements OnInit {
 
       try {
         await this.connectionService.updateOwner(this.form.value).toPromise();
+        console.log('Updated owner');
         this.alertService.success('Updated owner');
       } catch (error) {
         this.alertService.error(error.message);

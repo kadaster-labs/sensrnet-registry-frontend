@@ -16,7 +16,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private connectionService: ConnectionService,
     private router: Router,
-  ) { }
+  ) {}
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(catchError(async (error) => {

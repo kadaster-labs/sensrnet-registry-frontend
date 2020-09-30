@@ -19,9 +19,11 @@ export class NavBarComponent {
     private connectionService: ConnectionService,
   ) {}
 
-  public async logout() {
-    await this.connectionService.disconnectSocket();
-    await this.connectionService.logout();
-    await this.router.navigate(['/login']);
+  public async toggleMenu() {
+    if (this.router.url === '/') {
+      await this.router.navigate(['/owner']);
+    } else {
+      await this.router.navigate(['/']);
+    }
   }
 }

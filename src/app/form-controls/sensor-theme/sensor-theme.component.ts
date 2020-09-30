@@ -1,15 +1,7 @@
-import {
-  Component,
-  forwardRef,
-  OnDestroy,
-  Input,
-  AfterViewInit,
-  ChangeDetectorRef,
-} from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-
 import { SensorTheme } from '../../model/bodies/sensorTheme';
+import { Component, forwardRef, OnDestroy, Input, AfterViewInit } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 // describes what the return value of the form control will look like
 export interface SensorThemeFormValues {
@@ -55,7 +47,6 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, Af
   public sensorThemesList: string[];
 
   constructor(
-    private cd: ChangeDetectorRef,
     private formBuilder: FormBuilder,
   ) {
     this.form = this.formBuilder.group({
@@ -97,6 +88,7 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, Af
       this.form.reset();
       this.form.markAsPristine();
     }
+    ($('.selectpicker') as any).selectpicker('refresh');
   }
 
   public registerOnTouched(fn: any) {
