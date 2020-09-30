@@ -70,7 +70,7 @@ Once the images are available in the container registry, deployment can be done 
 `kustomize build deployment/overlays/gemeente-a | kubectl apply -f -`
 
 ## Testing
-Tests can be run using `npm run test`, which launches an headless Chrome browser to run the tests in. Please consult https://developers.google.com/web/updates/2017/04/headless-chrome#cli for local installation and setup. For CI purposes, we've included a Dockerfile with which the correct environment can easily be configured. This way, tests can be run by running `sh run-tests.sh`.
+Tests can be run using `npm run test`, which launches an headless Chrome browser to run the tests in. Please consult https://developers.google.com/web/updates/2017/04/headless-chrome#cli for local installation and setup. For CI purposes, we've included a Dockerfile with which the correct environment can easily be configured. This way, tests can be run by running `./run-tests.sh`.
 
 ## Find Us
 
