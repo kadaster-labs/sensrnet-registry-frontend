@@ -126,10 +126,10 @@ export class SensorService {
   }
 
   public async getMySensors(refresh) {
-    const sensors = this.getSensors(refresh);
+    const sensors = await this.getSensors(refresh);
     const owner = this.connectionService.currentOwnerValue;
 
-    return Object.values(this.sensorMap).filter((sensor) => sensor.ownerIds.includes(owner.id));
+    return sensors.filter((sensor) => sensor.ownerIds.includes(owner.id));
   }
 
   public getAll() {
