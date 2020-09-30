@@ -6,17 +6,18 @@
         </div>
         <div class="col-6">
             <div>
-                <h3>View Sensors</h3>
+                <h3>My Sensors</h3>
             </div>
             <hr>
             <table class="table table-striped table-hover table-bordered">
+                <caption class="hidden">Sensors</caption>
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th class= "pointer" scope="col" (click)="sortByAttribute('name')">Name<i class="fas fa-sort ml-2"></i></th>
-                    <th class= "pointer" scope="col" (click)="sortByAttribute('typeName')">Type<i class="fas fa-sort ml-2"></i></th>
-                    <th class= "pointer" scope="col" (click)="sortByAttribute('active')">Active<i class="fas fa-sort ml-2"></i></th>
-                    <th class= "pointer" scope="col" (click)="sortByAttribute('manufacturer')">Manufacturer<i class="fas fa-sort ml-2"></i></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('name')">Name<em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('typeName')">Type<em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('active')">Active<em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('manufacturer')">Manufacturer<em class="fas fa-sort ml-2"></em></th>
                 </tr>
                 </thead>
                 <tbody>

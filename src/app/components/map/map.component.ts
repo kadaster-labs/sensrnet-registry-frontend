@@ -324,7 +324,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public getNodeColor(ownerType: boolean, opacity: number) {
-    return ownerType ? `rgb(19, 65, 115, ${opacity})` : `rgb(0, 120, 54, ${opacity})`;
+    return ownerType ? `rgba(0,160,60, ${opacity})` : `rgba(19, 65, 115, ${opacity})`;
   }
 
   public updateSensor(updatedSensor: ISensor) {

@@ -125,6 +125,13 @@ export class SensorService {
     return Object.values(this.sensorMap);
   }
 
+  public async getMySensors(refresh) {
+    const sensors = this.getSensors(refresh);
+    const owner = this.connectionService.currentOwnerValue;
+
+    return Object.values(this.sensorMap).filter((sensor) => sensor.ownerIds.includes(owner.id));
+  }
+
   public getAll() {
     return this.http.get(`${environment.apiUrl}/Sensor`).toPromise();
   }

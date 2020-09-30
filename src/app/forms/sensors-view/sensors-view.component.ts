@@ -1,6 +1,5 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SensorService } from '../../services/sensor.service';
-import { MapComponent } from '../../components/map/map.component';
 
 @Component({
   selector: 'app-sensors-view',
@@ -9,7 +8,7 @@ import { MapComponent } from '../../components/map/map.component';
 })
 export class SensorsViewComponent implements OnInit {
 
-  public sensors;
+  public sensors = [];
   public ascending = true;
 
   constructor(
@@ -26,6 +25,6 @@ export class SensorsViewComponent implements OnInit {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.sensors = await this.sensorService.getSensors(false);
+    this.sensors = await this.sensorService.getMySensors(false);
   }
 }
