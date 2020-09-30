@@ -16,7 +16,6 @@ export class NavBarComponent {
 
   constructor(
     private router: Router,
-    private connectionService: ConnectionService,
   ) {}
 
   public async toggleMenu() {
