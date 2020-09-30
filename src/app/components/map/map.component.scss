@@ -25,7 +25,7 @@
   display: none;
 }
 
-::ng-deep ggc-search {
+::ng-deep #search {
   div {
     input {
       height: 3em !important;
@@ -60,15 +60,13 @@
   }
 }
 
-::ng-deep ggc-dataset-tree {
+::ng-deep #layers {
   div > button {
     color: #606060 !important;
     background-color: rgba(0, 0, 0, 0) !important;
   }
-}
 
-::ng-deep ggc-layer-selector {
-  div {
+  div > div {
     background-color: white !important;
   }
 }
