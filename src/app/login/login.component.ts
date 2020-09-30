@@ -30,11 +30,6 @@ export class LoginComponent implements OnInit {
     if (this.authenticationService.currentOwnerValue) {
       this.router.navigate(['/']);
     }
-
-    // redirect if app is in readonly mode
-    if (this.environment.isReadonly) {
-      this.router.navigate(['/']);
-    }
   }
 
   public ngOnInit() {
