@@ -1,3 +1,4 @@
 div.alert {
+  z-index: 100;
   margin-bottom: 0;
 }

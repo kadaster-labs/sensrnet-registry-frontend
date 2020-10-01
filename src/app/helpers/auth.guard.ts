@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
-import { AuthenticationService } from '../services/authentication.service';
+import { ConnectionService } from '../services/connection.service';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private connectionService: ConnectionService,
   ) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
-    const currentOwner = this.authenticationService.currentOwnerValue;
+    const currentOwner = this.connectionService.currentOwnerValue;
     if (currentOwner) {
       // authorized so return true
       return true;
