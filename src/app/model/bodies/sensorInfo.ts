@@ -7,7 +7,7 @@ export class SensorInfo {
     public description: string,
     public manufacturer: string,
     public theme?: Array<string>,
-    public typeDetails?: Array<object>,
+    public typeDetails?: Record<string, any>,
     public dataStreams?: Array<any>,
   ) { }
 }

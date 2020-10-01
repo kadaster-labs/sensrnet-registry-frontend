@@ -1,8 +1,7 @@
-import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-
 import { SensorTheme } from '../../model/bodies/sensorTheme';
+import { Component, forwardRef, OnDestroy, Input, AfterViewInit } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 // describes what the return value of the form control will look like
 export interface SensorThemeFormValues {
@@ -26,7 +25,7 @@ export interface SensorThemeFormValues {
     },
   ],
 })
-export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
+export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, AfterViewInit {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 
@@ -89,7 +88,6 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
       this.form.reset();
       this.form.markAsPristine();
     }
-
     ($('.selectpicker') as any).selectpicker('refresh');
   }
 
@@ -100,5 +98,9 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy {
   // communicate the inner form validation to the parent form
   public validate(_: FormControl) {
     return this.form.valid ? null : { theme: { valid: false } };
+  }
+
+  ngAfterViewInit(): void {
+    ($('.selectpicker') as any).selectpicker('refresh');
   }
 }
