@@ -1,28 +1,27 @@
-import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { ISensor } from '../model/bodies/sensor-body';
-import { IUpdateSensorBody, SensorService } from '../services/sensor.service';
-import { LocationService } from '../services/location.service';
+import { ISensor } from '../../model/bodies/sensor-body';
+import { IUpdateSensorBody, SensorService } from '../../services/sensor.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sensor-update',
   templateUrl: './sensor-update.component.html',
   styleUrls: ['./sensor-update.component.scss'],
 })
-export class SensorUpdateComponent implements OnChanges {
+export class SensorUpdateComponent {
 
   public form: FormGroup;
-
   public sensorUpdateSent = false;
 
-  @Input() public sensor: ISensor;
-  @Input() public active: boolean;
+  public sensor: ISensor;
+  public active: boolean;
   @Output() public closePane = new EventEmitter<void>();
 
   constructor(
-    private readonly sensorService: SensorService,
+    private router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly locationService: LocationService,
+    private readonly sensorService: SensorService,
   ) {
     const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -39,47 +38,32 @@ export class SensorUpdateComponent implements OnChanges {
     });
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes.sensor && changes.sensor.currentValue) {
-      const selectedSensor = changes.sensor.currentValue ? changes.sensor.currentValue : {};
-      this.form.setValue({
-        name: selectedSensor.name || '',
-        aim: selectedSensor.aim || '',
-        description: selectedSensor.description || '',
-        manufacturer: selectedSensor.manufacturer || '',
-        active: { value: selectedSensor.active.toString() || false },
-        documentationUrl: selectedSensor.documentationUrl || '',
-        location: {
-          latitude: selectedSensor.location ? selectedSensor.location.coordinates[1] : null,
-          longitude: selectedSensor.location ? selectedSensor.location.coordinates[0] : null,
-          height: selectedSensor.location ? selectedSensor.location.coordinates[2] : null,
-          baseObjectId: selectedSensor.baseObjectId || 'non-empty',
-        },
-        type: {
-          typeName: selectedSensor.typeName ? selectedSensor.typeName[0] : '',
-          typeDetails: selectedSensor.typeDetails ? selectedSensor.typeDetails.subType : '',
-        },
-        theme: { value: selectedSensor.theme || [] },
-      });
-    }
+  public onSensorSelected(sensor) {
+    this.sensor = sensor;
 
-    if (changes.active) {
-      if (changes.active.previousValue && !changes.active.currentValue) {
-        // clear form if pane get closed
-        console.log('clear form');
-        this.form.reset();
-        this.locationService.showLocation(null);
-      }
-    }
+    this.form.setValue({
+      name: this.sensor.name || '',
+      aim: this.sensor.aim || '',
+      description: this.sensor.description || '',
+      manufacturer: this.sensor.manufacturer || '',
+      active: { value: this.sensor.active.toString() || false },
+      documentationUrl: this.sensor.documentationUrl || '',
+      location: {
+        latitude: this.sensor.location ? this.sensor.location.coordinates[1] : null,
+        longitude: this.sensor.location ? this.sensor.location.coordinates[0] : null,
+        height: this.sensor.location ? this.sensor.location.coordinates[2] : null,
+        baseObjectId: this.sensor.baseObjectId || 'non-empty',
+      },
+      type: {
+        typeName: this.sensor.typeName ? this.sensor.typeName[0] : '',
+        typeDetails: this.sensor.typeDetails ? this.sensor.typeDetails.subType : '',
+      },
+      theme: { value: this.sensor.theme || [] },
+    });
   }
 
   get f() {
     return this.form.controls;
-  }
-
-  public close() {
-    console.log('close');
-    this.closePane.emit();
   }
 
   public async submit() {
@@ -87,7 +71,7 @@ export class SensorUpdateComponent implements OnChanges {
       return;
     }
 
-    const newValues =  this.form.value;
+    const newValues = this.form.value;
     const sensor = {
       typeName: newValues.type.typeName,
       location: newValues.location,
@@ -140,5 +124,9 @@ export class SensorUpdateComponent implements OnChanges {
         console.error(error);
       }
     }
+  }
+
+  public async close() {
+    await this.router.navigate(['']);
   }
 }
