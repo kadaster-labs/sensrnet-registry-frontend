@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       containers:
-      - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
+      - image: sensrnet-registry-frontend_central-viewer:latest
         name: registry-frontend
         imagePullPolicy: Never
         resources: {}

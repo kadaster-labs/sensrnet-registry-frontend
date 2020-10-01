@@ -10,10 +10,6 @@ services:
     build:
         context: "."
     ports:
-      - 4200:4200
-    environment:
-      - PROJECT=dev
-      - CONFIGURATION=production
-      - PROXY_CONFIG=src/proxy.conf.json
+      - 8080:8080
     networks:
       - backend
