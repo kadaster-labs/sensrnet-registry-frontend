@@ -62,7 +62,6 @@
     <div class="row h-100">
         <div class="h-100 vw-100">
             <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
-            <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
                 [url]="dataset.services[0].url" [layer]="dataset.services[0].layers[0].technicalName"
                 [mapName]="mapName" [minResolution]="dataset.services[0].layers[0].minResolution"
