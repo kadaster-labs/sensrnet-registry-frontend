@@ -28,6 +28,7 @@ import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.
 import { SensorRegisterComponent } from './forms/sensor-register/sensor-register.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
+import { MultiStepFormComponent } from './forms/multi-step-form/multi-step-form.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     SidebarComponent,
     MapComponent,
     SensorsViewComponent,
+    MultiStepFormComponent,
   ],
   imports: [
     BrowserModule,
