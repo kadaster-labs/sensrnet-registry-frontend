@@ -4,64 +4,84 @@
         <div class="col-1">
             <app-sidebar ></app-sidebar>
         </div>
-        <div class="col-6">
-            <div>
-                <h3>Register Sensor</h3>
+        <div [ngClass]="{'col-6': activeStepIndex === 3, 'col-11': activeStepIndex !== 3 }">
+            <div class="row">
+                <div class="col-6">
+                    <h3>Register Sensor</h3>
+                </div>
+                <div class="col-6 mt-2 text-right">
+                    <span [ngClass]="getClasses(0)" class="step"></span>
+                    <span [ngClass]="getClasses(1)" class="step"></span>
+                    <span [ngClass]="getClasses(2)" class="step"></span>
+                    <span [ngClass]="getClasses(3)" class="step"></span>
+                </div>
             </div>
             <hr>
             <form [formGroup]="form" (ngSubmit)="submit()">
-                <app-sensor-type formControlName="type" [submitted]="submitted" (sensorType)="setName($event)"></app-sensor-type>
-                <div class="form-group">
-                    <label> Name <span class="required">*</span>
-                    </label>
-                    <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
-                        [ngClass]="{ 'is-invalid': (f.name.dirty || f.name.touched || submitted) && f.name.errors }">
-                    <div *ngIf="(f.name.dirty || f.name.touched || submitted) && f.name.errors" class="invalid-input">
-                        <span class="required-text" *ngIf="f.name.errors.required">Name is required</span>
-                        <span class="required-text" *ngIf="f.name.errors.minlength">Name must be at least 6 characters</span>
+                <div *ngIf="activeStepIndex === 0">
+                    <app-sensor-type formControlName="type" [submitted]="stepSubmitted" (sensorType)="setName($event)"></app-sensor-type>
+                    <div class="form-group">
+                        <label>Name<span class="required">*</span></label>
+                        <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
+                            [ngClass]="{ 'is-invalid': (f.name.dirty || f.name.touched || stepSubmitted) && f.name.errors }">
+                        <div *ngIf="(f.name.dirty || f.name.touched || stepSubmitted) && f.name.errors" class="invalid-input">
+                            <span class="required-text" *ngIf="f.name.errors.required">Name is required</span>
+                            <span class="required-text" *ngIf="f.name.errors.minlength">Name must be at least 6 characters</span>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="aim">Aim</label>
-                    <input type="text" class="form-control" formControlName="aim" placeholder="Aim of the sensor">
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" type="text" formControlName="description"
-                        placeholder="Describe the sensor"></textarea>
-                </div>
-                <app-sensor-status formControlName="active" [submitted]="submitted"></app-sensor-status>
-                <hr>
-                <div class="form-group">
-                    <label for="manufacturer"> Manufacturer <span class="required">*</span></label>
-                    <input class="form-control" type="text" formControlName="manufacturer"
-                        [ngClass]="{ 'is-invalid': submitted && f.manufacturer.errors }"
-                        placeholder="Enter name of the manufacturer">
-                    <div *ngIf="(f.manufacturer.dirty || f.manufacturer.touched || submitted) && f.manufacturer.errors"
-                        class="invalid-input">
-                        <span class="required-text" *ngIf="f.manufacturer.errors.required">Manufacturer is required</span>
+                <div *ngIf="activeStepIndex === 1">
+                    <div class="form-group">
+                        <label for="aim">Aim</label>
+                        <input type="text" class="form-control" formControlName="aim" placeholder="Aim of the sensor">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="documentationUrl">Documentation URL <span class="required">*</span></label>
-                    <input class="form-control" type="url" formControlName="documentationUrl"
-                        placeholder="Enter URL of documentation"
-                        [ngClass]="{ 'is-invalid': submitted && f.documentationUrl.errors }">
-                    <div *ngIf="(f.documentationUrl.dirty || f.documentationUrl.touched || submitted) && f.documentationUrl.errors"
-                        class="invalid-input">
-                        <span class="required-text" *ngIf="f.documentationUrl.errors.required">Documentation is required</span>
-                        <span class="required-text" *ngIf="f.documentationUrl.errors.pattern">Not a valid URL</span>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" type="text" formControlName="description"
+                            placeholder="Describe the sensor"></textarea>
                     </div>
+                    <app-sensor-status formControlName="active" [submitted]="stepSubmitted"></app-sensor-status>
                 </div>
-                <app-sensor-location formControlName="location" [submitted]="submitted"></app-sensor-location>
-                <app-sensor-theme formControlName="theme" [submitted]="submitted"></app-sensor-theme>
-                <hr>
-                <button class="btn btn-primary btn-lg mr-3 mb-2" type="submit">Register</button>
-                <button type="button" class="btn btn-lg mb-2" (click)="close()">Close</button>
+                <div *ngIf="activeStepIndex === 2">
+                    <div class="form-group">
+                        <label for="manufacturer"> Manufacturer <span class="required">*</span></label>
+                        <input class="form-control" type="text" formControlName="manufacturer"
+                            [ngClass]="{ 'is-invalid': stepSubmitted && f.manufacturer.errors }"
+                            placeholder="Enter name of the manufacturer">
+                        <div *ngIf="(f.manufacturer.dirty || f.manufacturer.touched || stepSubmitted) && f.manufacturer.errors"
+                            class="invalid-input">
+                            <span class="required-text" *ngIf="f.manufacturer.errors.required">Manufacturer is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="documentationUrl">Documentation URL <span class="required">*</span></label>
+                        <input class="form-control" type="url" formControlName="documentationUrl"
+                            placeholder="Enter URL of documentation"
+                            [ngClass]="{ 'is-invalid': stepSubmitted && f.documentationUrl.errors }">
+                        <div *ngIf="(f.documentationUrl.dirty || f.documentationUrl.touched || stepSubmitted) && f.documentationUrl.errors"
+                            class="invalid-input">
+                            <span class="required-text" *ngIf="f.documentationUrl.errors.required">Documentation is required</span>
+                            <span class="required-text" *ngIf="f.documentationUrl.errors.pattern">Not a valid URL</span>
+                        </div>
+                    </div>
+                    <app-sensor-theme formControlName="theme" [submitted]="stepSubmitted"></app-sensor-theme>
+                </div>
+                <div *ngIf="activeStepIndex === 3">
+                    <app-sensor-location formControlName="location" [submitted]="stepSubmitted"></app-sensor-location>
+                </div>
+                <hr class="my-5">
+                <button type="button" class="btn btn-primary btn-lg mr-2"
+                        [disabled]="!activeStepIndex"
+                        (click)="goToStep('prev')">Previous</button>
+                <button type="submit" class="btn btn-primary btn-lg"
+                        *ngIf="activeStepIndex === totalSteps - 1">Submit</button>
+                <button type="button" class="btn btn-primary btn-lg"
+                        *ngIf="activeStepIndex !== totalSteps - 1"
+                        (click)="goToStep('next')">Next</button>
             </form>
         </div>
-        <div class="col-5" style="height: 88vh; max-height: 88vh">
+        <div *ngIf="activeStepIndex === 3" class="col-5" style="height: 85vh; max-height: 85vh">
             <app-map searchBarHeight="3vh"></app-map>
-        </div>`
+        </div>
     </div>
 </div>

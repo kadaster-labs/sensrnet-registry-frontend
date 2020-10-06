@@ -8,7 +8,6 @@ import { SensorsViewComponent } from './forms/sensors-view/sensors-view.componen
 import { OwnerUpdateComponent } from './forms/owner-update/owner-update.component';
 import { SensorUpdateComponent } from './forms/sensor-update/sensor-update.component';
 import { SensorRegisterComponent } from './forms/sensor-register/sensor-register.component';
-import { MultiStepFormComponent } from './forms/multi-step-form/multi-step-form.component';
 
 const routes: Routes = [
   { path: '', component: ViewerComponent, canActivate: [AuthGuard] },
@@ -18,7 +17,6 @@ const routes: Routes = [
   { path: 'owner', component: OwnerUpdateComponent },
 
   { path: 'sensor', component: SensorRegisterComponent },
-  { path: 'sensor-multi', component: MultiStepFormComponent },
   { path: 'sensor/update', component: SensorUpdateComponent },
 
   { path: 'sensors', component: SensorsViewComponent },

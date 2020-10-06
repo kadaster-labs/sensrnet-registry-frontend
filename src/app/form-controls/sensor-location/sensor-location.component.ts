@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
+import {Component, forwardRef, OnDestroy, Input, OnInit} from '@angular/core';
 import { LocationService } from '../../services/location.service';
 import { ISensorLocation } from '../../model/bodies/location';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -36,8 +36,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
 
   private location: ISensorLocation;
 
-  @Input()
-  public submitted: boolean;
+  @Input() public submitted: boolean;
 
   get f() {
     return this.form.controls;
@@ -59,7 +58,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     private readonly formBuilder: FormBuilder,
   ) {
     this.form = this.formBuilder.group({
-      height: [null, Validators.required],
+      height: [0, Validators.required],
       latitude: [null, Validators.required],
       longitude: [null, Validators.required],
       baseObjectId: [null, Validators.required],
@@ -96,10 +95,6 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
       {required: true};
   }
 
-  public ngOnDestroy() {
-    this.subscriptions.forEach((s) => s.unsubscribe());
-  }
-
   public onChange: any = () => {};
   public onTouched: any = () => {};
 
@@ -115,14 +110,14 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     if (value) {
       this.value = value;
     }
-
-    if (value === null) {
-      this.form.reset();
-    }
   }
 
   // communicate the inner form validation to the parent form
   public validate(_: FormControl) {
     return this.form.valid ? null : { location: { valid: false } };
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }
