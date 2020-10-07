@@ -252,6 +252,55 @@
       <segment state="translated">
         <source>Close</source>
       <target>Close</target></segment>
+    </unit><unit id="2180991850301812818">
+      <notes>
+        <note category="location">src/app/login/login.component.html:5</note>
+      </notes>
+      <segment state="translated">
+        <source>Welkom bij SensRNet</source>
+      <target>Welcome to SensRNet</target></segment>
+    </unit><unit id="2454050363478003966">
+      <notes>
+        
+      <note category="location">src/app/login/login.component.html:13</note><note category="location">src/app/login/login.component.html:32</note></notes>
+      <segment state="translated">
+        <source>Login</source>
+      <target>Login</target></segment>
+    </unit><unit id="1890300073702152532">
+      <notes>
+        <note category="location">src/app/login/login.component.html:16</note>
+      </notes>
+      <segment state="translated">
+        <source>E-mail</source>
+      <target>E-mail</target></segment>
+    </unit><unit id="685059167996407551">
+      <notes>
+        <note category="location">src/app/login/login.component.html:19</note>
+      </notes>
+      <segment state="translated">
+        <source>E-mail is verplicht</source>
+      <target>E-mail is required</target></segment>
+    </unit><unit id="6167011297025367250">
+      <notes>
+        <note category="location">src/app/login/login.component.html:23</note>
+      </notes>
+      <segment state="translated">
+        <source>Wachtwoord</source>
+      <target>Password</target></segment>
+    </unit><unit id="7798860197902905604">
+      <notes>
+        <note category="location">src/app/login/login.component.html:26</note>
+      </notes>
+      <segment state="translated">
+        <source>Wachtwoord is verplicht</source>
+      <target>Password is required</target></segment>
+    </unit><unit id="5913757458094097478">
+      <notes>
+        <note category="location">src/app/login/login.component.html:34</note>
+      </notes>
+      <segment state="translated">
+        <source>Registeer</source>
+      <target>Register</target></segment>
     </unit>
     
   </file>
