@@ -16,5 +16,5 @@ export interface ISensor {
   documentationUrl?: string;
   theme?: Array<string>;
   typeName: Array<string>;
-  typeDetails?: Array<object>;
+  typeDetails?: Record<string, any>;
 }

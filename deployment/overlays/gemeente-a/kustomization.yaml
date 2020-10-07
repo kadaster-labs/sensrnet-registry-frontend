@@ -1,8 +1,0 @@
-resources:
-- ../../base
-configMapGenerator:
-- name: env-config
-  namespace: sensrnet-frontend
-  literals:
-  - PROJECT=gemeente-a
-  - CONFIGURATION=production

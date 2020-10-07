@@ -1,0 +1,35 @@
+<nav class="sidebar">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="sidebar-link text-center mb-2" routerLink="/owner" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-pen fa-lg mx-1"></em>
+                    <br>
+                    <em class="side-text mx-1">Edit<br>Owner</em>
+                </a>
+                <a class="sidebar-link text-center mb-2" routerLink="/sensor" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-plus fa-lg mx-1"></em>
+                    <br>
+                    <em class="side-text mx-1">Create<br>Sensor</em>
+                </a>
+                <a class="sidebar-link text-center mb-2" routerLink="/sensor/update" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-pen fa-lg mx-1"></em>
+                    <br>
+                    <em class="side-text mx-1">Edit<br>Sensor</em>
+                </a>
+                <a class="sidebar-link text-center mb-2" routerLink="/sensors" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-eye mx-1"></em>
+                    <br>
+                    <em class="side-text">View<br>Sensors</em>
+                </a>
+                <a class="sidebar-link text-center" (click)="logout()">
+                    <em class="fas fa-sign-out-alt mx-1"></em>
+                    <br>
+                    <em class="side-text">Logout</em>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+

@@ -1,6 +1,6 @@
 
 # First Stage : to install and build dependences
-FROM node:12 as builder
+FROM node:12.18.4 as builder
 
 ARG http_proxy="http://ssl-proxy.cs.kadaster.nl:8080"
 ARG https_proxy="http://ssl-proxy.cs.kadaster.nl:8080"
@@ -13,29 +13,22 @@ WORKDIR /app
 
 COPY ./package*.json ./
 COPY .npmrc ./
-RUN npm install --only=production
+RUN npm install
 
 COPY src src
 COPY tsconfig*.json ./
 COPY angular.json ./
 
+RUN npm run build
 
-# Second Stage : Setup command to run your app using lightweight node image
-FROM node:12-alpine
 
-RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+# Second Stage : Setup command to serve the app using NGinx
+FROM nginxinc/nginx-unprivileged:1.18.0-alpine
 
-WORKDIR /home/node/app
+COPY VERSION .
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist/app /usr/share/nginx/html
 
-COPY --chown=node:node VERSION .
-COPY --chown=node:node scripts/entrypoint.sh entrypoint.sh
-COPY --chown=node:node --from=builder /app/. ./
+EXPOSE 8080
 
-USER node
-
-RUN npm i @angular/cli
-
-EXPOSE 4200
-
-ENTRYPOINT ["/home/node/app/entrypoint.sh"]
-CMD ["run"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

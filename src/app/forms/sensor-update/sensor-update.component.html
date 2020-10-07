@@ -1,0 +1,65 @@
+<div class="container-fluid">
+    <app-navbar locationClass="form"></app-navbar>
+    <div class="row form-header">
+        <div class="col-1">
+            <app-sidebar ></app-sidebar>
+        </div>
+        <div class="col-6">
+            <div>
+                <h3>Update Sensor</h3>
+            </div>
+            <hr>
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                <app-sensor-type formControlName="type"></app-sensor-type>
+                <div class="form-group">
+                    <label> Name <span class="required">*</span>
+                    </label>
+                    <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
+                        [ngClass]="{ 'is-invalid': (f.name.dirty || f.name.touched) && f.name.errors }">
+                    <div *ngIf="(f.name.dirty || f.name.touched || sensorUpdateSent) && f.name.errors" class="invalid-input">
+                        <span class="required-text" *ngIf="f.name.errors.required">Name is required</span>
+                        <span class="required-text" *ngIf="f.name.errors.minlength">Name must be at least 6 characters</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="aim">Aim</label>
+                    <input type="text" class="form-control" formControlName="aim" placeholder="Aim of the sensor">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" type="text" formControlName="description"
+                        placeholder="Describe the sensor"></textarea>
+                </div>
+                <app-sensor-status formControlName="active"></app-sensor-status>
+                <hr>
+                <div class="form-group">
+                    <label for="manufacturer"> Manufacturer <span class="required">*</span></label>
+                    <input class="form-control" type="text" formControlName="manufacturer"
+                        placeholder="Enter name of the manufacturer">
+                    <div *ngIf="(f.manufacturer.dirty || f.manufacturer.touched || sensorUpdateSent) && f.manufacturer.errors"
+                        class="invalid-input">
+                        <span class="required-text" *ngIf="f.manufacturer.errors.required">Manufacturer is required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="documentationUrl">Documentation URL <span class="required">*</span></label>
+                    <input class="form-control" type="url" formControlName="documentationUrl"
+                        placeholder="Enter URL of documentation">
+                    <div *ngIf="(f.documentationUrl.dirty || f.documentationUrl.touched || sensorUpdateSent) && f.documentationUrl.errors"
+                        class="invalid-input">
+                        <span class="required-text" *ngIf="f.documentationUrl.errors.required">Documentation is required</span>
+                        <span class="required-text" *ngIf="f.documentationUrl.errors.pattern">Not a valid URL</span>
+                    </div>
+                </div>
+                <app-sensor-location formControlName="location"></app-sensor-location>
+                <app-sensor-theme formControlName="theme"></app-sensor-theme>
+                <hr>
+                <button class="btn btn-primary btn-lg mr-3 mb-2" type="submit">Update</button>
+                <button type="button" class="btn btn-lg mb-2" (click)="close()">Close</button>
+            </form>
+        </div>
+        <div class="col-5" style="height: 88vh; max-height: 88vh">
+            <app-map (sensorSelected)='onSensorSelected($event)' searchBarHeight="3vh"></app-map>
+        </div>
+    </div>
+</div>
