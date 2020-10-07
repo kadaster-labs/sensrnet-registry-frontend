@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {ConnectionService} from '../services/connection.service';
-import {Router} from '@angular/router';
+import { ConnectionService } from '../services/connection.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',

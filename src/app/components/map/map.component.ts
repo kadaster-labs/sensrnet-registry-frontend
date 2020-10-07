@@ -550,7 +550,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
-    if (environment.clientName === 'Local' || environment.apiUrl.startsWith('https')) {
+    if (environment.apiUrl.startsWith('https')) {
       this.addFindMeButton();
     }
   }

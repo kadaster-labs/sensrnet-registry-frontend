@@ -7,10 +7,8 @@
         </li>
     </ul>
     <ul class="navbar-nav mr-auto nav nav-pills mt-1">
-        <li *ngIf="!environment.isReadonly">
-            <a role="button" class="navbar-menu-item" (click)="toggleMenu()" routerLinkActive="active">
-                Menu
-            </a>
-        </li>
+        <a role="button" class="navbar-menu-item" (click)="toggleMenu()" routerLinkActive="active">
+            Menu
+        </a>
     </ul>
 </nav>

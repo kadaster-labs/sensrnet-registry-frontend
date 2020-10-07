@@ -12,10 +12,6 @@ export class AuthGuard implements CanActivate {
   ) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    // Environment is readonly, no login available. Skip
-    if (environment.isReadonly) {
-      return true;
-    }
 
     const currentOwner = this.connectionService.currentOwnerValue;
     if (currentOwner) {
