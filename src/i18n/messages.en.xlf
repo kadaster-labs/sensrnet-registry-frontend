@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="nl" trgLang="en">
+  <file original="ng.template" id="ngi18n">
+    <unit id="ngb.alert.close">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts:3</note>
+      </notes>
+      <segment state="translated">
+        <source>Close</source>
+      <target>Close</target></segment>
+    </unit>
+    <unit id="ngb.carousel.previous">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts:13</note>
+      </notes>
+      <segment state="translated">
+        <source>Previous</source>
+      <target>Previous</target></segment>
+    </unit>
+    <unit id="ngb.carousel.next">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts:17</note>
+      </notes>
+      <segment state="translated">
+        <source>Next</source>
+      <target>Next</target></segment>
+    </unit>
+    <unit id="ngb.datepicker.previous-month">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:4</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:5</note>
+      </notes>
+      <segment state="translated">
+        <source>Previous month</source>
+      <target>Previous month</target></segment>
+    </unit>
+    <unit id="ngb.datepicker.next-month">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:26</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:27</note>
+      </notes>
+      <segment state="translated">
+        <source>Next month</source>
+      <target>Next month</target></segment>
+    </unit>
+    <unit id="ngb.datepicker.select-month">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:5</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:6</note>
+      </notes>
+      <segment state="translated">
+        <source>Select month</source>
+      <target>Select month</target></segment>
+    </unit>
+    <unit id="ngb.datepicker.select-year">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:13</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:14</note>
+      </notes>
+      <segment state="translated">
+        <source>Select year</source>
+      <target>Select year</target></segment>
+    </unit>
+    <unit id="ngb.pagination.first">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:2</note>
+      </notes>
+      <segment state="translated">
+        <source>««</source>
+      <target>««</target></segment>
+    </unit>
+    <unit id="ngb.pagination.previous">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:3</note>
+      </notes>
+      <segment state="translated">
+        <source>«</source>
+      <target>«</target></segment>
+    </unit>
+    <unit id="ngb.pagination.next">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:4</note>
+      </notes>
+      <segment state="translated">
+        <source>»</source>
+      <target>»</target></segment>
+    </unit>
+    <unit id="ngb.pagination.last">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:5</note>
+      </notes>
+      <segment state="translated">
+        <source>»»</source>
+      <target>»»</target></segment>
+    </unit>
+    <unit id="ngb.pagination.first-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:14</note>
+      </notes>
+      <segment state="translated">
+        <source>First</source>
+      <target>First</target></segment>
+    </unit>
+    <unit id="ngb.pagination.previous-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:24</note>
+      </notes>
+      <segment state="translated">
+        <source>Previous</source>
+      <target>Previous</target></segment>
+    </unit>
+    <unit id="ngb.pagination.next-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:44</note>
+      </notes>
+      <segment state="translated">
+        <source>Next</source>
+      <target>Next</target></segment>
+    </unit>
+    <unit id="ngb.pagination.last-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:53</note>
+      </notes>
+      <segment state="translated">
+        <source>Last</source>
+      <target>Last</target></segment>
+    </unit>
+    <unit id="ngb.progressbar.value">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts:7</note>
+      </notes>
+      <segment state="translated">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></target></segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-hours">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:9</note>
+      </notes>
+      <segment state="translated">
+        <source>Increment hours</source>
+      <target>Increment hours</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.HH">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:13</note>
+      </notes>
+      <segment state="translated">
+        <source>HH</source>
+      <target>HH</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.hours">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:15</note>
+      </notes>
+      <segment state="translated">
+        <source>Hours</source>
+      <target>Hours</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-hours">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:23</note>
+      </notes>
+      <segment state="translated">
+        <source>Decrement hours</source>
+      <target>Decrement hours</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-minutes">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:32</note>
+      </notes>
+      <segment state="translated">
+        <source>Increment minutes</source>
+      <target>Increment minutes</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.MM">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:35</note>
+      </notes>
+      <segment state="translated">
+        <source>MM</source>
+      <target>MM</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.minutes">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:37</note>
+      </notes>
+      <segment state="translated">
+        <source>Minutes</source>
+      <target>Minutes</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-minutes">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:45</note>
+      </notes>
+      <segment state="translated">
+        <source>Decrement minutes</source>
+      <target>Decrement minutes</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-seconds">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:54</note>
+      </notes>
+      <segment state="translated">
+        <source>Increment seconds</source>
+      <target>Increment seconds</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.SS">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:57</note>
+      </notes>
+      <segment state="translated">
+        <source>SS</source>
+      <target>SS</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.seconds">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:59</note>
+      </notes>
+      <segment state="translated">
+        <source>Seconds</source>
+      <target>Seconds</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-seconds">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:67</note>
+      </notes>
+      <segment state="translated">
+        <source>Decrement seconds</source>
+      <target>Decrement seconds</target></segment>
+    </unit>
+    <unit id="ngb.timepicker.PM">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:76</note>
+      </notes>
+      <segment state="translated">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></target></segment>
+    </unit>
+    <unit id="ngb.timepicker.AM">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:77</note>
+      </notes>
+      <segment state="translated">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></target></segment>
+    </unit>
+    <unit id="ngb.toast.close-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/toast/toast.d.ts:8</note>
+      </notes>
+      <segment state="translated">
+        <source>Close</source>
+      <target>Close</target></segment>
+    </unit>
+    
+  </file>
+</xliff>
