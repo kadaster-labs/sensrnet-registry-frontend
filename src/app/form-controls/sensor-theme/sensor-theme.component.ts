@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 import { SensorTheme } from '../../model/bodies/sensorTheme';
 import { Component, forwardRef, OnDestroy, Input, AfterViewInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 // describes what the return value of the form control will look like
 export interface SensorThemeFormValues {
@@ -29,8 +29,7 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, Af
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 
-  @Input()
-  public submitted: boolean;
+  @Input() public submitted: boolean;
 
   get value(): SensorThemeFormValues {
     return this.form.value;
@@ -50,7 +49,7 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, Af
     private formBuilder: FormBuilder,
   ) {
     this.form = this.formBuilder.group({
-      value: new FormControl([], Validators.required),
+      value: new FormControl([]),
     });
 
     this.sensorThemesList = Object.keys(this.sensorThemes).filter(String);

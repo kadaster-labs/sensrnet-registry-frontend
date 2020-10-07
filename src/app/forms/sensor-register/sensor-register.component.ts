@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { LocationService } from '../../services/location.service';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IRegisterSensorBody, SensorService } from '../../services/sensor.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class SensorRegisterComponent implements OnInit {
   public stepSubmitted = false;
 
   public form: FormGroup;
-  public formControlSteps: Array<Array<any>>;
+  public formControlSteps: Record<string, Array<any>>;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -30,29 +30,28 @@ export class SensorRegisterComponent implements OnInit {
   }
 
   get totalSteps() {
-    return this.formControlSteps.length;
+    return Object.keys(this.formControlSteps).length;
   }
 
   setName(item: string) {
     this.form.controls.name.setValue(item);
   }
 
-  public goToStep(step: string): void {
-    if (this.formControlSteps[this.activeStepIndex].some((f) => f.invalid)) {
-      if (step === 'prev') {
-        this.activeStepIndex -= 1;
+  public goToStep(step: number): void {
+    if (Object.values(this.formControlSteps)[this.activeStepIndex].some((f) => f.invalid)) {
+      if (step <= this.activeStepIndex) {
+        this.activeStepIndex = step;
       } else {
         this.stepSubmitted = true;
       }
     } else {
       this.stepSubmitted = false;
-      this.activeStepIndex = step === 'prev' ? this.activeStepIndex - 1 : this.activeStepIndex + 1;
+      this.activeStepIndex = step;
     }
   }
 
-  public resetForm() {
-    this.activeStepIndex = 0;
-    this.stepSubmitted = false;
+  public getStepLabel(): string {
+    return Object.keys(this.formControlSteps)[this.activeStepIndex];
   }
 
   public getClasses(pageIndex: number) {
@@ -65,56 +64,66 @@ export class SensorRegisterComponent implements OnInit {
   public async submit() {
     this.stepSubmitted = true;
 
-    // stop here if form is invalid
-    if (this.form.invalid) {
-      return;
-    }
+    // stop if form is invalid
+    if (this.form.valid) {
+      const sensor: IRegisterSensorBody = {
+        typeName: this.form.value.type.typeName,
+        location: this.form.value.location || {},
+        dataStreams: this.form.value.dataStreams || [],
+        active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
+        aim: this.form.value.aim,
+        description: this.form.value.description,
+        documentationUrl: this.form.value.documentationUrl || undefined,
+        manufacturer: this.form.value.manufacturer || undefined,
+        name: this.form.value.name,
+        theme: this.form.value.theme ? this.form.value.theme.value : [],
+        typeDetails: { subType: this.form.value.type.typeDetails || '' },
+      };
 
-    const sensor: IRegisterSensorBody = {
-      typeName: this.form.value.type.typeName,
-      location: this.form.value.location || {},
-      dataStreams: this.form.value.dataStreams || [],
-      active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings (i.e. "true") to boolean
-      aim: this.form.value.aim,
-      description: this.form.value.description,
-      documentationUrl: this.form.value.documentationUrl,
-      manufacturer: this.form.value.manufacturer,
-      name: this.form.value.name,
-      theme: this.form.value.theme.value || [],
-      typeDetails: { subType: this.form.value.type.typeDetails || '' },
-    };
-
-    try {
-      await this.sensorService.register(sensor);
-      this.locationService.showLocation(null);
-
-      this.resetForm();
-      this.alertService.success('Created sensor', false, 5000);
-    } catch (error) {
-      console.log(`An error has occurred while creating sensor: ${error}`);
+      try {
+        await this.sensorService.register(sensor);
+        this.locationService.showLocation(null);
+        this.alertService.success('Sensor created', false, 4000);
+      } catch (error) {
+        this.alertService.error(`An error has occurred while creating sensor: ${error}`);
+      }
+    } else {
+      console.log(this.form.errors);
+      this.alertService.error(`The form is invalid.`);
     }
   }
 
   public ngOnInit() {
-    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+    const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(6)]],
       aim: '',
       description: '',
-      manufacturer: ['', Validators.required],
+      manufacturer: '',
       active: '',
-      documentationUrl: ['', [Validators.required, Validators.pattern(reg)]],
+      documentationUrl: ['', [Validators.pattern(urlRegex)]],
+      dataStreams: new FormArray([]),
       location: [],
       type: [],
       theme: [],
     });
 
-    this.formControlSteps = [
-      [this.form.controls.name, this.form.controls.type],
-      [this.form.controls.aim, this.form.controls.description, this.form.controls.active],
-      [this.form.controls.manufacturer, this.form.controls.documentationUrl, this.form.controls.theme],
-      [this.form.controls.location],
-    ];
+    this.formControlSteps = {
+      'Required Properties': [
+        this.form.controls.name,
+        this.form.controls.type,
+        this.form.controls.active,
+      ], 'Optional Properties': [
+        this.form.controls.aim,
+        this.form.controls.description,
+        this.form.controls.manufacturer,
+        this.form.controls.documentationUrl,
+        this.form.controls.theme,
+      ], 'Data Streams': [
+        this.form.controls.dataStreams,
+      ], Location: [
+      this.form.controls.location,
+    ]};
   }
 }
