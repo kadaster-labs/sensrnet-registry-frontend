@@ -20,7 +20,7 @@
             <form [formGroup]="form" (ngSubmit)="submit()">
                 <div *ngIf="activeStepIndex === 0">
                     <app-sensor-type formControlName="type" [submitted]="stepSubmitted" (sensorType)="setName($event)"></app-sensor-type>
-                    <div class="form-group">
+                    <div class="form-group mb-4">
                         <label>Name</label>
                         <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
                             [ngClass]="{ 'is-invalid': (f.name.dirty || f.name.touched || stepSubmitted) && f.name.errors }">

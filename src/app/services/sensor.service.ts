@@ -79,7 +79,7 @@ export class SensorService {
   ) {}
 
   public async subscribe() {
-    if (!this.sensorCreated$ && !this.sensorUpdated$) {
+    if (!this.sensorCreated$ || !this.sensorUpdated$) {
       const sensorUpdated$ = this.connectionService.subscribeTo(EventType.SensorUpdated);
       const sensorRegistered$ = this.connectionService.subscribeTo(EventType.SensorRegistered);
       const sensorActivated$ = await this.connectionService.subscribeTo(EventType.SensorActivated);

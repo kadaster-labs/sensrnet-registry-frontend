@@ -110,11 +110,11 @@ export class SensorRegisterComponent implements OnInit {
     });
 
     this.formControlSteps = {
-      'Required Properties': [
+      'Sensor Properties': [
         this.form.controls.name,
         this.form.controls.type,
         this.form.controls.active,
-      ], 'Optional Properties': [
+      ], 'Optional Sensor Properties': [
         this.form.controls.aim,
         this.form.controls.description,
         this.form.controls.manufacturer,
@@ -122,7 +122,7 @@ export class SensorRegisterComponent implements OnInit {
         this.form.controls.theme,
       ], 'Data Streams': [
         this.form.controls.dataStreams,
-      ], Location: [
+      ], 'Sensor Location': [
       this.form.controls.location,
     ]};
   }
