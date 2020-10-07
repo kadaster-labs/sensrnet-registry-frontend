@@ -70,7 +70,13 @@ Once the images are available in the container registry, deployment can be done 
 `kustomize build deployment/overlays/gemeente-a | kubectl apply -f -`
 
 ## Internationalization + Localization
-A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with `ng xi18n --output-path src/locale`. This file can be duplicated for each extra language and its duplications can be translated using standard translation tools, for example Poedit. Then, during building, Angular generates alternative sites for each language, exposing them under different URL path, for example /nl/ for Dutch. 
+The default language for the UI has been chosen to be Dutch, since the product was originally developed for the Dutch speaking citizen. However, not only do we want to have the option to launch this site internationally, there are many Dutch citizens who don't speak Dutch. We want this site to be accessible for them as well. Therefore, the Angular app in this repo has been internationalized, so that various localizations can be added later on.
+
+A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with `npm run extract-i18n`. Each language gets its own translation file and can be translated using standard translation tools, for example Poedit.
+
+Angular tooling currently only supports generating translation files ones. This means that whenever we update the site and regenerate the translation files, we've lost a previous translations. There is no build-in way to update the current translations. For this reason, we use the [xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) tools, which does exactly that. The new and changed translations are marked as such, allowing us to translate the site in an incremental way.
+
+During the MVP process, the site is deployed for Dutch only. The app is therefore build to /dist/app. Whenever localizations are added, they will land in subfolders (i.e. /en/). This currently leads to problems with the way the backend is called (appending /api/), which breaks because of this. This will be changed in the future.
 
 ## Testing
 Tests can be run using `npm run test`, which launches an headless Chrome browser to run the tests in. Please consult https://developers.google.com/web/updates/2017/04/headless-chrome#cli for local installation and setup. For CI purposes, we've included a Dockerfile with which the correct environment can easily be configured. This way, tests can be run by running `./run-tests.sh`.
