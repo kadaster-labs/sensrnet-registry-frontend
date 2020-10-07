@@ -1,10 +1,5 @@
 resources:
 - ../../base
-configMapGenerator:
-- name: env-config
-  namespace: sensrnet-frontend
-  literals:
-  - PROJECT=dev
-  - CONFIGURATION=production
+
 patchesStrategicMerge:
 - deployment.yaml

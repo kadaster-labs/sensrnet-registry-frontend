@@ -17,7 +17,7 @@ export class AppComponent {
     private connectionService: ConnectionService,
   ) {
     this.connectionService.currentOwner.subscribe((x) => this.currentOwner = x);
-    this.setTitle(environment.clientName);
+    this.setTitle('Sensorenregister');
   }
 
   public setTitle(newTitle: string) {
