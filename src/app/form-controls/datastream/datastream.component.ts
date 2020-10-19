@@ -30,12 +30,12 @@ export class DataStreamComponent implements ControlValueAccessor {
       description: '',
       observedProperty: '',
       isPublic: true,
-      isOpen: true,
+      isOpenData: true,
       isReusable: true,
-      documentation: ['', [Validators.pattern(this.urlRegex)]],
-      datalink: ['', [Validators.pattern(this.urlRegex)]],
-      measurementUnit: '',
-      frequency: 0,
+      documentationUrl: ['', [Validators.pattern(this.urlRegex)]],
+      dataLink: ['', [Validators.pattern(this.urlRegex)]],
+      unitOfMeasurement: '',
+      dataFrequency: 0,
       dataQuality: 0,
     });
   }

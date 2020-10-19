@@ -38,7 +38,7 @@
             </div>
             <div class="col-md-4 mt-1 text-center">
                 <label>
-                    <input type="checkbox" formControlName="isOpen">
+                    <input type="checkbox" formControlName="isOpenData">
                     Is Open Data
                 </label>
             </div>
@@ -50,29 +50,29 @@
             </div>
             <div class="col-12">
                 <label>Documentation<span class="font-italic text-muted"> - Optional</span></label>
-                <input formControlName="documentation" type="text" placeholder="Enter URL of documentation" class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, 'documentation').errors }">
-                <div *ngIf="(getDataStreamElement(i, 'documentation').dirty || getDataStreamElement(i, 'documentation').touched || submitted) && getDataStreamElement(i, 'documentation').errors"
+                <input formControlName="documentationUrl" type="text" placeholder="Enter URL of documentation" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, 'documentationUrl').errors }">
+                <div *ngIf="(getDataStreamElement(i, 'documentationUrl').dirty || getDataStreamElement(i, 'documentationUrl').touched || submitted) && getDataStreamElement(i, 'documentationUrl').errors"
                      class="invalid-input">
-                    <span class="required-text" *ngIf="getDataStreamElement(i, 'documentation').errors.pattern">Not a valid URL</span>
+                    <span class="required-text" *ngIf="getDataStreamElement(i, 'documentationUrl').errors.pattern">Not a valid URL</span>
                 </div>
             </div>
             <div class="col-12">
                 <label>Datalink<span class="font-italic text-muted"> - Optional</span></label>
-                <input formControlName="datalink" type="text" placeholder="Enter URL of data" class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, 'datalink').errors }">
-                <div *ngIf="(getDataStreamElement(i, 'datalink').dirty || getDataStreamElement(i, 'datalink').touched || submitted) && getDataStreamElement(i, 'datalink').errors"
+                <input formControlName="dataLink" type="text" placeholder="Enter URL of data" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, 'dataLink').errors }">
+                <div *ngIf="(getDataStreamElement(i, 'dataLink').dirty || getDataStreamElement(i, 'dataLink').touched || submitted) && getDataStreamElement(i, 'dataLink').errors"
                      class="invalid-input">
-                    <span class="required-text" *ngIf="getDataStreamElement(i, 'datalink').errors.pattern">Not a valid URL</span>
+                    <span class="required-text" *ngIf="getDataStreamElement(i, 'dataLink').errors.pattern">Not a valid URL</span>
                 </div>
             </div>
             <div class="col-12">
                 <label>Unit of measurement<span class="font-italic text-muted"> - Optional</span></label>
-                <input formControlName="measurementUnit" type="text" placeholder="Unit of Measurement" class="form-control">
+                <input formControlName="unitOfMeasurement" type="text" placeholder="Unit of Measurement" class="form-control">
             </div>
             <div class="col-12">
                 <label>Data Frequency / s<span class="font-italic text-muted"> - Optional</span></label>
-                <input formControlName="frequency" type="number" placeholder="Frequency" class="form-control">
+                <input formControlName="dataFrequency" type="number" placeholder="Frequency" class="form-control">
             </div>
             <div class="col-12">
                 <label>Data Quality (worst - best)</label>

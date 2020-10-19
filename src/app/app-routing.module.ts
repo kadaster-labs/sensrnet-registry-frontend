@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'owner', component: OwnerUpdateComponent },
 
   { path: 'sensor', component: SensorRegisterComponent },
-  { path: 'sensor/update', component: SensorUpdateComponent },
+  { path: 'sensor/:id', component: SensorUpdateComponent },
 
   { path: 'sensors', component: SensorsViewComponent },
 

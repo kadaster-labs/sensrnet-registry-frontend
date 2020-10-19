@@ -1,47 +1,73 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ISensor } from '../../model/bodies/sensor-body';
+import { AlertService } from '../../services/alert.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IUpdateSensorBody, SensorService } from '../../services/sensor.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sensor-update',
   templateUrl: './sensor-update.component.html',
   styleUrls: ['./sensor-update.component.scss'],
 })
-export class SensorUpdateComponent {
+export class SensorUpdateComponent implements OnInit, OnDestroy {
+  public sensor: ISensor;
+
+  public submitted = false;
+  public activeStepIndex = 0;
 
   public form: FormGroup;
-  public sensorUpdateSent = false;
+  public subscriptions: Subscription[] = [];
+  public formControlSteps: Record<string, Array<any>>;
 
-  public sensor: ISensor;
-  public active: boolean;
-  @Output() public closePane = new EventEmitter<void>();
+  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
+    private readonly alertService: AlertService,
     private readonly sensorService: SensorService,
-  ) {
-    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  ) {}
 
-    this.form = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(6)]],
-      aim: '',
-      description: '',
-      manufacturer: ['', Validators.required],
-      active: '',
-      documentationUrl: ['', [Validators.required, Validators.pattern(reg)]],
-      location: [],
-      type: [],
-      theme: [],
-    });
+  get f() {
+    return this.form.controls;
   }
 
-  public onSensorSelected(sensor) {
+  public setName(item: string) {
+    this.form.controls.name.setValue(item);
+  }
+
+  public goToStep(step: number): void {
+    if (Object.values(this.formControlSteps)[this.activeStepIndex].some((f) => f.invalid)) {
+      if (step <= this.activeStepIndex) {
+        this.activeStepIndex = step;
+      } else {
+        this.submitted = true;
+      }
+    } else {
+      this.submitted = false;
+      this.activeStepIndex = step;
+    }
+  }
+
+  public getStepCount(): number {
+    return Object.keys(this.formControlSteps).length;
+  }
+
+  public getStepLabel(): string {
+    return Object.keys(this.formControlSteps)[this.activeStepIndex];
+  }
+
+  public getStepClasses(pageIndex: number) {
+    return { active: this.activeStepIndex === pageIndex, finished: this.activeStepIndex > pageIndex };
+  }
+
+  public setSensor(sensor: ISensor): void {
     this.sensor = sensor;
 
-    this.form.setValue({
+    this.form.patchValue({
       name: this.sensor.name || '',
       aim: this.sensor.aim || '',
       description: this.sensor.description || '',
@@ -60,73 +86,171 @@ export class SensorUpdateComponent {
       },
       theme: { value: this.sensor.theme || [] },
     });
-  }
 
-  get f() {
-    return this.form.controls;
+    const dataStreams = this.form.get('dataStreams') as FormArray;
+    for (const dataStream of this.sensor.dataStreams) {
+      dataStreams.push(this.formBuilder.group({
+        dataStreamId: dataStream.dataStreamId,
+        name: [dataStream.name, Validators.required],
+        reason: dataStream.reason || '',
+        description: dataStream.description || '',
+        observedProperty: dataStream.observedProperty || '',
+        isPublic: dataStream.isPublic || true,
+        isOpenData: dataStream.isOpenData || true,
+        isReusable: dataStream.isReusable || true,
+        documentationUrl: [dataStream.documentationUrl || '', [Validators.pattern(this.urlRegex)]],
+        dataLink: [dataStream.dataLink || '', [Validators.pattern(this.urlRegex)]],
+        unitOfMeasurement: dataStream.unitOfMeasurement || '',
+        dataFrequency: dataStream.dataFrequency || 0,
+        dataQuality: dataStream.dataQuality || 0,
+      }));
+    }
   }
 
   public async submit() {
-    if (!this.form.valid) {
-      return;
-    }
+    this.submitted = true;
 
-    const newValues = this.form.value;
-    const sensor = {
-      typeName: newValues.type.typeName,
-      location: newValues.location,
-      dataStreams: newValues.dataStreams,
+    // stop if form is invalid
+    if (this.form.valid) {
+      const sensor = {
+        typeName: this.form.value.type.typeName,
+        location: this.form.value.location,
+        dataStreams: this.form.value.dataStreams,
 
-      typeDetails: { subType: newValues.type.typeDetails },
-      active: newValues.active || false,
-      aim: newValues.aim,
-      description: newValues.description !== '' ? newValues.description : undefined,
-      documentationUrl: newValues.documentationUrl !== '' ? newValues.documentationUrl : undefined,
-      manufacturer: newValues.manufacturer,
-      name: newValues.name,
-      theme: newValues.theme.value,
-    };
-
-    try {
-      const active: boolean = JSON.parse(sensor.active.value); // "true" -> true, case insensitive
-      if (active === true && !this.sensor.active) {
-        await this.sensorService.activate(this.sensor._id);
-      } else if (active === false && this.sensor.active) {
-        await this.sensorService.deactivate(this.sensor._id);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    // TODO: only if some details have changed
-    try {
-      const details: IUpdateSensorBody = {
-        aim: sensor.aim,
-        description: sensor.description,
-        documentationUrl: sensor.documentationUrl,
-        manufacturer: sensor.manufacturer,
-        name: sensor.name,
-        typeName: sensor.typeName,
-        typeDetails: sensor.typeDetails,
-        theme: sensor.theme,
+        active: this.form.value.active || false,
+        aim: this.form.value.aim,
+        description: this.form.value.description !== '' ? this.form.value.description : undefined,
+        documentationUrl: this.form.value.documentationUrl !== '' ? this.form.value.documentationUrl : undefined,
+        manufacturer: this.form.value.manufacturer,
+        name: this.form.value.name,
+        theme: this.form.value.theme.value,
+        typeDetails: {subType: this.form.value.type.typeDetails},
       };
-      const result = await this.sensorService.updateDetails(this.sensor._id, details);
-      console.log(`Sensor was successfully updated, received id ${result}`);
-    } catch (error) {
-      console.error(error);
-    }
 
-    // TODO: only if location was changed
-    if (sensor.location) {
       try {
-        await this.sensorService.updateLocation(this.sensor._id, sensor.location);
+        const active: boolean = JSON.parse(sensor.active.value); // "true" -> true, case insensitive
+        if (active === true && !this.sensor.active) {
+          await this.sensorService.activate(this.sensor._id);
+        } else if (active === false && this.sensor.active) {
+          await this.sensorService.deactivate(this.sensor._id);
+        }
       } catch (error) {
         console.error(error);
       }
+
+      try {
+        const newDataStreams = sensor.dataStreams || [];
+        const newDataStreamIds = newDataStreams.map((d) => d.dataStreamId);
+        for (let newDataStream of newDataStreams) {
+          if (!newDataStream.hasOwnProperty('dataStreamId')) {
+            newDataStream = {
+              name: newDataStream.name,
+              reason: newDataStream.reason || undefined,
+              description: newDataStream.description || undefined,
+              observedProperty: newDataStream.observedProperty || undefined,
+              isPublic: newDataStream.isPublic,
+              isOpenData: newDataStream.isOpenData,
+              isReusable: newDataStream.isReusable,
+              documentationUrl: newDataStream.documentationUrl || undefined,
+              dataLink: newDataStream.dataLink || undefined,
+              unitOfMeasurement: newDataStream.unitOfMeasurement || undefined,
+              dataFrequency: newDataStream.dataFrequency,
+              dataQuality: newDataStream.dataQuality,
+            };
+            await this.sensorService.addDatastream(this.sensor._id, newDataStream);
+          }
+        }
+
+        const currentDataStreams = this.sensor.dataStreams || [];
+        for (const currentDataStream of currentDataStreams) {
+          if (currentDataStream.dataStreamId && !newDataStreamIds.includes(currentDataStream.dataStreamId)) {
+            await this.sensorService.deleteDatastream(this.sensor._id, currentDataStream.dataStreamId);
+          }
+        }
+
+        // Todo update ds if updated.
+      } catch (error) {
+        console.error(error);
+      }
+
+      // TODO: only if some details have changed
+      try {
+        const details: IUpdateSensorBody = {
+          aim: sensor.aim,
+          description: sensor.description,
+          documentationUrl: sensor.documentationUrl,
+
+          manufacturer: sensor.manufacturer,
+          name: sensor.name,
+          typeName: sensor.typeName,
+          typeDetails: sensor.typeDetails,
+          theme: sensor.theme,
+        };
+        await this.sensorService.updateDetails(this.sensor._id, details);
+        console.log(`Sensor was successfully updated.`);
+      } catch (error) {
+        console.error(error);
+      }
+
+      const heightUpdated = this.sensor.location.coordinates[2] !== sensor.location.height;
+      const latitudeUpdated = this.sensor.location.coordinates[1] !== sensor.location.latitude;
+      const longitudeUpdated = this.sensor.location.coordinates[0] !== sensor.location.longitude;
+      if (longitudeUpdated || latitudeUpdated || heightUpdated) {
+        try {
+          await this.sensorService.updateLocation(this.sensor._id, sensor.location);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      this.router.navigate(['']);
+    } else {
+      this.alertService.error(`The form is invalid.`);
     }
   }
 
-  public async close() {
-    await this.router.navigate(['']);
+  public ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(6)]],
+      aim: '',
+      description: '',
+      manufacturer: '',
+      active: '',
+      documentationUrl: ['', [Validators.pattern(this.urlRegex)]],
+      dataStreams: new FormArray([]),
+      location: [],
+      type: [],
+      theme: [],
+    });
+
+    this.subscriptions.push(
+      this.route.params.subscribe(async params => {
+        const sensorId = params.id;
+
+        const sensor = await this.sensorService.get(sensorId);
+        this.setSensor(sensor as ISensor);
+      })
+    );
+
+    this.formControlSteps = {
+      'Sensor Properties': [
+        this.form.controls.name,
+        this.form.controls.type,
+        this.form.controls.active,
+      ], 'Optional Sensor Properties': [
+        this.form.controls.aim,
+        this.form.controls.description,
+        this.form.controls.manufacturer,
+        this.form.controls.documentationUrl,
+        this.form.controls.theme,
+      ], 'Data Streams': [
+        this.form.controls.dataStreams,
+      ], 'Sensor Location': [
+        this.form.controls.location,
+      ]};
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }

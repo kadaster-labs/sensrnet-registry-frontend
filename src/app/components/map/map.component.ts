@@ -517,6 +517,10 @@ export class MapComponent implements OnInit, OnDestroy {
     return owner && sensor.ownerIds ? sensor.ownerIds.includes(owner.id) : false;
   }
 
+  public async editSensor(): Promise<void> {
+    await this.router.navigate([`/sensor/${this.selectedSensor._id}`]);
+  }
+
   public async ngOnInit(): Promise<void> {
     const sensors = await this.sensorService.getSensors(true);
     this.initMap(sensors);

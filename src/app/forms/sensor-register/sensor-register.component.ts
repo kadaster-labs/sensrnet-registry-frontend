@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { LocationService } from '../../services/location.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
@@ -10,8 +10,6 @@ import { IRegisterSensorBody, SensorService } from '../../services/sensor.servic
   styleUrls: ['./sensor-register.component.scss'],
 })
 export class SensorRegisterComponent implements OnInit {
-  @Input() public active = false;
-
   public submitted = false;
   public activeStepIndex = 0;
 
@@ -83,10 +81,29 @@ export class SensorRegisterComponent implements OnInit {
 
     // stop if form is invalid
     if (this.form.valid) {
+      const dataStreams = [];
+      const formDataStreams = this.form.value.dataStreams || [];
+      for (const dataStream of formDataStreams) {
+        dataStreams.push({
+          name: dataStream.name,
+          reason: dataStream.reason || undefined,
+          description: dataStream.description || undefined,
+          observedProperty: dataStream.observedProperty || undefined,
+          isPublic: dataStream.isPublic,
+          isOpenData: dataStream.isOpenData,
+          isReusable: dataStream.isReusable,
+          documentationUrl: dataStream.documentationUrl || undefined,
+          dataLink: dataStream.dataLink || undefined,
+          unitOfMeasurement: dataStream.unitOfMeasurement || undefined,
+          dataFrequency: dataStream.dataFrequency,
+          dataQuality: dataStream.dataQuality,
+        });
+      }
+
       const sensor: IRegisterSensorBody = {
+        dataStreams,
         typeName: this.form.value.type.typeName,
         location: this.form.value.location || {},
-        dataStreams: this.form.value.dataStreams || [],
         active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
         aim: this.form.value.aim,
         description: this.form.value.description,
