@@ -12,8 +12,8 @@ import { IRegisterSensorBody, SensorService } from '../../services/sensor.servic
 export class SensorRegisterComponent implements OnInit {
   @Input() public active = false;
 
+  public submitted = false;
   public activeStepIndex = 0;
-  public stepSubmitted = false;
 
   public form: FormGroup;
   public formControlSteps: Record<string, Array<any>>;
@@ -29,11 +29,7 @@ export class SensorRegisterComponent implements OnInit {
     return this.form.controls;
   }
 
-  get totalSteps() {
-    return Object.keys(this.formControlSteps).length;
-  }
-
-  setName(item: string) {
+  public setName(item: string) {
     this.form.controls.name.setValue(item);
   }
 
@@ -42,27 +38,48 @@ export class SensorRegisterComponent implements OnInit {
       if (step <= this.activeStepIndex) {
         this.activeStepIndex = step;
       } else {
-        this.stepSubmitted = true;
+        this.submitted = true;
       }
     } else {
-      this.stepSubmitted = false;
+      this.submitted = false;
       this.activeStepIndex = step;
     }
+  }
+
+  public getStepCount(): number {
+    return Object.keys(this.formControlSteps).length;
   }
 
   public getStepLabel(): string {
     return Object.keys(this.formControlSteps)[this.activeStepIndex];
   }
 
-  public getClasses(pageIndex: number) {
-    return {
-      active: this.activeStepIndex === pageIndex,
-      finished: this.activeStepIndex > pageIndex,
+  public getStepClasses(pageIndex: number) {
+    return { active: this.activeStepIndex === pageIndex, finished: this.activeStepIndex > pageIndex };
+  }
+
+  public findInvalidControlsRecursive(formToInvestigate: FormGroup|FormArray): string[] {
+    const invalidControls: string[] = [];
+    const recursiveFunc = (form: FormGroup|FormArray) => {
+      Object.keys(form.controls).forEach(field => {
+        const control = form.get(field);
+        if (control.invalid) {
+          invalidControls.push(field);
+        }
+        if (control instanceof FormGroup) {
+          recursiveFunc(control);
+        } else if (control instanceof FormArray) {
+          recursiveFunc(control);
+        }
+      });
     };
+    recursiveFunc(formToInvestigate);
+
+    return invalidControls;
   }
 
   public async submit() {
-    this.stepSubmitted = true;
+    this.submitted = true;
 
     // stop if form is invalid
     if (this.form.valid) {
@@ -88,7 +105,7 @@ export class SensorRegisterComponent implements OnInit {
         this.alertService.error(`An error has occurred while creating sensor: ${error}`);
       }
     } else {
-      console.log(this.form.errors);
+      console.error(this.findInvalidControlsRecursive(this.form));
       this.alertService.error(`The form is invalid.`);
     }
   }
@@ -123,7 +140,7 @@ export class SensorRegisterComponent implements OnInit {
       ], 'Data Streams': [
         this.form.controls.dataStreams,
       ], 'Sensor Location': [
-      this.form.controls.location,
+        this.form.controls.location,
     ]};
   }
 }

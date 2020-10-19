@@ -518,7 +518,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    const sensors = await this.sensorService.getSensors(false);
+    const sensors = await this.sensorService.getSensors(true);
     this.initMap(sensors);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {

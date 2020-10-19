@@ -19,7 +19,9 @@ export class DataStreamComponent implements ControlValueAccessor {
 
   private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    ) {}
 
   createDataStream(): FormGroup {
     return this.formBuilder.group({
