@@ -323,9 +323,7 @@ export class MapComponent implements OnInit, OnDestroy {
       updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
     ]));
     sensor.setGeometry(geom);
-    this.removeHighlight();
     this.clearLocationLayer();
-    this.highlightFeature(sensor);
 
     // update sensor update pane
     this.selectedSensor = updatedSensor;
@@ -522,7 +520,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    const sensors = await this.sensorService.getSensors(true);
+    const sensors = await this.sensorService.getSensors();
     this.initMap(sensors);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {

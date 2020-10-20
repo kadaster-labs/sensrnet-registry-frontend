@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ConnectionService } from '../../services/connection.service';
 import { Owner } from '../../model/owner';
+import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-owner-update',
@@ -11,16 +10,13 @@ import { AlertService } from '../../services/alert.service';
   styleUrls: ['./owner-update.component.scss']
 })
 export class OwnerUpdateComponent implements OnInit {
-
-  @Input() public active = false;
-  @Output() public closePane = new EventEmitter<void>();
-
   public form: FormGroup;
   public submitted = false;
   public currentOwner: Owner;
 
+  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
   constructor(
-    private router: Router,
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly connectionService: ConnectionService,
@@ -31,14 +27,13 @@ export class OwnerUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
-
     this.form = this.formBuilder.group({
       name: [this.currentOwner ? this.currentOwner.name : '', Validators.required],
       organisationName: [this.currentOwner ? this.currentOwner.organisationName : '', Validators.required],
       contactPhone: [this.currentOwner ? this.currentOwner.contactPhone : '', Validators.required],
       contactEmail: [this.currentOwner ? this.currentOwner.contactEmail : '', [Validators.required, Validators.email]],
-      website: [this.currentOwner ? this.currentOwner.website : '', [Validators.required, Validators.pattern(reg)]],
+      website: [this.currentOwner ? this.currentOwner.website : '',
+        [Validators.required, Validators.pattern(this.urlRegex)]],
     });
 
     this.initFormFields();
@@ -71,15 +66,11 @@ export class OwnerUpdateComponent implements OnInit {
 
       try {
         await this.connectionService.updateOwner(this.form.value).toPromise();
-        console.log('Updated owner');
+
         this.alertService.success('Updated owner');
       } catch (error) {
         this.alertService.error(error.message);
       }
     }
-  }
-
-  public async close() {
-    await this.router.navigate(['']);
   }
 }

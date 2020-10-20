@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { ISensor } from '../model/bodies/sensor-body';
-import { SensorTheme } from '../model/bodies/sensorTheme';
-import { environment } from '../../environments/environment';
-import { ConnectionService } from './connection.service';
-import { EventType } from '../model/events/event-type';
+import {Injectable} from '@angular/core';
+import {Observable, Subscriber} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {ISensor} from '../model/bodies/sensor-body';
+import {SensorTheme} from '../model/bodies/sensorTheme';
+import {environment} from '../../environments/environment';
+import {ConnectionService} from './connection.service';
+import {EventType} from '../model/events/event-type';
 
 export interface ILocationBody {
   longitude: number;
@@ -69,7 +69,6 @@ export interface IShareOwnershipBody {
 @Injectable({ providedIn: 'root' })
 export class SensorService {
 
-  private sensorMap: Record<string, ISensor> = {};
   private sensorCreated$: Observable<ISensor>;
   private sensorUpdated$: Observable<ISensor>;
 
@@ -88,14 +87,12 @@ export class SensorService {
 
       this.sensorCreated$ = new Observable((observer: Subscriber<ISensor>) => {
         sensorRegistered$.subscribe((sensor: ISensor) => {
-          this.sensorMap[sensor._id] = sensor;
           observer.next(sensor);
         });
       });
 
       this.sensorUpdated$ = new Observable((observer: Subscriber<ISensor>) => {
         const updateFunction = (sensor: ISensor) => {
-          this.sensorMap[sensor._id] = sensor;
           observer.next(sensor);
         };
         sensorUpdated$.subscribe(updateFunction);
@@ -110,30 +107,20 @@ export class SensorService {
 
   /** Register sensor */
   public register(sensor: IRegisterSensorBody) {
-    return this.http.post<ISensor>(`${environment.apiUrl}/Sensor`, sensor).toPromise();
+    return this.http.post<any>(`${environment.apiUrl}/Sensor`, sensor).toPromise();
   }
 
   /** Retrieve sensors */
-  public async getSensors(refresh) {
-    if (refresh || !Object.values(this.sensorMap).length) {
-      const sensors = await this.getAll() as ISensor[];
-      for (const sensor of sensors) {
-        this.sensorMap[sensor._id] = sensor;
-      }
-    }
-
-    return Object.values(this.sensorMap);
+  public async getSensors() {
+    const sensorPromise = this.http.get(`${environment.apiUrl}/Sensor`).toPromise();
+    return await sensorPromise as ISensor[];
   }
 
-  public async getMySensors(refresh) {
-    const sensors = await this.getSensors(refresh);
+  public async getMySensors() {
+    const sensors = await this.getSensors();
     const owner = this.connectionService.currentOwnerValue;
 
     return sensors.filter((sensor) => sensor.ownerIds.includes(owner.id));
-  }
-
-  public getAll() {
-    return this.http.get(`${environment.apiUrl}/Sensor`).toPromise();
   }
 
   /** Update sensor details */
@@ -177,12 +164,12 @@ export class SensorService {
   }
 
   /** Unregister a sensor */
-  public unregister(id: number) {
+  public unregister(id: string) {
     return this.http.delete(`${environment.apiUrl}/Sensor/${id}`).toPromise();
   }
 
   /** Retrieve a single sensor */
-  public get(id: number) {
+  public get(id: string) {
     return this.http.get(`${environment.apiUrl}/Sensor/${id}`).toPromise();
   }
 }

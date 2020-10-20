@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-fixed-top" [ngClass]="locationClass">
+<nav class="navbar navbar-fixed-top" [ngClass]="locationClass">
     <ul class="navbar-nav nav-pills ml-4 mr-4 mt-0">
         <li>
             <a routerLink="" class="navbar-header mx-4 text-decoration-none">
@@ -7,8 +7,10 @@
         </li>
     </ul>
     <ul class="navbar-nav mr-auto nav nav-pills mt-1">
-        <a role="button" class="navbar-menu-item" (click)="toggleMenu()" routerLinkActive="active">
-            Menu
-        </a>
+        <li>
+            <a role="button" class="navbar-menu-item" (click)="toggleMenu()" routerLinkActive="active">
+                Menu
+            </a>
+        </li>
     </ul>
 </nav>
