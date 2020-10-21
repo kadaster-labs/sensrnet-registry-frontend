@@ -33,9 +33,14 @@
                         <td><strong>Active</strong></td>
                         <td><em>{{ selectedSensor?.active }}</em></td>
                     </tr>
-                    <tr *ngIf="selectedSensor && ownsSensor(selectedSensor)">
+                    <tr *ngIf="selectedSensor">
                         <td colspan=2>
-                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">Edit</button>
+                            <div *ngIf="ownsSensor(selectedSensor); else viewSensor">
+                                <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">Edit</button>
+                            </div>
+                            <ng-template #viewSensor>
+                                <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">View</button>
+                            </ng-template>
                         </td>
                     </tr>
                 </tbody>

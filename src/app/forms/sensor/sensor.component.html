@@ -7,7 +7,10 @@
         <div [ngClass]="{'col-6': activeStepIndex === 3, 'col-11': activeStepIndex !== 3 }">
             <div class="row">
                 <div class="col-6">
-                    <h3>{{ getStepLabel() }}</h3>
+                    <h3 *ngIf="activeStepIndex === 0">Sensor Properties</h3>
+                    <h3 *ngIf="activeStepIndex === 1">Optional Sensor Properties</h3>
+                    <h3 *ngIf="activeStepIndex === 2">Data Streams</h3>
+                    <h3 *ngIf="activeStepIndex === 3">Sensor Location</h3>
                 </div>
                 <div class="col-6 mt-2 text-right">
                     <span *ngFor="let _ of [].constructor(getStepCount()); let i = index" [ngClass]="getStepClasses(i)" (click)="goToStep(i)" class="step pointer"></span>
@@ -65,14 +68,14 @@
                         [disabled]="!activeStepIndex"
                         (click)="goToStep(activeStepIndex - 1)">Previous</button>
                 <button type="submit" class="btn btn-primary btn-lg"
-                        *ngIf="activeStepIndex === getStepCount() - 1">Submit</button>
+                        *ngIf="activeStepIndex === getStepCount() - 1 && canSubmitSensor">Submit</button>
                 <button type="button" class="btn btn-primary btn-lg"
                         *ngIf="activeStepIndex !== getStepCount() - 1"
                         (click)="goToStep(activeStepIndex + 1)">Next</button>
             </form>
         </div>
         <div *ngIf="activeStepIndex === 3" class="col-5" style="height: 85vh; max-height: 85vh">
-            <app-map searchBarHeight="3vh"></app-map>
+            <app-map searchBarHeight="3vh" [clearLocationHighLight]="!sensor"></app-map>
         </div>
     </div>
 </div>

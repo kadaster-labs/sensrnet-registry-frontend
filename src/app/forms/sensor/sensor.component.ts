@@ -6,6 +6,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocationService } from '../../services/location.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IRegisterSensorBody, IUpdateSensorBody, SensorService } from '../../services/sensor.service';
+import {ConnectionService} from '../../services/connection.service';
 
 @Component({
   selector: 'app-sensor',
@@ -14,6 +15,7 @@ import { IRegisterSensorBody, IUpdateSensorBody, SensorService } from '../../ser
 })
 export class SensorComponent implements OnInit, OnDestroy {
   public sensor: ISensor;
+  public canSubmitSensor = true;
 
   public submitted = false;
   public activeStepIndex = 0;
@@ -21,7 +23,7 @@ export class SensorComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = [];
 
   public form: FormGroup;
-  public formControlSteps: Record<string, Array<any>>;
+  public formControlSteps: Array<Array<any>>;
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -32,6 +34,7 @@ export class SensorComponent implements OnInit, OnDestroy {
     private readonly alertService: AlertService,
     private readonly sensorService: SensorService,
     private readonly locationService: LocationService,
+    private readonly connectionService: ConnectionService,
   ) {}
 
   get f() {
@@ -43,12 +46,8 @@ export class SensorComponent implements OnInit, OnDestroy {
   }
 
   public goToStep(step: number): void {
-    if (Object.values(this.formControlSteps)[this.activeStepIndex].some((f) => f.invalid)) {
-      if (step <= this.activeStepIndex) {
-        this.activeStepIndex = step;
-      } else {
-        this.submitted = true;
-      }
+    if (this.formControlSteps[this.activeStepIndex].some((f) => f.invalid)) {
+      this.submitted = true;
     } else {
       this.submitted = false;
       this.activeStepIndex = step;
@@ -56,11 +55,7 @@ export class SensorComponent implements OnInit, OnDestroy {
   }
 
   public getStepCount(): number {
-    return Object.keys(this.formControlSteps).length;
-  }
-
-  public getStepLabel(): string {
-    return Object.keys(this.formControlSteps)[this.activeStepIndex];
+    return this.formControlSteps.length;
   }
 
   public getStepClasses(pageIndex: number) {
@@ -69,6 +64,15 @@ export class SensorComponent implements OnInit, OnDestroy {
 
   public setSensor(sensor: ISensor): void {
     this.sensor = sensor;
+
+    this.locationService.highlightLocation({
+      type: 'Point',
+      coordinates: this.sensor.location.coordinates,
+      baseObjectId: 'placeholder'
+    });
+
+    const owner = this.connectionService.currentOwnerValue;
+    this.canSubmitSensor = owner && sensor.ownerIds ? sensor.ownerIds.includes(owner.id) : false;
 
     this.form.patchValue({
       aim: this.sensor.aim || '',
@@ -115,147 +119,155 @@ export class SensorComponent implements OnInit, OnDestroy {
     }
   }
 
+  public async updateSensor() {
+    const updatedSensorProperties = {
+      typeName: this.form.value.type.typeName,
+      location: this.form.value.location,
+      dataStreams: this.form.value.dataStreams,
+      active: this.form.value.active || false,
+      aim: this.form.value.aim,
+      description: this.form.value.description !== '' ? this.form.value.description : undefined,
+      documentationUrl: this.form.value.documentationUrl !== '' ? this.form.value.documentationUrl : undefined,
+      manufacturer: this.form.value.manufacturer,
+      name: this.form.value.name,
+      theme: this.form.value.theme.value,
+      typeDetails: {subType: this.form.value.type.typeDetails},
+    };
+
+    try {
+      const active: boolean = JSON.parse(updatedSensorProperties.active.value);
+      if (active === true && !this.sensor.active) {
+        await this.sensorService.activate(this.sensor._id);
+      } else if (active === false && this.sensor.active) {
+        await this.sensorService.deactivate(this.sensor._id);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      const newDataStreams = updatedSensorProperties.dataStreams || [];
+      const newDataStreamIds = newDataStreams.map((d) => d.dataStreamId);
+      for (let newDataStream of newDataStreams) {
+        if (!newDataStream.hasOwnProperty('dataStreamId')) {
+          newDataStream = {
+            name: newDataStream.name,
+            reason: newDataStream.reason || undefined,
+            description: newDataStream.description || undefined,
+            observedProperty: newDataStream.observedProperty || undefined,
+            isPublic: newDataStream.isPublic,
+            isOpenData: newDataStream.isOpenData,
+            isReusable: newDataStream.isReusable,
+            documentationUrl: newDataStream.documentationUrl || undefined,
+            dataLink: newDataStream.dataLink || undefined,
+            unitOfMeasurement: newDataStream.unitOfMeasurement || undefined,
+            dataFrequency: newDataStream.dataFrequency,
+            dataQuality: newDataStream.dataQuality,
+          };
+          await this.sensorService.addDatastream(this.sensor._id, newDataStream);
+        }
+      }
+
+      const currentDataStreams = this.sensor.dataStreams || [];
+      for (const currentDataStream of currentDataStreams) {
+        if (currentDataStream.dataStreamId && !newDataStreamIds.includes(currentDataStream.dataStreamId)) {
+          await this.sensorService.deleteDatastream(this.sensor._id, currentDataStream.dataStreamId);
+        }
+      }
+
+      // TODO: Update existing DataStreams.
+    } catch (error) {
+      console.error(error);
+    }
+
+    // TODO: Execute only if details have changed.
+    try {
+      const details: IUpdateSensorBody = {
+        aim: updatedSensorProperties.aim,
+        description: updatedSensorProperties.description,
+        documentationUrl: updatedSensorProperties.documentationUrl,
+        manufacturer: updatedSensorProperties.manufacturer,
+        name: updatedSensorProperties.name,
+        typeName: updatedSensorProperties.typeName,
+        typeDetails: updatedSensorProperties.typeDetails,
+        theme: updatedSensorProperties.theme,
+      };
+      await this.sensorService.updateDetails(this.sensor._id, details);
+      console.log(`Sensor has successfully been updated.`);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const heightUpdated = this.sensor.location.coordinates[2] !== updatedSensorProperties.location.height;
+    const latitudeUpdated = this.sensor.location.coordinates[1] !== updatedSensorProperties.location.latitude;
+    const longitudeUpdated = this.sensor.location.coordinates[0] !== updatedSensorProperties.location.longitude;
+    if (longitudeUpdated || latitudeUpdated || heightUpdated) {
+      try {
+        await this.sensorService.updateLocation(this.sensor._id, updatedSensorProperties.location);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    await this.router.navigate(['']);
+  }
+
+  public async registerSensor() {
+    const dataStreams = [];
+    const formDataStreams = this.form.value.dataStreams || [];
+    for (const dataStream of formDataStreams) {
+      dataStreams.push({
+        name: dataStream.name,
+        reason: dataStream.reason || undefined,
+        description: dataStream.description || undefined,
+        observedProperty: dataStream.observedProperty || undefined,
+        isPublic: dataStream.isPublic,
+        isOpenData: dataStream.isOpenData,
+        isReusable: dataStream.isReusable,
+        documentationUrl: dataStream.documentationUrl || undefined,
+        dataLink: dataStream.dataLink || undefined,
+        unitOfMeasurement: dataStream.unitOfMeasurement || undefined,
+        dataFrequency: dataStream.dataFrequency,
+        dataQuality: dataStream.dataQuality,
+      });
+    }
+
+    const sensor: IRegisterSensorBody = {
+      dataStreams,
+      typeName: this.form.value.type.typeName,
+      location: this.form.value.location || {},
+      active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
+      aim: this.form.value.aim,
+      description: this.form.value.description,
+      documentationUrl: this.form.value.documentationUrl || undefined,
+      manufacturer: this.form.value.manufacturer || undefined,
+      name: this.form.value.name,
+      theme: this.form.value.theme ? this.form.value.theme.value : [],
+      typeDetails: {subType: this.form.value.type.typeDetails || ''},
+    };
+
+    try {
+      await this.sensorService.register(sensor);
+
+      this.locationService.showLocation(null);
+      this.alertService.success('Sensor registered!', false, 4000);
+    } catch (error) {
+      this.alertService.error(`An error has occurred while creating sensor: ${error}.`);
+    }
+  }
+
   public async submit() {
     this.submitted = true;
 
-    // Stop if the form is invalid.
-    if (this.form.valid) {
-      if (this.sensor) {  // Update the sensor.
-        const updatedSensorProperties = {
-          typeName: this.form.value.type.typeName,
-          location: this.form.value.location,
-          dataStreams: this.form.value.dataStreams,
-          active: this.form.value.active || false,
-          aim: this.form.value.aim,
-          description: this.form.value.description !== '' ? this.form.value.description : undefined,
-          documentationUrl: this.form.value.documentationUrl !== '' ? this.form.value.documentationUrl : undefined,
-          manufacturer: this.form.value.manufacturer,
-          name: this.form.value.name,
-          theme: this.form.value.theme.value,
-          typeDetails: {subType: this.form.value.type.typeDetails},
-        };
-
-        try {
-          const active: boolean = JSON.parse(updatedSensorProperties.active.value);
-          if (active === true && !this.sensor.active) {
-            await this.sensorService.activate(this.sensor._id);
-          } else if (active === false && this.sensor.active) {
-            await this.sensorService.deactivate(this.sensor._id);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-
-        try {
-          const newDataStreams = updatedSensorProperties.dataStreams || [];
-          const newDataStreamIds = newDataStreams.map((d) => d.dataStreamId);
-          for (let newDataStream of newDataStreams) {
-            if (!newDataStream.hasOwnProperty('dataStreamId')) {
-              newDataStream = {
-                name: newDataStream.name,
-                reason: newDataStream.reason || undefined,
-                description: newDataStream.description || undefined,
-                observedProperty: newDataStream.observedProperty || undefined,
-                isPublic: newDataStream.isPublic,
-                isOpenData: newDataStream.isOpenData,
-                isReusable: newDataStream.isReusable,
-                documentationUrl: newDataStream.documentationUrl || undefined,
-                dataLink: newDataStream.dataLink || undefined,
-                unitOfMeasurement: newDataStream.unitOfMeasurement || undefined,
-                dataFrequency: newDataStream.dataFrequency,
-                dataQuality: newDataStream.dataQuality,
-              };
-              await this.sensorService.addDatastream(this.sensor._id, newDataStream);
-            }
-          }
-
-          const currentDataStreams = this.sensor.dataStreams || [];
-          for (const currentDataStream of currentDataStreams) {
-            if (currentDataStream.dataStreamId && !newDataStreamIds.includes(currentDataStream.dataStreamId)) {
-              await this.sensorService.deleteDatastream(this.sensor._id, currentDataStream.dataStreamId);
-            }
-          }
-
-          // TODO: Update existing DataStreams.
-        } catch (error) {
-          console.error(error);
-        }
-
-        // TODO: Execute only if details have changed.
-        try {
-          const details: IUpdateSensorBody = {
-            aim: updatedSensorProperties.aim,
-            description: updatedSensorProperties.description,
-            documentationUrl: updatedSensorProperties.documentationUrl,
-            manufacturer: updatedSensorProperties.manufacturer,
-            name: updatedSensorProperties.name,
-            typeName: updatedSensorProperties.typeName,
-            typeDetails: updatedSensorProperties.typeDetails,
-            theme: updatedSensorProperties.theme,
-          };
-          await this.sensorService.updateDetails(this.sensor._id, details);
-          console.log(`Sensor has successfully been updated.`);
-        } catch (error) {
-          console.error(error);
-        }
-
-        const heightUpdated = this.sensor.location.coordinates[2] !== updatedSensorProperties.location.height;
-        const latitudeUpdated = this.sensor.location.coordinates[1] !== updatedSensorProperties.location.latitude;
-        const longitudeUpdated = this.sensor.location.coordinates[0] !== updatedSensorProperties.location.longitude;
-        if (longitudeUpdated || latitudeUpdated || heightUpdated) {
-          try {
-            await this.sensorService.updateLocation(this.sensor._id, updatedSensorProperties.location);
-          } catch (error) {
-            console.error(error);
-          }
-        }
-
-        await this.router.navigate(['']);
-      } else {
-        const dataStreams = [];
-        const formDataStreams = this.form.value.dataStreams || [];
-        for (const dataStream of formDataStreams) {
-          dataStreams.push({
-            name: dataStream.name,
-            reason: dataStream.reason || undefined,
-            description: dataStream.description || undefined,
-            observedProperty: dataStream.observedProperty || undefined,
-            isPublic: dataStream.isPublic,
-            isOpenData: dataStream.isOpenData,
-            isReusable: dataStream.isReusable,
-            documentationUrl: dataStream.documentationUrl || undefined,
-            dataLink: dataStream.dataLink || undefined,
-            unitOfMeasurement: dataStream.unitOfMeasurement || undefined,
-            dataFrequency: dataStream.dataFrequency,
-            dataQuality: dataStream.dataQuality,
-          });
-        }
-
-        const sensor: IRegisterSensorBody = {
-          dataStreams,
-          typeName: this.form.value.type.typeName,
-          location: this.form.value.location || {},
-          active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
-          aim: this.form.value.aim,
-          description: this.form.value.description,
-          documentationUrl: this.form.value.documentationUrl || undefined,
-          manufacturer: this.form.value.manufacturer || undefined,
-          name: this.form.value.name,
-          theme: this.form.value.theme ? this.form.value.theme.value : [],
-          typeDetails: {subType: this.form.value.type.typeDetails || ''},
-        };
-
-        try {
-          await this.sensorService.register(sensor);
-
-          this.locationService.showLocation(null);
-          this.alertService.success('Sensor registered!', false, 4000);
-        } catch (error) {
-          this.alertService.error(`An error has occurred while creating sensor: ${error}.`);
-        }
-      }
-    } else {
+    if (!this.form.valid) {
       this.alertService.error(`The form is invalid.`);
+      return;
+    }
+
+    if (this.sensor) {
+      await this.updateSensor();
+    } else {
+      await this.registerSensor();
     }
   }
 
@@ -275,22 +287,23 @@ export class SensorComponent implements OnInit, OnDestroy {
       theme: [],
     });
 
-    this.formControlSteps = {
-      'Sensor Properties': [
+    this.formControlSteps = [
+      [
         this.form.controls.name,
         this.form.controls.type,
         this.form.controls.active,
-      ], 'Optional Sensor Properties': [
+      ], [
         this.form.controls.aim,
         this.form.controls.description,
         this.form.controls.manufacturer,
         this.form.controls.documentationUrl,
         this.form.controls.theme,
-      ], 'Data Streams': [
+      ], [
         this.form.controls.dataStreams,
-      ], 'Sensor Location': [
+      ], [
         this.form.controls.location,
-    ]};
+      ]
+    ];
 
     this.subscriptions.push(
       this.route.params.subscribe(async params => {

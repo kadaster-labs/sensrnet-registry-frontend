@@ -39,6 +39,7 @@ import { ConnectionService } from '../../services/connection.service';
 export class MapComponent implements OnInit, OnDestroy {
 
   @Input() searchBarHeight;
+  @Input() clearLocationHighLight = true;
   @Output() sensorSelected = new EventEmitter();
 
   constructor(
@@ -48,9 +49,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private sensorService: SensorService,
     private locationService: LocationService,
     private connectionService: ConnectionService,
-  ) {
-    this.locationService.hideLocationMarker();
-  }
+  ) {}
 
   public mapName = 'srn';
   public subscriptions = [];
@@ -520,6 +519,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+    this.locationService.hideLocationMarker();
+    if (this.clearLocationHighLight) {
+      this.locationService.hideLocationHighlight();
+    }
+
     const sensors = await this.sensorService.getSensors();
     this.initMap(sensors);
 
@@ -549,6 +553,18 @@ export class MapComponent implements OnInit, OnDestroy {
         this.setLocation(locationFeature);
       } else {
         this.clearLocationLayer();
+      }
+    }));
+
+    this.subscriptions.push(this.locationService.locationHighlight$.subscribe((sensor) => {
+      this.removeHighlight();
+
+      if (sensor) {
+        const geometry = new Feature({
+          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[0], sensor.coordinates[1]]))
+        });
+
+        this.highlightFeature(geometry);
       }
     }));
 

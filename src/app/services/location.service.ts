@@ -18,10 +18,13 @@ export class LocationService {
     baseObjectId: 'iets',
   });
 
+  private locationHighlight: BehaviorSubject<ISensorLocation> = new BehaviorSubject(null);
+
   location$: Observable<ISensorLocation> = this.location.asObservable();
   showLocation$: Observable<ISensorLocation> = this.locationMarker.asObservable();
+  locationHighlight$: Observable<ISensorLocation> = this.locationHighlight.asObservable();
 
-  constructor() { }
+  constructor() {}
 
   setLocation(location: ISensorLocation) {
     let currentLocation = this.location.getValue();
@@ -43,5 +46,13 @@ export class LocationService {
 
   hideLocationMarker() {
     this.locationMarker.next(null);
+  }
+
+  highlightLocation(location: ISensorLocation) {
+    this.locationHighlight.next(location);
+  }
+
+  hideLocationHighlight() {
+    this.locationHighlight.next(null);
   }
 }

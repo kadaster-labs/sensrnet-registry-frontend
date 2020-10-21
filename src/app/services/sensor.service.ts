@@ -46,6 +46,10 @@ export interface IRegisterSensorBody {
   typeDetails?: object;
 }
 
+export interface IRegisterSensorResponseBody {
+  sensorId: string;
+}
+
 export interface IUpdateSensorBody {
   name?: string;
   aim?: string;
@@ -107,7 +111,7 @@ export class SensorService {
 
   /** Register sensor */
   public register(sensor: IRegisterSensorBody) {
-    return this.http.post<any>(`${environment.apiUrl}/Sensor`, sensor).toPromise();
+    return this.http.post<IRegisterSensorResponseBody>(`${environment.apiUrl}/Sensor`, sensor).toPromise();
   }
 
   /** Retrieve sensors */
