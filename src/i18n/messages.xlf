@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="nl">
+  <file original="ng.template" id="ngi18n">
+    <unit id="ngb.alert.close">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts:3</note>
+      </notes>
+      <segment>
+        <source>Close</source>
+      </segment>
+    </unit>
+    <unit id="ngb.carousel.previous">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts:13</note>
+      </notes>
+      <segment>
+        <source>Previous</source>
+      </segment>
+    </unit>
+    <unit id="ngb.carousel.next">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts:17</note>
+      </notes>
+      <segment>
+        <source>Next</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.previous-month">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:4</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:5</note>
+      </notes>
+      <segment>
+        <source>Previous month</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.next-month">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:26</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:27</note>
+      </notes>
+      <segment>
+        <source>Next month</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.select-month">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:5</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:6</note>
+      </notes>
+      <segment>
+        <source>Select month</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.select-year">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:13</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:14</note>
+      </notes>
+      <segment>
+        <source>Select year</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.first">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:2</note>
+      </notes>
+      <segment>
+        <source>««</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.previous">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:3</note>
+      </notes>
+      <segment>
+        <source>«</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.next">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:4</note>
+      </notes>
+      <segment>
+        <source>»</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.last">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:5</note>
+      </notes>
+      <segment>
+        <source>»»</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.first-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:14</note>
+      </notes>
+      <segment>
+        <source>First</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.previous-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:24</note>
+      </notes>
+      <segment>
+        <source>Previous</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.next-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:44</note>
+      </notes>
+      <segment>
+        <source>Next</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.last-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:53</note>
+      </notes>
+      <segment>
+        <source>Last</source>
+      </segment>
+    </unit>
+    <unit id="ngb.progressbar.value">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts:7</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-hours">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:9</note>
+      </notes>
+      <segment>
+        <source>Increment hours</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.HH">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:13</note>
+      </notes>
+      <segment>
+        <source>HH</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.hours">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:15</note>
+      </notes>
+      <segment>
+        <source>Hours</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-hours">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:23</note>
+      </notes>
+      <segment>
+        <source>Decrement hours</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-minutes">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:32</note>
+      </notes>
+      <segment>
+        <source>Increment minutes</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.MM">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:35</note>
+      </notes>
+      <segment>
+        <source>MM</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.minutes">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:37</note>
+      </notes>
+      <segment>
+        <source>Minutes</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-minutes">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:45</note>
+      </notes>
+      <segment>
+        <source>Decrement minutes</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-seconds">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:54</note>
+      </notes>
+      <segment>
+        <source>Increment seconds</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.SS">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:57</note>
+      </notes>
+      <segment>
+        <source>SS</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.seconds">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:59</note>
+      </notes>
+      <segment>
+        <source>Seconds</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-seconds">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:67</note>
+      </notes>
+      <segment>
+        <source>Decrement seconds</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.PM">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:76</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.AM">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:77</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></source>
+      </segment>
+    </unit>
+    <unit id="ngb.toast.close-aria">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/toast/toast.d.ts:8</note>
+      </notes>
+      <segment>
+        <source>Close</source>
+      </segment>
+    </unit>
+    <unit id="2180991850301812818">
+      <notes>
+        <note category="location">src/app/login/login.component.html:5</note>
+      </notes>
+      <segment>
+        <source>Welkom bij SensRNet</source>
+      </segment>
+    </unit>
+    <unit id="2454050363478003966">
+      <notes>
+        <note category="location">src/app/login/login.component.html:13</note>
+        <note category="location">src/app/login/login.component.html:32</note>
+      </notes>
+      <segment>
+        <source>Login</source>
+      </segment>
+    </unit>
+    <unit id="1890300073702152532">
+      <notes>
+        <note category="location">src/app/login/login.component.html:16</note>
+      </notes>
+      <segment>
+        <source>E-mail</source>
+      </segment>
+    </unit>
+    <unit id="685059167996407551">
+      <notes>
+        <note category="location">src/app/login/login.component.html:19</note>
+      </notes>
+      <segment>
+        <source>E-mail is verplicht</source>
+      </segment>
+    </unit>
+    <unit id="6167011297025367250">
+      <notes>
+        <note category="location">src/app/login/login.component.html:23</note>
+      </notes>
+      <segment>
+        <source>Wachtwoord</source>
+      </segment>
+    </unit>
+    <unit id="7798860197902905604">
+      <notes>
+        <note category="location">src/app/login/login.component.html:26</note>
+      </notes>
+      <segment>
+        <source>Wachtwoord is verplicht</source>
+      </segment>
+    </unit>
+    <unit id="5913757458094097478">
+      <notes>
+        <note category="location">src/app/login/login.component.html:34</note>
+      </notes>
+      <segment>
+        <source>Registeer</source>
+      </segment>
+    </unit>
+  </file>
+</xliff>
