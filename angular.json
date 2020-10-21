@@ -13,15 +13,23 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "nl",
+        "locales": {
+          "en": "src/i18n/messages.en.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/app",
             "index": "src/index.html",
+            "i18nMissingTranslation": "warning",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "localize": false,
             "aot": true,
             "assets": [
               "src/favicon.ico",
@@ -49,10 +57,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -61,7 +71,8 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [{
+              "budgets": [
+                {
                   "type": "initial",
                   "maximumWarning": "2.5mb",
                   "maximumError": "5mb"
@@ -72,6 +83,9 @@
                   "maximumError": "2mb"
                 }
               ]
+            },
+            "en": {
+              "localize": ["en"]
             }
           }
         },
@@ -83,6 +97,9 @@
           "configurations": {
             "production": {
               "browserTarget": "registryViewer:build:production"
+            },
+            "en": {
+              "browserTarget": "registryViewer:build:en"
             }
           }
         },
@@ -137,6 +154,21 @@
           "configurations": {
             "production": {
               "devServerTarget": "registryViewer:serve:production"
+            }
+          }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "i18nFormat": "xlf2",
+              "srcDir": "src/i18n",
+              "genDir": "src/i18n",
+              "defaultLanguage": "nl",
+              "languages": [
+                "nl",
+                "en"
+              ]
             }
           }
         }

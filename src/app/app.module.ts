@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import '@angular/common/locales/global/nl';
 
 import { GgcMapModule } from 'generieke-geo-componenten-map';
 import { GgcSearchModule } from 'generieke-geo-componenten-search';
@@ -63,6 +64,7 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'nl' },
   ],
   bootstrap: [
     AppComponent,
