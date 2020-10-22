@@ -60,11 +60,12 @@ export class LoginComponent implements OnInit {
     this.connectionService.login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe(
-        (data) => {
+        () => {
           this.router.navigate([this.returnUrl]);
         },
-        (error) => {
-          this.alertService.error(error.error.message);
+        (e) => {
+          console.log(e);
+          this.alertService.error(`Failed to login: Supply valid credentials.`);
           this.loading = false;
         });
   }

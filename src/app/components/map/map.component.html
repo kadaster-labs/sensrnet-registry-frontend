@@ -11,7 +11,7 @@
                           [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"
                           id="layers" class="p-0 m-0"></ggc-dataset-tree>
 
-        <div id="popup" class="ol-popup bg-white border-0 hidden">
+        <div id="popup" class="ol-popup bg-white border-0 hidden mb-5">
             <table *ngIf="showInfo" class="table table-bordered table-striped table-sm mb-0">
                 <caption class="hidden">Sensor details</caption>
                 <thead>
@@ -23,36 +23,24 @@
                 <tbody>
                     <tr>
                         <td><strong>Name</strong></td>
-                        <td><em>{{ activeFeatureInfo?.name }}</em></td>
+                        <td><em>{{ selectedSensor?.name }}</em></td>
                     </tr>
                     <tr>
                         <td><strong>Sensortype</strong></td>
-                        <td><em>{{ activeFeatureInfo?.typeName }}</em></td>
+                        <td><em>{{ selectedSensor?.typeName }}</em></td>
                     </tr>
                     <tr>
                         <td><strong>Active</strong></td>
-                        <td><em>{{ activeFeatureInfo?.active }}</em></td>
+                        <td><em>{{ selectedSensor?.active }}</em></td>
                     </tr>
-                    <tr>
-                        <td><strong>Aim</strong></td>
-                        <td><em>{{ activeFeatureInfo?.aim }}</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Description</strong></td>
-                        <td><em>{{ activeFeatureInfo?.description }}</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Manufacturer</strong></td>
-                        <td><em>{{ activeFeatureInfo?.manufacturer }}</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Theme</strong></td>
-                        <td>
-                            <ul style="list-style-type: circle">
-                                <li *ngFor="let item of activeFeatureInfo?.theme">
-                                    <em>{{item}}</em>
-                                </li>
-                            </ul>
+                    <tr *ngIf="selectedSensor">
+                        <td colspan=2>
+                            <div *ngIf="ownsSensor(selectedSensor); else viewSensor">
+                                <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">Edit</button>
+                            </div>
+                            <ng-template #viewSensor>
+                                <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">View</button>
+                            </ng-template>
                         </td>
                     </tr>
                 </tbody>

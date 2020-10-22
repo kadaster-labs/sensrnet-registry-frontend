@@ -1,7 +1,7 @@
+import { Subscription } from 'rxjs';
+import { Category, TypeSensor, TypeBeacon, TypeCamera } from '../../model/bodies/sensorTypes';
 import { Component, forwardRef, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
-import { Category, TypeSensor, TypeBeacon, TypeCamera } from '../../model/bodies/sensorTypes';
-import { Subscription } from 'rxjs';
 
 export interface SensorTypeFormValues {
   typeName: string;
@@ -29,8 +29,7 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 
-  @Input()
-  public submitted: boolean;
+  @Input() public submitted: boolean;
   @Output() sensorType = new EventEmitter<string>();
 
   public sensorCategories = Category;
@@ -80,13 +79,6 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
     return this.form.controls;
   }
 
-  // public ngOnChange(changes: SimpleChanges) {
-  //   if (changes.submitted) {
-  //     this.formSubmitted = changes.submitted;
-  //   }
-  // }
-
-
   private onFormChanges() {
     if (!this.form.get('typeName')) { return; }
 
@@ -112,7 +104,9 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
     });
 
     this.form.get('typeDetails').valueChanges.subscribe((category: Category) => {
-      this.sensorType.emit(this.form.get('typeDetails').value);
+      if (category) {
+        this.sensorType.emit(category);
+      }
     });
   }
 
@@ -145,5 +139,4 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   public validate(_: FormControl) {
     return this.form.valid ? null : { type: { valid: false } };
   }
-
 }

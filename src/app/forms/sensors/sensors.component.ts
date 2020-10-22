@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { SensorService } from '../../services/sensor.service';
 
 @Component({
-  selector: 'app-sensors-view',
-  templateUrl: './sensors-view.component.html',
-  styleUrls: ['./sensors-view.component.scss'],
+  selector: 'app-sensors',
+  templateUrl: './sensors.component.html',
+  styleUrls: ['./sensors.component.scss'],
 })
-export class SensorsViewComponent implements OnInit {
+export class SensorsComponent implements OnInit {
 
   public sensors = [];
   public ascending = true;
@@ -25,6 +25,6 @@ export class SensorsViewComponent implements OnInit {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.sensors = await this.sensorService.getMySensors(false);
+    this.sensors = await this.sensorService.getMySensors();
   }
 }

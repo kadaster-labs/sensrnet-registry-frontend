@@ -27,8 +27,7 @@ export class SensorStatusComponent implements ControlValueAccessor, OnDestroy {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 
-  @Input()
-  public submitted: boolean;
+  @Input() public submitted: boolean;
 
   get value(): SensorThemeFormValues {
     return this.form.value;

@@ -26,9 +26,13 @@ export class AlertService {
     return this.subject.asObservable();
   }
 
-  public success(message: string, keepAfterRouteChange = false) {
+  public success(message: string, keepAfterRouteChange = false, timeoutDuration = null) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
+
+    if (timeoutDuration) {
+      setTimeout(() => { this.clear(); }, timeoutDuration);
+    }
   }
 
   public error(message: string, keepAfterRouteChange = false) {

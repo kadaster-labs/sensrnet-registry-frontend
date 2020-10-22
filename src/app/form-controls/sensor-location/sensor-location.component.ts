@@ -1,8 +1,8 @@
-import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
-import { LocationService } from '../../services/location.service';
-import { ISensorLocation } from '../../model/bodies/location';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ISensorLocation } from '../../model/bodies/location';
+import { LocationService } from '../../services/location.service';
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 export interface SensorLocationFormValues {
   latitude: number;
@@ -36,8 +36,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
 
   private location: ISensorLocation;
 
-  @Input()
-  public submitted: boolean;
+  @Input() public submitted: boolean;
 
   get f() {
     return this.form.controls;
@@ -59,7 +58,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     private readonly formBuilder: FormBuilder,
   ) {
     this.form = this.formBuilder.group({
-      height: [null, Validators.required],
+      height: [0, Validators.required],
       latitude: [null, Validators.required],
       longitude: [null, Validators.required],
       baseObjectId: [null, Validators.required],
@@ -73,31 +72,30 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
       }),
     );
 
-    this.locationService.location$.subscribe(location => {
-      if (this.selectLocation === true) {
-        this.location = location;
-        console.log(`location set to ${JSON.stringify(this.location)}`);
-        this.form.setValue({
+    this.subscriptions.push(
+      this.locationService.location$.subscribe(location => {
+        if (this.selectLocation === true) {
+          this.location = location;
+          console.log(`location set to ${JSON.stringify(this.location)}`);
+
+          this.form.setValue({
             height: this.form.get('height').value,
             latitude: location.coordinates[0],
             longitude: location.coordinates[1],
             baseObjectId: 'non-empty',
-        });
+          });
 
-        this.locationService.showLocation(location);
+          this.locationService.showLocation(location);
 
-        this.selectLocation = false;
-      }
-    });
+          this.selectLocation = false;
+        }
+      })
+    );
   }
 
   public locationValidator(g: FormGroup) {
     return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
       {required: true};
-  }
-
-  public ngOnDestroy() {
-    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   public onChange: any = () => {};
@@ -115,14 +113,14 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     if (value) {
       this.value = value;
     }
-
-    if (value === null) {
-      this.form.reset();
-    }
   }
 
   // communicate the inner form validation to the parent form
   public validate(_: FormControl) {
     return this.form.valid ? null : { location: { valid: false } };
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }

@@ -15,6 +15,7 @@ import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
 import { extend, Extent } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
+import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
@@ -25,7 +26,6 @@ import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke
 
 import { ISensor } from '../../model/bodies/sensor-body';
 import { Category } from '../../model/bodies/sensorTypes';
-import { SensorInfo } from '../../model/bodies/sensorInfo';
 import { SensorService } from '../../services/sensor.service';
 import { environment } from '../../../environments/environment';
 import { LocationService } from '../../services/location.service';
@@ -39,6 +39,7 @@ import { ConnectionService } from '../../services/connection.service';
 export class MapComponent implements OnInit, OnDestroy {
 
   @Input() searchBarHeight;
+  @Input() clearLocationHighLight = true;
   @Output() sensorSelected = new EventEmitter();
 
   constructor(
@@ -48,9 +49,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private sensorService: SensorService,
     private locationService: LocationService,
     private connectionService: ConnectionService,
-  ) {
-    this.locationService.hideLocationMarker();
-  }
+  ) {}
 
   public mapName = 'srn';
   public subscriptions = [];
@@ -65,7 +64,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private selectCluster: SelectCluster;
   public highlightSource: VectorSource;
   public clusterLayer: AnimatedCluster;
-  public activeFeatureInfo: SensorInfo;
   public selectLocationLayer: VectorLayer;
   public selectLocationSource: VectorSource;
 
@@ -188,9 +186,7 @@ export class MapComponent implements OnInit, OnDestroy {
       if (numberOfFeatures === 1) {
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
-
-        const owner = this.connectionService.currentOwnerValue;
-        const isOwner = owner ? feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id) : false;
+        const isOwner = this.ownsSensor(feature.get('features')[0].values_.sensor);
 
         if (!active) {
           numberOfFeatures = `${isOwner}_${sensorType}_inactive`;
@@ -230,11 +226,9 @@ export class MapComponent implements OnInit, OnDestroy {
       let styleFeatures;
       const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
-        const owner = this.connectionService.currentOwnerValue;
-
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
-        const isOwner = feature.get('features')[0].values_.sensor.ownerIds.includes(owner.id);
+        const isOwner = this.ownsSensor(feature.get('features')[0].values_.sensor);
 
         let style: Style[];
         if (active) {
@@ -277,6 +271,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.popupOverlay = new Overlay({
       autoPan: false,
+      positioning: OverlayPositioning.BOTTOM_CENTER,
       element: document.getElementById('popup')
     });
     map.addOverlay(this.popupOverlay);
@@ -290,15 +285,6 @@ export class MapComponent implements OnInit, OnDestroy {
         const geometry = new Feature({
           geometry: feature.values_.geometry,
         });
-        this.activeFeatureInfo = new SensorInfo(
-          feature.get('name'),
-          feature.get('typeName'),
-          feature.get('active'),
-          feature.get('aim'),
-          feature.get('description'),
-          feature.get('manufacturer'),
-          feature.get('theme'),
-        );
         this.selectedSensor = feature.values_.sensor;
         this.sensorSelected.emit(this.selectedSensor);
         this.setShowInfo(feature.values_.geometry.flatCoordinates);
@@ -307,7 +293,6 @@ export class MapComponent implements OnInit, OnDestroy {
       } else if (activeFeatures.length > 1) {
         this.removeHighlight();
         this.setShowInfo(null);
-        this.activeFeatureInfo = null;
       }
     });
   }
@@ -337,20 +322,7 @@ export class MapComponent implements OnInit, OnDestroy {
       updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
     ]));
     sensor.setGeometry(geom);
-    this.removeHighlight();
     this.clearLocationLayer();
-    this.highlightFeature(sensor);
-
-    // update feature info
-    this.activeFeatureInfo = new SensorInfo(
-      updatedSensor.name,
-      updatedSensor.typeName,
-      updatedSensor.active,
-      updatedSensor.aim,
-      updatedSensor.description,
-      updatedSensor.manufacturer,
-      updatedSensor.theme,
-    );
 
     // update sensor update pane
     this.selectedSensor = updatedSensor;
@@ -372,7 +344,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.setShowInfo(null);
       this.removeHighlight();
-      this.activeFeatureInfo = null;
 
       this.locationService.setLocation({
         type: 'Point',
@@ -538,8 +509,22 @@ export class MapComponent implements OnInit, OnDestroy {
     }));
   }
 
+  public ownsSensor(sensor): boolean {
+    const owner = this.connectionService.currentOwnerValue;
+    return owner && sensor.ownerIds ? sensor.ownerIds.includes(owner.id) : false;
+  }
+
+  public async editSensor(): Promise<void> {
+    await this.router.navigate([`/sensor/${this.selectedSensor._id}`]);
+  }
+
   public async ngOnInit(): Promise<void> {
-    const sensors = await this.sensorService.getSensors(false);
+    this.locationService.hideLocationMarker();
+    if (this.clearLocationHighLight) {
+      this.locationService.hideLocationHighlight();
+    }
+
+    const sensors = await this.sensorService.getSensors();
     this.initMap(sensors);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
@@ -568,6 +553,18 @@ export class MapComponent implements OnInit, OnDestroy {
         this.setLocation(locationFeature);
       } else {
         this.clearLocationLayer();
+      }
+    }));
+
+    this.subscriptions.push(this.locationService.locationHighlight$.subscribe((sensor) => {
+      this.removeHighlight();
+
+      if (sensor) {
+        const geometry = new Feature({
+          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[0], sensor.coordinates[1]]))
+        });
+
+        this.highlightFeature(geometry);
       }
     }));
 

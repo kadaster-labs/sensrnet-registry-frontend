@@ -4,10 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ViewerComponent } from './viewer/viewer.component';
 import { RegisterComponent } from './register/register.component';
-import { SensorsViewComponent } from './forms/sensors-view/sensors-view.component';
+import { SensorsComponent } from './forms/sensors/sensors.component';
 import { OwnerUpdateComponent } from './forms/owner-update/owner-update.component';
-import { SensorUpdateComponent } from './forms/sensor-update/sensor-update.component';
-import { SensorRegisterComponent } from './forms/sensor-register/sensor-register.component';
+import { SensorComponent } from './forms/sensor/sensor.component';
 
 const routes: Routes = [
   { path: '', component: ViewerComponent, canActivate: [AuthGuard] },
@@ -16,10 +15,10 @@ const routes: Routes = [
 
   { path: 'owner', component: OwnerUpdateComponent },
 
-  { path: 'sensor', component: SensorRegisterComponent },
-  { path: 'sensor/update', component: SensorUpdateComponent },
+  { path: 'sensor', component: SensorComponent },
+  { path: 'sensor/:id', component: SensorComponent },
 
-  { path: 'sensors', component: SensorsViewComponent },
+  { path: 'sensors', component: SensorsComponent },
 
   // otherwise redirect to viewer
   { path: '**', redirectTo: '' },

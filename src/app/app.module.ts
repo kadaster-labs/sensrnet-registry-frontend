@@ -21,14 +21,14 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
-import { SensorsViewComponent } from './forms/sensors-view/sensors-view.component';
+import { SensorsComponent } from './forms/sensors/sensors.component';
 import { OwnerUpdateComponent } from './forms/owner-update/owner-update.component';
-import { SensorUpdateComponent } from './forms/sensor-update/sensor-update.component';
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
 import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
-import { SensorRegisterComponent } from './forms/sensor-register/sensor-register.component';
+import { SensorComponent } from './forms/sensor/sensor.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
+import { DataStreamComponent } from './form-controls/datastream/datastream.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +37,7 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
-    SensorUpdateComponent,
-    SensorRegisterComponent,
+    SensorComponent,
     SensorThemeComponent,
     SensorLocationComponent,
     SensorTypeComponent,
@@ -47,7 +46,8 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     NavBarComponent,
     SidebarComponent,
     MapComponent,
-    SensorsViewComponent,
+    SensorsComponent,
+    DataStreamComponent
   ],
   imports: [
     BrowserModule,
