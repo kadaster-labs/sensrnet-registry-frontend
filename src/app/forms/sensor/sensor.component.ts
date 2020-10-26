@@ -127,12 +127,14 @@ export class SensorComponent implements OnInit, OnDestroy {
       dataStreams: this.form.value.dataStreams,
       active: this.form.value.active || false,
       aim: this.form.value.aim,
-      description: this.form.value.description !== '' ? this.form.value.description : undefined,
-      documentationUrl: this.form.value.documentationUrl !== '' ? this.form.value.documentationUrl : undefined,
+      description: this.form.value.description,
+      documentationUrl: this.form.value.documentationUrl,
       manufacturer: this.form.value.manufacturer,
       name: this.form.value.name,
       theme: this.form.value.theme.value,
-      typeDetails: {subType: this.form.value.type.typeDetails},
+      typeDetails: {
+        subType: this.form.value.type.typeDetails,
+      },
     };
 
     try {
@@ -148,7 +150,6 @@ export class SensorComponent implements OnInit, OnDestroy {
 
     try {
       const currentDataStreams = this.sensor.dataStreams || [];
-
       const newDataStreams = updatedSensorProperties.dataStreams || [];
       const newDataStreamIds = newDataStreams.map((d) => d.dataStreamId);
       for (let newDataStream of newDataStreams) {
@@ -169,13 +170,12 @@ export class SensorComponent implements OnInit, OnDestroy {
                   }
                 }
               }
-
               if (Object.keys(updatedProperties).length) {
                 await this.sensorService.updateDatastream(this.sensor._id, newDataStream.dataStreamId, updatedProperties);
               }
             }
           }
-        } else if (!newDataStream.dataStreamId) {  // The data-stream is newly created;
+        } else if (!newDataStream.dataStreamId) {  // The data-stream has been newly created;
           newDataStream = {
             name: newDataStream.name,
             reason: newDataStream.reason || undefined,
@@ -199,26 +199,46 @@ export class SensorComponent implements OnInit, OnDestroy {
           await this.sensorService.deleteDatastream(this.sensor._id, currentDataStream.dataStreamId);
         }
       }
-
-      // TODO: Update existing DataStreams.
     } catch (error) {
       console.error(error);
     }
 
-    // TODO: Execute only if details have changed.
     try {
-      const details: IUpdateSensorBody = {
-        aim: updatedSensorProperties.aim,
-        description: updatedSensorProperties.description,
-        documentationUrl: updatedSensorProperties.documentationUrl,
-        manufacturer: updatedSensorProperties.manufacturer,
-        name: updatedSensorProperties.name,
-        typeName: updatedSensorProperties.typeName,
-        typeDetails: updatedSensorProperties.typeDetails,
-        theme: updatedSensorProperties.theme,
-      };
-      await this.sensorService.updateDetails(this.sensor._id, details);
-      console.log(`Sensor has successfully been updated.`);
+      const updatedProperties: IUpdateSensorBody = {};
+      if (this.sensor.name !== updatedSensorProperties.name) {
+        updatedProperties.name = updatedSensorProperties.name;
+      }
+      if (!this.sensor.typeName || !this.sensor.typeName.length || this.sensor.typeName[0] !== updatedSensorProperties.typeName) {
+        updatedProperties.typeName = updatedSensorProperties.typeName;
+      }
+      if (!this.sensor.typeDetails || this.sensor.typeDetails.subType !== updatedSensorProperties.typeDetails.subType) {
+        updatedProperties.typeDetails = updatedSensorProperties.typeDetails;
+      }
+      if (updatedSensorProperties.theme.length) {  // A theme is selected
+        if (this.sensor.theme && this.sensor.theme.length) { // And a theme existed already
+          const a = new Set(this.sensor.theme);
+          const b = new Set(updatedSensorProperties.theme);
+          if (!(a.size === b.size && [...a].every(value => b.has(value)))) {  // The theme has changed
+            updatedProperties.theme = updatedSensorProperties.theme;
+          }
+        } else { // No theme has previously been selected
+          updatedProperties.theme = updatedSensorProperties.theme;
+        }
+      } else if (this.sensor.theme && this.sensor.theme.length) { // No theme has currently been selected.
+        updatedProperties.theme = [];
+      }
+      for (const property of ['aim', 'description', 'documentationUrl', 'manufacturer']) {
+        if (this.sensor[property] !== updatedSensorProperties[property]) {
+          if (this.sensor[property] || updatedSensorProperties[property]) {
+            updatedProperties[property] = updatedSensorProperties[property];
+          }
+        }
+      }
+
+      if (Object.keys(updatedProperties).length) {
+        await this.sensorService.updateDetails(this.sensor._id, updatedProperties);
+        console.log(`Sensor ${this.sensor._id} has successfully been updated.`);
+      }
     } catch (error) {
       console.error(error);
     }
