@@ -21,7 +21,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let sensor of sensors; let i = index">
+                <tr *ngFor="let sensor of sensors; let i = index" class="pointer" (click)="selectSensor(sensor)">
                     <th scope="row">{{ i + 1 }}</th>
                     <td>{{ sensor.name }}</td>
                     <td>{{ sensor.typeName[0] }}</td>

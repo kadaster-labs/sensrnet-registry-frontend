@@ -3,10 +3,11 @@ import { ISensor } from '../../model/bodies/sensor-body';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { IDataStream } from '../../model/bodies/datastream-body';
 import { LocationService } from '../../services/location.service';
+import { ConnectionService } from '../../services/connection.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IRegisterSensorBody, IUpdateSensorBody, SensorService } from '../../services/sensor.service';
-import {ConnectionService} from '../../services/connection.service';
 
 @Component({
   selector: 'app-sensor',
@@ -146,10 +147,35 @@ export class SensorComponent implements OnInit, OnDestroy {
     }
 
     try {
+      const currentDataStreams = this.sensor.dataStreams || [];
+
       const newDataStreams = updatedSensorProperties.dataStreams || [];
       const newDataStreamIds = newDataStreams.map((d) => d.dataStreamId);
       for (let newDataStream of newDataStreams) {
-        if (!newDataStream.hasOwnProperty('dataStreamId')) {
+        if (newDataStream.dataStreamId) {  // The data-stream existed already: maybe it is updated.
+          for (const currentDataStream of currentDataStreams) {
+            if (newDataStream.dataStreamId === currentDataStream.dataStreamId) {
+              const updatedProperties: IDataStream = {};
+              for (const property of ['name', 'isPublic', 'isOpenData', 'isReusable', 'dataFrequency', 'dataQuality']) {
+                if (newDataStream[property] !== currentDataStream[property]) {
+                  updatedProperties[property] = newDataStream[property];
+                }
+              }
+              for (const property of ['reason', 'description', 'observedProperty', 'documentationUrl', 'dataLink',
+                'unitOfMeasurement']) {
+                if (newDataStream[property] !== currentDataStream[property]) {
+                  if (newDataStream[property] || currentDataStream[property]) {
+                    updatedProperties[property] = newDataStream[property];
+                  }
+                }
+              }
+
+              if (Object.keys(updatedProperties).length) {
+                await this.sensorService.updateDatastream(this.sensor._id, newDataStream.dataStreamId, updatedProperties);
+              }
+            }
+          }
+        } else if (!newDataStream.dataStreamId) {  // The data-stream is newly created;
           newDataStream = {
             name: newDataStream.name,
             reason: newDataStream.reason || undefined,
@@ -168,7 +194,6 @@ export class SensorComponent implements OnInit, OnDestroy {
         }
       }
 
-      const currentDataStreams = this.sensor.dataStreams || [];
       for (const currentDataStream of currentDataStreams) {
         if (currentDataStream.dataStreamId && !newDataStreamIds.includes(currentDataStream.dataStreamId)) {
           await this.sensorService.deleteDatastream(this.sensor._id, currentDataStream.dataStreamId);

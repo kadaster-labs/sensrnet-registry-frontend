@@ -9,5 +9,5 @@ export class SensorInfo {
     public theme?: Array<string>,
     public typeDetails?: Record<string, any>,
     public dataStreams?: Array<any>,
-  ) { }
+  ) {}
 }
