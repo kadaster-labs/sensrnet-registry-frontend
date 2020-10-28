@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ISensor } from '../../model/bodies/sensor-body';
 import { SensorService } from '../../services/sensor.service';
+import { LocationService } from '../../services/location.service';
 
 @Component({
   selector: 'app-sensors',
@@ -13,6 +15,7 @@ export class SensorsComponent implements OnInit {
 
   constructor(
     public sensorService: SensorService,
+    private readonly locationService: LocationService,
   ) {}
 
   public sortByAttribute(attribute) {
@@ -22,6 +25,14 @@ export class SensorsComponent implements OnInit {
     if (!this.ascending) {
       this.sensors.reverse();
     }
+  }
+
+  public selectSensor(sensor: ISensor) {
+    this.locationService.highlightLocation({
+      type: 'Point',
+      coordinates: sensor.location.coordinates,
+      baseObjectId: 'placeholder'
+    });
   }
 
   public async ngOnInit(): Promise<void> {

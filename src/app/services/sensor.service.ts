@@ -159,12 +159,17 @@ export class SensorService {
 
   /** Add datastream to sensor */
   public addDatastream(sensorId: string, datastream: object) {
-    return this.http.post(`${environment.apiUrl}/Sensor/${sensorId}/create/datastream`, datastream).toPromise();
+    return this.http.post(`${environment.apiUrl}/Sensor/${sensorId}/datastream`, datastream).toPromise();
+  }
+
+  /** Update datastream on sensor */
+  public updateDatastream(sensorId: string, datastreamId: string, datastream: object) {
+    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/datastream/${datastreamId}`, datastream).toPromise();
   }
 
   /** Delete a datastream from sensor */
-  public deleteDatastream(sensorId: string, datastreamId: number) {
-    return this.http.delete(`${environment.apiUrl}/Sensor/${sensorId}/delete/datastream/${datastreamId}`).toPromise();
+  public deleteDatastream(sensorId: string, datastreamId: string) {
+    return this.http.delete(`${environment.apiUrl}/Sensor/${sensorId}/datastream/${datastreamId}`).toPromise();
   }
 
   /** Unregister a sensor */
