@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subscriber} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {ISensor} from '../model/bodies/sensor-body';
 import {SensorTheme} from '../model/bodies/sensorTheme';
 import {environment} from '../../environments/environment';
 import {ConnectionService} from './connection.service';
 import {EventType} from '../model/events/event-type';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 export interface ILocationBody {
   longitude: number;
@@ -115,16 +115,37 @@ export class SensorService {
   }
 
   /** Retrieve sensors */
-  public async getSensors() {
-    const sensorPromise = this.http.get(`${environment.apiUrl}/Sensor`).toPromise();
+  public async getSensors(bottomLeftLongitude?: string, bottomLeftLatitude?: string, upperRightLongitude?: string,
+                          upperRightLatitude?: string) {
+    let params = new HttpParams();
+    if (bottomLeftLongitude) {
+      params = params.set('bottomLeftLongitude', bottomLeftLongitude);
+    }
+    if (bottomLeftLatitude) {
+      params = params.set('bottomLeftLatitude', bottomLeftLatitude);
+    }
+    if (upperRightLongitude) {
+      params = params.set('upperRightLongitude', upperRightLongitude);
+    }
+    if (upperRightLatitude) {
+      params = params.set('upperRightLatitude', upperRightLatitude);
+    }
+
+    const url = `${environment.apiUrl}/Sensor?${params.toString()}`;
+    const sensorPromise = this.http.get(url).toPromise();
     return await sensorPromise as ISensor[];
   }
 
   public async getMySensors() {
-    const sensors = await this.getSensors();
     const owner = this.connectionService.currentOwnerValue;
 
-    return sensors.filter((sensor) => sensor.ownerIds.includes(owner.id));
+    let params = new HttpParams();
+    params = params.set('ownerId', owner.id);
+
+    const url = `${environment.apiUrl}/Sensor?${params.toString()}`;
+    console.log(url);
+    const sensorPromise = this.http.get(url).toPromise();
+    return await sensorPromise as ISensor[];
   }
 
   /** Update sensor details */
