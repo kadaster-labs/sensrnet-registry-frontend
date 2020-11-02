@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config src/proxy.conf.json",
-    "start-en": "npm run start -- --configuration=en",
-    "build": "ng build --prod",
+    "start-nl": "npm run start -- --configuration=nl",
+    "build": "ng build --prod --configuration=nl",
     "lint": "ng lint",
     "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "pree2e": "webdriver-manager update --versions.chrome 73.0.3683.75",

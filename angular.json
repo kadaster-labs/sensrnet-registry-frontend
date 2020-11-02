@@ -14,9 +14,9 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "nl",
+        "sourceLocale": "en",
         "locales": {
-          "en": "src/i18n/messages.en.xlf"
+          "nl": "src/i18n/messages.nl.xlf"
         }
       },
       "architect": {
@@ -75,17 +75,17 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2.5mb",
-                  "maximumError": "5mb"
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "1mb",
-                  "maximumError": "2mb"
+                  "maximumError": "10mb"
                 }
               ]
             },
-            "en": {
-              "localize": ["en"]
+            "nl": {
+              "localize": ["nl"]
             }
           }
         },
@@ -98,8 +98,8 @@
             "production": {
               "browserTarget": "registryViewer:build:production"
             },
-            "en": {
-              "browserTarget": "registryViewer:build:en"
+            "nl": {
+              "browserTarget": "registryViewer:build:nl"
             }
           }
         },
@@ -164,7 +164,7 @@
               "i18nFormat": "xlf2",
               "srcDir": "src/i18n",
               "genDir": "src/i18n",
-              "defaultLanguage": "nl",
+              "defaultLanguage": "en",
               "languages": [
                 "nl",
                 "en"
