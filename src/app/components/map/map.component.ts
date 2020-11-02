@@ -15,6 +15,7 @@ import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
 import { extend, Extent } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
+import { getBottomLeft, getTopRight } from 'ol/extent';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
@@ -526,6 +527,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const sensors = await this.sensorService.getSensors();
     this.initMap(sensors);
+
+    // const onMoveEnd = async (evt) => {
+    //   const evtMap = evt.map;
+    //   const extent = evtMap.getView().calculateExtent(evtMap.getSize());
+    //
+    //   const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
+    //   const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
+    //
+    //   console.log(bottomLeft, topRight);
+    // };
+    // this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
       this.myLayers = data as Theme[];
