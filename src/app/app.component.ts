@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { Owner } from './model/owner';
-import { environment } from '../environments/environment';
 import { ConnectionService } from './services/connection.service';
 
 

@@ -47,7 +47,7 @@ import { DataStreamComponent } from './form-controls/datastream/datastream.compo
     SidebarComponent,
     MapComponent,
     SensorsComponent,
-    DataStreamComponent
+    DataStreamComponent,
   ],
   imports: [
     BrowserModule,

@@ -171,10 +171,9 @@ export class MapComponent implements OnInit, OnDestroy {
     return styleCache;
   }
 
-  public initMap(sensors) {
-    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+  public initMap() {
     const features: Array<Feature> = new GeoJSON().readFeatures({
-      features: featuresData,
+      features: [],
       type: 'FeatureCollection',
     });
 
@@ -298,6 +297,17 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  public updateMap(sensors) {
+    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+    const features: Array<Feature> = new GeoJSON().readFeatures({
+      features: featuresData,
+      type: 'FeatureCollection',
+    });
+
+    this.vectorSource.clear();
+    this.vectorSource.addFeatures(features);
+  }
+
   public setShowInfo(coordinates) {
     if (coordinates) {
       this.showInfo = true;
@@ -316,17 +326,33 @@ export class MapComponent implements OnInit, OnDestroy {
   public updateSensor(updatedSensor: ISensor) {
     const props = MapComponent.sensorToFeatureProperties(updatedSensor);
 
-    // update map
     const sensor = this.vectorSource.getFeatureById(updatedSensor._id);
-    sensor.setProperties(props);
-    const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
-      updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
-    ]));
-    sensor.setGeometry(geom);
-    this.clearLocationLayer();
+    if (sensor) {  // Update map.
+      sensor.setProperties(props);
+      const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
+        updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
+      ]));
+      sensor.setGeometry(geom);
+      this.clearLocationLayer();
 
-    // update sensor update pane
-    this.selectedSensor = updatedSensor;
+      if (this.selectedSensor && this.selectedSensor._id === updatedSensor._id) {
+        this.selectedSensor = updatedSensor;  // Update sensor update pane.
+      }
+    }
+  }
+
+  public sensorDeleted(deletedSensor: ISensor) {
+    const sensor = this.vectorSource.getFeatureById(deletedSensor._id);
+    if (sensor) {  // Update map.
+      if (this.selectedSensor && this.selectedSensor._id === deletedSensor._id) {
+        this.setShowInfo(undefined);
+        this.selectedSensor = undefined;
+      }
+
+      this.vectorSource.removeFeature(sensor);
+    }
+
+    this.locationService.hideLocationHighlight();
   }
 
   public handleEvent(event: SearchComponentEvent) {
@@ -519,31 +545,37 @@ export class MapComponent implements OnInit, OnDestroy {
     await this.router.navigate([`/sensor/${this.selectedSensor._id}`]);
   }
 
+  public async deleteSensor(): Promise<void> {
+    if (confirm('Are you sure?')) {
+      await this.sensorService.unregister(this.selectedSensor._id);
+    }
+  }
+
   public async ngOnInit(): Promise<void> {
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
     }
 
-    const sensors = await this.sensorService.getSensors();
-    this.initMap(sensors);
+    this.initMap();
+    const onMoveEnd = async (evt) => {
+      const evtMap = evt.map;
+      const extent = evtMap.getView().calculateExtent(evtMap.getSize());
 
-    // const onMoveEnd = async (evt) => {
-    //   const evtMap = evt.map;
-    //   const extent = evtMap.getView().calculateExtent(evtMap.getSize());
-    //
-    //   const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
-    //   const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
-    //
-    //   console.log(bottomLeft, topRight);
-    // };
-    // this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
+      const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
+      const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
+
+      const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
+        topRight[0].toString(), topRight[1].toString());
+      this.updateMap(sensors);
+    };
+    this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
       this.myLayers = data as Theme[];
     }, () => {}));
 
-    const { onRegister, onUpdate } = await this.sensorService.subscribe();
+    const { onRegister, onUpdate, onDelete } = await this.sensorService.subscribe();
 
     this.subscriptions.push(onRegister.subscribe((newSensor: ISensor) => {
       const feature: object = this.sensorToFeature(newSensor);
@@ -553,6 +585,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(onUpdate.subscribe((updatedSensor: ISensor) => {
       this.updateSensor(updatedSensor);
+    }));
+
+    this.subscriptions.push(onDelete.subscribe((deletedSensor: ISensor) => {
+      this.sensorDeleted(deletedSensor);
     }));
 
     this.subscriptions.push(this.locationService.showLocation$.subscribe((sensor) => {

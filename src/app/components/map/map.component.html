@@ -12,39 +12,47 @@
                           id="layers" class="p-0 m-0"></ggc-dataset-tree>
 
         <div id="popup" class="ol-popup bg-white border-0 hidden mb-5">
+            <div *ngIf="showInfo" class="row border mx-0">
+                <div class="col-12 mx-0 mt-2">
+                    <h4>{{ selectedSensor?.name }}</h4>
+                </div>
+            </div>
             <table *ngIf="showInfo" class="table table-bordered table-striped table-sm mb-0">
                 <caption class="hidden">Sensor details</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Attribute</th>
-                        <th scope="col">Value</th>
-                    </tr>
-                </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Name</strong></td>
-                        <td><em>{{ selectedSensor?.name }}</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Sensortype</strong></td>
+                        <td><strong>Category</strong></td>
                         <td><em>{{ selectedSensor?.typeName }}</em></td>
                     </tr>
                     <tr>
-                        <td><strong>Active</strong></td>
-                        <td><em>{{ selectedSensor?.active }}</em></td>
+                        <td><strong>Type</strong></td>
+                        <td><em>{{ selectedSensor?.typeDetails?.subType }}</em></td>
                     </tr>
-                    <tr *ngIf="selectedSensor">
-                        <td colspan=2>
-                            <div *ngIf="ownsSensor(selectedSensor); else viewSensor">
-                                <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">Edit</button>
-                            </div>
-                            <ng-template #viewSensor>
-                                <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">View</button>
-                            </ng-template>
+                    <tr>
+                        <td><strong><label for="selected-sensor-active" class="p-0 m-0">Active</label></strong></td>
+                        <td>
+                            <input type="checkbox" id="selected-sensor-active" class="pt-1 pb-0 my-0" [checked]="selectedSensor?.active" disabled>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="showInfo" class="row border mx-0">
+                <div class="col-12 px-1 mx-0">
+                    <div *ngIf="ownsSensor(selectedSensor); else viewSensor" class="row mx-0">
+                        <div class="col-6 my-2 px-1">
+                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">Edit</button>
+                        </div>
+                        <div class="col-6 my-2 px-1">
+                            <button (click)="deleteSensor()" class="btn btn-danger btn-sm btn-block">Delete</button>
+                        </div>
+                    </div>
+                    <ng-template #viewSensor>
+                        <div class="col-12 my-2 px-1 mx-0">
+                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">View</button>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row h-100">
