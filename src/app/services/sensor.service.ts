@@ -143,7 +143,6 @@ export class SensorService {
     params = params.set('ownerId', owner.id);
 
     const url = `${environment.apiUrl}/Sensor?${params.toString()}`;
-    console.log(url);
     const sensorPromise = this.http.get(url).toPromise();
     return await sensorPromise as ISensor[];
   }
