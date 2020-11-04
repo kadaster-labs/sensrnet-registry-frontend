@@ -3,40 +3,50 @@
         <ggc-search (searchComponentEventEmitter)="handleEvent($event)"
                     placeholderTextAndAriaLabel="Zoeken op locatie"
                     id="search" class="p-0 m-0" [style.top]="searchBarHeight"></ggc-search>
-
         <ggc-dataset-tree [themes]="myLayers"
                           (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
                           [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"
                           [iconExpanded]="iconExpanded" [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked"
                           [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"
                           id="layers" class="p-0 m-0"></ggc-dataset-tree>
-
         <div id="popup" class="ol-popup bg-white border-0 hidden mb-5">
-            <div *ngIf="showInfo" class="row border mx-0">
+            <div *ngIf="overlayVisible" class="row border mx-0">
                 <div class="col-12 mx-0 mt-2">
                     <h4>{{ selectedSensor?.name }}</h4>
                 </div>
             </div>
-            <table *ngIf="showInfo" class="table table-bordered table-striped table-sm mb-0">
+            <table *ngIf="overlayVisible" class="table table-bordered table-striped table-sm mb-0">
                 <caption class="hidden">Sensor details</caption>
                 <tbody>
                     <tr>
-                        <td><strong>Category</strong></td>
-                        <td><em>{{ selectedSensor?.typeName }}</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Type</strong></td>
-                        <td><em>{{ selectedSensor?.typeDetails?.subType }}</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong><label for="selected-sensor-active" class="p-0 m-0">Active</label></strong></td>
                         <td>
-                            <input type="checkbox" id="selected-sensor-active" class="pt-1 pb-0 my-0" [checked]="selectedSensor?.active" disabled>
+                            <strong>Category</strong>
+                        </td>
+                        <td>
+                            <em>{{ selectedSensor?.typeName }}</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Type</strong>
+                        </td>
+                        <td>
+                            <em>{{ selectedSensor?.typeDetails?.subType }}</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                <label for="selected-sensor-active" class="p-0 m-0">Active</label>
+                            </strong>
+                        </td>
+                        <td>
+                            <input type="checkbox" id="selected-sensor-active" class="pt-2 pb-0 my-0" [checked]="selectedSensor?.active" disabled>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="showInfo" class="row border mx-0">
+            <div *ngIf="overlayVisible && selectedSensor" class="row border mx-0">
                 <div class="col-12 px-1 mx-0">
                     <div *ngIf="ownsSensor(selectedSensor); else viewSensor" class="row mx-0">
                         <div class="col-6 my-2 px-1">
@@ -57,7 +67,7 @@
     </div>
     <div class="row h-100">
         <div class="h-100 vw-100">
-            <ggc-map [mapName]="'srn'" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
+            <ggc-map [mapName]="mapName" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
             <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
                 [url]="dataset.services[0].url" [layer]="dataset.services[0].layers[0].technicalName"
                 [mapName]="mapName" [minResolution]="dataset.services[0].layers[0].minResolution"
@@ -73,9 +83,9 @@
                 [zIndex]="dataset.services[0].layers[0].zIndex">
             </ggc-wms-layer>
             <ggc-map-details-container>
-                <ggc-mouse-position [mapName]="'srn'"></ggc-mouse-position>
-                <ggc-scale-denominator [mapName]="'srn'"></ggc-scale-denominator>
-                <ggc-scale-line [mapName]="'srn'"></ggc-scale-line>
+                <ggc-mouse-position [mapName]="mapName"></ggc-mouse-position>
+                <ggc-scale-denominator [mapName]="mapName"></ggc-scale-denominator>
+                <ggc-scale-line [mapName]="mapName"></ggc-scale-line>
             </ggc-map-details-container>
         </div>
     </div>
