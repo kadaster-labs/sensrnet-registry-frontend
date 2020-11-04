@@ -57,6 +57,7 @@ export class MapComponent implements OnInit, OnDestroy {
   public subscriptions = [];
   public environment = environment;
 
+  public mapUpdated;
   public overlayVisible = false;
   public selectedSensor: ISensor;
 
@@ -560,16 +561,22 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     this.initMap();
+
     const onMoveEnd = async (evt) => {
       const evtMap = evt.map;
-      const extent = evtMap.getView().calculateExtent(evtMap.getSize());
 
-      const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
-      const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
+      const currentRequestTimestamp = new Date().valueOf();
+      if (!this.mapUpdated || currentRequestTimestamp - this.mapUpdated > 500) {  // In case of e.g. resizing window.
+        this.mapUpdated = currentRequestTimestamp;
 
-      const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
-        topRight[0].toString(), topRight[1].toString());
-      this.updateMap(sensors);
+        const extent = evtMap.getView().calculateExtent(evtMap.getSize());
+        const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
+        const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
+
+        const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
+          topRight[0].toString(), topRight[1].toString());
+        this.updateMap(sensors);
+      }
     };
     this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
 
