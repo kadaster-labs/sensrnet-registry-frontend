@@ -10,13 +10,19 @@
                           [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"
                           id="layers" class="p-0 m-0"></ggc-dataset-tree>
         <div id="popup" class="ol-popup bg-white border-0 hidden mb-5">
-            <div *ngIf="overlayVisible" class="row border mx-0">
+            <div *ngIf="overlayVisible" class="row border border-bottom-0 mx-0">
                 <div class="col-12 mx-0 mt-2">
                     <h4>{{ selectedSensor?.name }}</h4>
                 </div>
             </div>
-            <table *ngIf="overlayVisible" class="table table-bordered table-striped table-sm mb-0">
-                <caption class="hidden">Sensor details</caption>
+            <table *ngIf="overlayVisible" class="table table-striped table-sm mb-0">
+                <caption class="sr-only sr-only-focusable">Sensor details</caption>
+                <thead class="sr-only sr-only-focusable">
+                    <tr>
+                        <th scope="col">Attribute</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr>
                         <td>
