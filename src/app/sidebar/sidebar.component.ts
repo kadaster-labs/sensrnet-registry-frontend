@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   constructor(
-    private connectionService: ConnectionService,
     private router: Router,
+    private connectionService: ConnectionService,
   ) {}
 
   public async logout() {

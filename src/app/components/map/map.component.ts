@@ -1,7 +1,7 @@
 import proj4 from 'proj4';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import Overlay from 'ol/Overlay';
 import Feature from 'ol/Feature';
@@ -27,6 +27,7 @@ import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke
 
 import { ISensor } from '../../model/bodies/sensor-body';
 import { Category } from '../../model/bodies/sensorTypes';
+import { ModalService } from '../../services/modal.service';
 import { SensorService } from '../../services/sensor.service';
 import { environment } from '../../../environments/environment';
 import { LocationService } from '../../services/location.service';
@@ -41,12 +42,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
   @Input() searchBarHeight;
   @Input() clearLocationHighLight = true;
-  @Output() sensorSelected = new EventEmitter();
 
   constructor(
     private router: Router,
-    public mapService: MapService,
+    private mapService: MapService,
     private httpClient: HttpClient,
+    private modalService: ModalService,
     private sensorService: SensorService,
     private locationService: LocationService,
     private connectionService: ConnectionService,
@@ -56,13 +57,15 @@ export class MapComponent implements OnInit, OnDestroy {
   public subscriptions = [];
   public environment = environment;
 
-  public showInfo = false;
+  public mapUpdated;
+  public overlayVisible = false;
+  public selectedSensor: ISensor;
 
   public popupOverlay: Overlay;
-  private clusterSource: Cluster;
-  private vectorSource: VectorSource;
+  public clusterSource: Cluster;
+  public vectorSource: VectorSource;
   public highlightLayer: VectorLayer;
-  private selectCluster: SelectCluster;
+  public selectCluster: SelectCluster;
   public highlightSource: VectorSource;
   public clusterLayer: AnimatedCluster;
   public selectLocationLayer: VectorLayer;
@@ -73,9 +76,8 @@ export class MapComponent implements OnInit, OnDestroy {
   public currentZoomlevel: number = undefined;
   public currentMapResolution: number = undefined;
 
-  public selectedSensor: ISensor;
-
-  private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs';
+  private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 ' +
+    '+y_0=463000 +ellps=bessel +units=m +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
   public myLayers: Theme[];
@@ -171,10 +173,9 @@ export class MapComponent implements OnInit, OnDestroy {
     return styleCache;
   }
 
-  public initMap(sensors) {
-    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+  public initMap() {
     const features: Array<Feature> = new GeoJSON().readFeatures({
-      features: featuresData,
+      features: [],
       type: 'FeatureCollection',
     });
 
@@ -287,26 +288,36 @@ export class MapComponent implements OnInit, OnDestroy {
           geometry: feature.values_.geometry,
         });
         this.selectedSensor = feature.values_.sensor;
-        this.sensorSelected.emit(this.selectedSensor);
-        this.setShowInfo(feature.values_.geometry.flatCoordinates);
+        this.showOverlay(feature.values_.geometry.flatCoordinates);
 
         this.highlightFeature(geometry);
       } else if (activeFeatures.length > 1) {
         this.removeHighlight();
-        this.setShowInfo(null);
+        this.hideOverlay();
       }
     });
   }
 
-  public setShowInfo(coordinates) {
-    if (coordinates) {
-      this.showInfo = true;
-      this.popupOverlay.setPosition(coordinates);
-      this.popupOverlay.getElement().classList.remove('hidden');
-    } else {
-      this.showInfo = false;
-      this.popupOverlay.getElement().classList.add('hidden');
-    }
+  public updateMap(sensors) {
+    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+    const features: Array<Feature> = new GeoJSON().readFeatures({
+      features: featuresData,
+      type: 'FeatureCollection',
+    });
+
+    this.vectorSource.clear();
+    this.vectorSource.addFeatures(features);
+  }
+
+  public showOverlay(coordinates) {
+    this.overlayVisible = true;
+    this.popupOverlay.setPosition(coordinates);
+    this.popupOverlay.getElement().classList.remove('hidden');
+  }
+
+  public hideOverlay() {
+    this.overlayVisible = false;
+    this.popupOverlay.getElement().classList.add('hidden');
   }
 
   public getNodeColor(ownerType: boolean, opacity: number) {
@@ -316,21 +327,36 @@ export class MapComponent implements OnInit, OnDestroy {
   public updateSensor(updatedSensor: ISensor) {
     const props = MapComponent.sensorToFeatureProperties(updatedSensor);
 
-    // update map
     const sensor = this.vectorSource.getFeatureById(updatedSensor._id);
-    sensor.setProperties(props);
-    const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
-      updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
-    ]));
-    sensor.setGeometry(geom);
-    this.clearLocationLayer();
+    if (sensor) {  // In case the sensor is currently visible on the map: update map.
+      sensor.setProperties(props);
+      const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
+        updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
+      ]));
+      sensor.setGeometry(geom);
+      this.clearLocationLayer();
 
-    // update sensor update pane
-    this.selectedSensor = updatedSensor;
+      if (this.selectedSensor && this.selectedSensor._id === updatedSensor._id) {
+        this.selectedSensor = updatedSensor;  // In case the sensor is selected: update overlay.
+      }
+    }
+  }
+
+  public sensorDeleted(deletedSensor: ISensor) {
+    this.locationService.hideLocationHighlight();
+
+    const sensor = this.vectorSource.getFeatureById(deletedSensor._id);
+    if (sensor) {  // In case the sensor is currently visible on the map: update map.
+      if (this.selectedSensor && this.selectedSensor._id === deletedSensor._id) {  // In case the sensor is selected.
+        this.hideOverlay();
+        this.selectedSensor = null;
+      }
+      this.vectorSource.removeFeature(sensor);
+    }
   }
 
   public handleEvent(event: SearchComponentEvent) {
-    this.mapService.zoomToPdokResult(event, 'srn');
+    this.mapService.zoomToPdokResult(event, this.mapName);
   }
 
   public handleMapEvents(mapEvent: MapComponentEvent) {
@@ -343,7 +369,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const mapCoordinateRD = mapEvent.value.coordinate;
       const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
 
-      this.setShowInfo(null);
+      this.hideOverlay();
       this.removeHighlight();
 
       this.locationService.setLocation({
@@ -384,21 +410,21 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public handleDatasetTreeEvents(event: DatasetTreeEvent) {
     if (event.type === 'layerActivated') {
-      const geactiveerdeService = event.value.services[0];
-      if (geactiveerdeService.type === 'wms') {
+      const deactivatedService = event.value.services[0];
+      if (deactivatedService.type === 'wms') {
         this.activeWmsDatasets.push(event.value);
-      } else if (geactiveerdeService.type === 'wmts') {
+      } else if (deactivatedService.type === 'wmts') {
         this.activeWmtsDatasets.push(event.value);
       }
     } else if (event.type === 'layerDeactivated') {
-      const gedeactiveerdeService = event.value.services[0];
-      if (gedeactiveerdeService.type === 'wms') {
+      const deactivatedService = event.value.services[0];
+      if (deactivatedService.type === 'wms') {
         this.activeWmsDatasets = this.activeWmsDatasets.filter((dataset) =>
-          dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
+          dataset.services[0].layers[0].technicalName !== deactivatedService.layers[0].technicalName);
         this.activeWmsDatasets = this.activeWmsDatasets.filter((dataset) => dataset.services.length > 0);
-      } else if (gedeactiveerdeService.type === 'wmts') {
+      } else if (deactivatedService.type === 'wmts') {
         this.activeWmtsDatasets = this.activeWmtsDatasets.filter((dataset) =>
-          dataset.services[0].layers[0].technicalName !== gedeactiveerdeService.layers[0].technicalName);
+          dataset.services[0].layers[0].technicalName !== deactivatedService.layers[0].technicalName);
         this.activeWmtsDatasets = this.activeWmtsDatasets.filter((dataset) => dataset.services.length > 0);
       }
     }
@@ -470,11 +496,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public removeHighlight() {
     this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
-    this.selectedSensor = undefined;
   }
 
   private zoomToPoint(point: Point) {
-    const view = this.mapService.getMap('srn').getView();
+    const view = this.mapService.getMap(this.mapName).getView();
     view.fit(point, {
       maxZoom: 10,
     });
@@ -505,7 +530,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.findMe();
     });
 
-    this.mapService.getMap('srn').addControl(new Control({
+    this.mapService.getMap(this.mapName).addControl(new Control({
       element: locate,
     }));
   }
@@ -519,31 +544,47 @@ export class MapComponent implements OnInit, OnDestroy {
     await this.router.navigate([`/sensor/${this.selectedSensor._id}`]);
   }
 
+  public async deleteSensor(): Promise<void> {
+    this.modalService.confirm('Please confirm.', 'Do you really want to delete the sensor?')
+      .then((confirmed) => {
+        if (confirmed) {
+          this.sensorService.unregister(this.selectedSensor._id);
+        }
+      })
+      .catch(() => console.log('User dismissed the dialog.'));
+  }
+
   public async ngOnInit(): Promise<void> {
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
     }
 
-    const sensors = await this.sensorService.getSensors();
-    this.initMap(sensors);
+    this.initMap();
 
-    // const onMoveEnd = async (evt) => {
-    //   const evtMap = evt.map;
-    //   const extent = evtMap.getView().calculateExtent(evtMap.getSize());
-    //
-    //   const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
-    //   const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
-    //
-    //   console.log(bottomLeft, topRight);
-    // };
-    // this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
+    const onMoveEnd = async (evt) => {
+      const evtMap = evt.map;
+
+      const currentRequestTimestamp = new Date().valueOf();
+      if (!this.mapUpdated || currentRequestTimestamp - this.mapUpdated > 500) {  // In case of e.g. resizing window.
+        this.mapUpdated = currentRequestTimestamp;
+
+        const extent = evtMap.getView().calculateExtent(evtMap.getSize());
+        const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
+        const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
+
+        const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
+          topRight[0].toString(), topRight[1].toString());
+        this.updateMap(sensors);
+      }
+    };
+    this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
       this.myLayers = data as Theme[];
     }, () => {}));
 
-    const { onRegister, onUpdate } = await this.sensorService.subscribe();
+    const { onRegister, onUpdate, onDelete } = await this.sensorService.subscribe();
 
     this.subscriptions.push(onRegister.subscribe((newSensor: ISensor) => {
       const feature: object = this.sensorToFeature(newSensor);
@@ -553,6 +594,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(onUpdate.subscribe((updatedSensor: ISensor) => {
       this.updateSensor(updatedSensor);
+    }));
+
+    this.subscriptions.push(onDelete.subscribe((deletedSensor: ISensor) => {
+      this.sensorDeleted(deletedSensor);
     }));
 
     this.subscriptions.push(this.locationService.showLocation$.subscribe((sensor) => {
