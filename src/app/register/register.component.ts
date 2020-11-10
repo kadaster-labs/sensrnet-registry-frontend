@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
+import { first, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 import { AlertService } from '../services/alert.service';
 import { ConnectionService } from '../services/connection.service';
@@ -50,7 +51,7 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.controls;
   }
 
-  public onSubmit() {
+  public async onSubmit() {
     this.submitted = true;
 
     // reset alerts on submit
@@ -69,8 +70,8 @@ export class RegisterComponent implements OnInit {
           this.alertService.success('Registration successful', true);
           this.router.navigate(['/login']);
         },
-        (error) => {
-          this.alertService.error(error.error.error);
+        () => {
+          this.alertService.error('Registration failed. Does the account exist already?');
           this.loading = false;
         });
   }
