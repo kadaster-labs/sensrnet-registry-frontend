@@ -61,7 +61,6 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         (e) => {
-          console.log(e);
           this.alertService.error(`Failed to login: Supply valid credentials.`);
           this.loading = false;
         });

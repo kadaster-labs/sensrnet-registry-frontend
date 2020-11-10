@@ -75,6 +75,7 @@ export class SensorService {
 
   private sensorCreated$: Observable<ISensor>;
   private sensorUpdated$: Observable<ISensor>;
+  private sensorDeleted$: Observable<ISensor>;
 
   constructor(
     private http: HttpClient,
@@ -83,7 +84,8 @@ export class SensorService {
   ) {}
 
   public async subscribe() {
-    if (!this.sensorCreated$ || !this.sensorUpdated$) {
+    if (!this.sensorCreated$ || !this.sensorUpdated$ || !this.sensorDeleted$) {
+      const sensorDeleted$ = this.connectionService.subscribeTo(EventType.SensorDeleted);
       const sensorUpdated$ = this.connectionService.subscribeTo(EventType.SensorUpdated);
       const sensorRegistered$ = this.connectionService.subscribeTo(EventType.SensorRegistered);
       const sensorActivated$ = await this.connectionService.subscribeTo(EventType.SensorActivated);
@@ -105,9 +107,15 @@ export class SensorService {
         sensorDeactivated$.subscribe(updateFunction);
         sensorLocationUpdated$.subscribe(updateFunction);
       });
+
+      this.sensorDeleted$ = new Observable((observer: Subscriber<ISensor>) => {
+        sensorDeleted$.subscribe((sensor: ISensor) => {
+          observer.next(sensor);
+        });
+      });
     }
 
-    return {onRegister: this.sensorCreated$, onUpdate: this.sensorUpdated$};
+    return {onRegister: this.sensorCreated$, onUpdate: this.sensorUpdated$, onDelete: this.sensorDeleted$};
   }
 
   /** Register sensor */

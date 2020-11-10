@@ -44,7 +44,7 @@ export class OwnerUpdateComponent implements OnInit {
     this.connectionService.currentOwner.subscribe((owner: Owner) => {
       this.currentOwner = owner;
 
-      if (!owner || !this.form) {
+      if (!owner || !this.currentOwner.name || !this.form) {
         return;
       }
 
