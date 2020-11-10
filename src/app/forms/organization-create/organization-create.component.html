@@ -1,0 +1,34 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group">
+        <label for="website">Website</label>
+        <input type="text" formControlName="website" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.website.errors }" />
+        <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
+            <div class="required-text" *ngIf="f.website.errors.required">Website is required</div>
+            <div class="required-text" *ngIf="f.website.errors.pattern">Not a valid URL</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="contactName">Contact person name<span class="font-italic text-muted"> - Optional</span></label>
+        <input type="text" formControlName="contactName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactName.errors }" />
+        <div *ngIf="submitted && f.contactName.errors" class="invalid-feedback">
+            <div class="required-text" *ngIf="f.contactName.errors.required">Name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="contactEmail">Public e-mail<span class="font-italic text-muted"> - Optional</span></label>
+        <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactEmail.errors }" />
+        <div *ngIf="submitted && f.contactEmail.errors" class="invalid-feedback">
+            <div class="required-text" *ngIf="f.contactEmail.errors.required">Public e-mail is required</div>
+            <div class="required-text" *ngIf="f.contactEmail.errors.email">Public e-mail must be a valid e-mail address</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="contactPhone">Public phone number<span class="font-italic text-muted"> - Optional</span></label>
+        <input type="text" formControlName="contactPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactPhone.errors }" />
+        <div *ngIf="submitted && f.contactPhone.errors" class="invalid-feedback">
+            <div class="required-text" *ngIf="f.contactPhone.errors.required">Public phone number is required</div>
+        </div>
+    </div>
+    <hr>
+    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit">Create</button>
+</form>

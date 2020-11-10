@@ -25,12 +25,15 @@ import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { SensorsComponent } from './forms/sensors/sensors.component';
-import { OwnerUpdateComponent } from './forms/owner-update/owner-update.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
+import { OrganizationComponent } from './components/organization/organization.component';
 import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
+import { OrganizationJoinComponent } from './forms/organization-join/organization-join.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
+import { OrganizationCreateComponent } from './forms/organization-create/organization-create.component';
+import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,7 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     SensorThemeComponent,
     SensorLocationComponent,
     SensorTypeComponent,
-    OwnerUpdateComponent,
+    OrganizationUpdateComponent,
     SensorStatusComponent,
     NavBarComponent,
     SidebarComponent,
@@ -51,8 +54,10 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     SensorsComponent,
     DataStreamComponent,
     ModalComponent,
-  ],
-  imports: [
+    OrganizationComponent,
+    OrganizationJoinComponent,
+    OrganizationCreateComponent,
+  ], imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -63,15 +68,14 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     GgcDatasetLegendModule,
     HttpClientModule,
     NgbModule,
-  ],
-  providers: [
+  ], providers: [
     ModalService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: 'nl' },
-  ],
-  bootstrap: [
+  ], bootstrap: [
     AppComponent,
   ],
 })
+
 export class AppModule {}

@@ -72,8 +72,12 @@ export class SensorComponent implements OnInit, OnDestroy {
       baseObjectId: 'placeholder'
     });
 
-    const owner = this.connectionService.currentOwnerValue;
-    this.canSubmitSensor = owner && sensor.ownerIds ? sensor.ownerIds.includes(owner.id) : false;
+    const claim = this.connectionService.currentClaim;
+    if (claim && claim.organizationId && sensor.organizationIds) {
+      this.canSubmitSensor = sensor.organizationIds.includes(claim.organizationId);
+    } else {
+      this.canSubmitSensor = false;
+    }
 
     this.form.patchValue({
       aim: this.sensor.aim || '',
@@ -88,8 +92,8 @@ export class SensorComponent implements OnInit, OnDestroy {
         baseObjectId: this.sensor.baseObjectId || 'non-empty',
       },
       type: {
-        typeName: this.sensor.typeName ? this.sensor.typeName[0] : '',
-        typeDetails: this.sensor.typeDetails ? this.sensor.typeDetails.subType : '',
+        category: this.sensor.category || '',
+        typeName: this.sensor.typeName || '',
       },
       theme: { value: this.sensor.theme || [] },
     });
@@ -122,7 +126,6 @@ export class SensorComponent implements OnInit, OnDestroy {
 
   public async updateSensor() {
     const updatedSensorProperties = {
-      typeName: this.form.value.type.typeName,
       location: this.form.value.location,
       dataStreams: this.form.value.dataStreams,
       active: this.form.value.active || false,
@@ -132,9 +135,8 @@ export class SensorComponent implements OnInit, OnDestroy {
       manufacturer: this.form.value.manufacturer,
       name: this.form.value.name,
       theme: this.form.value.theme.value,
-      typeDetails: {
-        subType: this.form.value.type.typeDetails,
-      },
+      category: this.form.value.type.category,
+      typeName: this.form.value.type.typeName,
     };
 
     try {
@@ -205,14 +207,10 @@ export class SensorComponent implements OnInit, OnDestroy {
 
     try {
       const updatedProperties: IUpdateSensorBody = {};
-      if (this.sensor.name !== updatedSensorProperties.name) {
-        updatedProperties.name = updatedSensorProperties.name;
-      }
-      if (!this.sensor.typeName || !this.sensor.typeName.length || this.sensor.typeName[0] !== updatedSensorProperties.typeName) {
-        updatedProperties.typeName = updatedSensorProperties.typeName;
-      }
-      if (!this.sensor.typeDetails || this.sensor.typeDetails.subType !== updatedSensorProperties.typeDetails.subType) {
-        updatedProperties.typeDetails = updatedSensorProperties.typeDetails;
+      for (const property of ['name', 'category', 'typeName']) {
+        if (this.sensor[property] !== updatedSensorProperties[property]) {
+          updatedProperties[property] = updatedSensorProperties[property];
+        }
       }
       if (updatedSensorProperties.theme.length) {  // A theme is selected
         if (this.sensor.theme && this.sensor.theme.length) { // And a theme existed already
@@ -237,7 +235,7 @@ export class SensorComponent implements OnInit, OnDestroy {
 
       if (Object.keys(updatedProperties).length) {
         await this.sensorService.updateDetails(this.sensor._id, updatedProperties);
-        console.log(`Sensor ${this.sensor._id} has successfully been updated.`);
+        console.log(`Sensor ${this.sensor._id} was successfully updated.`);
       }
     } catch (error) {
       console.error(error);
@@ -279,7 +277,6 @@ export class SensorComponent implements OnInit, OnDestroy {
 
     const sensor: IRegisterSensorBody = {
       dataStreams,
-      typeName: this.form.value.type.typeName,
       location: this.form.value.location || {},
       active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
       aim: this.form.value.aim,
@@ -288,7 +285,8 @@ export class SensorComponent implements OnInit, OnDestroy {
       manufacturer: this.form.value.manufacturer || undefined,
       name: this.form.value.name,
       theme: this.form.value.theme ? this.form.value.theme.value : [],
-      typeDetails: {subType: this.form.value.type.typeDetails || ''},
+      category: this.form.value.type.category,
+      typeName: this.form.value.type.typeName,
     };
 
     try {
@@ -306,6 +304,12 @@ export class SensorComponent implements OnInit, OnDestroy {
 
     if (!this.form.valid) {
       this.alertService.error(`The form is invalid.`);
+      return;
+    }
+
+    const claim = this.connectionService.currentClaim;
+    if (!claim || !claim.organizationId) {
+      this.alertService.error(`You need to join an organization first.`);
       return;
     }
 

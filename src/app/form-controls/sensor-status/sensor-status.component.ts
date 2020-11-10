@@ -1,6 +1,7 @@
-import { Component, forwardRef, Input, OnDestroy } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormGroup, FormBuilder, FormControl, Validators, ControlValueAccessor } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Component, forwardRef, Input, OnDestroy } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormGroup, FormBuilder, FormControl, Validators,
+  ControlValueAccessor } from '@angular/forms';
 
 export interface SensorThemeFormValues {
   value: boolean;

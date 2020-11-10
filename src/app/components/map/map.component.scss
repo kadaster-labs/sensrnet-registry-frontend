@@ -8,6 +8,13 @@
   display: none;
 }
 
+label {
+  margin-top: 5px;
+  color: #000000;
+  font-style: normal;
+  font-weight: bold;
+}
+
 ::ng-deep #search {
   left: 3rem;
   width: 17em;

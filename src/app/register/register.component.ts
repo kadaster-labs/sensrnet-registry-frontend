@@ -1,31 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { first, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-
+import { Component, OnInit } from '@angular/core';
+import {UserService} from '../services/user.service';
 import { AlertService } from '../services/alert.service';
 import { ConnectionService } from '../services/connection.service';
-import { OwnerService } from '../services/owner.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   styleUrls: ['./register.component.scss'],
   templateUrl: 'register.component.html',
 })
 export class RegisterComponent implements OnInit {
-  public registerForm: FormGroup;
   public loading = false;
   public submitted = false;
+  public registerForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private router: Router,
-    private connectionService: ConnectionService,
-    private ownerService: OwnerService,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
     private alertService: AlertService,
+    private connectionService: ConnectionService,
   ) {
-    // redirect to viewer if already logged in
-    if (this.connectionService.currentOwnerValue) {
+    const claim = this.connectionService.currentClaim;
+    if (claim && claim.accessToken) {
       this.router.navigate(['/']);
     }
   }
@@ -36,13 +34,6 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-
-      name: ['', Validators.required],
-      role: ['', Validators.required],
-      organisationName: ['', Validators.required],
-      contactEmail: ['', [Validators.required, Validators.email]],
-      contactPhone: ['', Validators.required],
-      website: ['', [Validators.required, Validators.pattern(reg)]],
     });
   }
 
@@ -63,7 +54,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.ownerService.register(this.registerForm.value)
+    this.userService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
         () => {

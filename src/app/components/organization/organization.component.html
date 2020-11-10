@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <app-navbar locationClass="form"></app-navbar>
+    <div class="row form-header">
+        <div class="col-1">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="col-11">
+            <div>
+                <h3>Organization</h3>
+            </div>
+            <hr>
+            <div *ngIf="belongsToOrganization;else create">
+                <app-organization-update></app-organization-update>
+            </div>
+            <ng-template #create>
+                <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio"
+                               name="options"
+                               autocomplete="off"
+                               [checked]="activeUpdateView == UpdateViewEnum.Join"
+                               (click)="activeUpdateView = UpdateViewEnum.Join">
+                        Join
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio"
+                               name="options"
+                               autocomplete="off"
+                               [checked]="activeUpdateView == UpdateViewEnum.Create"
+                               (click)="activeUpdateView = UpdateViewEnum.Create">
+                        Create
+                    </label>
+                </div>
+                <div *ngIf="activeUpdateView == UpdateViewEnum.Join">
+                    <app-organization-join></app-organization-join>
+                </div>
+                <div *ngIf="activeUpdateView == UpdateViewEnum.Create">
+                    <app-organization-create></app-organization-create>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

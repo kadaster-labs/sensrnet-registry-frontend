@@ -1,22 +1,20 @@
 import { Router } from '@angular/router';
-import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-
-import { Owner } from './model/owner';
+import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from './services/connection.service';
 
-
 @Component({ selector: 'app-root', templateUrl: 'app.component.html' })
-export class AppComponent {
-  public currentOwner: Owner;
-
+export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private titleService: Title,
     private connectionService: ConnectionService,
   ) {
-    this.connectionService.currentOwner.subscribe((x) => this.currentOwner = x);
     this.setTitle('Sensorenregister');
+  }
+
+  async ngOnInit() {
+    await this.connectionService.refreshClaim();
   }
 
   public setTitle(newTitle: string) {

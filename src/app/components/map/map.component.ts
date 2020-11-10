@@ -39,7 +39,6 @@ import { ConnectionService } from '../../services/connection.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-
   @Input() searchBarHeight;
   @Input() clearLocationHighLight = true;
 
@@ -95,6 +94,7 @@ export class MapComponent implements OnInit, OnDestroy {
     return {
       sensor,
       name: sensor.name,
+      category: sensor.category,
       typeName: sensor.typeName,
       active: sensor.active,
       aim: sensor.aim,
@@ -187,14 +187,14 @@ export class MapComponent implements OnInit, OnDestroy {
       let numberOfFeatures = FEATURES_.length;
       if (numberOfFeatures === 1) {
         const active = feature.get('features')[0].values_.active;
-        const sensorType = feature.get('features')[0].values_.typeName[0];
-        const isOwner = this.ownsSensor(feature.get('features')[0].values_.sensor);
+        const category = feature.get('features')[0].values_.category;
+        const ownsSensor = this.ownsSensor(feature.get('features')[0].values_.sensor);
 
         if (!active) {
-          numberOfFeatures = `${isOwner}_${sensorType}_inactive`;
+          numberOfFeatures = `${ownsSensor}_${category}_inactive`;
           style = styleCache[numberOfFeatures];
         } else {
-          numberOfFeatures = `${isOwner}_${sensorType}_active`;
+          numberOfFeatures = `${ownsSensor}_${category}_active`;
           style = styleCache[numberOfFeatures];
         }
       } else {
@@ -230,14 +230,14 @@ export class MapComponent implements OnInit, OnDestroy {
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
-        const isOwner = this.ownsSensor(feature.get('features')[0].values_.sensor);
+        const ownsSensor = this.ownsSensor(feature.get('features')[0].values_.sensor);
 
         let style: Style[];
         if (active) {
-          styleFeatures = `${isOwner}_${sensorType}_active`;
+          styleFeatures = `${ownsSensor}_${sensorType}_active`;
           style = styleCache[styleFeatures];
         } else {
-          styleFeatures = `${isOwner}_${sensorType}_inactive`;
+          styleFeatures = `${ownsSensor}_${sensorType}_inactive`;
           style = styleCache[styleFeatures];
         }
 
@@ -536,8 +536,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public ownsSensor(sensor): boolean {
-    const owner = this.connectionService.currentOwnerValue;
-    return owner && sensor.ownerIds ? sensor.ownerIds.includes(owner.id) : false;
+    const claim = this.connectionService.currentClaim;
+    return claim && claim.organizationId && sensor.organizationIds ? sensor.organizationIds.includes(claim.organizationId) : false;
   }
 
   public async editSensor(): Promise<void> {
@@ -559,7 +559,6 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
     }
-
     this.initMap();
 
     const onMoveEnd = async (evt) => {
@@ -575,7 +574,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
         const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
           topRight[0].toString(), topRight[1].toString());
-        this.updateMap(sensors);
+
+        if (sensors) {
+          this.updateMap(sensors);
+        }
       }
     };
     this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
