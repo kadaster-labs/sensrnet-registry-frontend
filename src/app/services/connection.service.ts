@@ -154,7 +154,6 @@ export class ConnectionService {
   public subscribeSocket(namespace: string) {
     if (this.socket) {
       this.socket.on(namespace, (event) => {
-        console.log(namespace, event);
         this.eventReceiver.next(new SocketEvent(namespace, event));
       });
     }
