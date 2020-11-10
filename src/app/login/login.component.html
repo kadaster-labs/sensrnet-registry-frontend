@@ -1,8 +1,13 @@
 <div class="jumbotron">
     <div class="container">
         <div class="row">
+            <div class="col col-sm-4 offset-sm-8 pt-5">
+                <app-language-switcher></app-language-switcher>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6 offset-sm-3">
-                <h1 i18n>Welkom bij SensRNet</h1>
+                <h1 i18n>Welcome to SensRNet</h1>
                 <div class="welcome-image">
                     <img src="assets\SensRNet-logo.png" class="image">
                 </div>
@@ -16,14 +21,14 @@
                         <label for="username" i18n>E-mail</label>
                         <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                         <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                            <div class="required-text" *ngIf="f.username.errors.required" i18n>E-mail is verplicht</div>
+                            <div class="required-text" *ngIf="f.username.errors.required" i18n>E-mail is required</div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="password" i18n>Wachtwoord</label>
+                        <label for="password" i18n>Password</label>
                         <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                         <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                            <div class="required-text" *ngIf="f.password.errors.required" i18n>Wachtwoord is verplicht</div>
+                            <div class="required-text" *ngIf="f.password.errors.required" i18n>Password is required</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -31,7 +36,7 @@
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                             <ng-container i18n>Login</ng-container>
                         </button>
-                        <a routerLink="/register" class="btn btn-link" i18n>Registeer</a>
+                        <a routerLink="/register" class="btn btn-link" i18n>Register</a>
                     </div>
                 </form>
             </div>

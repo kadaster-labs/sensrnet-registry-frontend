@@ -14,9 +14,15 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "en",
+        "sourceLocale": {
+          "code": "en",
+          "baseHref": "/en/"
+        },
         "locales": {
-          "nl": "src/i18n/messages.nl.xlf"
+          "nl": {
+            "baseHref": "",
+            "translation": "src/i18n/messages.nl.xlf"
+          }
         }
       },
       "architect": {
@@ -29,11 +35,12 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "localize": false,
+            "localize": true,
             "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/env.js",
               {
                 "glob": "**/*",
                 "input": "./node_modules/kadaster-huisstijl/dist/assets",
@@ -74,18 +81,21 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2.5mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "1mb",
+                  "maximumWarning": "2.5mb",
                   "maximumError": "10mb"
                 }
               ]
             },
             "nl": {
               "localize": ["nl"]
+            },
+            "en": {
+              "localize": ["en"]
             }
           }
         },
@@ -100,6 +110,9 @@
             },
             "nl": {
               "browserTarget": "registryViewer:build:nl"
+            },
+            "en": {
+              "browserTarget": "registryViewer:build:en"
             }
           }
         },
@@ -118,7 +131,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/env.js"
             ],
             "styles": [
               "src/styles.scss"

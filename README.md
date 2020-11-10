@@ -70,13 +70,22 @@ Once the images are available in the container registry, deployment can be done 
 `kustomize build deployment/overlays/gemeente-a | kubectl apply -f -`
 
 ## Internationalization + Localization
-The default language for the UI has been chosen to be Dutch, since the product was originally developed for the Dutch speaking citizen. However, not only do we want to have the option to launch this site internationally, there are many Dutch citizens who don't speak Dutch. We want this site to be accessible for them as well. Therefore, the Angular app in this repo has been internationalized, so that various localizations can be added later on.
+The default language for the UI is English. However, since during the MVP process the main audience is Dutch, the site serves the Dutch content by default. Since the app is internationalized, we also have the possibility to easily translate and launch the site in a different language later on.
 
-A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with `npm run extract-i18n`. Each language gets its own translation file and can be translated using standard translation tools, for example Poedit.
+### Development
+A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with 
+```
+npm run extract-i18n
+```
+Each language gets its own translation file and can be translated using standard translation tools, for example Poedit. Angular tooling currently only supports generating translation files ones. This means that whenever we update the site and regenerate the translation files, we've lost a previous translations. There is no build-in way to update the current translations. For this reason, we use the [xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) tools, which does exactly that. The new and changed translations are marked as such, allowing us to translate the site in an incremental way.
 
-Angular tooling currently only supports generating translation files ones. This means that whenever we update the site and regenerate the translation files, we've lost a previous translations. There is no build-in way to update the current translations. For this reason, we use the [xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) tools, which does exactly that. The new and changed translations are marked as such, allowing us to translate the site in an incremental way.
+A drawback is that languages cannot be swapped out using the Angular development server. To inspect a different language, the server has to be restart with a different configuration. We've provided the following commands to use:
+```
+npm run start     # starts development server using English locale
+npm run start-nl  # starts development server with Dutch locale
+```
 
-During the MVP process, the site is deployed for Dutch only. The app is therefore build to /dist/app. Whenever localizations are added, they will land in subfolders (i.e. /en/). This currently leads to problems with the way the backend is called (appending /api/), which breaks because of this. This will be changed in the future.
+When the app is built, different static sites are generated for each locale. Routing is therefore done in nginx.
 
 ## Testing
 Tests can be run using `npm run test`, which launches an headless Chrome browser to run the tests in. Please consult https://developers.google.com/web/updates/2017/04/headless-chrome#cli for local installation and setup. For CI purposes, we've included a Dockerfile with which the correct environment can easily be configured. This way, tests can be run by running `./run-tests.sh`.

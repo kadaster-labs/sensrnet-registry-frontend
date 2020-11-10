@@ -1,6 +1,5 @@
 import { Router } from '@angular/router';
 import {Component, Input} from '@angular/core';
-import { environment } from '../../environments/environment';
 import { ConnectionService } from '../services/connection.service';
 
 @Component({
@@ -11,8 +10,6 @@ import { ConnectionService } from '../services/connection.service';
 export class NavBarComponent {
 
   @Input() locationClass;
-
-  public environment = environment;
 
   constructor(
     private router: Router,

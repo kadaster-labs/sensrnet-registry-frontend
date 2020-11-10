@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {Observable, Subscriber} from 'rxjs';
 import {ISensor} from '../model/bodies/sensor-body';
 import {SensorTheme} from '../model/bodies/sensorTheme';
-import {environment} from '../../environments/environment';
 import {ConnectionService} from './connection.service';
 import {EventType} from '../model/events/event-type';
 import {HttpClient, HttpParams} from '@angular/common/http';
+import { EnvService } from './env.service';
 
 export interface ILocationBody {
   longitude: number;
@@ -78,6 +78,7 @@ export class SensorService {
 
   constructor(
     private http: HttpClient,
+    private env: EnvService,
     private connectionService: ConnectionService,
   ) {}
 
@@ -111,7 +112,7 @@ export class SensorService {
 
   /** Register sensor */
   public register(sensor: IRegisterSensorBody) {
-    return this.http.post<IRegisterSensorResponseBody>(`${environment.apiUrl}/Sensor`, sensor).toPromise();
+    return this.http.post<IRegisterSensorResponseBody>(`${this.env.apiUrl}/Sensor`, sensor).toPromise();
   }
 
   /** Retrieve sensors */
@@ -131,7 +132,7 @@ export class SensorService {
       params = params.set('upperRightLatitude', upperRightLatitude);
     }
 
-    const url = `${environment.apiUrl}/Sensor?${params.toString()}`;
+    const url = `${this.env.apiUrl}/Sensor?${params.toString()}`;
     const sensorPromise = this.http.get(url).toPromise();
     return await sensorPromise as ISensor[];
   }
@@ -142,63 +143,63 @@ export class SensorService {
     let params = new HttpParams();
     params = params.set('ownerId', owner.id);
 
-    const url = `${environment.apiUrl}/Sensor?${params.toString()}`;
+    const url = `${this.env.apiUrl}/Sensor?${params.toString()}`;
     const sensorPromise = this.http.get(url).toPromise();
     return await sensorPromise as ISensor[];
   }
 
   /** Update sensor details */
   public updateDetails(sensorId: string, details: IUpdateSensorBody) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/details`, details).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/details`, details).toPromise();
   }
 
   /** Transfer sensor ownership */
   public transferOwnership(sensorId: string, body: ITransferOwnershipBody) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/transfer`, body).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/transfer`, body).toPromise();
   }
 
   /** Share sensor ownership */
   public shareOwnership(sensorId: string, body: IShareOwnershipBody) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/share`, body).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/share`, body).toPromise();
   }
 
   /** Update location of a sensor */
   public updateLocation(sensorId: string, location: ILocationBody) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/location`, location).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/location`, location).toPromise();
   }
 
   /** Activate a sensor */
   public activate(sensorId: string) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/activate`, {}).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/activate`, {}).toPromise();
   }
 
   /** Deactivate a sensor */
   public deactivate(sensorId: string) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/deactivate`, {}).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/deactivate`, {}).toPromise();
   }
 
   /** Add datastream to sensor */
   public addDatastream(sensorId: string, datastream: object) {
-    return this.http.post(`${environment.apiUrl}/Sensor/${sensorId}/datastream`, datastream).toPromise();
+    return this.http.post(`${this.env.apiUrl}/Sensor/${sensorId}/datastream`, datastream).toPromise();
   }
 
   /** Update datastream on sensor */
   public updateDatastream(sensorId: string, datastreamId: string, datastream: object) {
-    return this.http.put(`${environment.apiUrl}/Sensor/${sensorId}/datastream/${datastreamId}`, datastream).toPromise();
+    return this.http.put(`${this.env.apiUrl}/Sensor/${sensorId}/datastream/${datastreamId}`, datastream).toPromise();
   }
 
   /** Delete a datastream from sensor */
   public deleteDatastream(sensorId: string, datastreamId: string) {
-    return this.http.delete(`${environment.apiUrl}/Sensor/${sensorId}/datastream/${datastreamId}`).toPromise();
+    return this.http.delete(`${this.env.apiUrl}/Sensor/${sensorId}/datastream/${datastreamId}`).toPromise();
   }
 
   /** Unregister a sensor */
   public unregister(id: string) {
-    return this.http.delete(`${environment.apiUrl}/Sensor/${id}`).toPromise();
+    return this.http.delete(`${this.env.apiUrl}/Sensor/${id}`).toPromise();
   }
 
   /** Retrieve a single sensor */
   public get(id: string) {
-    return this.http.get(`${environment.apiUrl}/Sensor/${id}`).toPromise();
+    return this.http.get(`${this.env.apiUrl}/Sensor/${id}`).toPromise();
   }
 }

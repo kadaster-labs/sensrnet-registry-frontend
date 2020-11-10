@@ -28,7 +28,6 @@ import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke
 import { ISensor } from '../../model/bodies/sensor-body';
 import { Category } from '../../model/bodies/sensorTypes';
 import { SensorService } from '../../services/sensor.service';
-import { environment } from '../../../environments/environment';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
 
@@ -54,7 +53,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public mapName = 'srn';
   public subscriptions = [];
-  public environment = environment;
 
   public showInfo = false;
 
@@ -580,7 +578,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
-    if (environment.apiUrl.startsWith('https')) {
+    if (window.location.protocol === 'https') {
       this.addFindMeButton();
     }
   }
