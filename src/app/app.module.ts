@@ -32,7 +32,6 @@ import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.com
 import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
-import { DataStreamComponent } from './form-controls/datastream/datastream.component';
 import { EnvServiceProvider } from './services/env.service.provider';
 
 @NgModule({
