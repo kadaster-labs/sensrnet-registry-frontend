@@ -23,6 +23,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { SensorComponent } from './forms/sensor/sensor.component';
 import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { SensorsComponent } from './forms/sensors/sensors.component';
 import { OwnerUpdateComponent } from './forms/owner-update/owner-update.component';
@@ -31,11 +32,13 @@ import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.com
 import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
+import { EnvServiceProvider } from './services/env.service.provider';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
+    LanguageSwitcherComponent,
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
@@ -68,7 +71,7 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
     ModalService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: 'nl' },
+    EnvServiceProvider,
   ],
   bootstrap: [
     AppComponent,

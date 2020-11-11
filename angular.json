@@ -14,9 +14,15 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "nl",
+        "sourceLocale": {
+          "code": "en",
+          "baseHref": "/en/"
+        },
         "locales": {
-          "en": "src/i18n/messages.en.xlf"
+          "nl": {
+            "baseHref": "",
+            "translation": "src/i18n/messages.nl.xlf"
+          }
         }
       },
       "architect": {
@@ -29,11 +35,12 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "localize": false,
+            "localize": true,
             "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/env.js",
               {
                 "glob": "**/*",
                 "input": "./node_modules/kadaster-huisstijl/dist/assets",
@@ -74,15 +81,18 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2.5mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "1mb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "2.5mb",
+                  "maximumError": "10mb"
                 }
               ]
+            },
+            "nl": {
+              "localize": ["nl"]
             },
             "en": {
               "localize": ["en"]
@@ -97,6 +107,9 @@
           "configurations": {
             "production": {
               "browserTarget": "registryViewer:build:production"
+            },
+            "nl": {
+              "browserTarget": "registryViewer:build:nl"
             },
             "en": {
               "browserTarget": "registryViewer:build:en"
@@ -118,7 +131,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/env.js"
             ],
             "styles": [
               "src/styles.scss"
@@ -164,7 +178,7 @@
               "i18nFormat": "xlf2",
               "srcDir": "src/i18n",
               "genDir": "src/i18n",
-              "defaultLanguage": "nl",
+              "defaultLanguage": "en",
               "languages": [
                 "nl",
                 "en"

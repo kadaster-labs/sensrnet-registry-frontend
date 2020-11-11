@@ -5,7 +5,6 @@ import { first } from 'rxjs/operators';
 
 import { AlertService } from '../services/alert.service';
 import { ConnectionService } from '../services/connection.service';
-import { environment } from '../../environments/environment';
 
 @Component({
   styleUrls: ['./login.component.scss'],
@@ -16,8 +15,6 @@ export class LoginComponent implements OnInit {
   public loading = false;
   public submitted = false;
   public returnUrl: string;
-
-  public environment = environment;
 
   constructor(
     private formBuilder: FormBuilder,

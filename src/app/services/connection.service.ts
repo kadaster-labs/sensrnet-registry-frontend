@@ -4,12 +4,11 @@ import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
+import { EnvService } from './env.service';
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionService {
-  private url = `${environment.apiUrl}`;
   private socket: SocketIOClient.Socket;
 
   public currentOwner: Observable<Owner>;
@@ -18,6 +17,7 @@ export class ConnectionService {
   constructor(
     private router: Router,
     private readonly http: HttpClient,
+    private env: EnvService,
   ) {
     this.currentOwnerSubject = new BehaviorSubject<Owner>(JSON.parse(localStorage.getItem('currentOwner')));
     this.currentOwner = this.currentOwnerSubject.asObservable();
@@ -29,7 +29,7 @@ export class ConnectionService {
   }
 
   public login(username: string, password: string) {
-    return this.http.post<any>(`${environment.apiUrl}/auth/login`, { username, password })
+    return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
       .pipe(map((data) => {
 
         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -47,7 +47,7 @@ export class ConnectionService {
   }
 
   public refreshAccessToken(): Observable<Owner> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/refresh`, null)
+    return this.http.post<any>(`${this.env.apiUrl}/auth/refresh`, null)
       .pipe(map((data) => {
         const user: Owner = { ...this.currentOwnerValue, ...data };
 
@@ -63,7 +63,7 @@ export class ConnectionService {
   // authentication of a user. Therefore, these functions should return to ownerService.
   public getOwner(): void {
     console.log('getOwner');
-    this.http.get<Owner>(`${environment.apiUrl}/Owner/`)
+    this.http.get<Owner>(`${this.env.apiUrl}/Owner/`)
       .subscribe((data: any) => {
         let owner: Owner = JSON.parse(localStorage.getItem('currentOwner'));
 
@@ -88,7 +88,7 @@ export class ConnectionService {
   }
 
   public updateOwner(user: Owner): Observable<Owner> {
-    return this.http.put(`${environment.apiUrl}/Owner/`, user)
+    return this.http.put(`${this.env.apiUrl}/Owner/`, user)
       .pipe(map(() => {
         let owner: Owner = JSON.parse(localStorage.getItem('currentOwner'));
 
@@ -105,7 +105,7 @@ export class ConnectionService {
     this.currentOwnerSubject.next(null);
 
     try {
-      await this.http.post<void>(`${environment.apiUrl}/auth/logout`, null).toPromise();
+      await this.http.post<void>(`${this.env.apiUrl}/auth/logout`, null).toPromise();
     } catch (error) {
       console.error('Something went wrong on logout', error);
     }
@@ -114,7 +114,7 @@ export class ConnectionService {
   public connectSocket() {
     if (!this.socket) {
       const namespace = 'sensor';
-      const host = this.url.substring(0, this.url.lastIndexOf('/'));  // strip the /api part
+      const host = this.env.apiUrl.substring(0, this.env.apiUrl.lastIndexOf('/'));  // strip the /api part
 
       const connectionOptions = {
         path: '/api/socket.io',

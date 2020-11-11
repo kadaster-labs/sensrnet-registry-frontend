@@ -13,7 +13,7 @@ WORKDIR /app
 
 COPY ./package*.json ./
 COPY .npmrc ./
-RUN npm install
+RUN npm ci
 
 COPY src src
 COPY tsconfig*.json ./
@@ -26,9 +26,11 @@ RUN npm run build
 FROM nginxinc/nginx-unprivileged:1.18.0-alpine
 
 COPY VERSION .
+COPY ./entrypoint.sh ./entrypoint.sh
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist/app /usr/share/nginx/html
+COPY --chown=nginx --from=builder /app/dist/app /usr/share/nginx/html
 
 EXPOSE 8080
 
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["./entrypoint.sh", "run"]
+CMD ["run"]

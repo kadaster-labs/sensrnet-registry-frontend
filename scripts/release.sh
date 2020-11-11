@@ -22,7 +22,7 @@ rm VERSION
 echo "$VERSION" >> VERSION
 
 # run build
-./build.sh
+./scripts/build.sh
 
 # tag it
 git add -A

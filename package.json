@@ -3,8 +3,8 @@
   "version": "0.0.13",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config src/proxy.conf.json",
-    "start-en": "npm run start -- --configuration=en",
+    "start": "ng serve --proxy-config src/proxy.conf.json --configuration=en",
+    "start-nl": "npm run start -- --configuration=nl",
     "build": "ng build --prod",
     "lint": "ng lint",
     "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
