@@ -36,6 +36,7 @@ import { SensorLocationComponent } from './form-controls/sensor-location/sensor-
 import { OrganizationCreateComponent } from './forms/organization-create/organization-create.component';
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 import { EnvServiceProvider } from './services/env.service.provider';
+import {OrganizationContactComponent} from "./form-controls/organization-contact/organization-contact.component";
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { EnvServiceProvider } from './services/env.service.provider';
     OrganizationComponent,
     OrganizationJoinComponent,
     OrganizationCreateComponent,
+    OrganizationContactComponent,
   ], imports: [
     BrowserModule,
     AppRoutingModule,
