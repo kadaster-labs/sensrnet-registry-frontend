@@ -9,7 +9,7 @@ import { SensorsComponent } from './forms/sensors/sensors.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 
 const routes: Routes = [
-  { path: '', component: ViewerComponent, canActivate: [AuthGuard] },
+  { path: '', component: ViewerComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 

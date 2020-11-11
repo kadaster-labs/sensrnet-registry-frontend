@@ -4,9 +4,9 @@ import { Claim } from '../model/claim';
 import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
 import { EnvService } from './env.service';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Subject, Observable, Subscriber } from 'rxjs';
 
 export class SocketEvent {
   constructor(
@@ -24,7 +24,7 @@ export class ConnectionService {
 
   // Routing the events using a separate observable is necessary because a socket connection may not exist at the
   // time some component tries to subscribe to an endpoint.
-  private eventReceiver: BehaviorSubject<SocketEvent> = new BehaviorSubject(new SocketEvent());
+  private eventReceiver: Subject<SocketEvent> = new Subject();
   private event$: Observable<SocketEvent> = this.eventReceiver.asObservable();
   private nameSpaceObservables: Record<string, Observable<any>> = {};
 
