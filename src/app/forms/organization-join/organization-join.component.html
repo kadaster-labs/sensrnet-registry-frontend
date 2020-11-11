@@ -1,13 +1,35 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-group">
-        <label for="organization">Organization</label>
-        <select data-container="body" class="form-control" formControlName="organization"
-                [ngClass]="{ 'is-invalid': submitted && f.organization.errors }">
-            <option *ngFor="let organization of organizations" [value]="organization._id">
-                {{ organization.website }}
-            </option>
-        </select>
+        <label>Filter</label>
+        <input (keyup)="filterInputChanged($event.target.value)" type="text" class="form-control" placeholder="website"/>
     </div>
+    <table class="table table-striped table-hover table-bordered">
+        <caption class="hidden">Organizations</caption>
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th class="pointer" scope="col">Website</th>
+            <th class="pointer" scope="col">Contact Name</th>
+            <th class="pointer" scope="col">Contact Email</th>
+            <th class="pointer" scope="col">Contact Phone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let organization of organizations"
+            (click)="selectOrganization(organization._id)"
+            class="pointer">
+            <th scope="row">
+                <input type="checkbox"
+                       class="pt-2 pb-1 my-0"
+                       [checked]="f.organization.value === organization._id">
+            </th>
+            <td>{{ organization.website }}</td>
+            <td>{{ organization.contactName }}</td>
+            <td>{{ organization.contactEmail }}</td>
+            <td>{{ organization.contactPhone }}</td>
+        </tr>
+        </tbody>
+    </table>
     <hr>
     <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit">Save</button>
 </form>

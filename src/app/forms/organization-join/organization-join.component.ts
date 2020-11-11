@@ -2,9 +2,11 @@ import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OrganizationService } from '../../services/organization.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {Organization} from '../../model/organization';
-import {UserService} from '../../services/user.service';
-import {ConnectionService} from '../../services/connection.service';
+import { Organization } from '../../model/organization';
+import { UserService } from '../../services/user.service';
+import { ConnectionService } from '../../services/connection.service';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-organization-join',
@@ -18,7 +20,7 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
   public subscriptions = [];
   public organizations = [];
 
-  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  private filterChanged: Subject<string> = new Subject<string>();
 
   constructor(
     private alertService: AlertService,
@@ -32,12 +34,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-  async ngOnInit(): Promise<void> {
-    this.form = this.formBuilder.group({
-      organization: new FormControl('', Validators.required),
-    });
-
-    const organizationPromise = this.organizationService.getAll().toPromise();
+  async getOrganizations(website?: string) {
+    const organizationPromise = this.organizationService.getOrganizations(website).toPromise();
     const organizations = await organizationPromise;
     if (organizations) {
       this.organizations = organizations as Organization[];
@@ -46,12 +44,40 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     }
   }
 
+  selectOrganization(organizationId: string) {
+    if (organizationId === this.form.get('organization').value) {
+      this.form.patchValue({ organization: '' });
+    } else {
+      this.form.patchValue({ organization: organizationId });
+    }
+  }
+
+  filterInputChanged(website) {
+    this.filterChanged.next(website);
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.form = this.formBuilder.group({
+      organization: new FormControl('', Validators.required),
+    });
+
+    await this.getOrganizations();
+    this.subscriptions.push(this.filterChanged
+      .pipe(
+        debounceTime(750),
+      )
+      .subscribe((website) => {
+        this.getOrganizations(website);
+      }));
+  }
+
   public async submit() {
     this.submitted = true;
     if (this.form.valid) {
       try {
         await this.userService.update(this.form.value).toPromise();
         await this.connectionService.refreshClaim();
+        this.connectionService.updateSocketOrganization();
 
         this.alertService.success('Updated.', false, 4000);
       } catch (error) {

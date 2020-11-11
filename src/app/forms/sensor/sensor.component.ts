@@ -73,8 +73,8 @@ export class SensorComponent implements OnInit, OnDestroy {
     });
 
     const claim = this.connectionService.currentClaim;
-    if (claim && claim.organizationId && sensor.organizationIds) {
-      this.canSubmitSensor = sensor.organizationIds.includes(claim.organizationId);
+    if (claim && claim.organizationId && sensor.organizations) {
+      this.canSubmitSensor = sensor.organizations.some(e => e.id === claim.organizationId);
     } else {
       this.canSubmitSensor = false;
     }

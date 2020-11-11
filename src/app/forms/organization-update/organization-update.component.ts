@@ -79,6 +79,7 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
     try {
       await this.userService.update({organization: null}).toPromise();
       await this.connectionService.refreshClaim();
+      this.connectionService.updateSocketOrganization();
 
       this.alertService.success('Saved.', false, 4000);
     } catch (error) {

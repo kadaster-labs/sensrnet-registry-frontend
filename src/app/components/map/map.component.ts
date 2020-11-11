@@ -537,7 +537,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public ownsSensor(sensor): boolean {
     const claim = this.connectionService.currentClaim;
-    return claim && claim.organizationId && sensor.organizationIds ? sensor.organizationIds.includes(claim.organizationId) : false;
+    return claim && claim.organizationId && sensor.organizations ? sensor.organizations.some(e => e.id === claim.organizationId) : false;
   }
 
   public async editSensor(): Promise<void> {

@@ -23,7 +23,7 @@ export class ConnectionService {
   private claimSubject: BehaviorSubject<Claim> = new BehaviorSubject<Claim>(null);
   public claim$: Observable<Claim> = this.claimSubject.asObservable();
 
-  // Routing the events using a separate observable is necessary because the socket connection may not exist at the
+  // Routing the events using a separate observable is necessary because a socket connection may not exist at the
   // time some component tries to subscribe to an endpoint.
   private eventReceiver: BehaviorSubject<SocketEvent> = new BehaviorSubject(new SocketEvent());
   private event$: Observable<SocketEvent> = this.eventReceiver.asObservable();
@@ -102,6 +102,16 @@ export class ConnectionService {
     await this.disconnectSocket();
     await this.logout();
     await this.router.navigate(['/login']);
+  }
+
+  public updateSocketOrganization() {
+    if (this.socket) {
+      let event = {};
+      if (this.currentClaim && this.currentClaim.organizationId) {
+        event = {organizationId: this.currentClaim.organizationId, ...event};
+      }
+      this.socket.emit('OrganizationUpdated', event);
+    }
   }
 
   public connectSocket() {

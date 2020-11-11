@@ -40,6 +40,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
         if (result && result.organizationId) {
           await this.userService.update({organization: result.organizationId}).toPromise();
           await this.connectionService.refreshClaim();
+          this.connectionService.updateSocketOrganization();
         }
       } catch (error) {
         this.alertService.error(error.message);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Organization } from '../model/organization';
 import { environment } from '../../environments/environment';
@@ -16,8 +16,12 @@ export class OrganizationService {
     return this.http.get(`${environment.apiUrl}/organization`);
   }
 
-  public getAll() {
-    return this.http.get(`${environment.apiUrl}/organizations`);
+  public getOrganizations(website?: string) {
+    let params = new HttpParams();
+    if (website) {
+      params = params.set('website', website);
+    }
+    return this.http.get(`${environment.apiUrl}/organizations?${params.toString()}`);
   }
 
   public update(organization: Organization) {

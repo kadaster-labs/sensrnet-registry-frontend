@@ -3,7 +3,7 @@ import { ISensorLocation } from './location';
 export interface ISensor {
   _id: string;
   nodeId: string;
-  organizationIds?: Array<string>;
+  organizations?: Array<Record<string, string>>;
   name?: string;
   location: ISensorLocation;
   baseObjectId: string;
