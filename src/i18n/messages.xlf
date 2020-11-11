@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="nl">
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">
   <file original="ng.template" id="ngi18n">
     <unit id="ngb.alert.close">
       <notes>
@@ -253,18 +253,18 @@
         <source>Close</source>
       </segment>
     </unit>
-    <unit id="2180991850301812818">
+    <unit id="8250042734400339043">
       <notes>
-        <note category="location">src/app/login/login.component.html:5</note>
+        <note category="location">src/app/login/login.component.html:10</note>
       </notes>
       <segment>
-        <source>Welkom bij SensRNet</source>
+        <source>Welcome to SensRNet</source>
       </segment>
     </unit>
     <unit id="2454050363478003966">
       <notes>
-        <note category="location">src/app/login/login.component.html:13</note>
-        <note category="location">src/app/login/login.component.html:32</note>
+        <note category="location">src/app/login/login.component.html:18</note>
+        <note category="location">src/app/login/login.component.html:37</note>
       </notes>
       <segment>
         <source>Login</source>
@@ -272,42 +272,42 @@
     </unit>
     <unit id="1890300073702152532">
       <notes>
-        <note category="location">src/app/login/login.component.html:16</note>
+        <note category="location">src/app/login/login.component.html:21</note>
       </notes>
       <segment>
         <source>E-mail</source>
       </segment>
     </unit>
-    <unit id="685059167996407551">
+    <unit id="6466460354973690677">
       <notes>
-        <note category="location">src/app/login/login.component.html:19</note>
+        <note category="location">src/app/login/login.component.html:24</note>
       </notes>
       <segment>
-        <source>E-mail is verplicht</source>
+        <source>E-mail is required</source>
       </segment>
     </unit>
-    <unit id="6167011297025367250">
+    <unit id="1431416938026210429">
       <notes>
-        <note category="location">src/app/login/login.component.html:23</note>
+        <note category="location">src/app/login/login.component.html:28</note>
       </notes>
       <segment>
-        <source>Wachtwoord</source>
+        <source>Password</source>
       </segment>
     </unit>
-    <unit id="7798860197902905604">
+    <unit id="205044832662301680">
       <notes>
-        <note category="location">src/app/login/login.component.html:26</note>
+        <note category="location">src/app/login/login.component.html:31</note>
       </notes>
       <segment>
-        <source>Wachtwoord is verplicht</source>
+        <source>Password is required</source>
       </segment>
     </unit>
-    <unit id="5913757458094097478">
+    <unit id="3301086086650990787">
       <notes>
-        <note category="location">src/app/login/login.component.html:34</note>
+        <note category="location">src/app/login/login.component.html:39</note>
       </notes>
       <segment>
-        <source>Registeer</source>
+        <source>Register</source>
       </segment>
     </unit>
   </file>

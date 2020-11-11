@@ -2,7 +2,6 @@ import { first } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../services/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from '../../environments/environment';
 import { ConnectionService } from '../services/connection.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -15,8 +14,6 @@ export class LoginComponent implements OnInit {
   public loading = false;
   public submitted = false;
   public returnUrl: string;
-
-  public environment = environment;
 
   constructor(
     private router: Router,

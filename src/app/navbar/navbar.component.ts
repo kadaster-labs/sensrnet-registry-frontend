@@ -1,6 +1,5 @@
 import { Router } from '@angular/router';
 import { Component, Input } from '@angular/core';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -9,8 +8,6 @@ import { environment } from '../../environments/environment';
 })
 export class NavBarComponent {
   @Input() locationClass;
-
-  public environment = environment;
 
   constructor(
     private router: Router,

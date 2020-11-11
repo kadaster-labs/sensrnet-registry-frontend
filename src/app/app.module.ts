@@ -1,5 +1,5 @@
 import '@angular/common/locales/global/nl';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -23,6 +23,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { SensorComponent } from './forms/sensor/sensor.component';
 import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { SensorsComponent } from './forms/sensors/sensors.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
@@ -34,11 +35,13 @@ import { OrganizationJoinComponent } from './forms/organization-join/organizatio
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
 import { OrganizationCreateComponent } from './forms/organization-create/organization-create.component';
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
+import { EnvServiceProvider } from './services/env.service.provider';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
+    LanguageSwitcherComponent,
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
@@ -72,7 +75,7 @@ import { OrganizationUpdateComponent } from './forms/organization-update/organiz
     ModalService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: 'nl' },
+    EnvServiceProvider,
   ], bootstrap: [
     AppComponent,
   ],

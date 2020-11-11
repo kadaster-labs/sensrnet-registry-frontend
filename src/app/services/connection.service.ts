@@ -5,8 +5,8 @@ import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
+import { EnvService } from './env.service';
 
 export class SocketEvent {
   constructor(
@@ -17,7 +17,6 @@ export class SocketEvent {
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionService {
-  private url = `${environment.apiUrl}`;
   private socket: SocketIOClient.Socket;
 
   private claimSubject: BehaviorSubject<Claim> = new BehaviorSubject<Claim>(null);
@@ -32,6 +31,7 @@ export class ConnectionService {
   constructor(
     private router: Router,
     private readonly http: HttpClient,
+    private env: EnvService,
   ) {
     this.claim$.subscribe(claim => {
       if (!this.socket && claim && claim.accessToken) {
@@ -61,7 +61,7 @@ export class ConnectionService {
   }
 
   public login(username: string, password: string) {
-    return this.http.post<any>(`${environment.apiUrl}/auth/login`, { username, password })
+    return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
       .pipe(map((data) => {
         const claim = this.getClaimFromToken(data.access_token);
         this.claimSubject.next(claim);
@@ -75,7 +75,7 @@ export class ConnectionService {
   }
 
   public async refreshClaim(): Promise<Claim> {
-    const response = await this.http.post<any>(`${environment.apiUrl}/auth/refresh`, null).toPromise();
+    const response = await this.http.post<any>(`${this.env.apiUrl}/auth/refresh`, null).toPromise();
 
     let claim;
     if (!response) {
@@ -92,7 +92,7 @@ export class ConnectionService {
     this.clearClaim();
 
     try {
-      await this.http.post<void>(`${environment.apiUrl}/auth/logout`, null).toPromise();
+      await this.http.post<void>(`${this.env.apiUrl}/auth/logout`, null).toPromise();
     } catch (error) {
       console.error(`Something went wrong when logging out: ${error}.`);
     }
@@ -117,7 +117,7 @@ export class ConnectionService {
   public connectSocket() {
     if (!this.socket) {
       const namespace = 'sensor';
-      const host = this.url.substring(0, this.url.lastIndexOf('/'));  // strip the /api part
+      const host = this.env.apiUrl.substring(0, this.env.apiUrl.lastIndexOf('/'));  // strip the /api part
 
       const connectionOptions = {
         path: '/api/socket.io',
