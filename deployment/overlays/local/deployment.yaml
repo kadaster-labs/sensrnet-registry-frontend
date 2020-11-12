@@ -3,9 +3,6 @@ kind: Deployment
 metadata:
   name: registry-frontend
 spec:
-  selector:
-    matchLabels:
-      app: registry-frontend
   template:
     spec:
       containers:

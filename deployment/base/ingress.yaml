@@ -1,9 +1,9 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
+  name: registry-frontend-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
-  name: registry-frontend-ingress
 spec:
   entryPoints:
   - http
