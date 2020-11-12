@@ -35,10 +35,10 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      website: [this.myOrganization ? this.myOrganization.website : '', [Validators.required, Validators.pattern(this.urlRegex)]],
-      contactName: [this.myOrganization ? this.myOrganization.contactName : '', Validators.required],
-      contactPhone: [this.myOrganization ? this.myOrganization.contactPhone : '', Validators.required],
-      contactEmail: [this.myOrganization ? this.myOrganization.contactEmail : '', [Validators.required, Validators.email]],
+      website: [this.myOrganization ? this.myOrganization.website : '', [Validators.pattern(this.urlRegex)]],
+      contactName: [this.myOrganization ? this.myOrganization.contactName : ''],
+      contactPhone: [this.myOrganization ? this.myOrganization.contactPhone : ''],
+      contactEmail: [this.myOrganization ? this.myOrganization.contactEmail : '', [Validators.email]],
     });
 
     this.initFormFields();

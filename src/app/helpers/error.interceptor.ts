@@ -35,11 +35,11 @@ export class ErrorInterceptor implements HttpInterceptor {
           take(1),
           switchMap(() => {
             // refresh token
-            const currentOwner = this.connectionService.currentClaim;
-            if (currentOwner && currentOwner.accessToken) {
+            const claim = this.connectionService.currentClaim;
+            if (claim && claim.accessToken) {
               request = request.clone({
                 setHeaders: {
-                  Authorization: `Bearer ${currentOwner.accessToken}`,
+                  Authorization: `Bearer ${claim.accessToken}`,
                 },
               });
             }
@@ -58,11 +58,10 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.refreshSubject.next(claim);
 
           // add authorization header with jwt token if available
-          const currentOwner = this.connectionService.currentClaim;
-          if (currentOwner && currentOwner.accessToken) {
+          if (claim && claim.accessToken) {
             request = request.clone({
               setHeaders: {
-                Authorization: `Bearer ${currentOwner.accessToken}`,
+                Authorization: `Bearer ${claim.accessToken}`,
               },
             });
           }

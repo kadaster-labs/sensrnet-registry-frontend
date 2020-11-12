@@ -6,7 +6,7 @@
     </div>
 </div>
 <div [formGroup]="parentForm" class="form-group">
-    <label for="contactEmail">Public e-mail<span class="font-italic text-muted"> - Optional</span></label>
+    <label for="contactEmail">Contact person mail<span class="font-italic text-muted"> - Optional</span></label>
     <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactEmail').errors }" />
     <div *ngIf="submitted && f.get('contactEmail').errors" class="invalid-feedback">
         <div class="required-text" *ngIf="f.get('contactEmail').errors.required">Public e-mail is required</div>
@@ -14,7 +14,7 @@
     </div>
 </div>
 <div [formGroup]="parentForm" class="form-group">
-    <label for="contactPhone">Public phone number<span class="font-italic text-muted"> - Optional</span></label>
+    <label for="contactPhone">Contact person phone<span class="font-italic text-muted"> - Optional</span></label>
     <input type="text" formControlName="contactPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactPhone').errors }" />
     <div *ngIf="submitted && f.get('contactPhone').errors" class="invalid-feedback">
         <div class="required-text" *ngIf="f.get('contactPhone').errors.required">Public phone number is required</div>

@@ -45,7 +45,7 @@ export class ConnectionService {
     if (accessToken) {
       try {
         const token = jwtDecode(accessToken) as any;
-        claim = new Claim(token.userId, token.sub, token.expires, accessToken);
+        claim = new Claim(token.sub, token.organizationId, token.exp, accessToken);
       } catch {
         claim = new Claim();
       }
@@ -63,7 +63,7 @@ export class ConnectionService {
   public login(username: string, password: string) {
     return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
       .pipe(map((data) => {
-        const claim = this.getClaimFromToken(data.access_token);
+        const claim = this.getClaimFromToken(data.accessToken);
         this.claimSubject.next(claim);
 
         return data;
@@ -81,7 +81,7 @@ export class ConnectionService {
     if (!response) {
       await this.logoutRedirect();
     } else {
-      claim = this.getClaimFromToken(response.access_token);
+      claim = this.getClaimFromToken(response.accessToken);
       this.claimSubject.next(claim);
     }
 
