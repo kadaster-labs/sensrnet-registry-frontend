@@ -1,13 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-group">
-        <label for="website">Website</label>
-        <input type="text" formControlName="website" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.website.errors }" />
-        <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
-            <div class="required-text" *ngIf="f.website.errors.required">Website is required</div>
-            <div class="required-text" *ngIf="f.website.errors.pattern">Not a valid URL</div>
+        <label for="name">Name</label>
+        <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+            <div class="required-text" *ngIf="f.name.errors.required">Name is required</div>
         </div>
     </div>
-    <app-organization-contact [parentForm]="form"></app-organization-contact>
+    <app-organization-contact [parentForm]="form" [submitted]="submitted"></app-organization-contact>
     <hr>
     <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit">Create</button>
 </form>

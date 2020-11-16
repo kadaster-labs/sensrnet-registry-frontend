@@ -1,15 +1,20 @@
 <div [formGroup]="parentForm" class="form-group">
+    <label for="website">Website<span class="font-italic text-muted"> - Optional</span></label>
+    <input type="text" formControlName="website" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('website').errors }" />
+    <div *ngIf="submitted && f.get('website').errors" class="invalid-feedback">
+        <div class="required-text" *ngIf="f.get('website').errors.pattern">Not a valid URL</div>
+    </div>
+</div>
+<div [formGroup]="parentForm" class="form-group">
     <label for="contactName">Contact person name<span class="font-italic text-muted"> - Optional</span></label>
     <input type="text" formControlName="contactName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactName').errors }" />
     <div *ngIf="submitted && f.get('contactName').errors" class="invalid-feedback">
-        <div class="required-text" *ngIf="f.get('contactName').errors.required">Name is required</div>
     </div>
 </div>
 <div [formGroup]="parentForm" class="form-group">
     <label for="contactEmail">Contact person mail<span class="font-italic text-muted"> - Optional</span></label>
     <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactEmail').errors }" />
     <div *ngIf="submitted && f.get('contactEmail').errors" class="invalid-feedback">
-        <div class="required-text" *ngIf="f.get('contactEmail').errors.required">Public e-mail is required</div>
         <div class="required-text" *ngIf="f.get('contactEmail').errors.email">Public e-mail must be a valid e-mail address</div>
     </div>
 </div>
@@ -17,6 +22,5 @@
     <label for="contactPhone">Contact person phone<span class="font-italic text-muted"> - Optional</span></label>
     <input type="text" formControlName="contactPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactPhone').errors }" />
     <div *ngIf="submitted && f.get('contactPhone').errors" class="invalid-feedback">
-        <div class="required-text" *ngIf="f.get('contactPhone').errors.required">Public phone number is required</div>
     </div>
 </div>

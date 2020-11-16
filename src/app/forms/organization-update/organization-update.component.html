@@ -1,14 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
-    <div class="form-group">
-        <label for="website">Website<span class="font-italic text-muted"> - Optional</span></label>
-        <input type="text" formControlName="website" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.website.errors }" />
-        <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
-            <div class="required-text" *ngIf="f.website.errors.required">Website is required</div>
-            <div class="required-text" *ngIf="f.website.errors.pattern">Not a valid URL</div>
-        </div>
-    </div>
-    <app-organization-contact [parentForm]="form"></app-organization-contact>
+    <app-organization-contact [parentForm]="form" [submitted]="submitted"></app-organization-contact>
     <hr>
+    <button class="btn btn-danger btn-lg mr-3 mb-1" type="button" (click)="leave()">Leave</button>
     <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit">Update</button>
-    <button class="btn btn-primary btn-lg mr-3 mb-1" type="button" (click)="leave()">Leave</button>
 </form>

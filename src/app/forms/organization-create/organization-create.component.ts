@@ -42,8 +42,8 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
           await this.connectionService.refreshClaim();
           this.connectionService.updateSocketOrganization();
         }
-      } catch (error) {
-        this.alertService.error(error.message);
+      } catch {
+        this.alertService.error('Failed to register. Does the organization exist already?');
       }
     }
     this.submitted = false;
@@ -51,7 +51,8 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      website: ['', [Validators.required, Validators.pattern(this.urlRegex)]],
+      name: ['', [Validators.required]],
+      website: ['', [Validators.pattern(this.urlRegex)]],
       contactName: [''],
       contactPhone: [''],
       contactEmail: ['', [Validators.email]],

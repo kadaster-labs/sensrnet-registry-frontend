@@ -1,21 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Claim } from '../../model/claim';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ISensor } from '../../model/bodies/sensor-body';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-sensors',
   templateUrl: './sensors.component.html',
   styleUrls: ['./sensors.component.scss'],
 })
-export class SensorsComponent implements OnInit {
-
+export class SensorsComponent implements OnInit, OnDestroy {
   public sensors = [];
   public ascending = true;
+
+  public organizationId;
+  public subscriptions = [];
 
   constructor(
     public sensorService: SensorService,
     private readonly locationService: LocationService,
+    private readonly connectionService: ConnectionService,
   ) {}
 
   public sortByAttribute(attribute) {
@@ -37,5 +42,17 @@ export class SensorsComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.sensors = await this.sensorService.getMySensors();
+
+    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
+      if (claim && claim.organizationId) {
+        this.organizationId = claim.organizationId;
+      } else {
+        this.organizationId = null;
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }

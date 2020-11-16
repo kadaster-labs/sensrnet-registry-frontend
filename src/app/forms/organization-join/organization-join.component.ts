@@ -34,8 +34,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-  async getOrganizations(website?: string) {
-    const organizationPromise = this.organizationService.getOrganizations(website).toPromise();
+  async getOrganizations(name?: string) {
+    const organizationPromise = this.organizationService.getOrganizations(name).toPromise();
     const organizations = await organizationPromise;
     if (organizations) {
       this.organizations = organizations as Organization[];
@@ -52,8 +52,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterInputChanged(website) {
-    this.filterChanged.next(website);
+  filterInputChanged(name) {
+    this.filterChanged.next(name);
   }
 
   async ngOnInit(): Promise<void> {

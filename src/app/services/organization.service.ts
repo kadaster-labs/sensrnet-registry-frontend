@@ -19,10 +19,10 @@ export class OrganizationService {
     return this.http.get(`${this.env.apiUrl}/organization`);
   }
 
-  public getOrganizations(website?: string) {
+  public getOrganizations(name?: string) {
     let params = new HttpParams();
-    if (website) {
-      params = params.set('website', website);
+    if (name) {
+      params = params.set('name', name);
     }
     return this.http.get(`${this.env.apiUrl}/organizations?${params.toString()}`);
   }

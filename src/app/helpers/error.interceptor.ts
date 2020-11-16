@@ -26,7 +26,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       }
 
       if (error.status !== 401) {
-        return throwError(error);
+        throw new Error(error);
       }
 
       if (this.refreshInProgress) {

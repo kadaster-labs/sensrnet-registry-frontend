@@ -6,10 +6,17 @@
         </div>
         <div class="col-11">
             <div>
-                <h3>Organization</h3>
+                <h3>
+                    <span *ngIf="organizationId;else noorg">
+                        {{organizationId}}
+                    </span>
+                    <ng-template #noorg>
+                        Organization
+                    </ng-template>
+                </h3>
             </div>
             <hr>
-            <div *ngIf="belongsToOrganization;else create">
+            <div *ngIf="organizationId;else create">
                 <app-organization-update></app-organization-update>
             </div>
             <ng-template #create>

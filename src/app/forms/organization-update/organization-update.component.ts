@@ -97,8 +97,8 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
       } catch (error) {
         this.alertService.error(error.message);
       }
+      this.submitted = false;
     }
-    this.submitted = false;
   }
 
   ngOnDestroy(): void {

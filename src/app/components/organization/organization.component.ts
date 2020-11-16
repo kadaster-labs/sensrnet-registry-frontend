@@ -13,8 +13,8 @@ enum UpdateView {
   styleUrls: ['./organization.component.scss']
 })
 export class OrganizationComponent implements OnInit, OnDestroy {
+  public organizationId;
   public subscriptions = [];
-  public belongsToOrganization = false;
 
   public UpdateViewEnum = UpdateView;
   public activeUpdateView = this.UpdateViewEnum.Join;
@@ -25,7 +25,11 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      this.belongsToOrganization = !!(claim && claim.organizationId);
+      if (claim && claim.organizationId) {
+        this.organizationId = claim.organizationId;
+      } else {
+        this.organizationId = null;
+      }
     }));
   }
 
