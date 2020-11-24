@@ -2,20 +2,18 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ISensorLocation } from '../model/bodies/location';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class LocationService {
   private location: BehaviorSubject<ISensorLocation> = new BehaviorSubject({
     type: 'Point',
     coordinates: [0, 0, 0],
-    baseObjectId: 'iets',
+    baseObjectId: 'non-empty',
   });
 
   private locationMarker: BehaviorSubject<ISensorLocation> = new BehaviorSubject({
     type: 'Point',
     coordinates: [0, 0, 0],
-    baseObjectId: 'iets',
+    baseObjectId: 'non-empty',
   });
 
   private locationHighlight: BehaviorSubject<ISensorLocation> = new BehaviorSubject(null);
@@ -23,8 +21,6 @@ export class LocationService {
   location$: Observable<ISensorLocation> = this.location.asObservable();
   showLocation$: Observable<ISensorLocation> = this.locationMarker.asObservable();
   locationHighlight$: Observable<ISensorLocation> = this.locationHighlight.asObservable();
-
-  constructor() {}
 
   setLocation(location: ISensorLocation) {
     let currentLocation = this.location.getValue();

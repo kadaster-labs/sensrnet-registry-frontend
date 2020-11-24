@@ -1,7 +1,8 @@
 import { Subscription } from 'rxjs';
 import { SensorTheme } from '../../model/bodies/sensorTheme';
 import { Component, forwardRef, OnDestroy, Input, AfterViewInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS,
+  NG_VALUE_ACCESSOR } from '@angular/forms';
 
 // describes what the return value of the form control will look like
 export interface SensorThemeFormValues {

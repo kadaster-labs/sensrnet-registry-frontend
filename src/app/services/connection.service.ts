@@ -1,113 +1,116 @@
+import jwtDecode from 'jwt-decode';
 import { map } from 'rxjs/operators';
-import { Owner } from '../model/owner';
+import { Claim } from '../model/claim';
 import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
 import { EnvService } from './env.service';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Subject, Observable, Subscriber } from 'rxjs';
+
+export class SocketEvent {
+  constructor(
+    public namespace?: string,
+    public event?: any,
+  ) {}
+}
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionService {
   private socket: SocketIOClient.Socket;
 
-  public currentOwner: Observable<Owner>;
-  private currentOwnerSubject: BehaviorSubject<Owner>;
+  private claimSubject: BehaviorSubject<Claim> = new BehaviorSubject<Claim>(null);
+  public claim$: Observable<Claim> = this.claimSubject.asObservable();
+
+  // Routing the events using a separate observable is necessary because a socket connection may not exist at the
+  // time some component tries to subscribe to an endpoint.
+  private eventReceiver: Subject<SocketEvent> = new Subject();
+  private event$: Observable<SocketEvent> = this.eventReceiver.asObservable();
+  private nameSpaceObservables: Record<string, Observable<any>> = {};
 
   constructor(
     private router: Router,
     private readonly http: HttpClient,
     private env: EnvService,
   ) {
-    this.currentOwnerSubject = new BehaviorSubject<Owner>(JSON.parse(localStorage.getItem('currentOwner')));
-    this.currentOwner = this.currentOwnerSubject.asObservable();
-    this.connectSocket();
+    this.claim$.subscribe(claim => {
+      if (!this.socket && claim && claim.accessToken) {
+        this.connectSocket();
+      }
+    });
   }
 
-  public get currentOwnerValue(): Owner {
-    return this.currentOwnerSubject.value;
+  public getClaimFromToken(accessToken: string): Claim {
+    let claim;
+    if (accessToken) {
+      try {
+        const token = jwtDecode(accessToken) as any;
+        claim = new Claim(token.sub, token.organizationId, token.exp, accessToken);
+      } catch {
+        claim = new Claim();
+      }
+    } else {
+      claim = new Claim();
+    }
+
+    return claim;
+  }
+
+  public get currentClaim(): Claim {
+    return this.claimSubject.value;
   }
 
   public login(username: string, password: string) {
     return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
       .pipe(map((data) => {
-
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentOwner', JSON.stringify(data));
-        this.currentOwnerSubject.next(data as Owner);
-
-        // TODO: In early test phases we conceptually combined users and owners. This leads to the creation of both on
-        // register, but only the user is returned. Therefore, an additional request is necessary for retrieving the
-        // saved owner information. Ideally this would be separated.
-        this.getOwner();
-        this.connectSocket();
+        const claim = this.getClaimFromToken(data.accessToken);
+        this.claimSubject.next(claim);
 
         return data;
       }));
   }
 
-  public refreshAccessToken(): Observable<Owner> {
-    return this.http.post<any>(`${this.env.apiUrl}/auth/refresh`, null)
-      .pipe(map((data) => {
-        const user: Owner = { ...this.currentOwnerValue, ...data };
-
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentOwner', JSON.stringify(user));
-        this.currentOwnerSubject.next(user);
-
-        return user;
-      }));
+  public clearClaim() {
+    this.claimSubject.next(null);
   }
 
-  // TODO: getOwner and updateOwner function are duplicated here from ownerService. This class should only concern the
-  // authentication of a user. Therefore, these functions should return to ownerService.
-  public getOwner(): void {
-    console.log('getOwner');
-    this.http.get<Owner>(`${this.env.apiUrl}/Owner/`)
-      .subscribe((data: any) => {
-        let owner: Owner = JSON.parse(localStorage.getItem('currentOwner'));
+  public async refreshClaim(): Promise<Claim> {
+    const response = await this.http.post<any>(`${this.env.apiUrl}/auth/refresh`, null).toPromise();
 
-        const partialUser = {
-          id: data[0]._id,
-          name: data[0].name,
-          contactEmail: data[0].contactEmail,
-          contactPhone: data[0].contactPhone,
-          organisationName: data[0].organisationName,
-          website: data[0].website,
-        };
+    let claim;
+    if (!response) {
+      await this.logoutRedirect();
+    } else {
+      claim = this.getClaimFromToken(response.accessToken);
+      this.claimSubject.next(claim);
+    }
 
-        owner = { ...owner, ...partialUser };
-
-        console.log('got new owner', owner);
-
-        localStorage.setItem('currentOwner', JSON.stringify(owner));
-        this.currentOwnerSubject.next(owner);
-
-        return owner;
-      });
-  }
-
-  public updateOwner(user: Owner): Observable<Owner> {
-    return this.http.put(`${this.env.apiUrl}/Owner/`, user)
-      .pipe(map(() => {
-        let owner: Owner = JSON.parse(localStorage.getItem('currentOwner'));
-
-        owner = { ...owner, ...user };
-
-        localStorage.setItem('currentOwner', JSON.stringify(owner));
-        this.currentOwnerSubject.next(owner);
-        return user;
-      }));
+    return claim;
   }
 
   public async logout() {
-    localStorage.removeItem('currentOwner');
-    this.currentOwnerSubject.next(null);
+    this.clearClaim();
 
     try {
       await this.http.post<void>(`${this.env.apiUrl}/auth/logout`, null).toPromise();
     } catch (error) {
-      console.error('Something went wrong on logout', error);
+      console.error(`Something went wrong when logging out: ${error}.`);
+    }
+  }
+
+  public async logoutRedirect() {
+    await this.disconnectSocket();
+    await this.logout();
+    await this.router.navigate(['/login']);
+  }
+
+  public updateSocketOrganization() {
+    if (this.socket) {
+      let event = {};
+      if (this.currentClaim && this.currentClaim.organizationId) {
+        event = {organizationId: this.currentClaim.organizationId, ...event};
+      }
+      this.socket.emit('OrganizationUpdated', event);
     }
   }
 
@@ -121,12 +124,12 @@ export class ConnectionService {
         transportOptions: undefined,
       };
 
-      const currentOwner = this.currentOwnerValue;
-      if (currentOwner) {
+      const claim = this.currentClaim;
+      if (claim && claim.accessToken) {
         connectionOptions.transportOptions = {
           polling: {
             extraHeaders: {
-              Authorization: `Bearer ${currentOwner.access_token}`,
+              Authorization: `Bearer ${claim.accessToken}`,
             }
           }
         };
@@ -137,14 +140,16 @@ export class ConnectionService {
 
       this.socket.on('connect', () => {
         console.log('Socket.io connected.');
+
+        for (const ns of Object.keys(this.nameSpaceObservables)) {
+          this.subscribeSocket(ns);
+        }
       });
 
       this.socket.on('disconnect', async () => {
         console.log('Socket.io disconnected.');
 
-        await this.disconnectSocket();
-        await this.logout();
-        await this.router.navigate(['/login']);
+        await this.logoutRedirect();
       });
     }
   }
@@ -156,9 +161,27 @@ export class ConnectionService {
     }
   }
 
+  public subscribeSocket(namespace: string) {
+    if (this.socket) {
+      this.socket.on(namespace, (event) => {
+        this.eventReceiver.next(new SocketEvent(namespace, event));
+      });
+    }
+  }
+
   public subscribeTo<T>(namespace: string = '/'): Observable<T> {
-    return new Observable((observer: Subscriber<T>) => {
-      this.socket.on(namespace, (message: T) => observer.next(message));
-    });
+    if (!this.nameSpaceObservables[namespace]) {
+      this.nameSpaceObservables[namespace] = new Observable((observer: Subscriber<T>) => {
+        this.event$.subscribe((event: SocketEvent) => {
+          if (event.namespace === namespace) {
+            observer.next(event.event);
+          }
+        });
+      });
+
+      this.subscribeSocket(namespace);
+    }
+
+    return this.nameSpaceObservables[namespace];
   }
 }

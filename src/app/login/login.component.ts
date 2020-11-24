@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-
+import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../services/alert.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConnectionService } from '../services/connection.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   styleUrls: ['./login.component.scss'],
@@ -17,14 +16,14 @@ export class LoginComponent implements OnInit {
   public returnUrl: string;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
-    private connectionService: ConnectionService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
     private alertService: AlertService,
+    private connectionService: ConnectionService,
   ) {
-    // redirect to home if already logged in
-    if (this.connectionService.currentOwnerValue) {
+    const claim = this.connectionService.currentClaim;
+    if (claim && claim.accessToken) {
       this.router.navigate(['/']);
     }
   }
@@ -60,7 +59,7 @@ export class LoginComponent implements OnInit {
         () => {
           this.router.navigate([this.returnUrl]);
         },
-        (e) => {
+        () => {
           this.alertService.error(`Failed to login: Supply valid credentials.`);
           this.loading = false;
         });

@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SensorComponent } from './sensor.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('SensorRegisterComponent', () => {
   let component: SensorComponent;

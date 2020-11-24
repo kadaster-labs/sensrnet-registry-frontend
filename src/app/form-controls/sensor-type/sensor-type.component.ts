@@ -1,11 +1,12 @@
 import { Subscription } from 'rxjs';
 import { Category, TypeSensor, TypeBeacon, TypeCamera } from '../../model/bodies/sensorTypes';
 import { Component, forwardRef, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators,
+  FormGroup } from '@angular/forms';
 
 export interface SensorTypeFormValues {
+  category: string;
   typeName: string;
-  typeDetails: string;
 }
 
 @Component({
@@ -36,11 +37,11 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   public sensorCategoriesList: string[];
   public sensorTypes = TypeSensor;
   public sensorTypesList: string[];
-  public typeDetailsList: string[];
   public beaconTypes = TypeBeacon;
   public beaconTypesList: string[];
   public cameraTypes = TypeCamera;
   public cameraTypesList: string[];
+  public typeNameList: string[];
 
   get value(): SensorTypeFormValues {
     return this.form.value;
@@ -55,8 +56,8 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
 
   constructor(private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
+      category: new FormControl('', Validators.required),
       typeName: new FormControl('', Validators.required),
-      typeDetails: new FormControl('', Validators.required),
     });
 
     this.subscriptions.push(
@@ -80,30 +81,30 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private onFormChanges() {
-    if (!this.form.get('typeName')) { return; }
+    if (!this.form.get('category')) { return; }
 
-    this.form.get('typeName').valueChanges.subscribe((category: Category) => {
+    this.form.get('category').valueChanges.subscribe((category: Category) => {
       this.form.patchValue({
-        typeDetails: '',
+        typeName: '',
       });
 
       switch (category) {
         case Category.Beacon:
-          this.typeDetailsList = this.beaconTypesList;
+          this.typeNameList = this.beaconTypesList;
           break;
         case Category.Camera:
-          this.typeDetailsList = this.cameraTypesList;
+          this.typeNameList = this.cameraTypesList;
           break;
         case Category.Sensor:
-          this.typeDetailsList = this.sensorTypesList;
+          this.typeNameList = this.sensorTypesList;
           break;
         default:
-          this.typeDetailsList = [];
+          this.typeNameList = [];
           break;
       }
     });
 
-    this.form.get('typeDetails').valueChanges.subscribe((category: Category) => {
+    this.form.get('typeName').valueChanges.subscribe((category: Category) => {
       if (category) {
         this.sensorType.emit(category);
       }

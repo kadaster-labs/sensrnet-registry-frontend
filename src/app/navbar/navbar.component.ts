@@ -1,6 +1,5 @@
 import { Router } from '@angular/router';
-import {Component, Input} from '@angular/core';
-import { ConnectionService } from '../services/connection.service';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +7,6 @@ import { ConnectionService } from '../services/connection.service';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavBarComponent {
-
   @Input() locationClass;
 
   constructor(
@@ -17,7 +15,7 @@ export class NavBarComponent {
 
   public async toggleMenu() {
     if (this.router.url === '/') {
-      await this.router.navigate(['/owner']);
+      await this.router.navigate(['/sensor']);
     } else {
       await this.router.navigate(['/']);
     }

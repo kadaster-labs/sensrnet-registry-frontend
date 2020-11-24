@@ -2,7 +2,8 @@ import { Subscription } from 'rxjs';
 import { ISensorLocation } from '../../model/bodies/location';
 import { LocationService } from '../../services/location.service';
 import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, FormControl,
+  Validators } from '@angular/forms';
 
 export interface SensorLocationFormValues {
   latitude: number;
@@ -86,7 +87,6 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
           });
 
           this.locationService.showLocation(location);
-
           this.selectLocation = false;
         }
       })

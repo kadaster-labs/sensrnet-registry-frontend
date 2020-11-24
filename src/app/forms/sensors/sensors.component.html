@@ -6,7 +6,7 @@
         </div>
         <div class="col-6">
             <div>
-                <h3>My Sensors</h3>
+                <h3>{{ organizationId }} Sensors</h3>
             </div>
             <hr>
             <table class="table table-striped table-hover table-bordered">
@@ -15,8 +15,8 @@
                 <tr>
                     <th scope="col">#</th>
                     <th class= "pointer" scope="col" (click)="sortByAttribute('name')">Name<em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('category')">Category<em class="fas fa-sort ml-2"></em></th>
                     <th class= "pointer" scope="col" (click)="sortByAttribute('typeName')">Type<em class="fas fa-sort ml-2"></em></th>
-                    <th class= "pointer" scope="col" (click)="sortByAttribute('active')">Active<em class="fas fa-sort ml-2"></em></th>
                     <th class= "pointer" scope="col" (click)="sortByAttribute('manufacturer')">Manufacturer<em class="fas fa-sort ml-2"></em></th>
                 </tr>
                 </thead>
@@ -24,8 +24,8 @@
                 <tr *ngFor="let sensor of sensors; let i = index" class="pointer" (click)="selectSensor(sensor)">
                     <th scope="row">{{ i + 1 }}</th>
                     <td>{{ sensor.name }}</td>
-                    <td>{{ sensor.typeName[0] }}</td>
-                    <td>{{ sensor.active }}</td>
+                    <td>{{ sensor.category }}</td>
+                    <td>{{ sensor.typeName }}</td>
                     <td>{{ sensor.manufacturer }}</td>
                 </tr>
                 </tbody>

@@ -1,27 +1,27 @@
 <div [formGroup]="form" class="form-group">
     <div class="form-group">
-        <label for="typeName">Category</label>
-        <select data-container="body" class="form-control" formControlName="typeName"
-            [ngClass]="{ 'is-invalid': submitted && f.typeName.errors }">
-            <option *ngFor="let type of sensorCategoriesList" [value]="type">
-                {{sensorCategories[type]}}
+        <label for="category">Category</label>
+        <select data-container="body" class="form-control" formControlName="category"
+            [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
+            <option *ngFor="let category of sensorCategoriesList" [value]="category">
+                {{sensorCategories[category]}}
             </option>
         </select>
-        <div *ngIf="(f.typeName.dirty || f.typeName.touched || submitted) && f.typeName.errors" class="invalid-input">
-            <span class="required-text" *ngIf="f.typeName.errors.required">Type is required</span>
+        <div *ngIf="(f.category.dirty || f.category.touched || submitted) && f.category.errors" class="invalid-input">
+            <span class="required-text" *ngIf="f.category.errors.required">Category is required</span>
         </div>
     </div>
     <div class="form-group">
-        <label for="typeDetails">{{ f.typeName.value }} Type</label>
-        <select class="form-control" data-container="body" formControlName="typeDetails"
-            [ngClass]="{ 'is-invalid': submitted && f.typeDetails.errors }">
-            <option *ngFor="let type of typeDetailsList" [value]="type">
-                {{type}}
+        <label for="typeName">{{ f.category.value }} Type</label>
+        <select class="form-control" data-container="body" formControlName="typeName"
+            [ngClass]="{ 'is-invalid': submitted && f.typeName.errors }">
+            <option *ngFor="let typeName of typeNameList" [value]="typeName">
+                {{typeName}}
             </option>
         </select>
-        <div *ngIf="(f.typeDetails.dirty || f.typeDetails.touched || submitted) && f.typeDetails.errors"
+        <div *ngIf="(f.typeName.dirty || f.typeName.touched || submitted) && f.typeName.errors"
             class="invalid-input">
-            <span class="required-text" *ngIf="f.typeDetails.errors.required">Type details are required</span>
+            <span class="required-text" *ngIf="f.typeName.errors.required">Type is required</span>
         </div>
     </div>
 </div>

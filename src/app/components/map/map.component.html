@@ -29,7 +29,7 @@
                             <strong>Category</strong>
                         </td>
                         <td>
-                            <em>{{ selectedSensor?.typeName }}</em>
+                            <em>{{ selectedSensor?.category }}</em>
                         </td>
                     </tr>
                     <tr>
@@ -37,7 +37,7 @@
                             <strong>Type</strong>
                         </td>
                         <td>
-                            <em>{{ selectedSensor?.typeDetails?.subType }}</em>
+                            <em>{{ selectedSensor?.typeName }}</em>
                         </td>
                     </tr>
                     <tr>
@@ -47,7 +47,8 @@
                             </strong>
                         </td>
                         <td>
-                            <input type="checkbox" id="selected-sensor-active" class="pt-2 pb-0 my-0" [checked]="selectedSensor?.active" disabled>
+                            <input type="checkbox" id="selected-sensor-active" class="pt-2 pb-0 my-0"
+                                   [checked]="selectedSensor?.active" disabled>
                         </td>
                     </tr>
                 </tbody>

@@ -1,27 +1,23 @@
-import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, switchMap } from 'rxjs/operators';
-
 import { ConnectionService } from '../services/connection.service';
+import { catchError, filter, take, switchMap } from 'rxjs/operators';
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   private refreshInProgress = false;
-  private refreshSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null
-  );
+  private refreshSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
-    private connectionService: ConnectionService,
     private router: Router,
+    private connectionService: ConnectionService,
   ) {}
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(catchError(async (error) => {
       if (request.url.includes('login') || request.url.includes('refresh')) {
-
         if (request.url.includes('refresh')) {
           await this.connectionService.logout();
         }
@@ -30,7 +26,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       }
 
       if (error.status !== 401) {
-        return throwError(error);
+        throw new Error(error);
       }
 
       if (this.refreshInProgress) {
@@ -39,11 +35,11 @@ export class ErrorInterceptor implements HttpInterceptor {
           take(1),
           switchMap(() => {
             // refresh token
-            const currentOwner = this.connectionService.currentOwnerValue;
-            if (currentOwner && currentOwner.access_token) {
+            const claim = this.connectionService.currentClaim;
+            if (claim && claim.accessToken) {
               request = request.clone({
                 setHeaders: {
-                  Authorization: `Bearer ${currentOwner.access_token}`,
+                  Authorization: `Bearer ${claim.accessToken}`,
                 },
               });
             }
@@ -53,39 +49,29 @@ export class ErrorInterceptor implements HttpInterceptor {
         );
       } else {
         this.refreshInProgress = true;
-
         this.refreshSubject.next(null);
 
-        return this.connectionService
-          .refreshAccessToken()
-          .pipe(
-            switchMap((token: any) => {
-              this.refreshInProgress = false;
+        try {
+          const claim = await this.connectionService.refreshClaim();
 
-              this.refreshSubject.next(token);
+          this.refreshInProgress = false;
+          this.refreshSubject.next(claim);
 
-              // add authorization header with jwt token if available
-              const currentOwner = this.connectionService.currentOwnerValue;
-              if (currentOwner && currentOwner.access_token) {
-                request = request.clone({
-                  setHeaders: {
-                    Authorization: `Bearer ${currentOwner.access_token}`,
-                  },
-                });
-              }
+          // add authorization header with jwt token if available
+          if (claim && claim.accessToken) {
+            request = request.clone({
+              setHeaders: {
+                Authorization: `Bearer ${claim.accessToken}`,
+              },
+            });
+          }
 
-              return next.handle(request);
-            }),
-            catchError(async (authError: any) => {
-              this.refreshInProgress = false;
+          return next.handle(request).toPromise();
+        } catch (e) {
+          this.refreshInProgress = false;
 
-              await this.connectionService.disconnectSocket();
-              await this.connectionService.logout();
-              await this.router.navigate(['/login']);
-
-              return throwError(authError);
-            })
-          );
+          return throwError(e);
+        }
       }
     }));
   }
