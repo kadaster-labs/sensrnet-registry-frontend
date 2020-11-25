@@ -40,7 +40,7 @@
     #language-switcher {
       padding: 12px;
 
-      ::ng-deep app-language-switcher {
+      ::ng-deep {
         button {
           box-shadow: none;
         }
