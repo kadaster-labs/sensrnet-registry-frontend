@@ -28,21 +28,38 @@
     color: #808080 !important;
   }
 
-  .navbar-menu-item {
-    color: #606060;
-    font-size: 18px;
-    font-weight: bold;
+  &:not(.form) .navbar-nav #language-switcher {
+    display: none;
   }
 
-  .navbar-menu-item:hover, .navbar-menu-item:active, .navbar-menu-item:focus {
-    border-radius: 10px !important;
-    color: #808080 !important;
-    background-color: rgba(0, 0, 0, 0) !important;
-  }
+  .navbar-nav {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
 
-  .logout {
-    a:after {
-      content: none;
+    #language-switcher {
+      padding: 12px;
+
+      ::ng-deep app-language-switcher .dropdown-menu.show {
+        position: absolute;
+        margin-top: 28px;
+      }
+    }
+
+    li:last-of-type {
+      margin-left: auto;
+    }
+
+    .navbar-menu-item {
+      color: #606060;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .navbar-menu-item:hover, .navbar-menu-item:active, .navbar-menu-item:focus {
+      border-radius: 10px !important;
+      color: #808080 !important;
+      background-color: rgba(0, 0, 0, 0) !important;
     }
   }
 }
