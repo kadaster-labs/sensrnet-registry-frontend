@@ -40,9 +40,15 @@
     #language-switcher {
       padding: 12px;
 
-      ::ng-deep app-language-switcher .dropdown-menu.show {
-        position: absolute;
-        margin-top: 28px;
+      ::ng-deep app-language-switcher {
+        button {
+          box-shadow: none;
+        }
+
+        .dropdown-menu.show {
+          position: absolute;
+          margin-top: 28px;
+        }
       }
     }
 
