@@ -6,7 +6,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { GgcMapModule } from 'generieke-geo-componenten-map';
-import { GgcSearchModule } from 'generieke-geo-componenten-search';
 import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
 
 import { AppComponent } from './app.component';
@@ -67,7 +66,6 @@ import {OrganizationContactComponent} from "./form-controls/organization-contact
     ReactiveFormsModule,
     FormsModule,
     GgcMapModule.forRoot(),
-    GgcSearchModule,
     GgcDatasetTreeModule,
     HttpClientModule,
     NgbModule,

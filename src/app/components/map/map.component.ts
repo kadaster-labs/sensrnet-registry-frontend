@@ -15,13 +15,13 @@ import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
 import { extend, Extent } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
-import { getBottomLeft, getTopRight } from 'ol/extent';
+import { getBottomLeft, getTopRight, getCenter } from 'ol/extent';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import SearchNominatim from 'ol-ext/control/SearchNominatim';
 
-import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
 import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
 
@@ -31,6 +31,7 @@ import { ModalService } from '../../services/modal.service';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
+import { Coordinate } from 'ol/coordinate';
 
 @Component({
   selector: 'app-map',
@@ -353,10 +354,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleEvent(event: SearchComponentEvent) {
-    this.mapService.zoomToPdokResult(event, this.mapName);
-  }
-
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
 
@@ -499,8 +496,23 @@ export class MapComponent implements OnInit, OnDestroy {
   private zoomToPoint(point: Point) {
     const view = this.mapService.getMap(this.mapName).getView();
     view.fit(point, {
+      duration: 250,
       maxZoom: 10,
     });
+  }
+
+  private zoomToExtent(extent: Extent) {
+    const view = this.mapService.getMap(this.mapName).getView();
+    const resolution = view.getResolutionForExtent(extent, this.mapService.getMap(this.mapName).getSize());
+    const zoom = view.getZoomForResolution(resolution);
+    const center = getCenter(extent);
+
+    setTimeout(() => {
+      view.animate({
+        center,
+        zoom: Math.min(zoom, 16)
+      });
+    }, 250);
   }
 
   private zoomToPosition(position: Position) {
@@ -520,7 +532,55 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Adds a search button on the map which can be used to search for a location
+   * Searches using the open source OSM Nominatim
+   * https://viglino.github.io/ol-ext/doc/doc-pages/ol.control.SearchNominatim.html
+   */
+  private addSearchButton(): void {
+    // Set the search control
+    const search = new SearchNominatim({
+      format: 'geojson',
+      placeholder: 'Voer locatie in',
+      polygon: $('#polygon').prop('checked'),
+      position: true,
+    });
+
+    search.on('select', (event) => {
+      if (event.search.class === 'place') {
+        // if the search result is a single point, zoom to it
+        const coordsRD: Coordinate = proj4(this.epsgWGS84, this.epsgRD, event.coordinate);
+        const point = new Point(coordsRD);
+
+        this.zoomToPoint(point);
+      } else {
+        // if the search result contains an area, zoom to its extent
+        // Nominatim returns coordinate in string Array of different order in WGS84
+        const min = [
+          parseFloat(event.search.boundingbox[2]),
+          parseFloat(event.search.boundingbox[0]),
+        ];
+        const max = [
+          parseFloat(event.search.boundingbox[3]),
+          parseFloat(event.search.boundingbox[1]),
+        ];
+        const extent: Extent = [
+          ...proj4(this.epsgWGS84, this.epsgRD, min),
+          ...proj4(this.epsgWGS84, this.epsgRD, max),
+        ] as Extent;
+
+        this.zoomToExtent(extent);
+      }
+    });
+
+    this.mapService.getMap(this.mapName).addControl(search);
+  }
+
   private addFindMeButton() {
+    if (window.location.protocol !== 'https') {
+      return;
+    }
+
     const locate = document.createElement('div');
     locate.className = 'ol-control ol-unselectable locate';
     locate.innerHTML = '<button title="Locate me">◎</button>';
@@ -625,9 +685,8 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
-    if (window.location.protocol === 'https') {
-      this.addFindMeButton();
-    }
+    this.addSearchButton();
+    this.addFindMeButton();
   }
 
   ngOnDestroy(): void {
