@@ -8,7 +8,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { GgcMapModule } from 'generieke-geo-componenten-map';
 import { GgcSearchModule } from 'generieke-geo-componenten-search';
 import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
-import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
 
 import { AppComponent } from './app.component';
 import { ModalService } from './services/modal.service';
@@ -70,7 +69,6 @@ import {OrganizationContactComponent} from "./form-controls/organization-contact
     GgcMapModule.forRoot(),
     GgcSearchModule,
     GgcDatasetTreeModule,
-    GgcDatasetLegendModule,
     HttpClientModule,
     NgbModule,
   ], providers: [
