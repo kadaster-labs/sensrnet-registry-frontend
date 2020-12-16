@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
+import { MapService } from './components/map/map.service';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ViewerComponent } from './viewer/viewer.component';
 import { NavBarComponent } from './navbar/navbar.component';
@@ -20,6 +21,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { SensorComponent } from './forms/sensor/sensor.component';
 import { RegisterComponent } from './register/register.component';
+import { LayerComponent } from './components/layer/layer.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
@@ -41,6 +43,7 @@ import {OrganizationContactComponent} from "./form-controls/organization-contact
     AppComponent,
     AlertComponent,
     LanguageSwitcherComponent,
+    LayerComponent,
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
@@ -70,6 +73,7 @@ import {OrganizationContactComponent} from "./form-controls/organization-contact
     HttpClientModule,
     NgbModule,
   ], providers: [
+    MapService,
     ModalService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

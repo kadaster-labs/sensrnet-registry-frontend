@@ -1,9 +1,9 @@
 import proj4 from 'proj4';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, Input, OnDestroy } from '@angular/core';
 
-import Overlay from 'ol/Overlay';
+import OlMap from 'ol/Map';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { Cluster } from 'ol/source';
@@ -14,7 +14,9 @@ import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
 import { extend, Extent } from 'ol/extent';
+import { Coordinate } from 'ol/coordinate';
 import VectorSource from 'ol/source/Vector';
+import { MapBrowserEvent, Overlay } from 'ol';
 import { getBottomLeft, getTopRight, getCenter } from 'ol/extent';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
@@ -22,16 +24,14 @@ import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import SearchNominatim from 'ol-ext/control/SearchNominatim';
 
-import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
-import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
 
+import { MapService } from './map.service';
 import { ISensor } from '../../model/bodies/sensor-body';
 import { Category } from '../../model/bodies/sensorTypes';
 import { ModalService } from '../../services/modal.service';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
-import { Coordinate } from 'ol/coordinate';
 
 @Component({
   selector: 'app-map',
@@ -44,15 +44,16 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
+    private elementRef: ElementRef,
     private mapService: MapService,
     private httpClient: HttpClient,
     private modalService: ModalService,
     private sensorService: SensorService,
     private locationService: LocationService,
     private connectionService: ConnectionService,
-  ) {}
+  ) { }
 
-  public mapName = 'srn';
+  public map: OlMap;
   public subscriptions = [];
 
   public mapUpdated;
@@ -69,8 +70,6 @@ export class MapComponent implements OnInit, OnDestroy {
   public selectLocationLayer: VectorLayer;
   public selectLocationSource: VectorSource;
 
-  public activeWmsDatasets: Dataset[] = [];
-  public activeWmtsDatasets: Dataset[] = [];
   public currentZoomlevel: number = undefined;
   public currentMapResolution: number = undefined;
 
@@ -78,7 +77,6 @@ export class MapComponent implements OnInit, OnDestroy {
     '+y_0=463000 +ellps=bessel +units=m +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
-  public myLayers: Theme[];
   public hideTreeDataset = false;
 
   public clusterMaxZoom = 15;
@@ -173,6 +171,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public initMap() {
+    this.map = this.mapService.getMap();
+    this.map.setTarget(this.elementRef.nativeElement.querySelector('#map'));
+    this.handleMapEvents();
+  }
+
+  public initFeatures() {
     const features: Array<Feature> = new GeoJSON().readFeatures({
       features: [],
       type: 'FeatureCollection',
@@ -225,7 +229,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const styleSelectedCluster = (feature) => {
       let styleFeatures;
-      const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
+      const zoomLevel = this.map.getView().getZoom();
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
         const active = feature.get('features')[0].values_.active;
         const sensorType = feature.get('features')[0].values_.typeName[0];
@@ -259,7 +263,7 @@ export class MapComponent implements OnInit, OnDestroy {
       style: styleCluster,
     });
 
-    const map = this.mapService.getMap(this.mapName);
+    const map = this.map;
     this.clusterLayer.setZIndex(10);
     map.addLayer(this.clusterLayer);
 
@@ -354,75 +358,72 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleMapEvents(mapEvent: MapComponentEvent) {
-    const map = this.mapService.getMap(this.mapName);
+  private async onMoveEnd(event: MapBrowserEvent) {
+    const map = event.map;
 
-    if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
-      this.currentMapResolution = map.getView().getResolution();
-      this.currentZoomlevel = this.mapService.getMap(this.mapName).getView().getZoom();
-    } else if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
-      const mapCoordinateRD = mapEvent.value.coordinate;
-      const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
+    const currentRequestTimestamp = new Date().valueOf();
+    if (!this.mapUpdated || currentRequestTimestamp - this.mapUpdated > 500) { // In case of e.g. resizing window.
+      this.mapUpdated = currentRequestTimestamp;
 
-      this.hideOverlay();
-      this.removeHighlight();
+      const extent = map.getView().calculateExtent(map.getSize());
+      const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
+      const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
 
-      this.locationService.setLocation({
-        type: 'Point',
-        coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
-        baseObjectId: 'placeholder'
-      });
+      const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
+                                                          topRight[0].toString(), topRight[1].toString());
 
-      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data) => {
-        const features = data.getProperties().features;
-
-        // check if feature is a cluster with multiple features
-        if (features.length < 2) {
-          return;
-        }
-
-        // determine extent for new view
-        const extent: Extent = features[0].getGeometry().getExtent().slice(0) as Extent;
-        features.forEach((f: Feature) => { extend(extent, f.getGeometry().getExtent()); });
-
-        // if we're already zoomed in, zoom in no more. Setting maxZoom in fit() also does this to some extent, however,
-        // in that case the camera is also centered. Returning early here also prevents the unnecessary panning.
-        if (map.getView().getZoom() > this.clusterMaxZoom) {
-          return;
-        }
-
-        const size = this.mapService.getMap(this.mapName).getSize();  // [width, height]
-        const fitOptions: FitOptions = {
-          duration: 1000,
-          maxZoom: this.clusterMaxZoom + 1,
-          padding: [size[1] * 0.2, size[0] * 0.2, size[1] * 0.2, size[0] * 0.2],  // up, right, down, left
-          size,
-        };
-        this.mapService.getMap(this.mapName).getView().fit(extent, fitOptions);
-      });
+      if (sensors) {
+        this.updateMap(sensors);
+      }
     }
   }
 
-  public handleDatasetTreeEvents(event: DatasetTreeEvent) {
-    if (event.type === 'layerActivated') {
-      const deactivatedService = event.value.services[0];
-      if (deactivatedService.type === 'wms') {
-        this.activeWmsDatasets.push(event.value);
-      } else if (deactivatedService.type === 'wmts') {
-        this.activeWmtsDatasets.push(event.value);
+  private onSingleClick(event: MapBrowserEvent) {
+    console.log(event);
+    const mapCoordinateRD = event.coordinate;
+    const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
+
+    this.hideOverlay();
+    this.removeHighlight();
+
+    this.locationService.setLocation({
+      type: 'Point',
+      coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
+      baseObjectId: 'placeholder'
+    });
+
+    event.map.forEachFeatureAtPixel(event.pixel, (data) => {
+      const features = data.getProperties().features;
+
+      // check if feature is a cluster with multiple features
+      if (features.length < 2) {
+        return;
       }
-    } else if (event.type === 'layerDeactivated') {
-      const deactivatedService = event.value.services[0];
-      if (deactivatedService.type === 'wms') {
-        this.activeWmsDatasets = this.activeWmsDatasets.filter((dataset) =>
-          dataset.services[0].layers[0].technicalName !== deactivatedService.layers[0].technicalName);
-        this.activeWmsDatasets = this.activeWmsDatasets.filter((dataset) => dataset.services.length > 0);
-      } else if (deactivatedService.type === 'wmts') {
-        this.activeWmtsDatasets = this.activeWmtsDatasets.filter((dataset) =>
-          dataset.services[0].layers[0].technicalName !== deactivatedService.layers[0].technicalName);
-        this.activeWmtsDatasets = this.activeWmtsDatasets.filter((dataset) => dataset.services.length > 0);
+
+      // determine extent for new view
+      const extent: Extent = features[0].getGeometry().getExtent().slice(0) as Extent;
+      features.forEach((f: Feature) => { extend(extent, f.getGeometry().getExtent()); });
+
+      // if we're already zoomed in, zoom in no more. Setting maxZoom in fit() also does this to some extent, however,
+      // in that case the camera is also centered. Returning early here also prevents the unnecessary panning.
+      if (event.map.getView().getZoom() > this.clusterMaxZoom) {
+        return;
       }
-    }
+
+      const size = this.map.getSize();  // [width, height]
+      const fitOptions: FitOptions = {
+        duration: 1000,
+        maxZoom: this.clusterMaxZoom + 1,
+        padding: [size[1] * 0.2, size[0] * 0.2, size[1] * 0.2, size[0] * 0.2],  // up, right, down, left
+        size,
+      };
+      this.map.getView().fit(extent, fitOptions);
+    });
+  }
+
+  public handleMapEvents() {
+    this.map.on('moveend', this.onMoveEnd.bind(this));
+    this.map.on('singleclick', this.onSingleClick.bind(this));
   }
 
   private sensorToFeature(newSensor: ISensor): object {
@@ -457,19 +458,19 @@ export class MapComponent implements OnInit, OnDestroy {
       }),
     });
     this.selectLocationLayer.setZIndex(25);
-    this.mapService.getMap(this.mapName).addLayer(this.selectLocationLayer);
+    this.map.addLayer(this.selectLocationLayer);
   }
 
   public removeLocationFeatures() {
-    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
+    this.map.removeLayer(this.selectLocationLayer);
   }
 
   public clearLocationLayer() {
-    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
+    this.map.removeLayer(this.selectLocationLayer);
   }
 
   public highlightFeature(feature: Feature) {
-    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
+    this.map.removeLayer(this.highlightLayer);
     this.highlightSource = new VectorSource({
       features: [feature],
     });
@@ -486,15 +487,15 @@ export class MapComponent implements OnInit, OnDestroy {
       })], opacity: 0.7,
     });
     this.highlightLayer.setZIndex(20);
-    this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
+    this.map.addLayer(this.highlightLayer);
   }
 
   public removeHighlight() {
-    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
+    this.map.removeLayer(this.highlightLayer);
   }
 
   private zoomToPoint(point: Point) {
-    const view = this.mapService.getMap(this.mapName).getView();
+    const view = this.map.getView();
     view.fit(point, {
       duration: 250,
       maxZoom: 10,
@@ -502,8 +503,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private zoomToExtent(extent: Extent) {
-    const view = this.mapService.getMap(this.mapName).getView();
-    const resolution = view.getResolutionForExtent(extent, this.mapService.getMap(this.mapName).getSize());
+    const view = this.map.getView();
+    const resolution = view.getResolutionForExtent(extent, this.map.getSize());
     const zoom = view.getZoomForResolution(resolution);
     const center = getCenter(extent);
 
@@ -549,8 +550,7 @@ export class MapComponent implements OnInit, OnDestroy {
     search.on('select', (event) => {
       if (event.search.class === 'place') {
         // if the search result is a single point, zoom to it
-        const coordsRD: Coordinate = proj4(this.epsgWGS84, this.epsgRD, event.coordinate);
-        const point = new Point(coordsRD);
+        const point = new Point(event.coordinate);
 
         this.zoomToPoint(point);
       } else {
@@ -573,7 +573,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.mapService.getMap(this.mapName).addControl(search);
+    this.map.addControl(search);
   }
 
   private addFindMeButton() {
@@ -588,7 +588,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.findMe();
     });
 
-    this.mapService.getMap(this.mapName).addControl(new Control({
+    this.map.addControl(new Control({
       element: locate,
     }));
   }
@@ -617,32 +617,9 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
     }
+
     this.initMap();
-
-    const onMoveEnd = async (evt) => {
-      const evtMap = evt.map;
-
-      const currentRequestTimestamp = new Date().valueOf();
-      if (!this.mapUpdated || currentRequestTimestamp - this.mapUpdated > 500) {  // In case of e.g. resizing window.
-        this.mapUpdated = currentRequestTimestamp;
-
-        const extent = evtMap.getView().calculateExtent(evtMap.getSize());
-        const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
-        const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
-
-        const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
-          topRight[0].toString(), topRight[1].toString());
-
-        if (sensors) {
-          this.updateMap(sensors);
-        }
-      }
-    };
-    this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
-
-    this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
-      this.myLayers = data as Theme[];
-    }, () => {}));
+    this.initFeatures();
 
     const { onRegister, onUpdate, onDelete } = await this.sensorService.subscribe();
 
