@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-      - image: sensrnetregistry.azurecr.io/sensrnet/registry-frontend:latest
+      - image: sensrnetnl/registry-frontend:latest
         name: registry-frontend
         ports:
         - name: http
