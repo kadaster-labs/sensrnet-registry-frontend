@@ -1,257 +1,879 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="nl" trgLang="nl">
   <file original="ng.template" id="ngi18n">
-    <unit id="ngb.alert.close">
+    <unit id="app.title">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts:3</note>
+        <note category="location">src/app/app.component.ts:9</note>
       </notes>
+      <segment state="translated">
+        <source>Sensor Registry</source>
+      <target>Sensoren Register</target></segment>
+    </unit><unit id="modal.accept">
+      <notes>
+        
+        
+      <note category="location">src/app/services/modal.service.ts:9</note></notes>
+      <segment state="translated">
+        <source>OK</source>
+      <target>OK</target></segment>
+    </unit><unit id="modal.decline">
+      <notes>
+        
+      <note category="location">src/app/services/modal.service.ts:10</note></notes>
+      <segment state="translated">
+        <source>Cancel</source>
+      <target>Annuleer</target></segment>
+    </unit><unit id="login.failed">
+      <notes>
+        <note category="location">src/app/login/login.component.ts:18</note>
+      </notes>
+      <segment state="translated">
+        <source>Failed to login: Supply valid credentials.</source>
+      <target>Inloggen mislukt: incorrecte inloggegevens.</target></segment>
+    </unit><unit id="ngb.alert.close">
+      <notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note></notes>
       <segment state="translated">
         <source>Close</source>
       <target>Sluiten</target></segment>
     </unit>
     <unit id="ngb.carousel.previous">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts:13</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:90</note></notes>
       <segment state="final">
         <source>Previous</source>
       <target>Previous</target></segment>
     </unit>
     <unit id="ngb.carousel.next">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts:17</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:111</note></notes>
       <segment state="final">
         <source>Next</source>
       <target>Next</target></segment>
     </unit>
     <unit id="ngb.datepicker.previous-month">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:4</note>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:5</note>
-      </notes>
+        
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:24</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:36</note></notes>
       <segment state="final">
         <source>Previous month</source>
       <target>Previous month</target></segment>
     </unit>
     <unit id="ngb.datepicker.next-month">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:26</note>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts:27</note>
-      </notes>
+        
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:52</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:69</note></notes>
       <segment state="final">
         <source>Next month</source>
       <target>Next month</target></segment>
     </unit>
     <unit id="ngb.datepicker.select-month">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:5</note>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:6</note>
-      </notes>
+        
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:43</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
       <segment state="final">
         <source>Select month</source>
       <target>Select month</target></segment>
     </unit>
     <unit id="ngb.datepicker.select-year">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:13</note>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts:14</note>
-      </notes>
+        
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
       <segment state="final">
         <source>Select year</source>
       <target>Select year</target></segment>
     </unit>
     <unit id="ngb.pagination.first">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:2</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:147</note></notes>
       <segment state="final">
         <source>««</source>
       <target>««</target></segment>
     </unit>
     <unit id="ngb.pagination.previous">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:3</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:155</note></notes>
       <segment state="final">
         <source>«</source>
       <target>«</target></segment>
     </unit>
     <unit id="ngb.pagination.next">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:4</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:163</note></notes>
       <segment state="final">
         <source>»</source>
       <target>»</target></segment>
     </unit>
     <unit id="ngb.pagination.last">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:5</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:172</note></notes>
       <segment state="final">
         <source>»»</source>
       <target>»»</target></segment>
     </unit>
     <unit id="ngb.pagination.first-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:14</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:183</note></notes>
       <segment state="final">
         <source>First</source>
       <target>First</target></segment>
     </unit>
     <unit id="ngb.pagination.previous-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:24</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
       <segment state="final">
         <source>Previous</source>
       <target>Previous</target></segment>
     </unit>
     <unit id="ngb.pagination.next-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:44</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
       <segment state="final">
         <source>Next</source>
       <target>Next</target></segment>
     </unit>
     <unit id="ngb.pagination.last-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts:53</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
       <segment state="final">
         <source>Last</source>
       <target>Last</target></segment>
     </unit>
     <unit id="ngb.progressbar.value">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts:7</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.ts:23</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></target></segment>
     </unit>
     <unit id="ngb.timepicker.increment-hours">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:9</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:74</note></notes>
       <segment state="final">
         <source>Increment hours</source>
       <target>Increment hours</target></segment>
     </unit>
     <unit id="ngb.timepicker.HH">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:13</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:46</note></notes>
       <segment state="final">
         <source>HH</source>
       <target>HH</target></segment>
     </unit>
     <unit id="ngb.timepicker.hours">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:15</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:52</note></notes>
       <segment state="final">
         <source>Hours</source>
       <target>Hours</target></segment>
     </unit>
     <unit id="ngb.timepicker.decrement-hours">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:23</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:83</note></notes>
       <segment state="final">
         <source>Decrement hours</source>
       <target>Decrement hours</target></segment>
     </unit>
     <unit id="ngb.timepicker.increment-minutes">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:32</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:91</note></notes>
       <segment state="final">
         <source>Increment minutes</source>
       <target>Increment minutes</target></segment>
     </unit>
     <unit id="ngb.timepicker.MM">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:35</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:61</note></notes>
       <segment state="final">
         <source>MM</source>
       <target>MM</target></segment>
     </unit>
     <unit id="ngb.timepicker.minutes">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:37</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:67</note></notes>
       <segment state="final">
         <source>Minutes</source>
       <target>Minutes</target></segment>
     </unit>
     <unit id="ngb.timepicker.decrement-minutes">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:45</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:98</note></notes>
       <segment state="final">
         <source>Decrement minutes</source>
       <target>Decrement minutes</target></segment>
     </unit>
     <unit id="ngb.timepicker.increment-seconds">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:54</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:139</note></notes>
       <segment state="final">
         <source>Increment seconds</source>
       <target>Increment seconds</target></segment>
     </unit>
     <unit id="ngb.timepicker.SS">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:57</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:108</note></notes>
       <segment state="final">
         <source>SS</source>
       <target>SS</target></segment>
     </unit>
     <unit id="ngb.timepicker.seconds">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:59</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:129</note></notes>
       <segment state="final">
         <source>Seconds</source>
       <target>Seconds</target></segment>
     </unit>
     <unit id="ngb.timepicker.decrement-seconds">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:67</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
       <segment state="final">
         <source>Decrement seconds</source>
       <target>Decrement seconds</target></segment>
     </unit>
     <unit id="ngb.timepicker.PM">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:76</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></target></segment>
     </unit>
     <unit id="ngb.timepicker.AM">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts:77</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></target></segment>
     </unit>
     <unit id="ngb.toast.close-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/toast/toast.d.ts:8</note>
-      </notes>
+        
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/toast/toast.ts:71</note></notes>
       <segment state="final">
         <source>Close</source>
       <target>Close</target></segment>
+    </unit><unit id="2826581353496868063">
+      <notes>
+        <note category="location">src/app/components/language-switcher/language-switcher.component.html:5</note>
+      </notes>
+      <segment state="translated">
+        <source>Language</source>
+      <target>Taal</target></segment>
+    </unit><unit id="3076687427621376223">
+      <notes>
+        
+      <note category="location">src/app/sidebar/sidebar.component.html:18</note><note category="location">src/app/components/organization/organization.component.html:14</note></notes>
+      <segment state="translated">
+        <source>Organization</source>
+      <target>Organisatie</target></segment>
+    </unit><unit id="3797778920049399855">
+      <notes>
+        <note category="location">src/app/sidebar/sidebar.component.html:23</note>
+      </notes>
+      <segment state="translated">
+        <source>Logout</source>
+      <target>Afmelden</target></segment>
+    </unit><unit id="register.success">
+      <notes>
+        <note category="location">src/app/register/register.component.ts:18</note>
+        <note category="location">src/app/register/register.component.ts:19</note>
+      </notes>
+      <segment state="translated">
+        <source>Registration successful</source>
+      <target>Registratie succesvol</target></segment>
+    </unit><unit id="2159130950882492111">
+      <notes>
+        <note category="location">src/app/register/register.component.html:28</note>
+      </notes>
+      <segment state="translated">
+        <source>Cancel</source>
+      <target>Annuleren</target></segment>
+    </unit><unit id="7533721054360206796">
+      <notes>
+        <note category="location">src/app/register/register.component.html:12</note>
+      </notes>
+      <segment state="translated">
+        <source>E-mail must be a valid e-mail address</source>
+      <target>E-mail moet een valide adres zijn</target></segment>
+    </unit><unit id="6446631772000124223">
+      <notes>
+        <note category="location">src/app/register/register.component.html:20</note>
+      </notes>
+      <segment state="translated">
+        <source>Password must be at least 6 characters</source>
+      <target>Wachtwoord moet uit minimaal 6 tekens bestaan</target></segment>
+    </unit><unit id="map.locate">
+      <notes>
+        <note category="location">src/app/components/map/map.component.ts:91</note>
+      </notes>
+      <segment state="translated">
+        <source>Locate me</source>
+      <target>Vind mij</target></segment>
+    </unit><unit id="map.confirm.title">
+      <notes>
+        <note category="location">src/app/components/map/map.component.ts:92</note>
+      </notes>
+      <segment state="translated">
+        <source>Please confirm</source>
+      <target>Bevestig</target></segment>
+    </unit><unit id="map.confirm.body">
+      <notes>
+        <note category="location">src/app/components/map/map.component.ts:93</note>
+      </notes>
+      <segment state="translated">
+        <source>Do you really want to delete the sensor?</source>
+      <target>Weet u zeker dat u de sensor wilt verwijderen?</target></segment>
+    </unit><unit id="map.geo.support">
+      <notes>
+        <note category="location">src/app/components/map/map.component.ts:94</note>
+      </notes>
+      <segment state="translated">
+        <source>Geolocation is not supported by this browser.</source>
+      <target>Locatie wordt niet ondersteunt door deze browser.</target></segment>
+    </unit><unit id="800975943269756056">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:4</note>
+      </notes>
+      <segment state="translated">
+        <source>Search for location</source>
+      <target>Zoek op locatie</target></segment>
+    </unit><unit id="8307140841776883735">
+      <notes>
+        <note category="location">src/app/components/organization/organization.component.html:30</note>
+      </notes>
+      <segment state="translated">
+        <source>Join</source>
+      <target>Toetreden</target></segment>
+    </unit><unit id="5674286808255988565">
+      <notes>
+        
+      <note category="location">src/app/components/organization/organization.component.html:38</note><note category="location">src/app/forms/organization-create/organization-create.component.html:11</note></notes>
+      <segment state="translated">
+        <source>Create</source>
+      <target>Maken</target></segment>
+    </unit><unit id="sensor.register.success">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.ts:31</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensor registered</source>
+      <target>Sensor geregistreerd</target></segment>
+    </unit><unit id="sensor.register.failure">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.ts:32</note>
+      </notes>
+      <segment state="translated">
+        <source>An error has occurred during registration:</source>
+      <target>Er is een fout opgetreden tijdens de registratie:</target></segment>
+    </unit><unit id="8953033926734869941">
+      <notes>
+        
+        
+        
+        
+        
+      <note category="location">src/app/forms/sensor/sensor.component.html:24</note><note category="location">src/app/forms/sensors/sensors.component.html:17</note><note category="location">src/app/forms/organization-join/organization-join.component.html:4</note><note category="location">src/app/forms/organization-join/organization-join.component.html:11</note><note category="location">src/app/forms/organization-create/organization-create.component.html:3</note><note category="location">src/app/form-controls/datastream/datastream.component.html:11</note></notes>
+      <segment state="translated">
+        <source>Name</source>
+      <target>Naam</target></segment>
+    </unit><unit id="6411448806393999934">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:25</note>
+      </notes>
+      <segment state="translated">
+        <source>Enter name</source>
+      <target>Voer naam in</target></segment>
+    </unit><unit id="7396349278616493092">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:37</note>
+      </notes>
+      <segment state="translated">
+        <source>Aim</source>
+      <target>Doel</target></segment>
+    </unit><unit id="457324318728193960">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:38</note>
+      </notes>
+      <segment state="translated">
+        <source>Aim of the sensor</source>
+      <target>Doel van de sensor</target></segment>
+    </unit><unit id="4902817035128594900">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:41</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:26</note>
+      </notes>
+      <segment state="translated">
+        <source>Description</source>
+      <target>Beschrijving</target></segment>
+    </unit><unit id="2404547175180966423">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:43</note>
+      </notes>
+      <segment state="translated">
+        <source>Describe the sensor</source>
+      <target>Beschrijf de sensor</target></segment>
+    </unit><unit id="859889886317613793">
+      <notes>
+        
+      <note category="location">src/app/forms/sensor/sensor.component.html:46</note><note category="location">src/app/forms/sensors/sensors.component.html:20</note></notes>
+      <segment state="translated">
+        <source>Manufacturer</source>
+      <target>Fabrikant</target></segment>
+    </unit><unit id="4230848033571840888">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:48</note>
+      </notes>
+      <segment state="translated">
+        <source>Enter name of the manufacturer</source>
+      <target>Voer de fabrikant naam in</target></segment>
+    </unit><unit id="6013667688532279516">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:51</note>
+      </notes>
+      <segment state="translated">
+        <source>Documentation URL</source>
+      <target>Documentatie URL</target></segment>
+    </unit><unit id="5880667752120449727">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:53</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:53</note>
+      </notes>
+      <segment state="translated">
+        <source>Enter URL of documentation</source>
+      <target>Voer de documentatie URL in</target></segment>
+    </unit><unit id="4452427314943113135">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:70</note>
+      </notes>
+      <segment state="translated">
+        <source>Previous</source>
+      <target>Vorige</target></segment>
+    </unit><unit id="7862928942621880455">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:10</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensor Properties</source>
+      <target>Sensor Eigenschappen</target></segment>
+    </unit><unit id="5621000013601072703">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:11</note>
+      </notes>
+      <segment state="translated">
+        <source>Optional Sensor Properties</source>
+      <target>Optionele Sensor Eigenschappen</target></segment>
+    </unit><unit id="7103242561722894475">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:12</note>
+      </notes>
+      <segment state="translated">
+        <source>Data Streams</source>
+      <target>Datastromen</target></segment>
+    </unit><unit id="4564411879911210622">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:13</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensor Location</source>
+      <target>Sensor Locatie</target></segment>
+    </unit><unit id="3833692663709091545">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:29</note>
+        <note category="location">src/app/forms/organization-create/organization-create.component.html:6</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:18</note>
+      </notes>
+      <segment state="translated">
+        <source>Name is required</source>
+      <target>Naam is vereist</target></segment>
+    </unit><unit id="8104330900862727758">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:30</note>
+      </notes>
+      <segment state="translated">
+        <source>Name must be at least 6 characters</source>
+      <target>Naam moet uit minimaal 6 tekens bestaan</target></segment>
+    </unit><unit id="8651329520452925938">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:56</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:57</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:66</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:5</note>
+      </notes>
+      <segment state="translated">
+        <source>Not a valid URL</source>
+      <target>Geen valide URL</target></segment>
+    </unit><unit id="935187492052582731">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:72</note>
+      </notes>
+      <segment state="translated">
+        <source>Submit</source>
+      <target>Bevestigen</target></segment>
+    </unit><unit id="3885497195825665706">
+      <notes>
+        <note category="location">src/app/forms/sensor/sensor.component.html:75</note>
+      </notes>
+      <segment state="translated">
+        <source>Next</source>
+      <target>Volgende</target></segment>
+    </unit><unit id="8829497237648100098">
+      <notes>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:3</note>
+      </notes>
+      <segment state="translated">
+        <source>Filter</source>
+      <target>Filteren</target></segment>
+    </unit><unit id="8539325943407755549">
+      <notes>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:7</note>
+      </notes>
+      <segment state="translated">
+        <source>Organizations</source>
+      <target>Organisaties</target></segment>
+    </unit><unit id="5481284030283031915">
+      <notes>
+        
+      <note category="location">src/app/forms/organization-join/organization-join.component.html:12</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note></notes>
+      <segment state="translated">
+        <source>Website</source>
+      <target>Website</target></segment>
+    </unit><unit id="9044503995162566400">
+      <notes>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:13</note>
+      </notes>
+      <segment state="translated">
+        <source>Contact Name</source>
+      <target>Contact Naam</target></segment>
+    </unit><unit id="1755327849942548232">
+      <notes>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:14</note>
+      </notes>
+      <segment state="translated">
+        <source>Contact Email</source>
+      <target>Contact Email</target></segment>
+    </unit><unit id="5373496340618282855">
+      <notes>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:15</note>
+      </notes>
+      <segment state="translated">
+        <source>Contact Phone</source>
+      <target>Contact Telefoonnummer</target></segment>
+    </unit><unit id="3768927257183755959">
+      <notes>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:36</note>
+      </notes>
+      <segment state="translated">
+        <source>Save</source>
+      <target>Opslaan</target></segment>
+    </unit><unit id="register.failed">
+      <notes>
+        <note category="location">src/app/forms/organization-create/organization-create.component.ts:22</note>
+      </notes>
+      <segment state="translated">
+        <source>Failed to register. Does the organization exist already?</source>
+      <target>De registratie is mislukt. Bestaat de organisatie al?</target></segment>
+    </unit><unit id="organization.update">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:24</note>
+      </notes>
+      <segment state="translated">
+        <source>Updated the organization.</source>
+      <target>De organisatie is geüpdatet.</target></segment>
+    </unit><unit id="2273088133016853024">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:4</note>
+      </notes>
+      <segment state="translated">
+        <source>Leave</source>
+      <target>Verlaten</target></segment>
+    </unit><unit id="4021752662928002901">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:5</note>
+      </notes>
+      <segment state="translated">
+        <source>Update</source>
+      <target>Updaten</target></segment>
+    </unit><unit id="5546023389249689964">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:3</note>
+      </notes>
+      <segment state="translated">
+        <source>Datastreams</source>
+      <target>Datastromen</target></segment>
+    </unit><unit id="8254163730790501097">
+      <notes>
+        
+      <note category="location">src/app/forms/sensor/sensor.component.html:37</note><note category="location">src/app/forms/sensor/sensor.component.html:41</note><note category="location">src/app/forms/sensor/sensor.component.html:46</note><note category="location">src/app/forms/sensor/sensor.component.html:51</note><note category="location">src/app/form-controls/datastream/datastream.component.html:3</note><note category="location">src/app/form-controls/datastream/datastream.component.html:22</note><note category="location">src/app/form-controls/datastream/datastream.component.html:26</note><note category="location">src/app/form-controls/datastream/datastream.component.html:30</note><note category="location">src/app/form-controls/datastream/datastream.component.html:52</note><note category="location">src/app/form-controls/datastream/datastream.component.html:61</note><note category="location">src/app/form-controls/datastream/datastream.component.html:70</note><note category="location">src/app/form-controls/datastream/datastream.component.html:74</note><note category="location">src/app/form-controls/sensor-theme/sensor-theme.component.html:2</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:14</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note></notes>
+      <segment state="translated">
+        <source> - Optional</source>
+      <target> - Optioneel</target></segment>
+    </unit><unit id="1204967233239083847">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:4</note>
+      </notes>
+      <segment state="translated">
+        <source>Add Datastream</source>
+      <target>Datastroom Toevoegen</target></segment>
+    </unit><unit id="3874212695899678552">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:15</note>
+      </notes>
+      <segment state="translated">
+        <source>Datastream name</source>
+      <target>Datastroom naam</target></segment>
+    </unit><unit id="4775550080689015987">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:22</note>
+      </notes>
+      <segment state="translated">
+        <source>Reason</source>
+      <target>Reden</target></segment>
+    </unit><unit id="3453795714433029022">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:23</note>
+      </notes>
+      <segment state="translated">
+        <source>Reason for the datastream</source>
+      <target>Reden voor de datastroom</target></segment>
+    </unit><unit id="4002306973832863531">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:27</note>
+      </notes>
+      <segment state="translated">
+        <source>Describe datastream</source>
+      <target>Beschrijf datastroom</target></segment>
+    </unit><unit id="4493082819727013565">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:30</note>
+      </notes>
+      <segment state="translated">
+        <source>Observed Property</source>
+      <target>Waargenomen eigenschap</target></segment>
+    </unit><unit id="5828006391937583005">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:31</note>
+      </notes>
+      <segment state="translated">
+        <source>The property that is observed</source>
+      <target>De eigenschap die waargenomen wordt</target></segment>
+    </unit><unit id="4316181475809137059">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:36</note>
+      </notes>
+      <segment state="translated">
+        <source>Is Public</source>
+      <target>Is Publiek</target></segment>
+    </unit><unit id="2765996121940624988">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:42</note>
+      </notes>
+      <segment state="translated">
+        <source>Is Open Data</source>
+      <target>Is Open Data</target></segment>
+    </unit><unit id="4975476383611780549">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:48</note>
+      </notes>
+      <segment state="translated">
+        <source>Is Reusable</source>
+      <target>Is Herbruikbaar</target></segment>
+    </unit><unit id="4895326106573044490">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:52</note>
+      </notes>
+      <segment state="translated">
+        <source>Documentation</source>
+      <target>Documentatie</target></segment>
+    </unit><unit id="8732411010010701151">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:61</note>
+      </notes>
+      <segment state="translated">
+        <source>Datalink</source>
+      <target>Datalink</target></segment>
+    </unit><unit id="3465033560498443683">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:62</note>
+      </notes>
+      <segment state="translated">
+        <source>Enter URL of data</source>
+      <target>Voer URL van de data in</target></segment>
+    </unit><unit id="842818106493560934">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:70</note>
+      </notes>
+      <segment state="translated">
+        <source>Unit of measurement</source>
+      <target>Meet eenheid</target></segment>
+    </unit><unit id="4479497848859905863">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
+      </notes>
+      <segment state="translated">
+        <source>Unit of Measurement</source>
+      <target>Meet Eenheid</target></segment>
+    </unit><unit id="3342278149916119635">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:74</note>
+      </notes>
+      <segment state="translated">
+        <source>Data Frequency / s</source>
+      <target>Data Fequentie / s</target></segment>
+    </unit><unit id="6122030973291308530">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:75</note>
+      </notes>
+      <segment state="translated">
+        <source>Frequency</source>
+      <target>Frequentie</target></segment>
+    </unit><unit id="2361149596254019287">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:78</note>
+      </notes>
+      <segment state="translated">
+        <source>Data Quality (worst - best)</source>
+      <target>Data Kwaliteit (slechtst - best)</target></segment>
+    </unit><unit id="3209056610537919480">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:79</note>
+      </notes>
+      <segment state="translated">
+        <source>Quality</source>
+      <target>Kwaliteit</target></segment>
+    </unit><unit id="5551307948733637188">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:11</note>
+      </notes>
+      <segment state="translated">
+        <source>Category is required</source>
+      <target>Categorie is verplicht</target></segment>
+    </unit><unit id="2258786061065425417">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:24</note>
+      </notes>
+      <segment state="translated">
+        <source>Type is required</source>
+      <target>Type is verplicht</target></segment>
+    </unit><unit id="1755726504733757199">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensor status</source>
+      <target>Sensor status</target></segment>
+    </unit><unit id="1859131936150262113">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
+      </notes>
+      <segment state="translated">
+        <source>Inactive</source>
+      <target>Inactief</target></segment>
+    </unit><unit id="5701779805166837861">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
+      </notes>
+      <segment state="translated">
+        <source>Status is required</source>
+      <target>Status is vereist</target></segment>
+    </unit><unit id="6595217940183311788">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-theme/sensor-theme.component.html:2</note>
+      </notes>
+      <segment state="translated">
+        <source>Theme(s)</source>
+      <target>Thema(s)</target></segment>
+    </unit><unit id="471816275243265264">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:3</note>
+      </notes>
+      <segment state="translated">
+        <source>Location</source>
+      <target>Locatie</target></segment>
+    </unit><unit id="5824839776083689686">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:6</note>
+      </notes>
+      <segment state="translated">
+        <source>Select on map</source>
+      <target>Selecteer op de kaart</target></segment>
+    </unit><unit id="7397645067969084297">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:11</note>
+      </notes>
+      <segment state="translated">
+        <source>Height (m)</source>
+      <target>Hoogte (m)</target></segment>
+    </unit><unit id="6049622808300788023">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:12</note>
+      </notes>
+      <segment state="translated">
+        <source>Enter Height (m)</source>
+      <target>Hoogte Invoeren (m)</target></segment>
+    </unit><unit id="8347820833028221543">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:15,16</note>
+      </notes>
+      <segment state="translated">
+        <source> Location and Height are required </source>
+      <target> Locatie and Hoogte zijn vereist </target></segment>
+    </unit><unit id="2285642860983205776">
+      <notes>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note>
+      </notes>
+      <segment state="translated">
+        <source>Contact Person Name</source>
+      <target>Contactpersoon Naam</target></segment>
+    </unit><unit id="7172729113485968588">
+      <notes>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:14</note>
+      </notes>
+      <segment state="translated">
+        <source>Contact Person Email</source>
+      <target>Contactpersoon Email</target></segment>
+    </unit><unit id="3643440439611422385">
+      <notes>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
+      </notes>
+      <segment state="translated">
+        <source>Contact Person Phone</source>
+      <target>Contactpersoon Telefoonnummer</target></segment>
+    </unit><unit id="1661700081276407146">
+      <notes>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:17</note>
+      </notes>
+      <segment state="translated">
+        <source>Public e-mail must be a valid e-mail address</source>
+      <target>Publieke e-mail moet een valide adres zijn</target></segment>
     </unit><unit id="8250042734400339043">
       <notes>
         <note category="location">src/app/login/login.component.html:10</note>
@@ -269,38 +891,131 @@
     </unit><unit id="1890300073702152532">
       <notes>
         
-      <note category="location">src/app/login/login.component.html:21</note></notes>
+      <note category="location">src/app/login/login.component.html:21</note><note category="location">src/app/register/register.component.html:8</note></notes>
       <segment state="final">
         <source>E-mail</source>
       <target>E-mail</target></segment>
     </unit><unit id="6466460354973690677">
       <notes>
-        <note category="location">src/app/login/login.component.html:24</note>
-      </notes>
+        
+      <note category="location">src/app/login/login.component.html:24</note><note category="location">src/app/register/register.component.html:11</note></notes>
       <segment state="translated">
         <source>E-mail is required</source>
       <target>E-mail is verplicht</target></segment>
     </unit><unit id="1431416938026210429">
       <notes>
-        <note category="location">src/app/login/login.component.html:28</note>
-      </notes>
+        
+      <note category="location">src/app/login/login.component.html:28</note><note category="location">src/app/register/register.component.html:16</note></notes>
       <segment state="translated">
         <source>Password</source>
       <target>Wachtwoord</target></segment>
     </unit><unit id="205044832662301680">
       <notes>
-        <note category="location">src/app/login/login.component.html:31</note>
-      </notes>
+        
+      <note category="location">src/app/login/login.component.html:31</note><note category="location">src/app/register/register.component.html:19</note></notes>
       <segment state="translated">
         <source>Password is required</source>
       <target>Wachtwoord is verplicht</target></segment>
+    </unit><unit id="3103656649990667741">
+      <notes>
+        <note category="location">src/app/navbar/navbar.component.html:4</note>
+      </notes>
+      <segment state="translated">
+        <source>SensRNet Registration App</source>
+      <target>SensRNet Registratie App</target></segment>
+    </unit><unit id="2102825898069375693">
+      <notes>
+        <note category="location">src/app/navbar/navbar.component.html:10</note>
+      </notes>
+      <segment state="translated">
+        <source>Menu</source>
+      <target>Menu</target></segment>
+    </unit><unit id="2178314187687279474">
+      <notes>
+        <note category="location">src/app/sidebar/sidebar.component.html:8</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensor</source>
+      <target>Sensor</target></segment>
+    </unit><unit id="5778514899777017666">
+      <notes>
+        <note category="location">src/app/sidebar/sidebar.component.html:13</note>
+        <note category="location">src/app/forms/sensors/sensors.component.html:9</note>
+        <note category="location">src/app/forms/sensors/sensors.component.html:13</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensors</source>
+      <target>Sensoren</target></segment>
     </unit><unit id="3301086086650990787">
       <notes>
-        <note category="location">src/app/login/login.component.html:39</note>
-      </notes>
+        
+      <note category="location">src/app/login/login.component.html:39</note><note category="location">src/app/register/register.component.html:5</note><note category="location">src/app/register/register.component.html:26</note></notes>
       <segment state="translated">
         <source>Register</source>
       <target>Registreer</target></segment>
+    </unit><unit id="8455841993733304388">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:20</note>
+      </notes>
+      <segment state="translated">
+        <source>Sensor details</source>
+      <target>Sensor details</target></segment>
+    </unit><unit id="1650073357556875190">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:23</note>
+      </notes>
+      <segment state="translated">
+        <source>Attribute</source>
+      <target>Attribuut</target></segment>
+    </unit><unit id="6555318547274416232">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:24</note>
+      </notes>
+      <segment state="translated">
+        <source>Value</source>
+      <target>Waarde</target></segment>
+    </unit><unit id="1806667489382256324">
+      <notes>
+        
+      <note category="location">src/app/components/map/map.component.html:30</note><note category="location">src/app/forms/sensors/sensors.component.html:18</note><note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:3</note></notes>
+      <segment state="translated">
+        <source>Category</source>
+      <target>Categorie</target></segment>
+    </unit><unit id="8650499415827640724">
+      <notes>
+        
+      <note category="location">src/app/components/map/map.component.html:38</note><note category="location">src/app/forms/sensors/sensors.component.html:19</note></notes>
+      <segment state="translated">
+        <source>Type</source>
+      <target>Type</target></segment>
+    </unit><unit id="8204176479746810612">
+      <notes>
+        
+      <note category="location">src/app/components/map/map.component.html:47</note><note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note></notes>
+      <segment state="translated">
+        <source>Active</source>
+      <target>Actief</target></segment>
+    </unit><unit id="7585826646011739428">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:61</note>
+      </notes>
+      <segment state="translated">
+        <source>Edit</source>
+      <target>Bewerken</target></segment>
+    </unit><unit id="7022070615528435141">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:64</note>
+      </notes>
+      <segment state="translated">
+        <source>Delete</source>
+      <target>Verwijderen</target></segment>
+    </unit><unit id="2509141182388535183">
+      <notes>
+        <note category="location">src/app/components/map/map.component.html:69</note>
+      </notes>
+      <segment state="translated">
+        <source>View</source>
+      <target>Bekijken</target></segment>
     </unit>
     
   </file>

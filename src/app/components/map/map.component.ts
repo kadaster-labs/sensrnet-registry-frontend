@@ -88,6 +88,11 @@ export class MapComponent implements OnInit, OnDestroy {
   public iconChecked = 'far fa-check-square';
   public iconInfoUrl = 'fas fa-info-circle';
 
+  public locateMeString = $localize`:@@map.locate:Locate me`;
+  public confirmTitleString = $localize`:@@map.confirm.title:Please confirm`;
+  public confirmBodyString = $localize`:@@map.confirm.body:Do you really want to delete the sensor?`;
+  public geoLocationNotSupportedString = $localize`:@@map.geo.support:Geolocation is not supported by this browser.`;
+
   private static sensorToFeatureProperties(sensor: ISensor) {
     return {
       sensor,
@@ -516,14 +521,14 @@ export class MapComponent implements OnInit, OnDestroy {
         this.zoomToPosition(position);
       });
     } else {
-      alert('Geolocation is not supported by this browser.');
+      alert(this.geoLocationNotSupportedString);
     }
   }
 
   private addFindMeButton() {
     const locate = document.createElement('div');
     locate.className = 'ol-control ol-unselectable locate';
-    locate.innerHTML = '<button title="Locate me">◎</button>';
+    locate.innerHTML = `<button title="${this.locateMeString}">◎</button>`;
     locate.addEventListener('click', () => {
       this.findMe();
     });
@@ -543,7 +548,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async deleteSensor(): Promise<void> {
-    this.modalService.confirm('Please confirm.', 'Do you really want to delete the sensor?')
+    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
       .then((confirmed) => {
         if (confirmed) {
           this.sensorService.unregister(this.selectedSensor._id);

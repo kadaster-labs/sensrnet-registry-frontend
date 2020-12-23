@@ -1,6 +1,6 @@
 <div [formGroup]="form" class="form-group">
     <div class="form-group">
-        <label for="category">Category</label>
+        <label for="category" i18n>Category</label>
         <select data-container="body" class="form-control" formControlName="category"
             [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
             <option *ngFor="let category of sensorCategoriesList" [value]="category">
@@ -8,7 +8,7 @@
             </option>
         </select>
         <div *ngIf="(f.category.dirty || f.category.touched || submitted) && f.category.errors" class="invalid-input">
-            <span class="required-text" *ngIf="f.category.errors.required">Category is required</span>
+            <span class="required-text" *ngIf="f.category.errors.required" i18n>Category is required</span>
         </div>
     </div>
     <div class="form-group">
@@ -21,7 +21,7 @@
         </select>
         <div *ngIf="(f.typeName.dirty || f.typeName.touched || submitted) && f.typeName.errors"
             class="invalid-input">
-            <span class="required-text" *ngIf="f.typeName.errors.required">Type is required</span>
+            <span class="required-text" *ngIf="f.typeName.errors.required" i18n>Type is required</span>
         </div>
     </div>
 </div>

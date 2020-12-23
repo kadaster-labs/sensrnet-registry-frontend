@@ -78,8 +78,6 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
         await this.userService.update(this.form.value).toPromise();
         await this.connectionService.refreshClaim();
         this.connectionService.updateSocketOrganization();
-
-        this.alertService.success('Updated.', false, 4000);
       } catch (error) {
         this.alertService.error(error.message);
       }

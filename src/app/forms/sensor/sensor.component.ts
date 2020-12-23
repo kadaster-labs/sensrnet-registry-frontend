@@ -28,6 +28,9 @@ export class SensorComponent implements OnInit, OnDestroy {
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
+  public sensorRegisterSuccessMessage = $localize`:@@sensor.register.success:Sensor registered`;
+  public sensorRegisterFailedMessage = $localize`:@@sensor.register.failure:An error has occurred during registration:`;
+
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -293,9 +296,9 @@ export class SensorComponent implements OnInit, OnDestroy {
       await this.sensorService.register(sensor);
 
       this.locationService.showLocation(null);
-      this.alertService.success('Sensor registered!', false, 4000);
+      this.alertService.success(this.sensorRegisterSuccessMessage, false, 4000);
     } catch (error) {
-      this.alertService.error(`An error has occurred while creating sensor: ${error}.`);
+      this.alertService.error(`${this.sensorRegisterFailedMessage}: ${error}.`);
     }
   }
 
