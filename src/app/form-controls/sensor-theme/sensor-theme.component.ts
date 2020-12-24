@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { SensorTheme } from '../../model/bodies/sensorTheme';
+import { SensorTheme, SensorThemeTranslation } from '../../model/bodies/sensorTheme';
 import { Component, forwardRef, OnDestroy, Input, AfterViewInit } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -45,6 +45,7 @@ export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, Af
 
   public sensorThemes = SensorTheme;
   public sensorThemesList: string[];
+  public sensorThemeTranslation = SensorThemeTranslation;
 
   constructor(
     private formBuilder: FormBuilder,

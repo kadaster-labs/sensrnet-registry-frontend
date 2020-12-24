@@ -24,8 +24,8 @@
                 <tr *ngFor="let sensor of sensors; let i = index" class="pointer" (click)="selectSensor(sensor)">
                     <th scope="row">{{ i + 1 }}</th>
                     <td>{{ sensor.name }}</td>
-                    <td>{{ sensor.category }}</td>
-                    <td>{{ sensor.typeName }}</td>
+                    <td>{{ getCategoryTranslation(sensor.category) }}</td>
+                    <td>{{ getTypeTranslation(sensor.typeName) }}</td>
                     <td>{{ sensor.manufacturer }}</td>
                 </tr>
                 </tbody>

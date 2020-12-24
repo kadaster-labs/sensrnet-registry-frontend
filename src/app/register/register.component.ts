@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
 
   public registerSuccessMessage = $localize`:@@register.success:Registration successful`;
-  public registerFailedMessage = $localize`:@@register.success:Registration failed. Does the account exist already?`;
+  public registerFailedMessage = $localize`:@@register.failure:Registration failed. Does the account exist already?`;
 
   constructor(
     private router: Router,

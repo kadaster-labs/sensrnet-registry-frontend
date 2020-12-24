@@ -304,12 +304,19 @@
       <target>Logout</target></segment>
     </unit><unit id="register.success">
       <notes>
-        <note category="location">src/app/register/register.component.ts:18</note>
-        <note category="location">src/app/register/register.component.ts:19</note>
-      </notes>
+        
+        
+      <note category="location">src/app/register/register.component.ts:18</note></notes>
       <segment state="final">
         <source>Registration successful</source>
       <target>Registration successful</target></segment>
+    </unit><unit id="register.failure">
+      <notes>
+        <note category="location">src/app/register/register.component.ts:19</note>
+      </notes>
+      <segment state="final">
+        <source>Registration failed. Does the account exist already?</source>
+      <target>Registration failed. Does the account exist already?</target></segment>
     </unit><unit id="2159130950882492111">
       <notes>
         <note category="location">src/app/register/register.component.html:28</note>
@@ -333,29 +340,29 @@
       <target>Password must be at least 6 characters</target></segment>
     </unit><unit id="map.locate">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:91</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:94</note></notes>
       <segment state="final">
         <source>Locate me</source>
       <target>Locate me</target></segment>
     </unit><unit id="map.confirm.title">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:92</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:95</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
     </unit><unit id="map.confirm.body">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:93</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:96</note></notes>
       <segment state="final">
         <source>Do you really want to delete the sensor?</source>
       <target>Do you really want to delete the sensor?</target></segment>
     </unit><unit id="map.geo.support">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:94</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:97</note></notes>
       <segment state="final">
         <source>Geolocation is not supported by this browser.</source>
       <target>Geolocation is not supported by this browser.</target></segment>
@@ -769,6 +776,209 @@
       <segment state="final">
         <source>Quality</source>
       <target>Quality</target></segment>
+    </unit><unit id="type.beacon">
+      <notes>
+        
+      <note category="location">src/app/model/bodies/sensorTypes.ts:8</note></notes>
+      <segment state="final">
+        <source>Beacon</source>
+      <target>Beacon</target></segment>
+    </unit><unit id="type.sensor">
+      <notes>
+        
+      <note category="location">src/app/model/bodies/sensorTypes.ts:9</note></notes>
+      <segment state="final">
+        <source>Sensor</source>
+      <target>Sensor</target></segment>
+    </unit><unit id="type.camera">
+      <notes>
+        
+      <note category="location">src/app/model/bodies/sensorTypes.ts:10</note></notes>
+      <segment state="final">
+        <source>Camera</source>
+      <target>Camera</target></segment>
+    </unit><unit id="type.weather">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:32</note>
+      </notes>
+      <segment state="final">
+        <source>Weather Station</source>
+      <target>Weather Station</target></segment>
+    </unit><unit id="type.gauge">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:33</note>
+      </notes>
+      <segment state="final">
+        <source>Wind Gauge</source>
+      <target>Wind Gauge</target></segment>
+    </unit><unit id="type.container">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:34</note>
+      </notes>
+      <segment state="final">
+        <source>Waste Container</source>
+      <target>Waste Container</target></segment>
+    </unit><unit id="type.dust">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:35</note>
+      </notes>
+      <segment state="final">
+        <source>Fine Dust Sensor</source>
+      <target>Fine Dust Sensor</target></segment>
+    </unit><unit id="type.uv">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:36</note>
+      </notes>
+      <segment state="final">
+        <source>UV-Sensor</source>
+      <target>UV-Sensor</target></segment>
+    </unit><unit id="type.light">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:37</note>
+      </notes>
+      <segment state="final">
+        <source>Light Cell</source>
+      <target>Light Cell</target></segment>
+    </unit><unit id="type.motion">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:38</note>
+      </notes>
+      <segment state="final">
+        <source>Motion Sensor</source>
+      <target>Motion Sensor</target></segment>
+    </unit><unit id="type.fire">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:39</note>
+      </notes>
+      <segment state="final">
+        <source>Fire Detector</source>
+      <target>Fire Detector</target></segment>
+    </unit><unit id="type.water">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:40</note>
+      </notes>
+      <segment state="final">
+        <source>Waterlevel Meter</source>
+      <target>Waterlevel Meter</target></segment>
+    </unit><unit id="type.mic">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:41</note>
+      </notes>
+      <segment state="final">
+        <source>Microphone / Sound Meter</source>
+      <target>Microphone / Sound Meter</target></segment>
+    </unit><unit id="type.counter">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:42</note>
+      </notes>
+      <segment state="final">
+        <source>Pedometer Counter</source>
+      <target>Pedometer Counter</target></segment>
+    </unit><unit id="type.radar">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:43</note>
+      </notes>
+      <segment state="final">
+        <source>Radar Detector</source>
+      <target>Radar Detector</target></segment>
+    </unit><unit id="type.gsm">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:44</note>
+      </notes>
+      <segment state="final">
+        <source>GSM Sensor</source>
+      <target>GSM Sensor</target></segment>
+    </unit><unit id="type.detection">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:45</note>
+      </notes>
+      <segment state="final">
+        <source>Detection Loop</source>
+      <target>Detection Loop</target></segment>
+    </unit><unit id="type.height">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:46</note>
+      </notes>
+      <segment state="final">
+        <source>Height Detection Device</source>
+      <target>Height Detection Device</target></segment>
+    </unit><unit id="type.environment">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:56</note>
+      </notes>
+      <segment state="final">
+        <source>Environmental Zone</source>
+      <target>Environmental Zone</target></segment>
+    </unit><unit id="type.security">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:57</note>
+      </notes>
+      <segment state="final">
+        <source>Security Camera</source>
+      <target>Security Camera</target></segment>
+    </unit><unit id="type.flashlight">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:58</note>
+      </notes>
+      <segment state="final">
+        <source>Traffic Flashlight</source>
+      <target>Traffic Flashlight</target></segment>
+    </unit><unit id="type.navigation">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:66</note>
+      </notes>
+      <segment state="final">
+        <source>Navigation Beacon</source>
+      <target>Navigation Beacon</target></segment>
+    </unit><unit id="theme.weather">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:12</note>
+      </notes>
+      <segment state="final">
+        <source>Weather</source>
+      <target>Weather</target></segment>
+    </unit><unit id="theme.nature">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:13</note>
+      </notes>
+      <segment state="final">
+        <source>Nature and Environment</source>
+      <target>Nature and Environment</target></segment>
+    </unit><unit id="theme.waste">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:14</note>
+      </notes>
+      <segment state="final">
+        <source>Waste</source>
+      <target>Waste</target></segment>
+    </unit><unit id="theme.safety">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:15</note>
+      </notes>
+      <segment state="final">
+        <source>Safety</source>
+      <target>Safety</target></segment>
+    </unit><unit id="theme.mobility">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:16</note>
+      </notes>
+      <segment state="final">
+        <source>Mobility</source>
+      <target>Mobility</target></segment>
+    </unit><unit id="theme.soil">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:17</note>
+      </notes>
+      <segment state="final">
+        <source>Soil and Underground</source>
+      <target>Soil and Underground</target></segment>
+    </unit><unit id="theme.other">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:18</note>
+      </notes>
+      <segment state="final">
+        <source>Other</source>
+      <target>Other</target></segment>
     </unit><unit id="5551307948733637188">
       <notes>
         <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:11</note>

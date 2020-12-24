@@ -30,7 +30,7 @@
                             <strong i18n>Category</strong>
                         </td>
                         <td>
-                            <em>{{ selectedSensor?.category }}</em>
+                            <em>{{ getCategoryTranslation(selectedSensor?.category) }}</em>
                         </td>
                     </tr>
                     <tr>
@@ -38,7 +38,7 @@
                             <strong i18n>Type</strong>
                         </td>
                         <td>
-                            <em>{{ selectedSensor?.typeName }}</em>
+                            <em>{{ getTypeTranslation(selectedSensor?.typeName) }}</em>
                         </td>
                     </tr>
                     <tr>

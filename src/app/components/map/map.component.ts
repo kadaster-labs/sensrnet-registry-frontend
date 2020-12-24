@@ -26,11 +26,11 @@ import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-data
 import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
 
 import { ISensor } from '../../model/bodies/sensor-body';
-import { Category } from '../../model/bodies/sensorTypes';
 import { ModalService } from '../../services/modal.service';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
+import { Category, getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
 
 @Component({
   selector: 'app-map',
@@ -57,6 +57,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public mapUpdated;
   public overlayVisible = false;
   public selectedSensor: ISensor;
+
+  public getTypeTranslation = getTypeTranslation;
+  public getCategoryTranslation = getCategoryTranslation;
 
   public popupOverlay: Overlay;
   public clusterSource: Cluster;

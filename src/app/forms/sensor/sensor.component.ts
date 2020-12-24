@@ -5,6 +5,7 @@ import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IDataStream } from '../../model/bodies/datastream-body';
 import { LocationService } from '../../services/location.service';
+import { getTypeTranslation } from '../../model/bodies/sensorTypes';
 import { ConnectionService } from '../../services/connection.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IRegisterSensorBody, IUpdateSensorBody, SensorService } from '../../services/sensor.service';
@@ -45,8 +46,8 @@ export class SensorComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-  public setName(item: string) {
-    this.form.controls.name.setValue(item);
+  public setNameFromCategory(item: string) {
+    this.form.controls.name.setValue(getTypeTranslation(item));
   }
 
   public goToStep(step: number): void {
