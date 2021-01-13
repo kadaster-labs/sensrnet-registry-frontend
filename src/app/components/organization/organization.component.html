@@ -8,10 +8,10 @@
             <div>
                 <h3>
                     <span *ngIf="organizationId;else noorg">
-                        {{organizationId}}
+                        {{ organizationId }}
                     </span>
                     <ng-template #noorg>
-                        Organization
+                        <span i18n>Organization</span>
                     </ng-template>
                 </h3>
             </div>
@@ -27,7 +27,7 @@
                                autocomplete="off"
                                [checked]="activeUpdateView == UpdateViewEnum.Join"
                                (click)="activeUpdateView = UpdateViewEnum.Join">
-                        Join
+                        <span i18n>Join</span>
                     </label>
                     <label class="btn btn-primary">
                         <input type="radio"
@@ -35,7 +35,7 @@
                                autocomplete="off"
                                [checked]="activeUpdateView == UpdateViewEnum.Create"
                                (click)="activeUpdateView = UpdateViewEnum.Create">
-                        Create
+                        <span i18n>Create</span>
                     </label>
                 </div>
                 <div *ngIf="activeUpdateView == UpdateViewEnum.Join">

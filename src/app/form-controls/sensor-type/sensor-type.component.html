@@ -1,14 +1,14 @@
 <div [formGroup]="form" class="form-group">
     <div class="form-group">
-        <label for="category">Category</label>
+        <label for="category" i18n>Category</label>
         <select data-container="body" class="form-control" formControlName="category"
             [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
-            <option *ngFor="let category of sensorCategoriesList" [value]="category">
-                {{sensorCategories[category]}}
+            <option *ngFor="let item of sensorCategories | keyvalue" [value]="item.key">
+                {{ getCategoryTranslation(item.value) }}
             </option>
         </select>
         <div *ngIf="(f.category.dirty || f.category.touched || submitted) && f.category.errors" class="invalid-input">
-            <span class="required-text" *ngIf="f.category.errors.required">Category is required</span>
+            <span class="required-text" *ngIf="f.category.errors.required" i18n>Category is required</span>
         </div>
     </div>
     <div class="form-group">
@@ -16,12 +16,12 @@
         <select class="form-control" data-container="body" formControlName="typeName"
             [ngClass]="{ 'is-invalid': submitted && f.typeName.errors }">
             <option *ngFor="let typeName of typeNameList" [value]="typeName">
-                {{typeName}}
+                {{ getTypeTranslation(typeName) }}
             </option>
         </select>
         <div *ngIf="(f.typeName.dirty || f.typeName.touched || submitted) && f.typeName.errors"
             class="invalid-input">
-            <span class="required-text" *ngIf="f.typeName.errors.required">Type is required</span>
+            <span class="required-text" *ngIf="f.typeName.errors.required" i18n>Type is required</span>
         </div>
     </div>
 </div>

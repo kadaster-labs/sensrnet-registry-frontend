@@ -17,12 +17,10 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(catchError(async (error) => {
-      if (request.url.includes('login') || request.url.includes('refresh')) {
-        if (request.url.includes('refresh')) {
-          await this.connectionService.logout();
-        }
-
+      if (request.url.includes('login')) {
         return throwError(error);
+      } else if (request.url.includes('refresh')) {
+        return await this.connectionService.logout();
       }
 
       if (error.status !== 401) {
@@ -54,11 +52,11 @@ export class ErrorInterceptor implements HttpInterceptor {
         try {
           const claim = await this.connectionService.refreshClaim();
 
-          this.refreshInProgress = false;
           this.refreshSubject.next(claim);
+          this.refreshInProgress = false;
 
-          // add authorization header with jwt token if available
-          if (claim && claim.accessToken) {
+          // Add authorization header with access token if available.
+          if (claim) {
             request = request.clone({
               setHeaders: {
                 Authorization: `Bearer ${claim.accessToken}`,

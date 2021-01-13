@@ -15,6 +15,9 @@ export class RegisterComponent implements OnInit {
   public submitted = false;
   public registerForm: FormGroup;
 
+  public registerSuccessMessage = $localize`:@@register.success:Registration successful`;
+  public registerFailedMessage = $localize`:@@register.failure:Registration failed. Does the account exist already?`;
+
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -58,11 +61,11 @@ export class RegisterComponent implements OnInit {
       .pipe(first())
       .subscribe(
         () => {
-          this.alertService.success('Registration successful', true);
+          this.alertService.success(this.registerSuccessMessage, true);
           this.router.navigate(['/login']);
         },
         () => {
-          this.alertService.error('Registration failed. Does the account exist already?');
+          this.alertService.error(this.registerFailedMessage);
           this.loading = false;
         });
   }

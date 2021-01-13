@@ -5,6 +5,7 @@ import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IDataStream } from '../../model/bodies/datastream-body';
 import { LocationService } from '../../services/location.service';
+import { getTypeTranslation } from '../../model/bodies/sensorTypes';
 import { ConnectionService } from '../../services/connection.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IRegisterSensorBody, IUpdateSensorBody, SensorService } from '../../services/sensor.service';
@@ -28,6 +29,11 @@ export class SensorComponent implements OnInit, OnDestroy {
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
+  public sensorRegisterSuccessMessage = $localize`:@@sensor.register.success:Sensor registered`;
+  public sensorRegisterInvalidMessage = $localize`:@@sensor.register.invalid:The form is invalid`;
+  public sensorRegisterFailedMessage = $localize`:@@sensor.register.failure:An error has occurred during registration:`;
+  public sensorRegisteredOrganizationMessage = $localize`:@@sensor.register.org:You need to join an organization first`;
+
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -42,8 +48,8 @@ export class SensorComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-  public setName(item: string) {
-    this.form.controls.name.setValue(item);
+  public setNameFromCategory(item: string) {
+    this.form.controls.name.setValue(getTypeTranslation(item));
   }
 
   public goToStep(step: number): void {
@@ -293,9 +299,9 @@ export class SensorComponent implements OnInit, OnDestroy {
       await this.sensorService.register(sensor);
 
       this.locationService.showLocation(null);
-      this.alertService.success('Sensor registered!', false, 4000);
+      this.alertService.success(this.sensorRegisterSuccessMessage, false, 4000);
     } catch (error) {
-      this.alertService.error(`An error has occurred while creating sensor: ${error}.`);
+      this.alertService.error(`${this.sensorRegisterFailedMessage}: ${error}.`);
     }
   }
 
@@ -303,13 +309,13 @@ export class SensorComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     if (!this.form.valid) {
-      this.alertService.error(`The form is invalid.`);
+      this.alertService.error(this.sensorRegisterInvalidMessage, false, 4000);
       return;
     }
 
     const claim = this.connectionService.currentClaim;
     if (!claim || !claim.organizationId) {
-      this.alertService.error(`You need to join an organization first.`);
+      this.alertService.error(this.sensorRegisteredOrganizationMessage);
       return;
     }
 

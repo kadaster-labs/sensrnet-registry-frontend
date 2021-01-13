@@ -19,6 +19,8 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
+  public registerFailedMessage = $localize`:@@register.failed:Failed to register. Does the organization exist already?`;
+
   constructor(
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
@@ -43,7 +45,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
           this.connectionService.updateSocketOrganization();
         }
       } catch {
-        this.alertService.error('Failed to register. Does the organization exist already?');
+        this.alertService.error(this.registerFailedMessage);
       }
     }
     this.submitted = false;

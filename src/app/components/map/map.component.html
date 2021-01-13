@@ -1,7 +1,8 @@
 <div class="container-fluid h-100">
     <div class="row">
         <ggc-search (searchComponentEventEmitter)="handleEvent($event)"
-                    placeholderTextAndAriaLabel="Zoeken op locatie"
+                    placeholderTextAndAriaLabel="Search for location"
+                    i18n-placeholderTextAndAriaLabel
                     id="search" class="p-0 m-0" [style.top]="searchBarHeight"></ggc-search>
         <ggc-dataset-tree [themes]="myLayers"
                           (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
@@ -16,34 +17,34 @@
                 </div>
             </div>
             <table *ngIf="overlayVisible" class="table table-striped table-sm mb-0">
-                <caption class="sr-only sr-only-focusable">Sensor details</caption>
+                <caption class="sr-only sr-only-focusable" i18n>Sensor details</caption>
                 <thead class="sr-only sr-only-focusable">
                     <tr>
-                        <th scope="col">Attribute</th>
-                        <th scope="col">Value</th>
+                        <th scope="col" i18n>Attribute</th>
+                        <th scope="col" i18n>Value</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <strong>Category</strong>
+                            <strong i18n>Category</strong>
                         </td>
                         <td>
-                            <em>{{ selectedSensor?.category }}</em>
+                            <em>{{ getCategoryTranslation(selectedSensor?.category) }}</em>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <strong>Type</strong>
+                            <strong i18n>Type</strong>
                         </td>
                         <td>
-                            <em>{{ selectedSensor?.typeName }}</em>
+                            <em>{{ getTypeTranslation(selectedSensor?.typeName) }}</em>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>
-                                <label for="selected-sensor-active" class="p-0 m-0">Active</label>
+                                <label for="selected-sensor-active" class="p-0 m-0" i18n>Active</label>
                             </strong>
                         </td>
                         <td>
@@ -57,15 +58,15 @@
                 <div class="col-12 px-1 mx-0">
                     <div *ngIf="ownsSensor(selectedSensor); else viewSensor" class="row mx-0">
                         <div class="col-6 my-2 px-1">
-                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">Edit</button>
+                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block" i18n>Edit</button>
                         </div>
                         <div class="col-6 my-2 px-1">
-                            <button (click)="deleteSensor()" class="btn btn-danger btn-sm btn-block">Delete</button>
+                            <button (click)="deleteSensor()" class="btn btn-danger btn-sm btn-block" i18n>Delete</button>
                         </div>
                     </div>
                     <ng-template #viewSensor>
                         <div class="col-12 my-2 px-1 mx-0">
-                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block">View</button>
+                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block" i18n>View</button>
                         </div>
                     </ng-template>
                 </div>

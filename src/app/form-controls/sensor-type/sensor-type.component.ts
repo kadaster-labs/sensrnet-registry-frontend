@@ -1,5 +1,6 @@
 import { Subscription } from 'rxjs';
-import { Category, TypeSensor, TypeBeacon, TypeCamera } from '../../model/bodies/sensorTypes';
+import { Category, TypeSensor, TypeBeacon, TypeCamera, getCategoryTranslation,
+  getTypeTranslation } from '../../model/bodies/sensorTypes';
 import { Component, forwardRef, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators,
   FormGroup } from '@angular/forms';
@@ -34,14 +35,17 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   @Output() sensorType = new EventEmitter<string>();
 
   public sensorCategories = Category;
-  public sensorCategoriesList: string[];
+  public getCategoryTranslation = getCategoryTranslation;
+
   public sensorTypes = TypeSensor;
   public sensorTypesList: string[];
   public beaconTypes = TypeBeacon;
   public beaconTypesList: string[];
   public cameraTypes = TypeCamera;
   public cameraTypesList: string[];
+
   public typeNameList: string[];
+  public getTypeTranslation = getTypeTranslation;
 
   get value(): SensorTypeFormValues {
     return this.form.value;
@@ -68,7 +72,6 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
       }),
     );
 
-    this.sensorCategoriesList = Object.keys(this.sensorCategories).filter(String);
     this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
     this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
     this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);

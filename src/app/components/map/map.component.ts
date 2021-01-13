@@ -26,11 +26,11 @@ import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-data
 import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
 
 import { ISensor } from '../../model/bodies/sensor-body';
-import { Category } from '../../model/bodies/sensorTypes';
 import { ModalService } from '../../services/modal.service';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
+import { Category, getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
 
 @Component({
   selector: 'app-map',
@@ -57,6 +57,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public mapUpdated;
   public overlayVisible = false;
   public selectedSensor: ISensor;
+
+  public getTypeTranslation = getTypeTranslation;
+  public getCategoryTranslation = getCategoryTranslation;
 
   public popupOverlay: Overlay;
   public clusterSource: Cluster;
@@ -87,6 +90,11 @@ export class MapComponent implements OnInit, OnDestroy {
   public iconUnchecked = 'far fa-square';
   public iconChecked = 'far fa-check-square';
   public iconInfoUrl = 'fas fa-info-circle';
+
+  public locateMeString = $localize`:@@map.locate:Locate me`;
+  public confirmTitleString = $localize`:@@map.confirm.title:Please confirm`;
+  public confirmBodyString = $localize`:@@map.confirm.body:Do you really want to delete the sensor?`;
+  public geoLocationNotSupportedString = $localize`:@@map.geo.support:Geolocation is not supported by this browser.`;
 
   private static sensorToFeatureProperties(sensor: ISensor) {
     return {
@@ -516,14 +524,14 @@ export class MapComponent implements OnInit, OnDestroy {
         this.zoomToPosition(position);
       });
     } else {
-      alert('Geolocation is not supported by this browser.');
+      alert(this.geoLocationNotSupportedString);
     }
   }
 
   private addFindMeButton() {
     const locate = document.createElement('div');
     locate.className = 'ol-control ol-unselectable locate';
-    locate.innerHTML = '<button title="Locate me">◎</button>';
+    locate.innerHTML = `<button title="${this.locateMeString}">◎</button>`;
     locate.addEventListener('click', () => {
       this.findMe();
     });
@@ -543,7 +551,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async deleteSensor(): Promise<void> {
-    this.modalService.confirm('Please confirm.', 'Do you really want to delete the sensor?')
+    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
       .then((confirmed) => {
         if (confirmed) {
           this.sensorService.unregister(this.selectedSensor._id);
