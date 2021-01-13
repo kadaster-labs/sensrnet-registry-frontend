@@ -30,7 +30,9 @@ export class SensorComponent implements OnInit, OnDestroy {
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
   public sensorRegisterSuccessMessage = $localize`:@@sensor.register.success:Sensor registered`;
+  public sensorRegisterInvalidMessage = $localize`:@@sensor.register.invalid:The form is invalid`;
   public sensorRegisterFailedMessage = $localize`:@@sensor.register.failure:An error has occurred during registration:`;
+  public sensorRegisteredOrganizationMessage = $localize`:@@sensor.register.org:You need to join an organization first`;
 
   constructor(
     private readonly router: Router,
@@ -307,13 +309,13 @@ export class SensorComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     if (!this.form.valid) {
-      this.alertService.error(`The form is invalid.`);
+      this.alertService.error(this.sensorRegisterInvalidMessage, false, 4000);
       return;
     }
 
     const claim = this.connectionService.currentClaim;
     if (!claim || !claim.organizationId) {
-      this.alertService.error(`You need to join an organization first.`);
+      this.alertService.error(this.sensorRegisteredOrganizationMessage);
       return;
     }
 
