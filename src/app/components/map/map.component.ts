@@ -380,8 +380,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.locationService.setLocation({
         type: 'Point',
-        coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
-        baseObjectId: 'placeholder'
+        coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0]
       });
 
       map.forEachFeatureAtPixel(mapEvent.value.pixel, (data) => {

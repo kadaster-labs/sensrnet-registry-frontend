@@ -6,14 +6,12 @@ import { ISensorLocation } from '../model/bodies/location';
 export class LocationService {
   private location: BehaviorSubject<ISensorLocation> = new BehaviorSubject({
     type: 'Point',
-    coordinates: [0, 0, 0],
-    baseObjectId: 'non-empty',
+    coordinates: [0, 0, 0]
   });
 
   private locationMarker: BehaviorSubject<ISensorLocation> = new BehaviorSubject({
     type: 'Point',
-    coordinates: [0, 0, 0],
-    baseObjectId: 'non-empty',
+    coordinates: [0, 0, 0]
   });
 
   private locationHighlight: BehaviorSubject<ISensorLocation> = new BehaviorSubject(null);
