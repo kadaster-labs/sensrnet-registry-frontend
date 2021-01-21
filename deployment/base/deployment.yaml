@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-      - image: sensrnetnl/registry-frontend:0.1.0
+      - image: sensrnetnl/registry-frontend:0.2.0
         name: registry-frontend
         ports:
         - name: http
