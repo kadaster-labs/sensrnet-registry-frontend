@@ -21,20 +21,14 @@ export class LocationService {
   locationHighlight$: Observable<ISensorLocation> = this.locationHighlight.asObservable();
 
   setLocation(location: ISensorLocation) {
-    let currentLocation = this.location.getValue();
-    currentLocation = location;
     this.location.next(location);
   }
 
   unsetLocation() {
-    let location = this.location.getValue();
-    location = undefined;
-    this.location.next(location);
+    this.location.next(null);
   }
 
   showLocation(location: ISensorLocation) {
-    let currentLocation = this.locationMarker.getValue();
-    currentLocation = location;
     this.locationMarker.next(location);
   }
 

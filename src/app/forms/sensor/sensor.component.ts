@@ -295,12 +295,12 @@ export class SensorComponent implements OnInit, OnDestroy {
     const sensorLocation = this.form.value.location;
     const sensor: IRegisterSensorBody = {
       dataStreams,
-      location: sensorLocation ? [sensorLocation.longitude, sensorLocation.latitude, sensorLocation.height] : [],
+      location: sensorLocation ? [sensorLocation.longitude, sensorLocation.latitude, sensorLocation.height] : null,
       active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
       aim: this.form.value.aim,
       description: this.form.value.description,
-      documentationUrl: this.form.value.documentationUrl || undefined,
-      manufacturer: this.form.value.manufacturer || undefined,
+      documentationUrl: this.form.value.documentationUrl || null,
+      manufacturer: this.form.value.manufacturer || null,
       name: this.form.value.name,
       theme: this.form.value.theme ? this.form.value.theme.value : [],
       category: this.form.value.type.category,
