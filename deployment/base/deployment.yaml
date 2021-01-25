@@ -24,6 +24,9 @@ spec:
             port: http
           initialDelaySeconds: 5
           periodSeconds: 10
+        env:
+          - name: API_URL
+            value: /api
         args:
           - -health-status=true
         resources:
