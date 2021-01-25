@@ -9,7 +9,4 @@ spec:
       - image: sensrnet-registry-frontend_registry-frontend:latest
         name: registry-frontend
         imagePullPolicy: Never
-        env:
-        - name: API_URL
-          value: http://localhost/api
         resources: {}
