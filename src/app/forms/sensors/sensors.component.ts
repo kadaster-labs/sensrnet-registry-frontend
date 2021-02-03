@@ -4,6 +4,7 @@ import { ISensor } from '../../model/bodies/sensor-body';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
+import { getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
 
 @Component({
   selector: 'app-sensors',
@@ -17,6 +18,9 @@ export class SensorsComponent implements OnInit, OnDestroy {
   public organizationId;
   public subscriptions = [];
 
+  public getTypeTranslation = getTypeTranslation;
+  public getCategoryTranslation = getCategoryTranslation;
+
   constructor(
     public sensorService: SensorService,
     private readonly locationService: LocationService,
@@ -24,9 +28,22 @@ export class SensorsComponent implements OnInit, OnDestroy {
   ) {}
 
   public sortByAttribute(attribute) {
+    let toString;
+    if (attribute === 'category') {
+      toString = x => getCategoryTranslation(x);
+    } else if (attribute === 'typeName') {
+      toString = x => getTypeTranslation(x);
+    } else {
+      toString = x => x;
+    }
+
     this.ascending = !this.ascending;
-    this.sensors.sort((a, b) => (a[attribute] > b[attribute]) ? 1 : (a[attribute] === b[attribute]) ? ((a[attribute] >
-      b[attribute]) ? 1 : -1) : -1 );
+    this.sensors.sort((a, b) => {
+      const aString = toString(a[attribute]);
+      const bString = toString(b[attribute]);
+      return aString > bString ? 1 : (aString === bString) ? ((aString > bString) ? 1 : -1) : -1;
+    });
+
     if (!this.ascending) {
       this.sensors.reverse();
     }

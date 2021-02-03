@@ -1,14 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: registry-frontend
-
 commonLabels:
   app.kubernetes.io/name: sensrnet
   app.kubernetes.io/component: registry-frontend
 
 resources:
-  - namespace.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml

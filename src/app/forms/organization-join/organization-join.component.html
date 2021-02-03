@@ -1,18 +1,18 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-group">
-        <label>Filter</label>
-        <input (keyup)="filterInputChanged($event.target.value)" type="text" class="form-control" placeholder="Name"/>
+        <label i18n>Filter</label>
+        <input (keyup)="filterInputChanged($event.target.value)" type="text" class="form-control" placeholder="Name" i18n-placeholder/>
     </div>
     <table class="table table-striped table-hover table-bordered">
-        <caption class="hidden">Organizations</caption>
+        <caption class="hidden" i18n>Organizations</caption>
         <thead>
         <tr>
             <th scope="col"></th>
-            <th class="pointer" scope="col">Name</th>
-            <th class="pointer" scope="col">Website</th>
-            <th class="pointer" scope="col">Contact Name</th>
-            <th class="pointer" scope="col">Contact Email</th>
-            <th class="pointer" scope="col">Contact Phone</th>
+            <th class="pointer" scope="col" i18n>Name</th>
+            <th class="pointer" scope="col" i18n>Website</th>
+            <th class="pointer" scope="col" i18n>Contact Name</th>
+            <th class="pointer" scope="col" i18n>Contact Email</th>
+            <th class="pointer" scope="col" i18n>Contact Phone</th>
         </tr>
         </thead>
         <tbody>
@@ -33,5 +33,5 @@
         </tbody>
     </table>
     <hr>
-    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit">Save</button>
+    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit" i18n>Save</button>
 </form>

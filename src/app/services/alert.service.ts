@@ -35,9 +35,13 @@ export class AlertService {
     }
   }
 
-  public error(message: string, keepAfterRouteChange = false) {
+  public error(message: string, keepAfterRouteChange = false, timeoutDuration = null) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'error', text: message });
+
+    if (timeoutDuration) {
+      setTimeout(() => { this.clear(); }, timeoutDuration);
+    }
   }
 
   public clear() {

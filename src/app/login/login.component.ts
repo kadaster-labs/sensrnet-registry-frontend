@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
   public submitted = false;
   public returnUrl: string;
 
+  public loginFailedMessage = $localize`:@@login.failed:Failed to login: Supply valid credentials.`;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -60,7 +62,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         () => {
-          this.alertService.error(`Failed to login: Supply valid credentials.`);
+          this.alertService.error(this.loginFailedMessage);
           this.loading = false;
         });
   }

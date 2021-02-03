@@ -4,7 +4,7 @@ kind: Kustomization
 bases:
 - ../../base
 
-namespace: local
+namespace: demo
 
-patchesStrategicMerge:
-- deployment.yaml
+commonLabels:
+  environment: demo

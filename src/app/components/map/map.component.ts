@@ -27,11 +27,11 @@ import SearchNominatim from 'ol-ext/control/SearchNominatim';
 
 import { MapService } from './map.service';
 import { ISensor } from '../../model/bodies/sensor-body';
-import { Category } from '../../model/bodies/sensorTypes';
 import { ModalService } from '../../services/modal.service';
 import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
+import { Category, getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
 
 @Component({
   selector: 'app-map',
@@ -60,6 +60,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public overlayVisible = false;
   public selectedSensor: ISensor;
 
+  public getTypeTranslation = getTypeTranslation;
+  public getCategoryTranslation = getCategoryTranslation;
+
   public popupOverlay: Overlay;
   public clusterSource: Cluster;
   public vectorSource: VectorSource;
@@ -73,8 +76,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public currentZoomlevel: number = undefined;
   public currentMapResolution: number = undefined;
 
-  private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 ' +
-    '+y_0=463000 +ellps=bessel +units=m +no_defs';
+  private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 ' +
+    '+y_0=463000 +ellps=bessel +units=m +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,' +
+    '-1.8703473836068,4.0812 +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
   public hideTreeDataset = false;
@@ -86,6 +90,11 @@ export class MapComponent implements OnInit, OnDestroy {
   public iconUnchecked = 'far fa-square';
   public iconChecked = 'far fa-check-square';
   public iconInfoUrl = 'fas fa-info-circle';
+
+  public locateMeString = $localize`:@@map.locate:Locate me`;
+  public confirmTitleString = $localize`:@@map.confirm.title:Please confirm`;
+  public confirmBodyString = $localize`:@@map.confirm.body:Do you really want to delete the sensor?`;
+  public geoLocationNotSupportedString = $localize`:@@map.geo.support:Geolocation is not supported by this browser.`;
 
   private static sensorToFeatureProperties(sensor: ISensor) {
     return {
@@ -529,7 +538,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.zoomToPosition(position);
       });
     } else {
-      alert('Geolocation is not supported by this browser.');
+      alert(this.geoLocationNotSupportedString);
     }
   }
 
@@ -583,7 +592,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const locate = document.createElement('div');
     locate.className = 'ol-control ol-unselectable locate';
-    locate.innerHTML = '<button title="Locate me">◎</button>';
+    locate.innerHTML = `<button title="${this.locateMeString}">◎</button>`;
     locate.addEventListener('click', () => {
       this.findMe();
     });
@@ -603,7 +612,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async deleteSensor(): Promise<void> {
-    this.modalService.confirm('Please confirm.', 'Do you really want to delete the sensor?')
+    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
       .then((confirmed) => {
         if (confirmed) {
           this.sensorService.unregister(this.selectedSensor._id);

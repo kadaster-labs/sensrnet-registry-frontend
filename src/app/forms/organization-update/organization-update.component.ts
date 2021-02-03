@@ -21,6 +21,8 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
+  public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
+
   constructor(
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
@@ -80,8 +82,6 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
       await this.userService.update({organization: null}).toPromise();
       await this.connectionService.refreshClaim();
       this.connectionService.updateSocketOrganization();
-
-      this.alertService.success('Saved.', false, 4000);
     } catch (error) {
       this.alertService.error(error.message);
     }
@@ -93,7 +93,7 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
       try {
         await this.organizationService.update(this.form.value).toPromise();
 
-        this.alertService.success('Updated.', false, 4000);
+        this.alertService.success(this.updateSuccessMessage, false, 4000);
       } catch (error) {
         this.alertService.error(error.message);
       }

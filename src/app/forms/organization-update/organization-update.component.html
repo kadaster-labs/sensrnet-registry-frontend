@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <app-organization-contact [parentForm]="form" [submitted]="submitted"></app-organization-contact>
     <hr>
-    <button class="btn btn-danger btn-lg mr-3 mb-1" type="button" (click)="leave()">Leave</button>
-    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit">Update</button>
+    <button class="btn btn-danger btn-lg mr-3 mb-1" type="button" (click)="leave()" i18n>Leave</button>
+    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit" i18n>Update</button>
 </form>

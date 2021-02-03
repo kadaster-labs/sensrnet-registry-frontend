@@ -1,18 +1,20 @@
 <div [formGroup]="form">
-    <label for="formControlRange">Sensor status</label>
+    <label for="formControlRange" i18n>Sensor status</label>
     <div class="form-group">
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="true" formControlName="value">Active
+                <input class="form-check-input" type="radio" value="true" formControlName="value">
+                <span i18n>Active</span>
             </label>
         </div>
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="false" formControlName="value">Inactive
+                <input class="form-check-input" type="radio" value="false" formControlName="value">
+                <span i18n>Inactive</span>
             </label>
         </div>
     </div>
     <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors" class="invalid-input">
-        <span class="required-text" *ngIf="f.value.errors.required">Status is required</span>
+        <span class="required-text" *ngIf="f.value.errors.required" i18n>Status is required</span>
     </div>
 </div>

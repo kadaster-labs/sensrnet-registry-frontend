@@ -6,6 +6,9 @@ import { ModalComponent } from '../components/modal/modal.component';
 @Injectable({ providedIn: 'root' })
 export class ModalService {
 
+  public btnOkText = $localize`:@@modal.accept:OK`;
+  public btnCancelText = $localize`:@@modal.decline:Cancel`;
+
   constructor(
     private router: Router,
     private modalService: NgbModal,
@@ -20,8 +23,8 @@ export class ModalService {
   public confirm(
     title: string,
     message: string,
-    btnOkText: string = 'OK',
-    btnCancelText: string = 'Cancel',
+    btnOkText: string = this.btnOkText,
+    btnCancelText: string = this.btnCancelText,
     dialogSize: 'sm'|'lg' = 'sm'): Promise<boolean> {
     const modalRef = this.modalService.open(ModalComponent, { size: dialogSize, windowClass: 'modal-window' });
     modalRef.componentInstance.title = title;

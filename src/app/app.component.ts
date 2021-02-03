@@ -5,12 +5,15 @@ import { ConnectionService } from './services/connection.service';
 
 @Component({ selector: 'app-root', templateUrl: 'app.component.html' })
 export class AppComponent implements OnInit {
+
+  public title = $localize`:@@app.title:Sensor Registry`;
+
   constructor(
     private router: Router,
     private titleService: Title,
     private connectionService: ConnectionService,
   ) {
-    this.setTitle('Sensorenregister');
+    this.setTitle(this.title);
   }
 
   async ngOnInit() {

@@ -2,13 +2,11 @@
     <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
         aria-expanded="false">
         <span class="fa fa-language"></span>
-        Language
+        <span class="ml-2" i18n>Language</span>
     </button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu dropdown-menu-right">
         <li *ngFor="let language of allLanguages; let i=index">
-            <a href="/{{language.lang}}{{getCurrentRoute()}}">
-                {{language.name}}
-            </a>
+            <a href="/{{language.lang}}{{getCurrentRoute()}}">{{ language.name }}</a>
         </li>
     </ul>
 </div>
