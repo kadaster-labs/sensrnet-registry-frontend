@@ -52,8 +52,7 @@ export class SensorsComponent implements OnInit, OnDestroy {
   public selectSensor(sensor: ISensor) {
     this.locationService.highlightLocation({
       type: 'Point',
-      coordinates: sensor.location.coordinates,
-      baseObjectId: 'placeholder'
+      coordinates: sensor.location.coordinates
     });
   }
 
