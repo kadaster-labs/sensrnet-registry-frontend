@@ -67,7 +67,7 @@ description:
               nodes gebruik van worden gemaakt. Een node is aangewezen om publicatie van
               (publieke) sensoren op de kaart te doen: de Publishing Node.
 
-        documentation: "https://github.com/kadaster-labs/sensrnet-home/blob/master/README.md"
+        documentation: "https://github.com/kadaster-labs/sensrnet-home/blob/main/README.md"
         apiDocumentation: "pc.zaakonline.nl"
 #
 #    features:
@@ -117,4 +117,4 @@ dependsOn:
 
 installations:
     - type: helm
-      url: "https://raw.githubusercontent.com/kadaster-labs/sensrnet-helm-charts/tree/master/charts/registry-frontend/"
+      url: "https://raw.githubusercontent.com/kadaster-labs/sensrnet-helm-charts/tree/main/charts/registry-frontend/"
