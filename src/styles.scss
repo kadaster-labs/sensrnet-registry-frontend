@@ -11,25 +11,28 @@ $font-size-base: 1.25rem;
 @import "bootstrap-select/dist/css/bootstrap-select.min.css";
 @import "ol/ol.css";
 @import "ol-ext/dist/ol-ext.min.css";
+@import "ol-layerswitcher/dist/ol-layerswitcher.css";
 
 .ol-overlaycontainer-stopevent .ol-zoom {
   top: auto;
   right: 0.5em;
-  bottom: 0.5em;
+  bottom: 2.5em;
   left: auto;
+}
+
+.ol-overlaycontainer-stopevent .ol-search {
+  top: calc(.5em + 75px);
+}
+
+.ol-overlaycontainer-stopevent .locate {
+  top: calc(.5em + 50px);
+  left: 3em;
 }
 
 .ol-overlaycontainer-stopevent .ol-rotate {
   top: auto;
   right: 0.5em;
   bottom: 6.1em;
-  left: auto;
-}
-
-.ol-overlaycontainer-stopevent .locate {
-  top: auto;
-  right: 0.5em;
-  bottom: 4.1em;
   left: auto;
 }
 

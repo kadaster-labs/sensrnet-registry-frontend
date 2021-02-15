@@ -3,18 +3,21 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, Input, OnDestroy } from '@angular/core';
 
+import WMTS from 'ol/source/WMTS';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import ResizeObserver from 'resize-observer-polyfill';
+
 import OlMap from 'ol/Map';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import { Cluster } from 'ol/source';
+import { Cluster, OSM, Stamen, TileWMS } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
 import { FitOptions } from 'ol/View';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import { extend, Extent } from 'ol/extent';
-import { Coordinate } from 'ol/coordinate';
+import { extend, Extent, getTopLeft, getWidth } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
 import { MapBrowserEvent, Overlay } from 'ol';
 import { getBottomLeft, getTopRight, getCenter } from 'ol/extent';
@@ -22,8 +25,9 @@ import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import LayerSwitcher from 'ol-layerswitcher';
 import SearchNominatim from 'ol-ext/control/SearchNominatim';
-
+import { Group } from 'ol/layer';
 
 import { MapService } from './map.service';
 import { ISensor } from '../../model/bodies/sensor-body';
@@ -32,6 +36,8 @@ import { SensorService } from '../../services/sensor.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
 import { Category, getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
+import TileLayer from 'ol/layer/Tile';
+import Projection from 'ol/proj/Projection';
 
 @Component({
   selector: 'app-map',
@@ -65,13 +71,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public popupOverlay: Overlay;
   public clusterSource: Cluster;
-  public vectorSource: VectorSource;
+  public vectorSource: VectorSource<any>;
   public highlightLayer: VectorLayer;
   public selectCluster: SelectCluster;
-  public highlightSource: VectorSource;
+  public highlightSource: VectorSource<Geometry>;
   public clusterLayer: AnimatedCluster;
   public selectLocationLayer: VectorLayer;
-  public selectLocationSource: VectorSource;
+  public selectLocationSource: VectorSource<Geometry>;
 
   public currentZoomlevel: number = undefined;
   public currentMapResolution: number = undefined;
@@ -181,12 +187,22 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public initMap() {
     this.map = this.mapService.getMap();
-    this.map.setTarget(this.elementRef.nativeElement.querySelector('#map'));
+    const mapElement = this.elementRef.nativeElement.querySelector('#map');
+    this.map.setTarget(mapElement);
+
+    // Observe map resizes
+    // https://openlayers.org/en/latest/doc/faq.html#user-content-why-is-zooming-or-clicking-off-inaccurate
+    const sizeObserver = new ResizeObserver(() => {
+      console.log('update map size');
+      this.map.updateSize();
+    });
+    sizeObserver.observe(mapElement);
+
     this.handleMapEvents();
   }
 
   public initFeatures() {
-    const features: Array<Feature> = new GeoJSON().readFeatures({
+    const features: Array<Feature<Geometry>> = new GeoJSON().readFeatures({
       features: [],
       type: 'FeatureCollection',
     });
@@ -312,7 +328,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public updateMap(sensors) {
     const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
-    const features: Array<Feature> = new GeoJSON().readFeatures({
+    const features: Array<Feature<Geometry>> = new GeoJSON().readFeatures({
       features: featuresData,
       type: 'FeatureCollection',
     });
@@ -367,7 +383,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async onMoveEnd(event: MapBrowserEvent) {
+  private async onMoveEnd(event: MapBrowserEvent<UIEvent>) {
     const map = event.map;
 
     const currentRequestTimestamp = new Date().valueOf();
@@ -387,7 +403,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onSingleClick(event: MapBrowserEvent) {
+  private onSingleClick(event: MapBrowserEvent<UIEvent>) {
     console.log(event);
     const mapCoordinateRD = event.coordinate;
     const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
@@ -411,7 +427,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       // determine extent for new view
       const extent: Extent = features[0].getGeometry().getExtent().slice(0) as Extent;
-      features.forEach((f: Feature) => { extend(extent, f.getGeometry().getExtent()); });
+      features.forEach((f: Feature<Geometry>) => { extend(extent, f.getGeometry().getExtent()); });
 
       // if we're already zoomed in, zoom in no more. Setting maxZoom in fit() also does this to some extent, however,
       // in that case the camera is also centered. Returning early here also prevents the unnecessary panning.
@@ -447,7 +463,7 @@ export class MapComponent implements OnInit, OnDestroy {
     };
   }
 
-  private setLocation(feature: Feature) {
+  private setLocation(feature: Feature<Geometry>) {
     this.selectLocationSource = new VectorSource({
       features: [feature],
     });
@@ -478,7 +494,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.removeLayer(this.selectLocationLayer);
   }
 
-  public highlightFeature(feature: Feature) {
+  public highlightFeature(feature: Feature<Geometry>) {
     this.map.removeLayer(this.highlightLayer);
     this.highlightSource = new VectorSource({
       features: [feature],
@@ -585,6 +601,94 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.addControl(search);
   }
 
+  /**
+   *
+   */
+  private addLayerSwitcher(): void {
+    // Geldigheidsgebied van het tiling schema in RD-coördinaten:
+    var projectionExtent: Extent = [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999];
+    var projection = new Projection({ code: 'EPSG:28992', units: 'm', extent: projectionExtent });
+    // Resoluties (pixels per meter) van de zoomniveaus:
+    var resolutions = [3440.640, 1720.320, 860.160, 430.080, 215.040, 107.520, 53.760, 26.880, 13.440, 6.720, 3.360, 1.680, 0.840, 0.420, 0.210];
+    var size = getWidth(projectionExtent) / 256;
+    // Er zijn 15 (0 tot 14) zoomniveaus beschikbaar van de WMTS-service voor de BRT-Achtergrondkaart:
+    var matrixIds = new Array(15);
+    for (var z = 0; z < 15; ++z) {
+        matrixIds[z] = 'EPSG:28992:' + z;
+    }
+
+    const layers = [
+      new Group({
+        // A layer must have a title to appear in the layerswitcher
+        title: 'Base maps',
+        layers: [
+          new Group({
+            // A layer must have a title to appear in the layerswitcher
+            title: 'Water color with labels',
+            // Setting the layers type to 'base' results
+            // in it having a radio button and only one
+            // base layer being visibile at a time
+            type: 'base',
+            // Setting combine to true causes sub-layers to be hidden
+            // in the layerswitcher, only the parent is shown
+            combine: true,
+            visible: false,
+            layers: [
+              new TileLayer({
+                source: new Stamen({
+                  layer: 'watercolor'
+                })
+              }),
+              new TileLayer({
+                source: new Stamen({
+                  layer: 'terrain-labels'
+                })
+              })
+            ]
+          }),
+          new TileLayer({
+            // A layer must have a title to appear in the layerswitcher
+            title: 'OpenStreetMap',
+            // Again set this layer as a base layer
+            type: 'base',
+            visible: true,
+            source: new OSM()
+          }),
+          new TileLayer({
+            title: 'BRT',
+            type: 'base',
+            visible: true,
+            opacity: 0.7,
+            source: new WMTS({
+              attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
+              url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
+              layer: 'brtachtergrondkaart',
+              matrixSet: 'EPSG:28992',
+              format: 'image/png',
+              projection: projection,
+              tileGrid: new WMTSTileGrid({
+                  origin: getTopLeft(projectionExtent),
+                  resolutions: resolutions,
+                  matrixIds: matrixIds
+              }),
+              style: 'default',
+              wrapX: false
+            })
+          })
+        ]
+      })
+    ];
+
+    this.map.setLayerGroup(layers[0]);
+
+    const layerSwitcher = new LayerSwitcher({
+      reverse: true,
+      groupSelectStyle: 'children'
+    });
+
+    this.map.addControl(layerSwitcher);
+  }
+
   private addFindMeButton() {
     if (window.location.protocol !== 'https') {
       return;
@@ -672,6 +776,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }));
 
     this.addSearchButton();
+    this.addLayerSwitcher();
     this.addFindMeButton();
   }
 

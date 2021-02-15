@@ -5,9 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import { GgcMapModule } from 'generieke-geo-componenten-map';
-import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
-
 import { AppComponent } from './app.component';
 import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -21,7 +18,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { SensorComponent } from './forms/sensor/sensor.component';
 import { RegisterComponent } from './register/register.component';
-import { LayerComponent } from './components/layer/layer.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
@@ -43,7 +39,6 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     AppComponent,
     AlertComponent,
     LanguageSwitcherComponent,
-    LayerComponent,
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
@@ -68,8 +63,6 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    GgcMapModule.forRoot(),
-    GgcDatasetTreeModule,
     HttpClientModule,
     NgbModule,
   ], providers: [
