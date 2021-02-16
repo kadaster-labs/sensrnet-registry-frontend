@@ -633,7 +633,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
-    if (window.location.protocol === 'https') {
+    if (window.location.protocol === 'https:') {
       this.addFindMeButton();
     }
   }
