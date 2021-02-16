@@ -9,7 +9,6 @@ export interface SensorLocationFormValues {
   latitude: number;
   longitude: number;
   height: number;
-  baseObjectId: 'non-empty';
 }
 
 @Component({
@@ -61,8 +60,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     this.form = this.formBuilder.group({
       height: [0, Validators.required],
       latitude: [null, Validators.required],
-      longitude: [null, Validators.required],
-      baseObjectId: [null, Validators.required],
+      longitude: [null, Validators.required]
     });
 
     this.subscriptions.push(
@@ -83,7 +81,6 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
             height: this.form.get('height').value,
             latitude: location.coordinates[0],
             longitude: location.coordinates[1],
-            baseObjectId: 'non-empty',
           });
 
           this.locationService.showLocation(location);
@@ -94,8 +91,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
   }
 
   public locationValidator(g: FormGroup) {
-    return g.get('latitude').value && g.get('longitude') && g.get('height') && g.get('baseObjectId') ? null :
-      {required: true};
+    return g.get('latitude').value && g.get('longitude') && g.get('height') ? null : {required: true};
   }
 
   public onChange: any = () => {};

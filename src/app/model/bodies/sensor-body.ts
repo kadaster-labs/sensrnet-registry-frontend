@@ -6,7 +6,7 @@ export interface ISensor {
   organizations?: Array<Record<string, string>>;
   name?: string;
   location: ISensorLocation;
-  baseObjectId: string;
+  baseObjectId?: string;
   dataStreams?: Array<any>;
   aim?: string;
   description?: string;

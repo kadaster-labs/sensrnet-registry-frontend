@@ -8,7 +8,12 @@ import { LocationService } from '../../services/location.service';
 import { getTypeTranslation } from '../../model/bodies/sensorTypes';
 import { ConnectionService } from '../../services/connection.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { IRegisterSensorBody, IUpdateSensorBody, SensorService } from '../../services/sensor.service';
+import {
+  IRegisterSensorBody,
+  IUpdateLocationBody,
+  IUpdateSensorBody,
+  SensorService
+} from '../../services/sensor.service';
 
 @Component({
   selector: 'app-sensor',
@@ -74,8 +79,7 @@ export class SensorComponent implements OnInit, OnDestroy {
 
     this.locationService.highlightLocation({
       type: 'Point',
-      coordinates: this.sensor.location.coordinates,
-      baseObjectId: 'placeholder'
+      coordinates: this.sensor.location.coordinates
     });
 
     const claim = this.connectionService.currentClaim;
@@ -94,8 +98,7 @@ export class SensorComponent implements OnInit, OnDestroy {
       location: {
         longitude: this.sensor.location ? this.sensor.location.coordinates[0] : null,
         latitude: this.sensor.location ? this.sensor.location.coordinates[1] : null,
-        height: this.sensor.location ? this.sensor.location.coordinates[2] : null,
-        baseObjectId: this.sensor.baseObjectId || 'non-empty',
+        height: this.sensor.location ? this.sensor.location.coordinates[2] : null
       },
       type: {
         category: this.sensor.category || '',
@@ -251,8 +254,16 @@ export class SensorComponent implements OnInit, OnDestroy {
     const latitudeUpdated = this.sensor.location.coordinates[1] !== updatedSensorProperties.location.latitude;
     const longitudeUpdated = this.sensor.location.coordinates[0] !== updatedSensorProperties.location.longitude;
     if (longitudeUpdated || latitudeUpdated || heightUpdated) {
+      const updateLocationBody: IUpdateLocationBody = {
+        location: [
+          updatedSensorProperties.location.longitude,
+          updatedSensorProperties.location.latitude,
+          updatedSensorProperties.location.height
+        ],
+      };
+
       try {
-        await this.sensorService.updateLocation(this.sensor._id, updatedSensorProperties.location);
+        await this.sensorService.updateLocation(this.sensor._id, updateLocationBody);
       } catch (error) {
         console.error(error);
       }
@@ -281,14 +292,15 @@ export class SensorComponent implements OnInit, OnDestroy {
       });
     }
 
+    const sensorLocation = this.form.value.location;
     const sensor: IRegisterSensorBody = {
       dataStreams,
-      location: this.form.value.location || {},
+      location: sensorLocation ? [sensorLocation.longitude, sensorLocation.latitude, sensorLocation.height] : null,
       active: JSON.parse(this.form.value.active.value.toLowerCase()) || false, // cast strings ("true") to boolean
       aim: this.form.value.aim,
       description: this.form.value.description,
-      documentationUrl: this.form.value.documentationUrl || undefined,
-      manufacturer: this.form.value.manufacturer || undefined,
+      documentationUrl: this.form.value.documentationUrl || null,
+      manufacturer: this.form.value.manufacturer || null,
       name: this.form.value.name,
       theme: this.form.value.theme ? this.form.value.theme.value : [],
       category: this.form.value.type.category,

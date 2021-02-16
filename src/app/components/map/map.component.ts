@@ -414,7 +414,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.locationService.setLocation({
       type: 'Point',
       coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
-      baseObjectId: 'placeholder'
     });
 
     event.map.forEachFeatureAtPixel(event.pixel, (data) => {
@@ -523,7 +522,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const view = this.map.getView();
     view.fit(point, {
       duration: 250,
-      maxZoom: 10,
+      maxZoom: 16,
     });
   }
 
@@ -605,6 +604,14 @@ export class MapComponent implements OnInit, OnDestroy {
    *
    */
   private addLayerSwitcher(): void {
+
+    const osmLayer = new TileLayer({
+      visible: true,
+      source: new OSM()
+    });
+    osmLayer.set('title', 'OpenStreetMap');  // A layer must have a title to appear in the layerswitcher
+    osmLayer.set('type', 'base');
+
     // Geldigheidsgebied van het tiling schema in RD-coördinaten:
     var projectionExtent: Extent = [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999];
     var projection = new Projection({ code: 'EPSG:28992', units: 'm', extent: projectionExtent });
@@ -617,69 +624,63 @@ export class MapComponent implements OnInit, OnDestroy {
         matrixIds[z] = 'EPSG:28992:' + z;
     }
 
-    const layers = [
-      new Group({
-        // A layer must have a title to appear in the layerswitcher
-        title: 'Base maps',
-        layers: [
-          new Group({
-            // A layer must have a title to appear in the layerswitcher
-            title: 'Water color with labels',
-            // Setting the layers type to 'base' results
-            // in it having a radio button and only one
-            // base layer being visibile at a time
-            type: 'base',
-            // Setting combine to true causes sub-layers to be hidden
-            // in the layerswitcher, only the parent is shown
-            combine: true,
-            visible: false,
-            layers: [
-              new TileLayer({
-                source: new Stamen({
-                  layer: 'watercolor'
-                })
-              }),
-              new TileLayer({
-                source: new Stamen({
-                  layer: 'terrain-labels'
-                })
-              })
-            ]
-          }),
-          new TileLayer({
-            // A layer must have a title to appear in the layerswitcher
-            title: 'OpenStreetMap',
-            // Again set this layer as a base layer
-            type: 'base',
-            visible: true,
-            source: new OSM()
-          }),
-          new TileLayer({
-            title: 'BRT',
-            type: 'base',
-            visible: true,
-            opacity: 0.7,
-            source: new WMTS({
-              attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
-              url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
-              layer: 'brtachtergrondkaart',
-              matrixSet: 'EPSG:28992',
-              format: 'image/png',
-              projection: projection,
-              tileGrid: new WMTSTileGrid({
-                  origin: getTopLeft(projectionExtent),
-                  resolutions: resolutions,
-                  matrixIds: matrixIds
-              }),
-              style: 'default',
-              wrapX: false
-            })
-          })
-        ]
+    const brtLayer = new TileLayer({
+      visible: true,
+      opacity: 0.7,
+      source: new WMTS({
+        attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
+        url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
+        layer: 'brtachtergrondkaart',
+        matrixSet: 'EPSG:28992',
+        format: 'image/png',
+        projection: projection,
+        tileGrid: new WMTSTileGrid({
+            origin: getTopLeft(projectionExtent),
+            resolutions: resolutions,
+            matrixIds: matrixIds
+        }),
+        style: 'default',
+        wrapX: false
       })
-    ];
+    });
+    brtLayer.set('title', 'BRT');
+    brtLayer.set('type', 'base');
 
-    this.map.setLayerGroup(layers[0]);
+    const watercolorWithLabelsGroup = new Group({
+
+      visible: false,
+      layers: [
+        new TileLayer({
+          source: new Stamen({
+            layer: 'watercolor'
+          })
+        }),
+        new TileLayer({
+          source: new Stamen({
+            layer: 'terrain-labels'
+          })
+        })
+      ]
+    });
+    watercolorWithLabelsGroup.set('title', 'Water color with labels');
+    // Setting the layers type to 'base' results
+    // in it having a radio button and only one
+    // base layer being visibile at a time
+    watercolorWithLabelsGroup.set('type', 'base');
+    // Setting combine to true causes sub-layers to be hidden
+    // in the layerswitcher, only the parent is shown
+    watercolorWithLabelsGroup.set('combine', true);
+
+    const baseLayers = new Group({
+      layers: [
+        watercolorWithLabelsGroup,
+        osmLayer,
+        brtLayer
+      ]
+    });
+    baseLayers.set('title', 'Base maps');
+
+    this.map.setLayerGroup(baseLayers);
 
     const layerSwitcher = new LayerSwitcher({
       reverse: true,

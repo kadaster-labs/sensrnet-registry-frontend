@@ -7,13 +7,6 @@ import { ConnectionService } from './connection.service';
 import { SensorTheme } from '../model/bodies/sensorTheme';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-export interface ILocationBody {
-  longitude: number;
-  latitude: number;
-  height: number;
-  baseObjectId: string;
-}
-
 export interface IDatastreamBody {
   name: string;
 
@@ -33,11 +26,12 @@ export interface IDatastreamBody {
 export interface IRegisterSensorBody {
   category: string;
   typeName: string;
-  location: ILocationBody;
+  location: number[];
   dataStreams: IDatastreamBody[];
 
   name?: string;
   aim?: string;
+  baseObjectId?: string;
   description?: string;
   manufacturer?: string;
   active?: boolean;
@@ -62,6 +56,11 @@ export interface IUpdateSensorBody {
   category?: string;
   typeName?: string;
   typeDetails?: object;
+}
+
+export interface IUpdateLocationBody {
+  location: number[];
+  baseObjectId?: string;
 }
 
 export interface ITransferOwnershipBody {
@@ -182,7 +181,7 @@ export class SensorService {
   }
 
   /** Update location of a sensor */
-  public updateLocation(sensorId: string, location: ILocationBody) {
+  public updateLocation(sensorId: string, location: IUpdateLocationBody) {
     return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/location`, location).toPromise();
   }
 
