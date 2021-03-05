@@ -40,6 +40,10 @@ export class ConnectionService {
     });
   }
 
+  public getUser() {
+    return this.http.get<any>(`${this.env.apiUrl}/user`).toPromise();
+  }
+
   public getClaimFromToken(accessToken: string): Claim {
     let claim;
     if (accessToken) {

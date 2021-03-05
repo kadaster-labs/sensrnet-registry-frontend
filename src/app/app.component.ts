@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.connectionService.refreshClaim();
+    // await this.connectionService.refreshClaim();
   }
 
   public setTitle(newTitle: string) {

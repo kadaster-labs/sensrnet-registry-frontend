@@ -561,6 +561,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+    const user = await this.connectionService.getUser();
+    console.log(user);
+
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
