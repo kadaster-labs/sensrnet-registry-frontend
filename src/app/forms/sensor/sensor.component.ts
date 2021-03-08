@@ -14,6 +14,7 @@ import {
   IUpdateSensorBody,
   SensorService
 } from '../../services/sensor.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-sensor',
@@ -43,6 +44,7 @@ export class SensorComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
+    private readonly userService: UserService,
     private readonly alertService: AlertService,
     private readonly sensorService: SensorService,
     private readonly locationService: LocationService,
@@ -82,7 +84,7 @@ export class SensorComponent implements OnInit, OnDestroy {
       coordinates: this.sensor.location.coordinates
     });
 
-    const claim = this.connectionService.currentClaim;
+    const claim = this.connectionService.currentClaims;
     if (claim && claim.organizationId && sensor.organizations) {
       this.canSubmitSensor = sensor.organizations.some(e => e.id === claim.organizationId);
     } else {
@@ -325,8 +327,7 @@ export class SensorComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const claim = this.connectionService.currentClaim;
-    if (!claim || !claim.organizationId) {
+    if (!this.userService.hasJoinedOrganization()) {
       this.alertService.error(this.sensorRegisteredOrganizationMessage);
       return;
     }

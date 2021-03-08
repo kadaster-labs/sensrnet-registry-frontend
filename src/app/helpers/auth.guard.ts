@@ -11,6 +11,8 @@ export class AuthGuard implements CanActivate {
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentClaim = this.connectionService.currentClaim;
+
+    // check if claim is present
     if (currentClaim) {
       return true;
     }

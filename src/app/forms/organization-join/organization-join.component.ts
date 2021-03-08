@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service';
 import { ConnectionService } from '../../services/connection.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-organization-join',
@@ -23,7 +24,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
   private filterChanged: Subject<string> = new Subject<string>();
 
   constructor(
-    private alertService: AlertService,
+    private readonly router: Router,
+    private readonly alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
@@ -76,8 +78,9 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     if (this.form.valid) {
       try {
         await this.userService.update(this.form.value).toPromise();
-        await this.connectionService.refreshClaim();
+        await this.connectionService.refreshToken();
         this.connectionService.updateSocketOrganization();
+        this.router.navigate(['/viewer']);
       } catch (error) {
         this.alertService.error(error.message);
       }

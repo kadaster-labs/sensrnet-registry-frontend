@@ -1,6 +1,4 @@
-import jwtDecode from 'jwt-decode';
-import { map } from 'rxjs/operators';
-import { Claim } from '../model/claim';
+import { Claims } from '../model/claim';
 import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
@@ -19,8 +17,8 @@ export class SocketEvent {
 export class ConnectionService {
   private socket: SocketIOClient.Socket;
 
-  private claimSubject: BehaviorSubject<Claim> = new BehaviorSubject<Claim>(null);
-  public claim$: Observable<Claim> = this.claimSubject.asObservable();
+  private claimsSubject: BehaviorSubject<Claims> = new BehaviorSubject<Claims>(null);
+  public claim$: Observable<Claims> = this.claimsSubject.asObservable();
 
   // Routing the events using a separate observable is necessary because a socket connection may not exist at the
   // time some component tries to subscribe to an endpoint.
@@ -29,74 +27,41 @@ export class ConnectionService {
   private nameSpaceObservables: Record<string, Observable<any>> = {};
 
   constructor(
-    private router: Router,
+    private readonly router: Router,
+    private readonly env: EnvService,
     private readonly http: HttpClient,
-    private env: EnvService,
   ) {
-    this.claim$.subscribe(claim => {
-      if (!this.socket && claim && claim.accessToken) {
+    this.claim$.subscribe(claims => {
+      console.log('claims has update')
+      if (!this.socket && claims && claims.access_token) {
         this.connectSocket();
       }
     });
   }
 
-  public getUser() {
-    return this.http.get<any>(`${this.env.apiUrl}/user`).toPromise();
-  }
-
-  public getClaimFromToken(accessToken: string): Claim {
-    let claim;
-    if (accessToken) {
-      try {
-        const token = jwtDecode(accessToken) as any;
-        claim = new Claim(token.sub, token.organizationId, token.exp, accessToken);
-      } catch {
-        claim = new Claim();
-      }
-    } else {
-      claim = new Claim();
-    }
-
-    return claim;
-  }
-
-  public get currentClaim(): Claim {
-    return this.claimSubject.value;
-  }
-
-  public login(username: string, password: string) {
-    return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
-      .pipe(map((data) => {
-        const claim = this.getClaimFromToken(data.accessToken);
-        this.claimSubject.next(claim);
-
-        return data;
-      }));
+  public get currentClaims(): Claims {
+    return this.claimsSubject.value;
   }
 
   public clearClaim() {
-    this.claimSubject.next(null);
+    this.claimsSubject.next(null);
   }
 
-  public async refreshClaim(): Promise<Claim> {
-    const response = await this.http.post<any>(`${this.env.apiUrl}/auth/refresh`, null).toPromise();
+  public async refreshToken(): Promise<void> {
+    const response = await this.http.get<any>(`${this.env.apiUrl}/user`).toPromise() as Claims;
 
-    let claim;
     if (!response) {
-      await this.logoutRedirect();
-    } else {
-      claim = this.getClaimFromToken(response.accessToken);
-      this.claimSubject.next(claim);
+      return this.logoutRedirect();
     }
 
-    return claim;
+    this.claimsSubject.next(response);
   }
 
   public async logout() {
     this.clearClaim();
 
     try {
-      await this.http.post<void>(`${this.env.apiUrl}/auth/logout`, null).toPromise();
+      await this.http.get<void>(`${this.env.apiUrl}/auth/logout`).toPromise();
     } catch (error) {
       console.error(`Something went wrong when logging out: ${error}.`);
     }
@@ -111,8 +76,8 @@ export class ConnectionService {
   public updateSocketOrganization() {
     if (this.socket) {
       let event = {};
-      if (this.currentClaim && this.currentClaim.organizationId) {
-        event = {organizationId: this.currentClaim.organizationId, ...event};
+      if (this.currentClaims && this.currentClaims.organizationId) {
+        event = {organizationId: this.currentClaims.organizationId, ...event};
       }
       this.socket.emit('OrganizationUpdated', event);
     }
@@ -128,12 +93,12 @@ export class ConnectionService {
         transportOptions: undefined,
       };
 
-      const claim = this.currentClaim;
-      if (claim && claim.accessToken) {
+      const claim = this.currentClaims;
+      if (claim && claim.access_token) {
         connectionOptions.transportOptions = {
           polling: {
             extraHeaders: {
-              Authorization: `Bearer ${claim.accessToken}`,
+              Authorization: `Bearer ${claim.access_token}`,
             }
           }
         };

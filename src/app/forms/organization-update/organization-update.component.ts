@@ -1,4 +1,4 @@
-import { Claim } from '../../model/claim';
+import { Claims } from '../../model/claim';
 import { Organization } from '../../model/organization';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
@@ -6,6 +6,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectionService } from '../../services/connection.service';
 import { OrganizationService } from '../../services/organization.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-organization-update',
@@ -24,9 +25,10 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
   public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
 
   constructor(
-    private alertService: AlertService,
+    private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
+    private readonly alertService: AlertService,
     private readonly connectionService: ConnectionService,
     private readonly organizationService: OrganizationService,
   ) {}
@@ -47,7 +49,7 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
   }
 
   initFormFields(): void {
-    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
+    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claims) => {
       if (claim && claim.organizationId) {
         const organizationPromise = this.organizationService.get().toPromise();
         try {
@@ -80,8 +82,9 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
   public async leave() {
     try {
       await this.userService.update({organization: null}).toPromise();
-      await this.connectionService.refreshClaim();
+      await this.connectionService.refreshToken();
       this.connectionService.updateSocketOrganization();
+      this.router.navigate(['/viewer']);
     } catch (error) {
       this.alertService.error(error.message);
     }

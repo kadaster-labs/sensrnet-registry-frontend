@@ -15,65 +15,10 @@
         </div>
         <div class="row">
             <div class="col-sm-6 offset-sm-3 pt-5">
-                <h2 i18n>Login</h2>
-                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    <div class="form-group">
-                        <label for="username" i18n>E-mail</label>
-                        <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                            <div class="required-text" *ngIf="f.username.errors.required" i18n>E-mail is required</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" i18n>Password</label>
-                        <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                            <div class="required-text" *ngIf="f.password.errors.required" i18n>Password is required</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button [disabled]="loading" class="btn btn-primary">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            <ng-container i18n>Login</ng-container>
-                        </button>
-                        <a routerLink="/register" class="btn btn-link" i18n>Register</a>
-                    </div>
-                </form>
                 <div>
-                    <a href="/api/auth/oidc" target="_self">Login with Azure</a>
+                    <a href="/api/auth/login" target="_self" class="btn">Login with Azure</a>
                 </div>
             </div>
         </div>
-        <!-- <div class="row">
-          <div class="col">
-            <h2><a id="user-content-shortly-and-simply-why" class="anchor" aria-hidden="true" href="#shortly-and-simply-why"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
-              <path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path>
-          </svg></a>Shortly and simply why?</h2>
-  <p>There is a growing number of sensors, cameras and measuring devices in the
-      public space. Why are they hanging on the lamp post? What are they measuring?
-      And by whom? Those questions are relevant to the citizens to be assured that no
-      private and sensitive data are collected without their approvement. At the same
-      time the municipalities feel obligated to provide a transparency about the
-      hanging devices to the inhabitants and provide a good working registration tool
-      to the owners of the measuring devices. The sensor owners would value the
-      clarity about the process to register their devices and uniformity in the
-      legislation if they plan to install their devices throughout more cities. We
-      cannot forget about researchers, developers and data scientists who would highly
-      appreciate the transparency about the measuring devices and potential access to
-      their data. The National Sensor Registry seems to be the solution to answer the
-      abovementioned questions. The registry would:</p>
-  <ul>
-      <li>provide transparency to the municipalities and citizens about the data
-          collected by the devices and the purpose for collection;</li>
-      <li>Provide overview and insight into where sensors are placed in public space
-          and who is the owner</li>
-      <li>allow sensor owners to register the devices in an uniform way;</li>
-      <li>provide access to highly demanded data to utilize the smart city concept;</li>
-      <li>act as a platform that provides transparent, safe and secure environment
-          where citizens and entrepreneurs can get more information or make objections
-          against the reason behind collecting data.</li>
-  </ul>
-          </div>
-        </div> -->
     </div>
 </div>

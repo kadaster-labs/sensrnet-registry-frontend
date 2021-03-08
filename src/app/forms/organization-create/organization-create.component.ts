@@ -5,6 +5,7 @@ import { OrganizationId } from '../../model/bodies/organization-id';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectionService } from '../../services/connection.service';
 import { OrganizationService } from '../../services/organization.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-organization-create',
@@ -22,9 +23,10 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
   public registerFailedMessage = $localize`:@@register.failed:Failed to register. Does the organization exist already?`;
 
   constructor(
-    private alertService: AlertService,
+    private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
+    private readonly alertService: AlertService,
     private readonly connectionService: ConnectionService,
     private readonly organizationService: OrganizationService,
   ) {}
@@ -41,8 +43,9 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
         if (result && result.organizationId) {
           await this.userService.update({organization: result.organizationId}).toPromise();
-          await this.connectionService.refreshClaim();
+          await this.connectionService.refreshToken();
           this.connectionService.updateSocketOrganization();
+          this.router.navigate(['/viewer']);
         }
       } catch {
         this.alertService.error(this.registerFailedMessage);

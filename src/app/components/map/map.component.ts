@@ -542,7 +542,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public ownsSensor(sensor): boolean {
-    const claim = this.connectionService.currentClaim;
+    const claim = this.connectionService.currentClaims;
     return claim && claim.organizationId && sensor.organizations ? sensor.organizations.some(e => e.id === claim.organizationId) : false;
   }
 
@@ -561,8 +561,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    const user = await this.connectionService.getUser();
-    console.log(user);
 
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {

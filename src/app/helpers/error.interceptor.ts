@@ -33,11 +33,11 @@ export class ErrorInterceptor implements HttpInterceptor {
           take(1),
           switchMap(() => {
             // refresh token
-            const claim = this.connectionService.currentClaim;
-            if (claim && claim.accessToken) {
+            const claim = this.connectionService.currentClaims;
+            if (claim && claim.access_token) {
               request = request.clone({
                 setHeaders: {
-                  Authorization: `Bearer ${claim.accessToken}`,
+                  Authorization: `Bearer ${claim.access_token}`,
                 },
               });
             }
@@ -50,19 +50,10 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.refreshSubject.next(null);
 
         try {
-          const claim = await this.connectionService.refreshClaim();
+          const claim = await this.connectionService.refreshToken();
 
           this.refreshSubject.next(claim);
           this.refreshInProgress = false;
-
-          // Add authorization header with access token if available.
-          if (claim) {
-            request = request.clone({
-              setHeaders: {
-                Authorization: `Bearer ${claim.accessToken}`,
-              },
-            });
-          }
 
           return next.handle(request).toPromise();
         } catch (e) {

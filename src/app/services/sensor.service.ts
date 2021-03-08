@@ -147,7 +147,7 @@ export class SensorService {
   }
 
   public async getMySensors() {
-    const claim = this.connectionService.currentClaim;
+    const claim = this.connectionService.currentClaims;
 
     let sensors;
     if (claim && claim.organizationId) {

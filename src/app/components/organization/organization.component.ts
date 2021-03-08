@@ -1,4 +1,4 @@
-import { Claim } from '../../model/claim';
+import { Claims } from '../../model/claim';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConnectionService } from '../../services/connection.service';
 
@@ -24,9 +24,9 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      if (claim && claim.organizationId) {
-        this.organizationId = claim.organizationId;
+    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claims: Claims) => {
+      if (claims && claims.organizationId) {
+        this.organizationId = claims.organizationId;
       } else {
         this.organizationId = null;
       }
