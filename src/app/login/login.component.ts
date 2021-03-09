@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { ConnectionService } from '../services/connection.service';
 
 @Component({
   styleUrls: ['./login.component.scss'],
@@ -16,12 +17,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly oidcSecurityService: OidcSecurityService,
+    private readonly connectionService: ConnectionService,
   ) { }
 
   ngOnInit() {
     this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
       console.log('is authenticated', auth);
       if (auth) {
+        this.connectionService.refreshToken();
         this.router.navigate(['/viewer']);
       }
     });

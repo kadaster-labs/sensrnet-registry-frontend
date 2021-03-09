@@ -61,12 +61,6 @@ export class ConnectionService {
   public async logout() {
     this.clearClaim();
     this.oidcSecurityService.logoffLocal();
-
-    try {
-      await this.http.get<void>(`${this.env.apiUrl}/auth/logout`).toPromise();
-    } catch (error) {
-      console.error(`Something went wrong when logging out: ${error}.`);
-    }
   }
 
   public async logoutRedirect() {
