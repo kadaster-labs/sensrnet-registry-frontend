@@ -7,10 +7,10 @@ export class EnvService {
   public apiUrl = '';
 
   // tenant Id for OpenID connect (currently only AzureAD)
-  public tenantId = '';
+  public azuread_tenant_id = '';
 
   // client Id for OpenID connect (currently only AzureAD)
-  public clientId = '';
+  public azuread_client_id = '';
 
   constructor() {
   }

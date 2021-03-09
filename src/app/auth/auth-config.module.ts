@@ -5,11 +5,11 @@ import { EnvService } from '../services/env.service';
 export function configureAuth(oidcConfigService: OidcConfigService, envService: EnvService): () => Promise<any> {
   return () =>
     oidcConfigService.withConfig({
-      stsServer: `https://login.microsoftonline.com/${this.envService.tenantId}/v2.0`,
+      stsServer: `https://login.microsoftonline.com/${envService.azuread_tenant_id}/v2.0`,
       authWellknownEndpoint: 'https://login.microsoftonline.com/common/v2.0',
       redirectUrl: window.location.origin,
       postLogoutRedirectUri: window.location.origin,
-      clientId: `${envService.clientId}`,
+      clientId: `${envService.azuread_client_id}`,
       scope: 'openid profile offline_access email',
       responseType: 'code',
       silentRenew: true,
