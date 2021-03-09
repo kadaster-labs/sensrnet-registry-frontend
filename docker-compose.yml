@@ -11,6 +11,8 @@ services:
         context: "."
     environment:
       - API_URL=http://localhost:3000/api
+    env_file:
+      - .env
     ports:
       - 8080:8080
     networks:

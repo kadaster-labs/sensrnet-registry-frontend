@@ -11,6 +11,9 @@ import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
 import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
 
 import { AppComponent } from './app.component';
+import { AuthConfigModule } from './auth/auth-config.module';
+import { ErrorInterceptor } from './auth/error.interceptor';
+import { AuthInterceptor } from './auth/jwt.interceptor';
 import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -18,7 +21,6 @@ import { ViewerComponent } from './viewer/viewer.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { ErrorInterceptor } from './helpers/error.interceptor';
 import { SensorComponent } from './forms/sensor/sensor.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
@@ -35,8 +37,6 @@ import { OrganizationCreateComponent } from './forms/organization-create/organiz
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
-import { AuthConfigModule } from './auth/auth-config.module';
-import { AuthInterceptor } from './helpers/jwt.interceptor';
 
 @NgModule({
   declarations: [
