@@ -21,7 +21,7 @@ export function configureAuth(oidcConfigService: OidcConfigService, envService: 
         prompt: 'select_account', // login, consent
       },
       secureRoutes: [ // where to send the id token to
-        'api/'
+        envService.apiUrl,
       ],
     });
 }

@@ -20,6 +20,7 @@ import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 import { SearchComponentEvent } from 'generieke-geo-componenten-search';
 import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
@@ -49,6 +50,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private sensorService: SensorService,
     private locationService: LocationService,
     private connectionService: ConnectionService,
+    private oidcSecurityService: OidcSecurityService,
   ) {}
 
   public mapName = 'srn';
@@ -561,6 +563,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+
+    this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
+      if (auth) {
+        this.connectionService.refreshToken();
+      }
+    });
 
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {

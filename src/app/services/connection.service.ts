@@ -34,7 +34,7 @@ export class ConnectionService {
     private readonly oidcSecurityService: OidcSecurityService,
   ) {
     this.claim$.subscribe(claims => {
-      if (!this.socket && claims && claims.access_token) {
+      if (!this.socket && claims) {
         this.connectSocket();
       }
     });
@@ -80,6 +80,8 @@ export class ConnectionService {
   }
 
   public connectSocket() {
+    // TODO: does not work out of the box with token from external oidc provider
+    // hints at how to fix https://github.com/nestjs/nest/issues/3206#issuecomment-543767894
     if (!this.socket) {
       const namespace = 'sensor';
       const host = this.env.apiUrl.substring(0, this.env.apiUrl.lastIndexOf('/'));  // strip the /api part
@@ -90,7 +92,7 @@ export class ConnectionService {
       };
 
       const claim = this.currentClaims;
-      if (claim && claim.access_token) {
+      if (claim && claim.organizationId) {
         connectionOptions.transportOptions = {
           polling: {
             extraHeaders: {
