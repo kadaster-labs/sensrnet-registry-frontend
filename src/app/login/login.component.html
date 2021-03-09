@@ -15,9 +15,10 @@
         </div>
         <div class="row">
             <div class="col-sm-6 offset-sm-3 pt-5">
-                <div>
-                    <a href="/api/auth/login" target="_self" class="btn">Login with Azure</a>
-                </div>
+                <button (click)="login()" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    <ng-container i18n>Login</ng-container>
+                </button>
             </div>
         </div>
     </div>

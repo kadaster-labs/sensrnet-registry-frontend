@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { EnvService } from './env.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Subject, Observable, Subscriber } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 export class SocketEvent {
   constructor(
@@ -30,9 +31,9 @@ export class ConnectionService {
     private readonly router: Router,
     private readonly env: EnvService,
     private readonly http: HttpClient,
+    private readonly oidcSecurityService: OidcSecurityService,
   ) {
     this.claim$.subscribe(claims => {
-      console.log('claims has update')
       if (!this.socket && claims && claims.access_token) {
         this.connectSocket();
       }
@@ -59,6 +60,7 @@ export class ConnectionService {
 
   public async logout() {
     this.clearClaim();
+    this.oidcSecurityService.logoffLocal();
 
     try {
       await this.http.get<void>(`${this.env.apiUrl}/auth/logout`).toPromise();

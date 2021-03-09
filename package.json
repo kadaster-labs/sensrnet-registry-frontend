@@ -25,6 +25,7 @@
     "@angular/router": "^11.0.5",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ngx-i18nsupport/tooling": "^8.0.3",
+    "angular-auth-oidc-client": "11.6.2",
     "bootstrap": "^4.5.0",
     "bootstrap-select": "^1.13.18",
     "core-js": "^2.6.11",

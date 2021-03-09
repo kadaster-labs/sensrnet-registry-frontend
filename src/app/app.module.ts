@@ -35,6 +35,8 @@ import { OrganizationCreateComponent } from './forms/organization-create/organiz
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
+import { AuthConfigModule } from './auth/auth-config.module';
+import { AuthInterceptor } from './helpers/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -70,8 +72,10 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     GgcDatasetLegendModule,
     HttpClientModule,
     NgbModule,
+    AuthConfigModule,
   ], providers: [
     ModalService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     EnvServiceProvider,
   ], bootstrap: [

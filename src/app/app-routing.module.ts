@@ -7,8 +7,10 @@ import { SensorsComponent } from './forms/sensors/sensors.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 
 const routes: Routes = [
-  { path: '', component: ViewerComponent },
+  { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
+
+  { path: 'viewer', component: ViewerComponent },
 
   { path: 'organization', component: OrganizationComponent },
 
@@ -18,7 +20,7 @@ const routes: Routes = [
   { path: 'sensors', component: SensorsComponent },
 
   // otherwise redirect to viewer
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({
