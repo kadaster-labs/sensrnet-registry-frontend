@@ -1,6 +1,6 @@
 import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { OrganizationService } from '../../services/organization.service';
+import { LegalEntityService } from '../../services/legal-entity.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Organization } from '../../model/organization';
 import { UserService } from '../../services/user.service';
@@ -27,7 +27,7 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
-    private readonly organizationService: OrganizationService,
+    private readonly organizationService: LegalEntityService,
   ) {}
 
   get f() {
@@ -77,7 +77,6 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
       try {
         await this.userService.update(this.form.value).toPromise();
         await this.connectionService.refreshClaim();
-        this.connectionService.updateSocketOrganization();
       } catch (error) {
         this.alertService.error(error.message);
       }

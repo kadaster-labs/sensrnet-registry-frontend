@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-import { AuthGuard } from './helpers/auth.guard';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ViewerComponent } from './viewer/viewer.component';
-import { SensorComponent } from './forms/sensor/sensor.component';
+import { DeviceComponent } from './forms/device/device.component';
 import { RegisterComponent } from './register/register.component';
 import { SensorsComponent } from './forms/sensors/sensors.component';
 import { OrganizationComponent } from './components/organization/organization.component';
@@ -15,10 +14,10 @@ const routes: Routes = [
 
   { path: 'organization', component: OrganizationComponent },
 
-  { path: 'sensor', component: SensorComponent },
-  { path: 'sensor/:id', component: SensorComponent },
+  { path: 'device', component: DeviceComponent },
+  { path: 'device/:id', component: DeviceComponent },
 
-  { path: 'sensors', component: SensorsComponent },
+  { path: 'devices', component: SensorsComponent },
 
   // otherwise redirect to viewer
   { path: '**', redirectTo: '' },

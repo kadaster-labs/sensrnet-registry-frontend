@@ -20,7 +20,7 @@ import { NavBarComponent } from './navbar/navbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ErrorInterceptor } from './helpers/error.interceptor';
-import { SensorComponent } from './forms/sensor/sensor.component';
+import { DeviceComponent } from './forms/device/device.component';
 import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
@@ -46,7 +46,7 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     ViewerComponent,
     LoginComponent,
     RegisterComponent,
-    SensorComponent,
+    DeviceComponent,
     SensorThemeComponent,
     SensorLocationComponent,
     SensorTypeComponent,

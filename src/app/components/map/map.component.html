@@ -13,7 +13,7 @@
         <div id="popup" class="ol-popup bg-white border-0 hidden mb-5">
             <div *ngIf="overlayVisible" class="row border border-bottom-0 mx-0">
                 <div class="col-12 mx-0 mt-2">
-                    <h4>{{ selectedSensor?.name }}</h4>
+                    <h4>{{ selectedDevice?.name }}</h4>
                 </div>
             </div>
             <table *ngIf="overlayVisible" class="table table-striped table-sm mb-0">
@@ -30,43 +30,32 @@
                             <strong i18n>Category</strong>
                         </td>
                         <td>
-                            <em>{{ getCategoryTranslation(selectedSensor?.category) }}</em>
+                            <em>{{ getCategoryTranslation(selectedDevice?.category) }}</em>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <strong i18n>Type</strong>
+                            <strong i18n>Connectivity</strong>
                         </td>
                         <td>
-                            <em>{{ getTypeTranslation(selectedSensor?.typeName) }}</em>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>
-                                <label for="selected-sensor-active" class="p-0 m-0" i18n>Active</label>
-                            </strong>
-                        </td>
-                        <td>
-                            <input type="checkbox" id="selected-sensor-active" class="pt-2 pb-0 my-0"
-                                   [checked]="selectedSensor?.active" disabled>
+                            <em>{{ selectedDevice?.connectivity }}</em>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="overlayVisible && selectedSensor" class="row border mx-0">
+            <div *ngIf="overlayVisible && selectedDevice" class="row border mx-0">
                 <div class="col-12 px-1 mx-0">
-                    <div *ngIf="ownsSensor(selectedSensor); else viewSensor" class="row mx-0">
+                    <div *ngIf="ownsDevice(selectedDevice); else viewDevice" class="row mx-0">
                         <div class="col-6 my-2 px-1">
-                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block" i18n>Edit</button>
+                            <button (click)="editDevice()" class="btn btn-primary btn-sm btn-block" i18n>Edit</button>
                         </div>
                         <div class="col-6 my-2 px-1">
-                            <button (click)="deleteSensor()" class="btn btn-danger btn-sm btn-block" i18n>Delete</button>
+                            <button (click)="deleteDevice()" class="btn btn-danger btn-sm btn-block" i18n>Delete</button>
                         </div>
                     </div>
-                    <ng-template #viewSensor>
+                    <ng-template #viewDevice>
                         <div class="col-12 my-2 px-1 mx-0">
-                            <button (click)="editSensor()" class="btn btn-primary btn-sm btn-block" i18n>View</button>
+                            <button (click)="editDevice()" class="btn btn-primary btn-sm btn-block" i18n>View</button>
                         </div>
                     </ng-template>
                 </div>

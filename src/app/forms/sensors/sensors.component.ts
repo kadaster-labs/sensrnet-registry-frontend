@@ -1,7 +1,7 @@
 import { Claim } from '../../model/claim';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ISensor } from '../../model/bodies/sensor-body';
-import { SensorService } from '../../services/sensor.service';
+import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { ConnectionService } from '../../services/connection.service';
 import { getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
@@ -22,7 +22,7 @@ export class SensorsComponent implements OnInit, OnDestroy {
   public getCategoryTranslation = getCategoryTranslation;
 
   constructor(
-    public sensorService: SensorService,
+    public sensorService: DeviceService,
     private readonly locationService: LocationService,
     private readonly connectionService: ConnectionService,
   ) {}
@@ -60,11 +60,7 @@ export class SensorsComponent implements OnInit, OnDestroy {
     this.sensors = await this.sensorService.getMySensors();
 
     this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      if (claim && claim.organizationId) {
-        this.organizationId = claim.organizationId;
-      } else {
-        this.organizationId = null;
-      }
+      this.organizationId = null;
     }));
   }
 

@@ -1,19 +1,19 @@
-import { SensorComponent } from './sensor.component';
+import { DeviceComponent } from './device.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('SensorRegisterComponent', () => {
-  let component: SensorComponent;
-  let fixture: ComponentFixture<SensorComponent>;
+  let component: DeviceComponent;
+  let fixture: ComponentFixture<DeviceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SensorComponent ],
+      declarations: [ DeviceComponent ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SensorComponent);
+    fixture = TestBed.createComponent(DeviceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

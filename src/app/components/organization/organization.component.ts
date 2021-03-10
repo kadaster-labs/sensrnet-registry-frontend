@@ -25,11 +25,11 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      if (claim && claim.organizationId) {
-        this.organizationId = claim.organizationId;
-      } else {
-        this.organizationId = null;
-      }
+      // if (claim && claim.organizationId) {
+      //   this.organizationId = claim.organizationId;
+      // } else {
+      //   this.organizationId = null;
+      // }
     }));
   }
 

@@ -5,7 +5,7 @@ import { Organization } from '../model/organization';
 import { EnvService } from './env.service';
 
 @Injectable({ providedIn: 'root' })
-export class OrganizationService {
+export class LegalEntityService {
   constructor(
     private env: EnvService,
     private http: HttpClient
@@ -16,7 +16,7 @@ export class OrganizationService {
   }
 
   public get() {
-    return this.http.get(`${this.env.apiUrl}/organization`);
+    return this.http.get(`${this.env.apiUrl}/legalentity`);
   }
 
   public getOrganizations(name?: string) {

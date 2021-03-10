@@ -5,7 +5,7 @@ import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectionService } from '../../services/connection.service';
-import { OrganizationService } from '../../services/organization.service';
+import { LegalEntityService } from '../../services/legal-entity.service';
 
 @Component({
   selector: 'app-organization-update',
@@ -28,7 +28,7 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
-    private readonly organizationService: OrganizationService,
+    private readonly organizationService: LegalEntityService,
   ) {}
 
   get f() {
@@ -48,7 +48,7 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
 
   initFormFields(): void {
     this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      if (claim && claim.organizationId) {
+      if (claim) {
         const organizationPromise = this.organizationService.get().toPromise();
         try {
           this.myOrganization = await organizationPromise;
@@ -81,7 +81,6 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
     try {
       await this.userService.update({organization: null}).toPromise();
       await this.connectionService.refreshClaim();
-      this.connectionService.updateSocketOrganization();
     } catch (error) {
       this.alertService.error(error.message);
     }

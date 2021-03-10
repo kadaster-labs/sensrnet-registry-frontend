@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OrganizationId } from '../../model/bodies/organization-id';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectionService } from '../../services/connection.service';
-import { OrganizationService } from '../../services/organization.service';
+import { LegalEntityService } from '../../services/legal-entity.service';
 
 @Component({
   selector: 'app-organization-create',
@@ -26,7 +26,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
-    private readonly organizationService: OrganizationService,
+    private readonly organizationService: LegalEntityService,
   ) {}
 
   get f() {
@@ -42,7 +42,6 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
         if (result && result.organizationId) {
           await this.userService.update({organization: result.organizationId}).toPromise();
           await this.connectionService.refreshClaim();
-          this.connectionService.updateSocketOrganization();
         }
       } catch {
         this.alertService.error(this.registerFailedMessage);

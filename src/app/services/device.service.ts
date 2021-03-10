@@ -6,6 +6,22 @@ import { EventType } from '../model/events/event-type';
 import { ConnectionService } from './connection.service';
 import { SensorTheme } from '../model/bodies/sensorTheme';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import {IDevice, ILocationDetails} from '../model/bodies/device-model';
+
+export interface IRegisterLocationBody {
+  location: number[];
+  name?: string;
+  description?: string;
+}
+
+export interface IRegisterDeviceBody {
+  _id?: string;
+  name: string;
+  description?: string;
+  category?: string;
+  connectivity?: string;
+  location: IRegisterLocationBody;
+}
 
 export interface IDatastreamBody {
   name: string;
@@ -72,10 +88,10 @@ export interface IShareOwnershipBody {
 }
 
 @Injectable({ providedIn: 'root' })
-export class SensorService {
-  private sensorCreated$: Observable<ISensor>;
-  private sensorUpdated$: Observable<ISensor>;
-  private sensorDeleted$: Observable<ISensor>;
+export class DeviceService {
+  private deviceLocated$: Observable<IDevice>;
+  private deviceUpdated$: Observable<IDevice>;
+  private deviceRemoved$: Observable<IDevice>;
 
   constructor(
     private http: HttpClient,
@@ -85,43 +101,37 @@ export class SensorService {
 
   public async subscribe() {
     // This way multiple calls to subscribe do not create new observables.
-    if (!this.sensorCreated$ || !this.sensorUpdated$ || !this.sensorDeleted$) {
-      const sensorDeleted$ = this.connectionService.subscribeTo(EventType.SensorDeleted);
-      const sensorUpdated$ = this.connectionService.subscribeTo(EventType.SensorUpdated);
-      const sensorRegistered$ = this.connectionService.subscribeTo(EventType.SensorRegistered);
-      const sensorActivated$ = await this.connectionService.subscribeTo(EventType.SensorActivated);
-      const sensorDeactivated$ = await this.connectionService.subscribeTo(EventType.SensorDeactivated);
-      const sensorLocationUpdated$ = await this.connectionService.subscribeTo(EventType.SensorRelocated);
+    if (!this.deviceLocated$ || !this.deviceUpdated$ || !this.deviceRemoved$) {
+      const deviceUpdated$ = this.connectionService.subscribeTo(EventType.DeviceUpdated);
+      const deviceDeleted$ = this.connectionService.subscribeTo(EventType.DeviceDeleted);
+      const deviceLocated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
 
-      this.sensorCreated$ = new Observable((observer: Subscriber<ISensor>) => {
-        sensorRegistered$.subscribe((sensor: ISensor) => {
+      this.deviceLocated$ = new Observable((observer: Subscriber<IDevice>) => {
+        deviceLocated$.subscribe((sensor: IDevice) => {
           observer.next(sensor);
         });
       });
 
-      this.sensorUpdated$ = new Observable((observer: Subscriber<ISensor>) => {
-        const updateFunction = (sensor: ISensor) => {
+      this.deviceUpdated$ = new Observable((observer: Subscriber<IDevice>) => {
+        const updateFunction = (sensor: IDevice) => {
           observer.next(sensor);
         };
-        sensorUpdated$.subscribe(updateFunction);
-        sensorActivated$.subscribe(updateFunction);
-        sensorDeactivated$.subscribe(updateFunction);
-        sensorLocationUpdated$.subscribe(updateFunction);
+        deviceUpdated$.subscribe(updateFunction);
       });
 
-      this.sensorDeleted$ = new Observable((observer: Subscriber<ISensor>) => {
-        sensorDeleted$.subscribe((sensor: ISensor) => {
+      this.deviceRemoved$ = new Observable((observer: Subscriber<IDevice>) => {
+        deviceDeleted$.subscribe((sensor: IDevice) => {
           observer.next(sensor);
         });
       });
     }
 
-    return { onRegister: this.sensorCreated$, onUpdate: this.sensorUpdated$, onDelete: this.sensorDeleted$ };
+    return { onLocate: this.deviceLocated$, onUpdate: this.deviceUpdated$, onRemove: this.deviceRemoved$ };
   }
 
-  /** Register sensor */
-  public register(sensor: IRegisterSensorBody) {
-    return this.http.post<IRegisterSensorResponseBody>(`${this.env.apiUrl}/sensor`, sensor).toPromise();
+  /** Register device */
+  public register(device: IRegisterDeviceBody) {
+    return this.http.post(`${this.env.apiUrl}/device`, device).toPromise();
   }
 
   /** Retrieve sensors */
@@ -146,13 +156,35 @@ export class SensorService {
     return await sensorPromise as ISensor[];
   }
 
+  public async getDevices(bottomLeftLongitude?: string, bottomLeftLatitude?: string, upperRightLongitude?: string,
+                          upperRightLatitude?: string) {
+    let params = new HttpParams();
+    if (bottomLeftLongitude) {
+      params = params.set('bottomLeftLongitude', bottomLeftLongitude);
+    }
+    if (bottomLeftLatitude) {
+      params = params.set('bottomLeftLatitude', bottomLeftLatitude);
+    }
+    if (upperRightLongitude) {
+      params = params.set('upperRightLongitude', upperRightLongitude);
+    }
+    if (upperRightLatitude) {
+      params = params.set('upperRightLatitude', upperRightLatitude);
+    }
+
+    const url = `${this.env.apiUrl}/device?${params.toString()}`;
+    const devicePromise = this.http.get(url).toPromise();
+
+    return await devicePromise as IDevice[];
+  }
+
   public async getMySensors() {
     const claim = this.connectionService.currentClaim;
 
     let sensors;
-    if (claim && claim.organizationId) {
-      let params = new HttpParams();
-      params = params.set('organizationId', claim.organizationId);
+    if (claim) {
+      const params = new HttpParams();
+      // params = params.set('organizationId', claim.organizationId);
 
       const url = `${this.env.apiUrl}/sensor?${params.toString()}`;
       const sensorPromise = this.http.get(url).toPromise();
@@ -215,8 +247,8 @@ export class SensorService {
     return this.http.delete(`${this.env.apiUrl}/sensor/${id}`).toPromise();
   }
 
-  /** Retrieve a single sensor */
+  /** Retrieve a single device */
   public get(id: string) {
-    return this.http.get(`${this.env.apiUrl}/sensor/${id}`).toPromise();
+    return this.http.get(`${this.env.apiUrl}/device/${id}`).toPromise();
   }
 }
