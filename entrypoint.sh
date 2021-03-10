@@ -10,17 +10,24 @@ replace_envs () {
   done
 }
 
-replace_envs_tenant_id () {
+replace_envs_oidc_issuer_url () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.azuread_tenant_id = ''@window.__env.azuread_tenant_id = '${AZUREAD_TENANT_ID}'@" ${dir}env.js
+    sed -i "s@window.__env.oidc_issuer_url = ''@window.__env.oidc_issuer_url = '${OIDC_ISSUER_URL}'@" ${dir}env.js
   done
 }
 
-replace_envs_client_id () {
+replace_envs_oidc_well_known () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.azuread_client_id = ''@window.__env.azuread_client_id = '${AZUREAD_CLIENT_ID}'@" ${dir}env.js
+    sed -i "s@window.__env.oidc_well_known = ''@window.__env.oidc_well_known = '${OIDC_WELL_KNOWN}'@" ${dir}env.js
+  done
+}
+
+replace_envs_oidc_client_id () {
+  for dir in /usr/share/nginx/html/*/
+  do
+    sed -i "s@window.__env.oidc_client_id = ''@window.__env.oidc_client_id = '${OIDC_CLIENT_ID}'@" ${dir}env.js
   done
 }
 
@@ -28,12 +35,17 @@ if [[ ! -z "$API_URL" ]]; then
   replace_envs
 fi
 
-if [[ ! -z "$AZUREAD_TENANT_ID" ]]; then
-  replace_envs_tenant_id
+if [[ ! -z "$OIDC_ISSUER_URL" ]]; then
+  replace_envs_oidc_issuer_url
 fi
 
-if [[ ! -z "$AZUREAD_CLIENT_ID" ]]; then
-  replace_envs_client_id
+if [[ ! -z "$OIDC_WELL_KNOWN" ]]; then
+  replace_envs_oidc_well_known
+fi
+
+
+if [[ ! -z "$OIDC_CLIENT_ID" ]]; then
+  replace_envs_oidc_client_id
 fi
 
 if [ "$1" = "run" ]; then

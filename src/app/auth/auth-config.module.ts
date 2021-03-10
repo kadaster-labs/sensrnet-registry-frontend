@@ -1,25 +1,22 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { AuthModule, OidcConfigService } from 'angular-auth-oidc-client';
 import { EnvService } from '../services/env.service';
+import { environment } from '../../environments/environment';
 
 export function configureAuth(oidcConfigService: OidcConfigService, envService: EnvService): () => Promise<any> {
   return () =>
     oidcConfigService.withConfig({
-      stsServer: `https://login.microsoftonline.com/${envService.azuread_tenant_id}/v2.0`,
-      authWellknownEndpoint: 'https://login.microsoftonline.com/common/v2.0',
+      stsServer: envService.oidc_issuer_url,
+      authWellknownEndpoint: envService.oidc_well_known,
+      issValidationOff: !environment.production,
       redirectUrl: window.location.origin,
       postLogoutRedirectUri: window.location.origin,
-      clientId: `${envService.azuread_client_id}`,
-      scope: 'openid profile offline_access email',
-      responseType: 'code',
+      clientId: envService.oidc_client_id,
+      scope: 'openid profile email',
+      responseType: 'id_token token',
       silentRenew: true,
-      issValidationOff: true, // azuread
-      maxIdTokenIatOffsetAllowedInSeconds: 600, // azuread
       silentRenewUrl: window.location.origin + '/silent-renew.html',
       renewTimeBeforeTokenExpiresInSeconds: 10,
-      customParams: {
-        prompt: 'select_account', // login, consent
-      },
       secureRoutes: [ // where to send the id token to
         envService.apiUrl,
       ],
