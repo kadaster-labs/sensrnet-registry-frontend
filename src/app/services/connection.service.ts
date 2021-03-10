@@ -92,11 +92,12 @@ export class ConnectionService {
       };
 
       const claim = this.currentClaims;
-      if (claim && claim.organizationId) {
+      const token = this.oidcSecurityService.getIdToken();
+      if (claim && claim.organizationId && token) {
         connectionOptions.transportOptions = {
           polling: {
             extraHeaders: {
-              Authorization: `Bearer ${claim.access_token}`,
+              Authorization: `Bearer ${token}`,
             }
           }
         };
