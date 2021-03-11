@@ -24,13 +24,13 @@ import {SearchComponentEvent} from 'generieke-geo-componenten-search';
 import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
 import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
 
+import {ILegalEntity} from '../../model/legalEntity';
 import {IDevice} from '../../model/bodies/device-model';
-import {ISensor} from '../../model/bodies/sensor-body';
 import {ModalService} from '../../services/modal.service';
 import {DeviceService} from '../../services/device.service';
 import {LocationService} from '../../services/location.service';
 import {ConnectionService} from '../../services/connection.service';
-import {Category, getCategoryTranslation, getTypeTranslation} from '../../model/bodies/sensorTypes';
+import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
 
 @Component({
   selector: 'app-map',
@@ -58,7 +58,6 @@ export class MapComponent implements OnInit, OnDestroy {
   public overlayVisible = false;
   public selectedDevice: IDevice;
 
-  public getTypeTranslation = getTypeTranslation;
   public getCategoryTranslation = getCategoryTranslation;
 
   public popupOverlay: Overlay;
@@ -101,6 +100,7 @@ export class MapComponent implements OnInit, OnDestroy {
     return {
       device,
       name: device.name,
+      canEdit: device.canEdit,
       description: device.description,
       category: device.category,
       connectivity: device.connectivity,
@@ -487,8 +487,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public ownsDevice(device): boolean {
-    const claim = this.connectionService.currentClaim;
-    return false;
+    return device.canEdit;
   }
 
   public async editDevice(): Promise<void> {
@@ -506,6 +505,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();

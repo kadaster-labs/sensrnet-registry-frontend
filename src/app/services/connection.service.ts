@@ -81,7 +81,7 @@ export class ConnectionService {
     if (!response) {
       await this.logoutRedirect();
     } else {
-      claim = this.getClaimFromToken(response.accessToken);
+      claim = await this.getClaimFromToken(response.accessToken);
       this.claimSubject.next(claim);
     }
 

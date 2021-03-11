@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { Organization } from '../model/organization';
+import {ILegalEntity, LegalEntity} from '../model/legalEntity';
 import { EnvService } from './env.service';
 
 @Injectable({ providedIn: 'root' })
@@ -11,12 +11,12 @@ export class LegalEntityService {
     private http: HttpClient
   ) { }
 
-  public register(organization: Organization) {
-    return this.http.post(`${this.env.apiUrl}/organization`, organization);
+  public register(legalEntity: LegalEntity) {
+    return this.http.post(`${this.env.apiUrl}/legalentity`, legalEntity);
   }
 
   public get() {
-    return this.http.get(`${this.env.apiUrl}/legalentity`);
+    return this.http.get<ILegalEntity>(`${this.env.apiUrl}/legalentity`);
   }
 
   public getOrganizations(name?: string) {
@@ -27,7 +27,7 @@ export class LegalEntityService {
     return this.http.get(`${this.env.apiUrl}/organizations?${params.toString()}`);
   }
 
-  public update(organization: Organization) {
+  public update(organization: LegalEntity) {
     return this.http.put(`${this.env.apiUrl}/organization`, organization);
   }
 

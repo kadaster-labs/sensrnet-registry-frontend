@@ -44,4 +44,5 @@ export interface IDevice {
     type: string,
     coordinates: number[],
   };
+  canEdit?: boolean;
 }

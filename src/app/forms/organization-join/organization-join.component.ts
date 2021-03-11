@@ -2,7 +2,7 @@ import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Organization } from '../../model/organization';
+import { LegalEntity } from '../../model/legalEntity';
 import { UserService } from '../../services/user.service';
 import { ConnectionService } from '../../services/connection.service';
 import { Subject } from 'rxjs';
@@ -38,7 +38,7 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     const organizationPromise = this.organizationService.getOrganizations(name).toPromise();
     const organizations = await organizationPromise;
     if (organizations) {
-      this.organizations = organizations as Organization[];
+      this.organizations = organizations as LegalEntity[];
     } else {
       this.organizations = [];
     }

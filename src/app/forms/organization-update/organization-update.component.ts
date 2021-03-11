@@ -1,5 +1,5 @@
 import { Claim } from '../../model/claim';
-import { Organization } from '../../model/organization';
+import { LegalEntity } from '../../model/legalEntity';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -15,7 +15,7 @@ import { LegalEntityService } from '../../services/legal-entity.service';
 export class OrganizationUpdateComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public submitted = false;
-  public myOrganization: Organization;
+  public myOrganization: LegalEntity;
 
   public subscriptions = [];
 
