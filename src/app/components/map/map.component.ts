@@ -198,7 +198,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     sizeObserver.observe(mapElement);
 
-    this.handleMapEvents();
+    this.addMapEvents();
   }
 
   public initFeatures() {
@@ -448,17 +448,9 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  public handleMapEvents() {
-    // Add listeners once when they not exist yet. This function is called every time the map component is recreated,
-    // for example navigating to other pages and returning here. The map reference lives inside map.service, therefore
-    // check first if there are still listeners present
-    if (!this.map.getListeners('moveend')) {
+  public addMapEvents() {
       this.map.on('moveend', this.onMoveEnd.bind(this));
-    }
-
-    if (!this.map.getListeners('singleclick')) {
       this.map.on('singleclick', this.onSingleClick.bind(this));
-    }
   }
 
   private sensorToFeature(newSensor: ISensor): object {
@@ -800,5 +792,10 @@ export class MapComponent implements OnInit, OnDestroy {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+
+    // this.map actually lives in map.service.ts. If we let it live, all layers and listeners are re-added each time the
+    // map component is recreated. Instead of manually keeping track of it, just kill the map and recreate it next time.
+    // Perhaps not an efficient way, but at least keeps this component more predictable.
+    this.mapService.deleteMap();
   }
 }

@@ -55,12 +55,12 @@ export class MapService {
    */
   getMap(id?): Map {
     id = id || 'map';
-    // Create map if not exist
+
     if (!this.map[id]) {
-      this.map[id] = this.createMap(id);
+      this.map[id] = this.createMap(id); // Create map if not exist
     }
-    // return the map
-    return this.map[id];
+
+    return this.map[id]; // return the map
   }
 
   /** Get all maps
@@ -79,4 +79,16 @@ export class MapService {
     return Object.values(this.map);
   }
 
+  /** Delete a maps
+   * @param id map id
+   */
+  deleteMap(id?): void {
+    id = id || 'map';
+
+    if (!this.map[id]) {
+      return;
+    }
+
+    delete this.map[id];
+  }
 }
