@@ -449,8 +449,16 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public handleMapEvents() {
-    this.map.on('moveend', this.onMoveEnd.bind(this));
-    this.map.on('singleclick', this.onSingleClick.bind(this));
+    // Add listeners once when they not exist yet. This function is called every time the map component is recreated,
+    // for example navigating to other pages and returning here. The map reference lives inside map.service, therefore
+    // check first if there are still listeners present
+    if (!this.map.getListeners('moveend')) {
+      this.map.on('moveend', this.onMoveEnd.bind(this));
+    }
+
+    if (!this.map.getListeners('singleclick')) {
+      this.map.on('singleclick', this.onSingleClick.bind(this));
+    }
   }
 
   private sensorToFeature(newSensor: ISensor): object {
