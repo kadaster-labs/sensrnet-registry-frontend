@@ -286,25 +286,24 @@ export class MapComponent implements OnInit, OnDestroy {
       name: 'Cluster',
       source: this.clusterSource,
       style: styleCluster,
+      zIndex: 1,
     });
 
-    const map = this.map;
-    this.clusterLayer.setZIndex(10);
-    map.addLayer(this.clusterLayer);
+    this.map.addLayer(this.clusterLayer);
 
     this.selectCluster = new SelectCluster({
       pointRadius: 40,
       style: styleCluster,
       featureStyle: styleSelectedCluster,
     });
-    map.addInteraction(this.selectCluster);
+    this.map.addInteraction(this.selectCluster);
 
     this.popupOverlay = new Overlay({
       autoPan: false,
       positioning: OverlayPositioning.BOTTOM_CENTER,
       element: document.getElementById('popup')
     });
-    map.addOverlay(this.popupOverlay);
+    this.map.addOverlay(this.popupOverlay);
 
     this.selectCluster.getFeatures().on(['add'], (event) => {
       this.removeHighlight();
@@ -335,6 +334,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.vectorSource.clear();
     this.vectorSource.addFeatures(features);
+
+    // TODO features do not show without removing and re-adding the layer. Check if there is a better way
+    this.map.removeLayer(this.clusterLayer);
+    this.map.addLayer(this.clusterLayer);
   }
 
   public showOverlay(coordinates) {
@@ -480,8 +483,8 @@ export class MapComponent implements OnInit, OnDestroy {
           }),
         }),
       }),
+      zIndex: 3,
     });
-    this.selectLocationLayer.setZIndex(25);
     this.map.addLayer(this.selectLocationLayer);
   }
 
@@ -500,17 +503,21 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     this.highlightLayer = new VectorLayer({
       source: this.highlightSource,
-      style: [new Style({
-        image: new CircleStyle({
-          radius: 20,
-          stroke: new Stroke({
-            color: '#FF0000',
-            width: 2,
+      style: [
+        new Style({
+          image: new CircleStyle({
+            radius: 20,
+            stroke: new Stroke({
+              color: '#FF0000',
+              width: 2,
+            }),
           }),
-        }),
-      })], opacity: 0.7,
+        })
+      ],
+      opacity: 0.7,
+      zIndex: 2,
     });
-    this.highlightLayer.setZIndex(20);
+
     this.map.addLayer(this.highlightLayer);
   }
 
