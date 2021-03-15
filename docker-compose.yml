@@ -11,6 +11,9 @@ services:
         context: "."
     environment:
       - API_URL=http://localhost:3000/api
+      - OIDC_ISSUER=http://localhost:5556/dex
+      - OIDC_WELL_KNOWN=http://localhost:5556/dex
+      - OIDC_CLIENT_ID=registry-frontend
     ports:
       - 8080:8080
     networks:

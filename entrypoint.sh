@@ -10,24 +10,24 @@ replace_envs () {
   done
 }
 
-replace_envs_oidc_issuer_url () {
+replace_envs_oidc_issuer () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.oidc_issuer_url = ''@window.__env.oidc_issuer_url = '${OIDC_ISSUER_URL}'@" ${dir}env.js
+    sed -i "s@window.__env.oidc_issuer = '/dex'@window.__env.oidc_issuer = '${OIDC_ISSUER}'@" ${dir}env.js
   done
 }
 
 replace_envs_oidc_well_known () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.oidc_well_known = ''@window.__env.oidc_well_known = '${OIDC_WELL_KNOWN}'@" ${dir}env.js
+    sed -i "s@window.__env.oidc_well_known = '/dex'@window.__env.oidc_well_known = '${OIDC_WELL_KNOWN}'@" ${dir}env.js
   done
 }
 
 replace_envs_oidc_client_id () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.oidc_client_id = ''@window.__env.oidc_client_id = '${OIDC_CLIENT_ID}'@" ${dir}env.js
+    sed -i "s@window.__env.oidc_client_id = 'registry-frontend'@window.__env.oidc_client_id = '${OIDC_CLIENT_ID}'@" ${dir}env.js
   done
 }
 
@@ -35,8 +35,8 @@ if [[ ! -z "$API_URL" ]]; then
   replace_envs
 fi
 
-if [[ ! -z "$OIDC_ISSUER_URL" ]]; then
-  replace_envs_oidc_issuer_url
+if [[ ! -z "$OIDC_ISSUER" ]]; then
+  replace_envs_oidc_issuer
 fi
 
 if [[ ! -z "$OIDC_WELL_KNOWN" ]]; then

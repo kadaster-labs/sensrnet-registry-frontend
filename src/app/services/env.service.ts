@@ -7,7 +7,7 @@ export class EnvService {
   public apiUrl = '';
 
   // issuer endpoint
-  public oidc_issuer_url = '';
+  public oidc_issuer = '';
 
   // well known endpoint (in case it is at non default location)
   public oidc_well_known = '';
