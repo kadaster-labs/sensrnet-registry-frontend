@@ -13,4 +13,4 @@ extension. The end-user is therefore logged in within the Angular SPA. The
 authenticated user gets an id_token from the OpenID Connect provider. This token
 can then be consumed by our API.
 
-![Overview](./images/overview.PNG)
+![Overview](./overview.PNG)
