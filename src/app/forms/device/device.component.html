@@ -8,9 +8,8 @@
             <div class="row">
                 <div class="col-6">
                     <h3 *ngIf="activeStepIndex === 0" i18n>Device Properties</h3>
-                    <h3 *ngIf="activeStepIndex === 1" i18n>Optional Sensor Properties</h3>
-                    <h3 *ngIf="activeStepIndex === 2" i18n>Data Streams</h3>
-                    <h3 *ngIf="activeStepIndex === 3" i18n>Sensor Location</h3>
+                    <h3 *ngIf="activeStepIndex === 1" i18n>Sensors</h3>
+                    <h3 *ngIf="activeStepIndex === 2" i18n>Datastreams</h3>
                 </div>
                 <div class="col-6 mt-2 text-right">
                     <span *ngFor="let _ of [].constructor(getStepCount()); let i = index" [ngClass]="getStepClasses(i)" (click)="goToStep(i)" class="step pointer"></span>
@@ -47,50 +46,28 @@
                         <label for="locationDescription"><span i18n>Location description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                         <textarea class="form-control" type="text" formControlName="locationDescription" placeholder="Description of the device location" i18n-placeholder></textarea>
                     </div>
+                    <hr class="my-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    <button type="button" class="btn btn-primary btn-lg ml-2" (click)="activeStepIndex = activeStepIndex + 1" *ngIf="deviceId">Next</button>
                 </div>
-                <hr class="my-2">
-                <button type="submit" class="btn btn-primary btn-lg float-right" i18n>Save</button>
             </form>
-<!--            <form [formGroup]="form" (ngSubmit)="submit()">-->
-<!--                <div [ngStyle]="{display: activeStepIndex === 1 ? 'block' : 'none'}">-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="aim"><span i18n>Aim</span><span class="font-italic text-muted" i18n> - Optional</span></label>-->
-<!--                        <input type="text" class="form-control" formControlName="aim" placeholder="Aim of the sensor" i18n-placeholder>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="manufacturer"><span i18n>Manufacturer</span><span class="font-italic text-muted" i18n> - Optional</span></label>-->
-<!--                        <input class="form-control" type="text" formControlName="manufacturer"-->
-<!--                            placeholder="Enter name of the manufacturer" i18n-placeholder>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="documentationUrl"><span i18n>Documentation URL</span><span class="font-italic text-muted" i18n> - Optional</span></label>-->
-<!--                        <input class="form-control" type="url" formControlName="documentationUrl"-->
-<!--                            placeholder="Enter URL of documentation"-->
-<!--                            [ngClass]="{ 'is-invalid': submitted && f.documentationUrl.errors }" i18n-placeholder>-->
-<!--                        <div *ngIf="(f.documentationUrl.dirty || f.documentationUrl.touched || submitted) && f.documentationUrl.errors" class="invalid-input">-->
-<!--                            <span class="required-text" *ngIf="f.documentationUrl.errors.pattern" i18n>Not a valid URL</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <app-sensor-theme formControlName="theme" [submitted]="submitted"></app-sensor-theme>-->
-<!--                </div>-->
-<!--                <div [ngStyle]="{display: activeStepIndex === 2 ? 'block' : 'none'}">-->
-<!--                    <app-datastream formArrayName="dataStreams" [parentForm]="form" [submitted]="submitted"></app-datastream>-->
-<!--                </div>-->
-<!--                <div [ngStyle]="{display: activeStepIndex === 3 ? 'block' : 'none'}">-->
-
-<!--                </div>-->
-<!--                <hr class="my-5">-->
-<!--                <button type="button" class="btn btn-primary btn-lg mr-2"-->
-<!--                        [disabled]="!activeStepIndex"-->
-<!--                        (click)="goToStep(activeStepIndex - 1)" i18n>Previous</button>-->
-<!--                <button type="submit" class="btn btn-primary btn-lg"-->
-<!--                        *ngIf="activeStepIndex === getStepCount() - 1 && canSubmitSensor" i18n>Save</button>-->
-<!--                <button type="button" class="btn btn-primary btn-lg"-->
-<!--                        (click)="goToStep(activeStepIndex + 1)" i18n>Save</button>-->
-<!--            </form>-->
+            <form [formGroup]="sensorForm" (ngSubmit)="submitSensors()">
+                <div [ngStyle]="{display: activeStepIndex === 1 ? 'block' : 'none'}">
+                    <app-sensor formArrayName="sensors" [parentForm]="sensorForm" [submitted]="submitted"></app-sensor>
+                    <hr class="my-2">
+                    <button type="submit" class="btn btn-primary btn-lg float-right" i18n>Save</button>
+                </div>
+            </form>
+            <form [formGroup]="sensorForm" (ngSubmit)="submitSensors()">
+                <div [ngStyle]="{display: activeStepIndex === 2 ? 'block' : 'none'}">
+                    <app-datastream formArrayName="sensors" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
+                    <hr class="my-2">
+                    <button type="submit" class="btn btn-primary btn-lg float-right" i18n>Save</button>
+                </div>
+            </form>
         </div>
         <div *ngIf="activeStepIndex === 0" class="col-5" style="height: 85vh; max-height: 85vh">
-            <app-map searchBarHeight="2rem" [clearLocationHighLight]="!sensor"></app-map>
+            <app-map searchBarHeight="2rem" [clearLocationHighLight]="!deviceId"></app-map>
         </div>
     </div>
 </div>

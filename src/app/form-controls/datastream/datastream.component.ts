@@ -26,17 +26,17 @@ export class DataStreamComponent implements ControlValueAccessor {
   createDataStream(): FormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required],
-      reason: '',
       description: '',
       observedProperty: '',
+      theme: [],
+      dataQuality: '',
+      isActive: true,
       isPublic: true,
       isOpenData: true,
+      containsPersonalInfoData: true,
       isReusable: true,
-      documentationUrl: ['', [Validators.pattern(this.urlRegex)]],
+      documentation: ['', [Validators.pattern(this.urlRegex)]],
       dataLink: ['', [Validators.pattern(this.urlRegex)]],
-      unitOfMeasurement: '',
-      dataFrequency: 0,
-      dataQuality: 0,
     });
   }
 

@@ -29,7 +29,7 @@ import { SensorsComponent } from './forms/sensors/sensors.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
 import { OrganizationComponent } from './components/organization/organization.component';
-import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
+import { ThemeComponent } from './form-controls/theme/theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { OrganizationJoinComponent } from './forms/organization-join/organization-join.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
@@ -37,6 +37,7 @@ import { OrganizationCreateComponent } from './forms/organization-create/organiz
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
+import {SensorComponent} from './form-controls/sensor/sensor.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     LoginComponent,
     RegisterComponent,
     DeviceComponent,
-    SensorThemeComponent,
+    ThemeComponent,
     SensorLocationComponent,
     SensorTypeComponent,
     OrganizationUpdateComponent,
@@ -57,6 +58,7 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     MapComponent,
     SensorsComponent,
     DataStreamComponent,
+    SensorComponent,
     ModalComponent,
     OrganizationComponent,
     OrganizationJoinComponent,

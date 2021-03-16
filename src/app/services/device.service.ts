@@ -23,6 +23,16 @@ export interface IRegisterDeviceBody {
   location: IRegisterLocationBody;
 }
 
+export interface IRegisterSensorBody {
+  _id?: string;
+  name: string;
+  description?: string;
+  type?: string;
+  manufacturer?: string;
+  supplier?: string;
+  documentation?: string;
+}
+
 export interface IDatastreamBody {
   name: string;
 
@@ -37,24 +47,6 @@ export interface IDatastreamBody {
   dataLink?: string;
   dataFrequency?: number;
   dataQuality?: number;
-}
-
-export interface IRegisterSensorBody {
-  category: string;
-  typeName: string;
-  location: number[];
-  dataStreams: IDatastreamBody[];
-
-  name?: string;
-  aim?: string;
-  baseObjectId?: string;
-  description?: string;
-  manufacturer?: string;
-  active?: boolean;
-  observationArea?: object;
-  documentationUrl?: string;
-  theme?: SensorTheme;
-  typeDetails?: object;
 }
 
 export interface IRegisterSensorResponseBody {
@@ -103,7 +95,7 @@ export class DeviceService {
     // This way multiple calls to subscribe do not create new observables.
     if (!this.deviceLocated$ || !this.deviceUpdated$ || !this.deviceRemoved$) {
       const deviceUpdated$ = this.connectionService.subscribeTo(EventType.DeviceUpdated);
-      const deviceDeleted$ = this.connectionService.subscribeTo(EventType.DeviceDeleted);
+      const deviceRemoved$ = this.connectionService.subscribeTo(EventType.DeviceRemoved);
       const deviceLocated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
 
       this.deviceLocated$ = new Observable((observer: Subscriber<IDevice>) => {
@@ -120,7 +112,7 @@ export class DeviceService {
       });
 
       this.deviceRemoved$ = new Observable((observer: Subscriber<IDevice>) => {
-        deviceDeleted$.subscribe((sensor: IDevice) => {
+        deviceRemoved$.subscribe((sensor: IDevice) => {
           observer.next(sensor);
         });
       });
@@ -131,7 +123,11 @@ export class DeviceService {
 
   /** Register device */
   public register(device: IRegisterDeviceBody) {
-    return this.http.post(`${this.env.apiUrl}/device`, device).toPromise();
+    return this.http.post(`${this.env.apiUrl}/device`, device);
+  }
+
+  public registerSensor(deviceId: string, sensor: IRegisterSensorBody) {
+    return this.http.post(`${this.env.apiUrl}/device/${deviceId}/sensor`, sensor);
   }
 
   /** Retrieve sensors */
@@ -244,11 +240,11 @@ export class DeviceService {
 
   /** Unregister a sensor */
   public unregister(id: string) {
-    return this.http.delete(`${this.env.apiUrl}/sensor/${id}`).toPromise();
+    return this.http.delete(`${this.env.apiUrl}/device/${id}`).toPromise();
   }
 
   /** Retrieve a single device */
   public get(id: string) {
-    return this.http.get(`${this.env.apiUrl}/device/${id}`).toPromise();
+    return this.http.get(`${this.env.apiUrl}/device/${id}`);
   }
 }

@@ -295,7 +295,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public deviceDeleted(deletedDevice: IDevice) {
     this.locationService.hideLocationHighlight();
-
     const device = this.vectorSource.getFeatureById(deletedDevice._id);
     if (device) {  // In case the sensor is currently visible on the map: update map.
       if (this.selectedDevice && this.selectedDevice._id === deletedDevice._id) {  // In case the sensor is selected.
