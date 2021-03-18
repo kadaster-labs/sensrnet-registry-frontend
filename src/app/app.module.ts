@@ -25,7 +25,7 @@ import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { SensorsComponent } from './forms/sensors/sensors.component';
+import { DevicesComponent } from './forms/devices/devices.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
 import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
 import { OrganizationComponent } from './components/organization/organization.component';
@@ -56,7 +56,7 @@ import {SensorComponent} from './form-controls/sensor/sensor.component';
     NavBarComponent,
     SidebarComponent,
     MapComponent,
-    SensorsComponent,
+    DevicesComponent,
     DataStreamComponent,
     SensorComponent,
     ModalComponent,

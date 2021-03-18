@@ -4,7 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { ViewerComponent } from './viewer/viewer.component';
 import { DeviceComponent } from './forms/device/device.component';
 import { RegisterComponent } from './register/register.component';
-import { SensorsComponent } from './forms/sensors/sensors.component';
+import { DevicesComponent } from './forms/devices/devices.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 
 const routes: Routes = [
@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'device', component: DeviceComponent },
   { path: 'device/:id', component: DeviceComponent },
 
-  { path: 'devices', component: SensorsComponent },
+  { path: 'devices', component: DevicesComponent },
 
   // otherwise redirect to viewer
   { path: '**', redirectTo: '' },

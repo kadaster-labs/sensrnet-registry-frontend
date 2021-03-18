@@ -4,7 +4,7 @@ export enum SensorTheme {
     Waste = 'Waste',
     Safety = 'Safety',
     Mobility = 'Mobility',
-    SoilandUnderground = 'SoilandUnderground',
+    SoilAndUnderground = 'SoilAndUnderground',
     Other = 'Other',
 }
 
@@ -14,6 +14,6 @@ export const SensorThemeTranslation = {
   Waste: $localize`:@@theme.waste:Waste`,
   Safety: $localize`:@@theme.safety:Safety`,
   Mobility: $localize`:@@theme.mobility:Mobility`,
-  SoilandUnderground: $localize`:@@theme.soil:Soil and Underground`,
+  SoilAndUnderground: $localize`:@@theme.soil:Soil and Underground`,
   Other: $localize`:@@theme.other:Other`,
 };

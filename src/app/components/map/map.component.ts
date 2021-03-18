@@ -48,7 +48,6 @@ export class MapComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private deviceService: DeviceService,
     private locationService: LocationService,
-    private connectionService: ConnectionService,
   ) {}
 
   public mapName = 'srn';

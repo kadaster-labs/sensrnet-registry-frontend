@@ -47,22 +47,25 @@
                         <textarea class="form-control" type="text" formControlName="locationDescription" placeholder="Description of the device location" i18n-placeholder></textarea>
                     </div>
                     <hr class="my-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                    <button type="button" class="btn btn-primary btn-lg ml-2" (click)="activeStepIndex = activeStepIndex + 1" *ngIf="deviceId">Next</button>
+                    <button type="submit" class="btn btn-primary btn-lg mr-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)">Next</button>
                 </div>
             </form>
             <form [formGroup]="sensorForm" (ngSubmit)="submitSensors()">
                 <div [ngStyle]="{display: activeStepIndex === 1 ? 'block' : 'none'}">
-                    <app-sensor formArrayName="sensors" [parentForm]="sensorForm" [submitted]="submitted"></app-sensor>
+                    <app-sensor formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-sensor>
                     <hr class="my-2">
-                    <button type="submit" class="btn btn-primary btn-lg float-right" i18n>Save</button>
+                    <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg mr-2" (click)="goToStep(activeStepIndex - 1)">Previous</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)">Next</button>
                 </div>
             </form>
-            <form [formGroup]="sensorForm" (ngSubmit)="submitSensors()">
+            <form [formGroup]="sensorForm" (ngSubmit)="submitDataStreams()">
                 <div [ngStyle]="{display: activeStepIndex === 2 ? 'block' : 'none'}">
-                    <app-datastream formArrayName="sensors" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
+                    <app-datastream formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
                     <hr class="my-2">
-                    <button type="submit" class="btn btn-primary btn-lg float-right" i18n>Save</button>
+                    <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex - 1)">Previous</button>
                 </div>
             </form>
         </div>

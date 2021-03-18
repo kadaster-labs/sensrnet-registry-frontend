@@ -14,6 +14,12 @@ export interface IRegisterLocationBody {
   description?: string;
 }
 
+export interface IUpdateLocationBody {
+  location?: number[];
+  name?: string;
+  description?: string;
+}
+
 export interface IRegisterDeviceBody {
   _id?: string;
   name: string;
@@ -21,6 +27,15 @@ export interface IRegisterDeviceBody {
   category?: string;
   connectivity?: string;
   location: IRegisterLocationBody;
+}
+
+export interface IUpdateDeviceBody {
+  _id?: string;
+  name?: string;
+  description?: string;
+  category?: string;
+  connectivity?: string;
+  location: IUpdateLocationBody;
 }
 
 export interface IRegisterSensorBody {
@@ -33,50 +48,48 @@ export interface IRegisterSensorBody {
   documentation?: string;
 }
 
-export interface IDatastreamBody {
-  name: string;
-
-  reason?: string;
+export interface IUpdateSensorBody {
+  _id?: string;
+  name?: string;
   description?: string;
-  observedProperty?: string;
-  unitOfMeasurement?: string;
+  type?: string;
+  manufacturer?: string;
+  supplier?: string;
+  documentation?: string;
+}
+
+export interface IRegisterDataStreamBody {
+  _id?: string;
+  name: string;
+  description?: string;
+  unitOfMeasurement?: Record<string, any>;
+  observedArea?: Record<string, any>;
+  theme?: string[];
+  dataQuality?: string;
+  isActive?: boolean;
   isPublic?: boolean;
   isOpenData?: boolean;
+  containsPersonalInfoData?: boolean;
   isReusable?: boolean;
-  documentationUrl?: string;
+  documentation?: string;
   dataLink?: string;
-  dataFrequency?: number;
-  dataQuality?: number;
 }
 
-export interface IRegisterSensorResponseBody {
-  sensorId: string;
-}
-
-export interface IUpdateSensorBody {
+export interface IUpdateDataStreamBody {
+  _id?: string;
   name?: string;
-  aim?: string;
   description?: string;
-  manufacturer?: string;
-  observationArea?: object;
-  documentationUrl?: string;
-  theme?: SensorTheme[];
-  category?: string;
-  typeName?: string;
-  typeDetails?: object;
-}
-
-export interface IUpdateLocationBody {
-  location: number[];
-  baseObjectId?: string;
-}
-
-export interface ITransferOwnershipBody {
-  newOrganizationId: string;
-}
-
-export interface IShareOwnershipBody {
-  organizationId: string;
+  unitOfMeasurement?: Record<string, any>;
+  observedArea?: Record<string, any>;
+  theme?: string[];
+  dataQuality?: string;
+  isActive?: boolean;
+  isPublic?: boolean;
+  isOpenData?: boolean;
+  containsPersonalInfoData?: boolean;
+  isReusable?: boolean;
+  documentation?: string;
+  dataLink?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -126,8 +139,34 @@ export class DeviceService {
     return this.http.post(`${this.env.apiUrl}/device`, device);
   }
 
+  public update(deviceId: string, device: IUpdateDeviceBody) {
+    return this.http.put(`${this.env.apiUrl}/device/${deviceId}`, device);
+  }
+
   public registerSensor(deviceId: string, sensor: IRegisterSensorBody) {
     return this.http.post(`${this.env.apiUrl}/device/${deviceId}/sensor`, sensor);
+  }
+
+  public updateSensor(deviceId: string, sensorId: string, sensor: IUpdateSensorBody) {
+    return this.http.put(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}`, sensor);
+  }
+
+  public removeSensor(deviceId: string, sensorId: string) {
+    return this.http.delete(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}`);
+  }
+
+  public registerDataStream(deviceId: string, sensorId: string, dataStream: IRegisterDataStreamBody) {
+    return this.http.post(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream`, dataStream);
+  }
+
+  public updateDataStream(deviceId: string, sensorId: string, dataStreamId: string,
+                          dataStream: IUpdateDataStreamBody) {
+    return this.http.put(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}`,
+      dataStream);
+  }
+
+  public removeDataStream(deviceId: string, sensorId: string, dataStreamId: string) {
+    return this.http.delete(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}`);
   }
 
   /** Retrieve sensors */
@@ -174,38 +213,26 @@ export class DeviceService {
     return await devicePromise as IDevice[];
   }
 
-  public async getMySensors() {
-    const claim = this.connectionService.currentClaim;
+  public async getMyDevices(legalEntityId, pageIndex, pageSize) {
+    let devices;
+    if (legalEntityId) {
+      let params = new HttpParams();
+      params = params.set('pageSize', pageSize);
+      params = params.set('pageIndex', pageIndex);
+      params = params.set('legalEntityId', legalEntityId);
 
-    let sensors;
-    if (claim) {
-      const params = new HttpParams();
-      // params = params.set('organizationId', claim.organizationId);
-
-      const url = `${this.env.apiUrl}/sensor?${params.toString()}`;
-      const sensorPromise = this.http.get(url).toPromise();
-
-      sensors = await sensorPromise as ISensor[];
+      const url = `${this.env.apiUrl}/device?${params.toString()}`;
+      devices = await this.http.get(url).toPromise() as ISensor[];
     } else {
-      sensors = [];
+      devices = [];
     }
 
-    return sensors;
+    return devices;
   }
 
   /** Update sensor details */
   public updateDetails(sensorId: string, details: IUpdateSensorBody) {
     return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/details`, details).toPromise();
-  }
-
-  /** Transfer sensor ownership */
-  public transferOwnership(sensorId: string, body: ITransferOwnershipBody) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/transfer`, body).toPromise();
-  }
-
-  /** Share sensor ownership */
-  public shareOwnership(sensorId: string, body: IShareOwnershipBody) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/share`, body).toPromise();
   }
 
   /** Update location of a sensor */

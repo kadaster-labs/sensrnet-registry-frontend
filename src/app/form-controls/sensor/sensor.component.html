@@ -3,7 +3,7 @@
         <span i18n>Sensors</span><span class="font-italic text-muted" i18n> - Optional</span><br>
         <button type="button" class="btn btn-outline-secondary mt-2" (click)="addSensor()" i18n>Add Sensor</button>
     </div>
-    <div formArrayName="sensors" *ngFor="let sensor of parentForm.get('sensors')['controls']; let i = index;" class="col-12 mt-3 form-group">
+    <div formArrayName="sensors" *ngFor="let sensor of parentForm.get('sensors')['controls']; let i = index;" class="col-6 mt-3 form-group">
         <div class="row py-3 bg-light border rounded" formGroupName="{{i}}">
             <div class="col-12">
                 <label i18n>Name</label>
@@ -55,9 +55,6 @@
                     <span class="required-text" *ngIf="getSensorElement(i, 'documentation').errors.pattern" i18n>Not a valid URL</span>
                 </div>
             </div>
-<!--            <div class="col-12">-->
-<!--                <app-datastream formArrayName="dataStreams" [parentForm]="getSensorElementForm(i)" [submitted]="submitted"></app-datastream>-->
-<!--            </div>-->
         </div>
     </div>
 </div>

@@ -45,5 +45,6 @@ export interface IDevice {
     coordinates: number[],
   };
   sensors?: ISensor[];
+  dataStreams?: IDataStream[];
   canEdit?: boolean;
 }
