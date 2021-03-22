@@ -1,23 +1,22 @@
-import { Claim } from '../../model/claim';
-import { LegalEntity } from '../../model/legalEntity';
+import {IContactDetails, ILegalEntity} from '../../model/legalEntity';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConnectionService } from '../../services/connection.service';
-import { LegalEntityService } from '../../services/legal-entity.service';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import {UserUpdateBody} from '../../model/bodies/user-update';
+import {LegalEntityService} from '../../services/legal-entity.service';
 
 @Component({
   selector: 'app-organization-update',
   templateUrl: './organization-update.component.html',
   styleUrls: ['./organization-update.component.scss']
 })
-export class OrganizationUpdateComponent implements OnInit, OnDestroy {
+export class OrganizationUpdateComponent implements OnInit {
   public form: FormGroup;
   public submitted = false;
-  public myOrganization: LegalEntity;
 
-  public subscriptions = [];
+  @Input() public legalEntity: ILegalEntity;
+  @Output() updateLegalEntity = new EventEmitter<boolean>();
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -27,8 +26,7 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
-    private readonly connectionService: ConnectionService,
-    private readonly organizationService: LegalEntityService,
+    private readonly legalEntityService: LegalEntityService,
   ) {}
 
   get f() {
@@ -36,51 +34,34 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    let contactName;
+    let contactPhone;
+    let contactEmail;
+    if (this.legalEntity && this.legalEntity.contactDetails && this.legalEntity.contactDetails.length) {
+      if (this.legalEntity.contactDetails[0].name) {
+        contactName = this.legalEntity.contactDetails[0].name;
+      }
+      if (this.legalEntity.contactDetails[0].phone) {
+        contactPhone = this.legalEntity.contactDetails[0].phone;
+      }
+      if (this.legalEntity.contactDetails[0].email) {
+        contactEmail = this.legalEntity.contactDetails[0].email;
+      }
+    }
     this.form = this.formBuilder.group({
-      website: [this.myOrganization ? this.myOrganization.website : '', [Validators.pattern(this.urlRegex)]],
-      contactName: [this.myOrganization ? this.myOrganization.contactName : ''],
-      contactPhone: [this.myOrganization ? this.myOrganization.contactPhone : ''],
-      contactEmail: [this.myOrganization ? this.myOrganization.contactEmail : '', [Validators.email]],
+      name: [this.legalEntity ? this.legalEntity.name : null, [Validators.required]],
+      website: [this.legalEntity ? this.legalEntity.website : null, [Validators.pattern(this.urlRegex)]],
+      contactName: [contactName],
+      contactPhone: [contactPhone],
+      contactEmail: [contactEmail, [Validators.email]],
     });
-
-    this.initFormFields();
-  }
-
-  initFormFields(): void {
-    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      if (claim) {
-        const organizationPromise = this.organizationService.get().toPromise();
-        try {
-          this.myOrganization = await organizationPromise;
-        } catch {
-          this.myOrganization = null;
-        }
-      } else {
-        this.myOrganization = null;
-      }
-
-      if (this.myOrganization) {
-        this.form.setValue({
-          website: this.myOrganization.website,
-          contactName: this.myOrganization.contactName,
-          contactPhone: this.myOrganization.contactPhone,
-          contactEmail: this.myOrganization.contactEmail,
-        });
-      } else {
-        this.form.setValue({
-          website: '',
-          contactName: '',
-          contactPhone: '',
-          contactEmail: '',
-        });
-      }
-    }));
   }
 
   public async leave() {
+    const userUpdate: UserUpdateBody = {legalEntityId: null};
     try {
-      await this.userService.update({organization: null}).toPromise();
-      await this.connectionService.refreshClaim();
+      await this.userService.update(userUpdate).toPromise();
+      this.updateLegalEntity.emit();
     } catch (error) {
       this.alertService.error(error.message);
     }
@@ -89,8 +70,36 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
   public async submit() {
     this.submitted = true;
     if (!this.form.invalid) {
+      const legalEntityUpdate: Record<string, any> = {};
+      if (this.form.controls.name.dirty) {
+        legalEntityUpdate.name = this.form.value.name;
+      }
+      if (this.form.controls.website.dirty) {
+        legalEntityUpdate.website = this.form.value.website;
+      }
+
+      const contactDetailsUpdate: Record<string, any> = {};
+      if (this.form.controls.contactName.dirty) {
+        contactDetailsUpdate.name = this.form.value.contactName;
+      }
+      if (this.form.controls.contactPhone.dirty) {
+        contactDetailsUpdate.phone = this.form.value.contactPhone;
+      }
+      if (this.form.controls.contactEmail.dirty) {
+        contactDetailsUpdate.email = this.form.value.contactEmail;
+      }
+
       try {
-        await this.organizationService.update(this.form.value).toPromise();
+        if (Object.keys(legalEntityUpdate).length) {
+          await this.legalEntityService.update(legalEntityUpdate as ILegalEntity).toPromise();
+        }
+        if (Object.keys(contactDetailsUpdate).length) {
+          let contactDetailsId;
+          if (this.legalEntity && this.legalEntity.contactDetails && this.legalEntity.contactDetails.length) {
+            contactDetailsId = this.legalEntity.contactDetails[0]._id;
+            await this.legalEntityService.updateContactDetails(contactDetailsId, contactDetailsUpdate as IContactDetails).toPromise();
+          }
+        }
 
         this.alertService.success(this.updateSuccessMessage, false, 4000);
       } catch (error) {
@@ -98,9 +107,5 @@ export class OrganizationUpdateComponent implements OnInit, OnDestroy {
       }
       this.submitted = false;
     }
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }

@@ -1,6 +1,5 @@
-import { Claim } from '../../model/claim';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConnectionService } from '../../services/connection.service';
+import { Component, OnInit } from '@angular/core';
+import { LegalEntityService } from '../../services/legal-entity.service';
 
 enum UpdateView {
   Join = 0,
@@ -12,28 +11,21 @@ enum UpdateView {
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit, OnDestroy {
-  public organizationId;
-  public subscriptions = [];
+export class OrganizationComponent implements OnInit {
+  public legalEntity;
 
   public UpdateViewEnum = UpdateView;
   public activeUpdateView = this.UpdateViewEnum.Join;
 
   constructor(
-    private readonly connectionService: ConnectionService,
+    private legalEntityService: LegalEntityService,
   ) {}
 
-  ngOnInit(): void {
-    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claim: Claim) => {
-      // if (claim && claim.organizationId) {
-      //   this.organizationId = claim.organizationId;
-      // } else {
-      //   this.organizationId = null;
-      // }
-    }));
+  async getLegalEntity() {
+    this.legalEntity = await this.legalEntityService.get().toPromise();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+  async ngOnInit(): Promise<void> {
+    await this.getLegalEntity();
   }
 }

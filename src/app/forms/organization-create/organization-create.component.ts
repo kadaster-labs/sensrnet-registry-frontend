@@ -1,10 +1,10 @@
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { OrganizationId } from '../../model/bodies/organization-id';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import { LegalEntityId } from '../../model/bodies/legal-entity-id';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConnectionService } from '../../services/connection.service';
-import { LegalEntityService } from '../../services/legal-entity.service';
+import {IRegisterLegalEntityBody, LegalEntityService} from '../../services/legal-entity.service';
+import {IContactDetails} from '../../model/legalEntity';
 
 @Component({
   selector: 'app-organization-create',
@@ -12,6 +12,8 @@ import { LegalEntityService } from '../../services/legal-entity.service';
   styleUrls: ['./organization-create.component.scss']
 })
 export class OrganizationCreateComponent implements OnInit, OnDestroy {
+  @Output() updateLegalEntity = new EventEmitter<boolean>();
+
   public form: FormGroup;
   public submitted = false;
 
@@ -25,8 +27,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
-    private readonly connectionService: ConnectionService,
-    private readonly organizationService: LegalEntityService,
+    private readonly legalEntityService: LegalEntityService,
   ) {}
 
   get f() {
@@ -37,11 +38,21 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.form.valid) {
       try {
-        const result = await this.organizationService.register(this.form.value).toPromise() as OrganizationId;
+        const contactDetails: IContactDetails = {
+          name: this.form.value.contactName,
+          email: this.form.value.contactEmail,
+          phone: this.form.value.contactPhone,
+        };
+        const legalEntity: IRegisterLegalEntityBody = {
+          name: this.form.value.name,
+          website: this.form.value.website,
+          contactDetails,
+        };
 
-        if (result && result.organizationId) {
-          await this.userService.update({organization: result.organizationId}).toPromise();
-          await this.connectionService.refreshClaim();
+        const result = await this.legalEntityService.register(legalEntity).toPromise() as LegalEntityId;
+        if (result && result.legalEntityId) {
+          await this.userService.update({legalEntityId: result.legalEntityId}).toPromise();
+          this.updateLegalEntity.emit();
         }
       } catch {
         this.alertService.error(this.registerFailedMessage);
@@ -61,6 +72,6 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

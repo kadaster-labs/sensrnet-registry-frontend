@@ -1,4 +1,11 @@
 <div [formGroup]="parentForm" class="form-group">
+    <label for="name" i18n>Name</label>
+    <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('name').errors }" />
+    <div *ngIf="submitted && f.get('name').errors" class="invalid-feedback">
+        <div class="required-text" *ngIf="f.get('name').errors.required" i18n>Name is required</div>
+    </div>
+</div>
+<div [formGroup]="parentForm" class="form-group">
     <label for="website"><span i18n>Website</span><span class="font-italic text-muted" i18n> - Optional</span></label>
     <input type="text" formControlName="website" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('website').errors }" />
     <div *ngIf="submitted && f.get('website').errors" class="invalid-feedback">
@@ -6,19 +13,19 @@
     </div>
 </div>
 <div [formGroup]="parentForm" class="form-group">
-    <label for="contactName"><span i18n>Contact Person Name</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+    <label for="contactName"><span i18n>Contact Department Name</span><span class="font-italic text-muted" i18n> - Optional</span></label>
     <input type="text" formControlName="contactName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactName').errors }" />
     <div *ngIf="submitted && f.get('contactName').errors" class="invalid-feedback"></div>
 </div>
 <div [formGroup]="parentForm" class="form-group">
-    <label for="contactEmail"><span i18n>Contact Person Email</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+    <label for="contactEmail"><span i18n>Contact Department Email</span><span class="font-italic text-muted" i18n> - Optional</span></label>
     <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactEmail').errors }" />
     <div *ngIf="submitted && f.get('contactEmail').errors" class="invalid-feedback">
-        <div class="required-text" *ngIf="f.get('contactEmail').errors.email" i18n>Public e-mail must be a valid e-mail address</div>
+        <div class="required-text" *ngIf="f.get('contactEmail').errors.email" i18n>Contact e-mail must be a valid e-mail address</div>
     </div>
 </div>
 <div [formGroup]="parentForm" class="form-group">
-    <label for="contactPhone"><span i18n>Contact Person Phone</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+    <label for="contactPhone"><span i18n>Contact Department Phone</span><span class="font-italic text-muted" i18n> - Optional</span></label>
     <input type="text" formControlName="contactPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactPhone').errors }" />
     <div *ngIf="submitted && f.get('contactPhone').errors" class="invalid-feedback">
     </div>
