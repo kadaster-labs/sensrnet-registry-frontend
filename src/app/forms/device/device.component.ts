@@ -31,8 +31,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public formControlSteps: Array<Array<any>>;
 
   public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
-  public saveSuccessMessage = $localize`:@@register.success:Saved!`;
-  public saveFailedMessage = $localize`:@@register.failure:An error has occurred during save:`;
+  public saveSuccessMessage = $localize`:@@device.register.success:Saved!`;
+  public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
   public saveTitleString = $localize`:@@step.confirm.title:Save the step!`;
   public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
