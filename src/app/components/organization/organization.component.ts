@@ -6,6 +6,11 @@ enum UpdateView {
   Create = 1,
 }
 
+enum OrganizationView {
+  View = 0,
+  Users = 1,
+}
+
 @Component({
   selector: 'app-organization',
   templateUrl: './organization.component.html',
@@ -15,7 +20,10 @@ export class OrganizationComponent implements OnInit {
   public legalEntity;
 
   public UpdateViewEnum = UpdateView;
+  public OrganizationViewEnum = OrganizationView;
+
   public activeUpdateView = this.UpdateViewEnum.Join;
+  public activeOrganizationView = this.OrganizationViewEnum.View;
 
   constructor(
     private legalEntityService: LegalEntityService,

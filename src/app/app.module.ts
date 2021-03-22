@@ -38,6 +38,7 @@ import { OrganizationUpdateComponent } from './forms/organization-update/organiz
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
 import {SensorComponent} from './form-controls/sensor/sensor.component';
+import {OrganizationUsersComponent} from "./forms/organization-users/organization-users.component";
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import {SensorComponent} from './form-controls/sensor/sensor.component';
     DevicesComponent,
     DataStreamComponent,
     SensorComponent,
+    OrganizationUsersComponent,
     ModalComponent,
     OrganizationComponent,
     OrganizationJoinComponent,

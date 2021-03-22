@@ -1,18 +1,16 @@
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDevice } from '../../model/bodies/device-model';
+import { ModalService } from '../../services/modal.service';
 import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocationService } from '../../services/location.service';
 import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
-import {
-  DeviceService,
-  IRegisterDataStreamBody,
-  IRegisterDeviceBody,
-  IRegisterSensorBody, IUpdateDataStreamBody, IUpdateDeviceBody, IUpdateSensorBody,
+import { DeviceService, IRegisterDataStreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDataStreamBody,
+  IUpdateDeviceBody, IUpdateSensorBody,
 } from '../../services/device.service';
-import {ModalService} from '../../services/modal.service';
+
 
 @Component({
   selector: 'app-device',
@@ -41,10 +39,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly router: Router,
-    private modalService: ModalService,
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly alertService: AlertService,
+    private readonly modalService: ModalService,
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
   ) {}
@@ -58,7 +56,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
   }
 
   public async goToStep(step: number): Promise<void> {
-    if (this.formControlSteps[this.activeStepIndex].some((f) => f.invalid)) {
+    if (this.formControlSteps[this.activeStepIndex].some(x => x.invalid)) {
       this.submitted = true;
     } else {
       this.submitted = false;
@@ -68,7 +66,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (this.deviceId) {
             this.activeStepIndex = step;
           } else {
-            this.modalService.confirm(this.saveTitleString, this.saveBodyString).then();
+            try {
+              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
+            } catch (e) {
+              console.log('dismissed modal');
+            }
           }
         } else if (this.activeStepIndex === 1) {
           const sensors = this.sensorForm.get('sensors') as FormArray;
@@ -77,7 +79,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (allRegistered) {
             this.activeStepIndex = step;
           } else {
-            this.modalService.confirm(this.saveTitleString, this.saveBodyString).then();
+            try {
+              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
+            } catch (e) {
+              console.log('dismissed modal');
+            }
           }
         } else if (this.activeStepIndex === 2) {
           let allRegistered = true;
@@ -95,7 +101,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (allRegistered) {
             this.activeStepIndex = step;
           } else {
-            this.modalService.confirm(this.saveTitleString, this.saveBodyString).then();
+            try {
+              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
+            } catch (e) {
+              console.log('dismissed modal');
+            }
           }
         }
       }
@@ -106,7 +116,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     if (!this.deviceForm.valid) {
-      this.alertService.error(this.formInvalidMessage, false, 4000);
+      this.alertService.error(this.formInvalidMessage);
       return;
     }
 
@@ -117,7 +127,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     if (!this.sensorForm.valid) {
-      this.alertService.error(this.formInvalidMessage, false, 4000);
+      this.alertService.error(this.formInvalidMessage);
       return;
     }
 
@@ -128,7 +138,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     if (!this.sensorForm.valid) {
-      this.alertService.error(this.formInvalidMessage, false, 4000);
+      this.alertService.error(this.formInvalidMessage);
       return;
     }
 
@@ -136,7 +146,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
   }
 
   public getStepCount(): number {
-    return 3;
+    return this.formControlSteps.length;
   }
 
   public getStepClasses(pageIndex: number) {
@@ -202,7 +212,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
         documentation: sensor.documentation,
         dataStreams,
       }));
-
       this.sensorForm.markAsPristine();
     }
   }
@@ -237,13 +246,17 @@ export class DeviceComponent implements OnInit, OnDestroy {
         deviceUpdate.location = location;
       }
 
-      if (Object.keys(deviceUpdate).length) {
-        await this.deviceService.update(this.deviceForm.value.id, deviceUpdate as IUpdateDeviceBody).toPromise();
-        this.deviceForm.markAsPristine();
+      try {
+        if (Object.keys(deviceUpdate).length) {
+          await this.deviceService.update(this.deviceForm.value.id, deviceUpdate as IUpdateDeviceBody).toPromise();
+          this.deviceForm.markAsPristine();
+          this.alertService.success(this.saveSuccessMessage);
+        }
+      } catch (e) {
+        this.alertService.error(e.message);
       }
 
       this.submitted = false;
-      this.alertService.success(this.saveSuccessMessage, false, 4000);
     } else {
       const deviceLocation = this.deviceForm.value.location;
 
@@ -262,14 +275,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
       try {
         const deviceDetails: Record<string, any> = await this.deviceService.register(device).toPromise();
         this.deviceId = deviceDetails.deviceId;
-
         this.deviceForm.markAsPristine();
 
         this.locationService.showLocation(null);
-        this.alertService.success(this.saveSuccessMessage, false, 4000);
+        this.alertService.success(this.saveSuccessMessage);
         this.submitted = false;
       } catch (e) {
-        this.alertService.error(`${this.saveFailedMessage}: ${e.error}.`);
+        this.alertService.error(`${this.saveFailedMessage}: ${e.message}.`);
       }
     }
   }
@@ -295,7 +307,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           sensorEntry.patchValue({id: sensorResult.sensorId});
         } catch (e) {
           failed = true;
-          this.alertService.error(e.message, false, 4000);
+          this.alertService.error(e.message);
         }
       } else {
         const sensorUpdate: Record<string, any> = {};
@@ -318,18 +330,23 @@ export class DeviceComponent implements OnInit, OnDestroy {
           sensorUpdate.documentation = sensorEntryValue.documentation;
         }
 
-        if (Object.keys(sensorUpdate).length) {
-          await this.deviceService.updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate as IUpdateSensorBody).toPromise();
-          this.sensorForm.markAsPristine();
+        try {
+          if (Object.keys(sensorUpdate).length) {
+            await this.deviceService.updateSensor(this.deviceId, sensorEntryValue.id,
+              sensorUpdate as IUpdateSensorBody).toPromise();
+            this.sensorForm.markAsPristine();
+            this.alertService.success(this.saveSuccessMessage);
+          }
+        } catch (e) {
+          this.alertService.error(e.message);
         }
 
         this.submitted = false;
-        this.alertService.success(this.saveSuccessMessage, false, 4000);
       }
     }
 
     if (!failed) {
-      this.alertService.success(this.saveSuccessMessage, false, 4000);
+      this.alertService.success(this.saveSuccessMessage);
     }
 
     this.submitted = false;
@@ -368,7 +385,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
               dataStreamEntry.patchValue({id: dataStreamResult.dataStreamId});
             } catch (e) {
               failed = true;
-              this.alertService.error(e.message, false, 4000);
+              this.alertService.error(e.message);
             }
           } else {
             const dataStreamUpdate: Record<string, any> = {};
@@ -431,13 +448,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.deviceForm = this.formBuilder.group({
       id: null,
-      category: '',
-      name: ['', [Validators.required, Validators.minLength(6)]],
-      connectivity: '',
-      description: '',
+      category: null,
+      name: [null, [Validators.required, Validators.minLength(6)]],
+      connectivity: null,
+      description: null,
       location: [],
-      locationName: '',
-      locationDescription: '',
+      locationName: null,
+      locationDescription: null,
       sensors: new FormArray([]),
     });
 
@@ -477,6 +494,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

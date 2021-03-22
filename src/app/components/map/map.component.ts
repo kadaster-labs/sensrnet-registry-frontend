@@ -24,13 +24,13 @@ import {SearchComponentEvent} from 'generieke-geo-componenten-search';
 import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
 import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
 
-import {ILegalEntity} from '../../model/legalEntity';
 import {IDevice} from '../../model/bodies/device-model';
+import {AlertService} from '../../services/alert.service';
 import {ModalService} from '../../services/modal.service';
 import {DeviceService} from '../../services/device.service';
 import {LocationService} from '../../services/location.service';
-import {ConnectionService} from '../../services/connection.service';
 import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
+
 
 @Component({
   selector: 'app-map',
@@ -45,6 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private httpClient: HttpClient,
+    private alertService: AlertService,
     private modalService: ModalService,
     private deviceService: DeviceService,
     private locationService: LocationService,
@@ -196,7 +197,7 @@ export class MapComponent implements OnInit, OnDestroy {
     };
 
     this.vectorSource = new VectorSource({
-      features
+      features,
     });
 
     this.clusterSource = new Cluster({
@@ -494,16 +495,18 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public async deleteDevice(): Promise<void> {
     this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
-      .then((confirmed) => {
+      .then(async confirmed => {
         if (confirmed) {
-          this.deviceService.unregister(this.selectedDevice._id);
+          try {
+            await this.deviceService.unregister(this.selectedDevice._id);
+          } catch (e) {
+            this.alertService.error(e.message);
+          }
         }
-      })
-      .catch(() => console.log('User dismissed the dialog.'));
+      }).catch(() => console.log('User dismissed the dialog.'));
   }
 
   public async ngOnInit(): Promise<void> {
-
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
@@ -584,8 +587,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const subscription of this.subscriptions) {
-      subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

@@ -5,3 +5,7 @@
 .pointer {
   cursor: pointer;
 }
+
+.pagination > .active > span {
+  background-color: #007bff !important;
+}

@@ -110,6 +110,7 @@ export class DeviceService {
       const deviceUpdated$ = this.connectionService.subscribeTo(EventType.DeviceUpdated);
       const deviceRemoved$ = this.connectionService.subscribeTo(EventType.DeviceRemoved);
       const deviceLocated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
+      const deviceRelocated$ = this.connectionService.subscribeTo(EventType.DeviceRelocated);
 
       this.deviceLocated$ = new Observable((observer: Subscriber<IDevice>) => {
         deviceLocated$.subscribe((sensor: IDevice) => {
@@ -118,10 +119,9 @@ export class DeviceService {
       });
 
       this.deviceUpdated$ = new Observable((observer: Subscriber<IDevice>) => {
-        const updateFunction = (sensor: IDevice) => {
-          observer.next(sensor);
-        };
+        const updateFunction = (sensor: IDevice) => observer.next(sensor);
         deviceUpdated$.subscribe(updateFunction);
+        deviceRelocated$.subscribe(updateFunction);
       });
 
       this.deviceRemoved$ = new Observable((observer: Subscriber<IDevice>) => {

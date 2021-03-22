@@ -12,14 +12,13 @@ import {LegalEntityService} from '../../services/legal-entity.service';
   styleUrls: ['./organization-update.component.scss']
 })
 export class OrganizationUpdateComponent implements OnInit {
-  public form: FormGroup;
-  public submitted = false;
-
   @Input() public legalEntity: ILegalEntity;
   @Output() updateLegalEntity = new EventEmitter<boolean>();
 
-  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  public form: FormGroup;
+  public submitted = false;
 
+  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
   public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
 
   constructor(
@@ -48,6 +47,7 @@ export class OrganizationUpdateComponent implements OnInit {
         contactEmail = this.legalEntity.contactDetails[0].email;
       }
     }
+
     this.form = this.formBuilder.group({
       name: [this.legalEntity ? this.legalEntity.name : null, [Validators.required]],
       website: [this.legalEntity ? this.legalEntity.website : null, [Validators.pattern(this.urlRegex)]],
@@ -58,7 +58,9 @@ export class OrganizationUpdateComponent implements OnInit {
   }
 
   public async leave() {
-    const userUpdate: UserUpdateBody = {legalEntityId: null};
+    const userUpdate: UserUpdateBody = {
+      leaveLegalEntity: true,
+    };
     try {
       await this.userService.update(userUpdate).toPromise();
       this.updateLegalEntity.emit();
@@ -101,7 +103,7 @@ export class OrganizationUpdateComponent implements OnInit {
           }
         }
 
-        this.alertService.success(this.updateSuccessMessage, false, 4000);
+        this.alertService.success(this.updateSuccessMessage);
       } catch (error) {
         this.alertService.error(error.message);
       }

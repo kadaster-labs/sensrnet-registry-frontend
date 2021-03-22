@@ -11,9 +11,9 @@ import {LegalEntityService} from '../../services/legal-entity.service';
   styleUrls: ['./devices.component.scss'],
 })
 export class DevicesComponent implements OnInit {
+  public legalEntity;
   public devices = [];
   public ascending = true;
-  public legalEntity;
 
   public pageIndex = 0;
   public pageSize = 15;

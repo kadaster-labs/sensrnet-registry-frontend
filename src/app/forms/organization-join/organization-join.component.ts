@@ -84,6 +84,6 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

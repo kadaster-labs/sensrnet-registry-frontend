@@ -16,7 +16,6 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
   public form: FormGroup;
   public submitted = false;
-
   public subscriptions = [];
 
   public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
@@ -51,7 +50,6 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
         const result = await this.legalEntityService.register(legalEntity).toPromise() as LegalEntityId;
         if (result && result.legalEntityId) {
-          await this.userService.update({legalEntityId: result.legalEntityId}).toPromise();
           this.updateLegalEntity.emit();
         }
       } catch {
@@ -72,6 +70,6 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

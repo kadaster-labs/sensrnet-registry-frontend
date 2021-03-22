@@ -54,25 +54,21 @@ export class SensorComponent implements ControlValueAccessor {
     sensors.push(this.createSensor());
   }
 
-  removeSensor(index): void {
+  async removeSensor(index): Promise<void> {
     const sensors = this.parentForm.get('sensors') as FormArray;
     const sensorId = this.parentForm.get(`sensors.${index}`).value.id;
 
-    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
-      .then(async confirmed => {
-        if (confirmed) {
-          if (sensorId) {
-            try {
-              await this.deviceService.removeSensor(this.deviceId, sensorId).toPromise();
-              sensors.removeAt(index);
-            } catch (e) {
-              this.alertService.error(`Failed to delete: ${e.error}.`);
-            }
-          } else {
-            sensors.removeAt(index);
-          }
+    try {
+      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+      if (confirmed) {
+        if (sensorId) {
+          await this.deviceService.removeSensor(this.deviceId, sensorId).toPromise();
         }
-      }).catch(() => console.log('User dismissed the dialog.'));
+        sensors.removeAt(index);
+      }
+    } catch (e) {
+      this.alertService.error(e.message);
+    }
   }
 
   public getSensorElement(i, elem) {

@@ -17,7 +17,26 @@
             </div>
             <hr>
             <div *ngIf="legalEntity;else createLegalEntity">
-                <app-organization-update [legalEntity]="legalEntity" (updateLegalEntity)="getLegalEntity()"></app-organization-update>
+                <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="options" autocomplete="off"
+                               [checked]="activeOrganizationView == OrganizationViewEnum.View"
+                               (click)="activeOrganizationView = OrganizationViewEnum.View">
+                        <span i18n>Details</span>
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="options" autocomplete="off"
+                               [checked]="activeOrganizationView == OrganizationViewEnum.Users"
+                               (click)="activeOrganizationView = OrganizationViewEnum.Users">
+                        <span i18n>Users</span>
+                    </label>
+                </div>
+                <div *ngIf="activeOrganizationView == OrganizationViewEnum.View">
+                    <app-organization-update [legalEntity]="legalEntity" (updateLegalEntity)="getLegalEntity()"></app-organization-update>
+                </div>
+                <div *ngIf="activeOrganizationView == OrganizationViewEnum.Users">
+                    <app-organization-users></app-organization-users>
+                </div>
             </div>
             <ng-template #createLegalEntity>
                 <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
