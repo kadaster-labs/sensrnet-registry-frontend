@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-
-import { IContactDetails, ILegalEntity } from '../model/legalEntity';
 import { EnvService } from './env.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { IContactDetails, ILegalEntity } from '../model/legalEntity';
 
 export interface IRegisterLegalEntityBody {
   _id?: string;
@@ -19,7 +18,7 @@ export class LegalEntityService {
   ) { }
 
   public register(legalEntity: IRegisterLegalEntityBody) {
-    return this.http.post(`${this.env.apiUrl}/legalentity`, legalEntity);
+    return this.http.post(`${this.env.apiUrl}/legalentity/organization`, legalEntity);
   }
 
   public get() {
@@ -35,7 +34,7 @@ export class LegalEntityService {
   }
 
   public update(legalEntity: ILegalEntity) {
-    return this.http.put(`${this.env.apiUrl}/legalentity`, legalEntity);
+    return this.http.put(`${this.env.apiUrl}/legalentity/organization`, legalEntity);
   }
 
   public updateContactDetails(contactDetailsId, contactDetails: IContactDetails) {
