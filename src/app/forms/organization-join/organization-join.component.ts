@@ -73,9 +73,11 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.form.valid) {
       try {
-        const userUpdate: UserUpdateBody = {legalEntityId: this.form.value.legalEntity};
+        const legalEntityId = this.form.value.legalEntity;
+        const userUpdate: UserUpdateBody = {legalEntityId};
         await this.userService.update(userUpdate).toPromise();
         this.updateLegalEntity.emit();
+        this.connectionService.updateSocketLegalEntity(legalEntityId);
       } catch (error) {
         this.alertService.error(error.message);
       }

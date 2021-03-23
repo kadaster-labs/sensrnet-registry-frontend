@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import {UserUpdateBody} from '../../model/bodies/user-update';
 import {LegalEntityService} from '../../services/legal-entity.service';
+import {ConnectionService} from "../../services/connection.service";
 
 @Component({
   selector: 'app-organization-update',
@@ -25,6 +26,7 @@ export class OrganizationUpdateComponent implements OnInit {
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
+    private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
   ) {}
 
@@ -64,6 +66,7 @@ export class OrganizationUpdateComponent implements OnInit {
     try {
       await this.userService.update(userUpdate).toPromise();
       this.updateLegalEntity.emit();
+      this.connectionService.updateSocketLegalEntity(null);
     } catch (error) {
       this.alertService.error(error.message);
     }

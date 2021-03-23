@@ -151,6 +151,12 @@ export class ConnectionService {
     }
   }
 
+  public updateSocketLegalEntity(legalEntityId: string) {
+    if (this.socket) {
+      this.socket.emit('LegalEntityUpdated', {legalEntityId});
+    }
+  }
+
   public subscribeSocket(namespace: string) {
     if (this.socket) {
       this.socket.on(namespace, (event) => {

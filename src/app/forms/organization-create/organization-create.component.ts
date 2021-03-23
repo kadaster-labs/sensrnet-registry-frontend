@@ -5,6 +5,7 @@ import { LegalEntityId } from '../../model/bodies/legal-entity-id';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {IRegisterLegalEntityBody, LegalEntityService} from '../../services/legal-entity.service';
 import {IContactDetails} from '../../model/legalEntity';
+import {ConnectionService} from "../../services/connection.service";
 
 @Component({
   selector: 'app-organization-create',
@@ -26,6 +27,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
+    private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
   ) {}
 
@@ -51,6 +53,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
         const result = await this.legalEntityService.register(legalEntity).toPromise() as LegalEntityId;
         if (result && result.legalEntityId) {
           this.updateLegalEntity.emit();
+          this.connectionService.updateSocketLegalEntity(result.legalEntityId);
         }
       } catch {
         this.alertService.error(this.registerFailedMessage);
