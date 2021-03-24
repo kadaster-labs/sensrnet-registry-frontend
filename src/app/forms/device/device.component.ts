@@ -206,7 +206,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         id: sensor._id,
         name: [sensor.name, Validators.required],
         description: [sensor.description, Validators.required],
-        typeName: [sensor.type, Validators.required],
+        typeName: sensor.type ? {value: sensor.type} : null,
         manufacturer: sensor.manufacturer,
         supplier: sensor.supplier,
         documentation: sensor.documentation,
@@ -296,7 +296,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         const sensor: IRegisterSensorBody = {
           name: sensorEntryValue.name,
           description: sensorEntryValue.description,
-          type: sensorEntryValue.typeName,
+          type: sensorEntryValue.typeName.value,
           manufacturer: sensorEntryValue.manufacturer,
           supplier: sensorEntryValue.supplier,
           documentation: sensorEntryValue.documentation,
@@ -318,7 +318,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           sensorUpdate.description = sensorEntryValue.description;
         }
         if (sensorEntry.get('typeName').dirty) {
-          sensorUpdate.type = sensorEntryValue.typeName;
+          sensorUpdate.type = sensorEntryValue.typeName.value;
         }
         if (sensorEntry.get('manufacturer').dirty) {
           sensorUpdate.manufacturer = sensorEntryValue.manufacturer;

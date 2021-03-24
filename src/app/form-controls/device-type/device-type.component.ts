@@ -10,23 +10,23 @@ export interface SensorTypeFormValues {
 }
 
 @Component({
-  selector: 'app-sensor-type',
-  templateUrl: './sensor-type.component.html',
-  styleUrls: ['./sensor-type.component.scss'],
+  selector: 'app-device-type',
+  templateUrl: './device-type.component.html',
+  styleUrls: ['./device-type.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SensorTypeComponent),
+      useExisting: forwardRef(() => DeviceTypeComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => SensorTypeComponent),
+      useExisting: forwardRef(() => DeviceTypeComponent),
       multi: true,
     },
   ],
 })
-export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
+export class DeviceTypeComponent implements ControlValueAccessor, OnDestroy {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 

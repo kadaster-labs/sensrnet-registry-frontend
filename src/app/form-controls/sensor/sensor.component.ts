@@ -1,5 +1,4 @@
-import { TypeSensor } from '../../model/bodies/sensorTypes';
-import { Component, forwardRef, Input } from '@angular/core';
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {ModalService} from '../../services/modal.service';
 import {DeviceService} from '../../services/device.service';
@@ -21,8 +20,6 @@ export class SensorComponent implements ControlValueAccessor {
   @Input() public deviceId: string;
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
-
-  public typeNameList: string[] = Object.keys(TypeSensor);
 
   private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 

@@ -27,7 +27,7 @@ import { LanguageSwitcherComponent } from './components/language-switcher/langua
 import { ModalComponent } from './components/modal/modal.component';
 import { DevicesComponent } from './forms/devices/devices.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
-import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
+import { DeviceTypeComponent } from './form-controls/device-type/device-type.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 import { ThemeComponent } from './form-controls/theme/theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
@@ -38,7 +38,8 @@ import { OrganizationUpdateComponent } from './forms/organization-update/organiz
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
 import {SensorComponent} from './form-controls/sensor/sensor.component';
-import {OrganizationUsersComponent} from "./forms/organization-users/organization-users.component";
+import {OrganizationUsersComponent} from './forms/organization-users/organization-users.component';
+import {TypeComponent} from './form-controls/type/type.component';
 
 @NgModule({
   declarations: [
@@ -50,8 +51,9 @@ import {OrganizationUsersComponent} from "./forms/organization-users/organizatio
     RegisterComponent,
     DeviceComponent,
     ThemeComponent,
+    TypeComponent,
     SensorLocationComponent,
-    SensorTypeComponent,
+    DeviceTypeComponent,
     OrganizationUpdateComponent,
     SensorStatusComponent,
     NavBarComponent,
