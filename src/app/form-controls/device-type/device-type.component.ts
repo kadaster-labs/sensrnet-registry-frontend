@@ -1,6 +1,5 @@
 import { Subscription } from 'rxjs';
-import { Category, TypeSensor, TypeBeacon, TypeCamera, getCategoryTranslation,
-  getTypeTranslation } from '../../model/bodies/sensorTypes';
+import { Category, TypeSensor, getCategoryTranslation } from '../../model/bodies/sensorTypes';
 import { Component, forwardRef, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators,
   FormGroup } from '@angular/forms';
@@ -11,23 +10,23 @@ export interface SensorTypeFormValues {
 }
 
 @Component({
-  selector: 'app-sensor-type',
-  templateUrl: './sensor-type.component.html',
-  styleUrls: ['./sensor-type.component.scss'],
+  selector: 'app-device-type',
+  templateUrl: './device-type.component.html',
+  styleUrls: ['./device-type.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SensorTypeComponent),
+      useExisting: forwardRef(() => DeviceTypeComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => SensorTypeComponent),
+      useExisting: forwardRef(() => DeviceTypeComponent),
       multi: true,
     },
   ],
 })
-export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
+export class DeviceTypeComponent implements ControlValueAccessor, OnDestroy {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 
@@ -36,16 +35,6 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
 
   public sensorCategories = Category;
   public getCategoryTranslation = getCategoryTranslation;
-
-  public sensorTypes = TypeSensor;
-  public sensorTypesList: string[];
-  public beaconTypes = TypeBeacon;
-  public beaconTypesList: string[];
-  public cameraTypes = TypeCamera;
-  public cameraTypesList: string[];
-
-  public typeNameList: string[];
-  public getTypeTranslation = getTypeTranslation;
 
   get value(): SensorTypeFormValues {
     return this.form.value;
@@ -61,20 +50,14 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
   constructor(private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
       category: new FormControl('', Validators.required),
-      typeName: new FormControl('', Validators.required),
     });
 
     this.subscriptions.push(
-      // any time the inner form changes update the parent of any change
       this.form.valueChanges.subscribe((value) => {
         this.onChange(value);
         this.onTouched();
       }),
     );
-
-    this.beaconTypesList = Object.keys(this.beaconTypes).filter(String);
-    this.cameraTypesList = Object.keys(this.cameraTypes).filter(String);
-    this.sensorTypesList = Object.keys(this.sensorTypes).filter(String);
 
     this.onFormChanges();
   }
@@ -87,27 +70,6 @@ export class SensorTypeComponent implements ControlValueAccessor, OnDestroy {
     if (!this.form.get('category')) { return; }
 
     this.form.get('category').valueChanges.subscribe((category: Category) => {
-      this.form.patchValue({
-        typeName: '',
-      });
-
-      switch (category) {
-        case Category.Beacon:
-          this.typeNameList = this.beaconTypesList;
-          break;
-        case Category.Camera:
-          this.typeNameList = this.cameraTypesList;
-          break;
-        case Category.Sensor:
-          this.typeNameList = this.sensorTypesList;
-          break;
-        default:
-          this.typeNameList = [];
-          break;
-      }
-    });
-
-    this.form.get('typeName').valueChanges.subscribe((category: Category) => {
       if (category) {
         this.sensorType.emit(category);
       }

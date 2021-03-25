@@ -112,22 +112,21 @@
         <source>Menu</source>
       </segment>
     </unit>
-    <unit id="2178314187687279474">
+    <unit id="7292902857194439444">
       <notes>
         <note category="location">src/app/sidebar/sidebar.component.html:8</note>
       </notes>
       <segment>
-        <source>Sensor</source>
+        <source>Device</source>
       </segment>
     </unit>
-    <unit id="5778514899777017666">
+    <unit id="3719027099325959755">
       <notes>
         <note category="location">src/app/sidebar/sidebar.component.html:13</note>
-        <note category="location">src/app/forms/sensors/sensors.component.html:9</note>
-        <note category="location">src/app/forms/sensors/sensors.component.html:13</note>
+        <note category="location">src/app/forms/devices/devices.component.html:13</note>
       </notes>
       <segment>
-        <source>Sensors</source>
+        <source>Devices</source>
       </segment>
     </unit>
     <unit id="3076687427621376223">
@@ -208,7 +207,7 @@
         <note category="location">src/app/components/map/map.component.ts:96</note>
       </notes>
       <segment>
-        <source>Do you really want to delete the sensor?</source>
+        <source>Do you really want to delete the device?</source>
       </segment>
     </unit>
     <unit id="map.geo.support">
@@ -254,34 +253,26 @@
     <unit id="1806667489382256324">
       <notes>
         <note category="location">src/app/components/map/map.component.html:30</note>
-        <note category="location">src/app/forms/sensors/sensors.component.html:18</note>
+        <note category="location">src/app/forms/devices/devices.component.html:18</note>
         <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:3</note>
       </notes>
       <segment>
         <source>Category</source>
       </segment>
     </unit>
-    <unit id="8650499415827640724">
+    <unit id="2887948366226336935">
       <notes>
         <note category="location">src/app/components/map/map.component.html:38</note>
-        <note category="location">src/app/forms/sensors/sensors.component.html:19</note>
+        <note category="location">src/app/forms/device/device.component.html:33</note>
+        <note category="location">src/app/forms/devices/devices.component.html:19</note>
       </notes>
       <segment>
-        <source>Type</source>
-      </segment>
-    </unit>
-    <unit id="8204176479746810612">
-      <notes>
-        <note category="location">src/app/components/map/map.component.html:47</note>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
-      </notes>
-      <segment>
-        <source>Active</source>
+        <source>Connectivity</source>
       </segment>
     </unit>
     <unit id="7585826646011739428">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:61</note>
+        <note category="location">src/app/components/map/map.component.html:50</note>
       </notes>
       <segment>
         <source>Edit</source>
@@ -289,7 +280,7 @@
     </unit>
     <unit id="7022070615528435141">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:64</note>
+        <note category="location">src/app/components/map/map.component.html:53</note>
       </notes>
       <segment>
         <source>Delete</source>
@@ -297,7 +288,7 @@
     </unit>
     <unit id="2509141182388535183">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:69</note>
+        <note category="location">src/app/components/map/map.component.html:58</note>
       </notes>
       <segment>
         <source>View</source>
@@ -311,9 +302,34 @@
         <source>Language</source>
       </segment>
     </unit>
+    <unit id="6215970478390263685">
+      <notes>
+        <note category="location">src/app/components/organization/organization.component.html:11</note>
+      </notes>
+      <segment>
+        <source>My Organization</source>
+      </segment>
+    </unit>
+    <unit id="5028777105388019087">
+      <notes>
+        <note category="location">src/app/components/organization/organization.component.html:25</note>
+      </notes>
+      <segment>
+        <source>Details</source>
+      </segment>
+    </unit>
+    <unit id="4555457172864212828">
+      <notes>
+        <note category="location">src/app/components/organization/organization.component.html:31</note>
+        <note category="location">src/app/forms/organization-users/organization-users.component.html:3</note>
+      </notes>
+      <segment>
+        <source>Users</source>
+      </segment>
+    </unit>
     <unit id="8307140841776883735">
       <notes>
-        <note category="location">src/app/components/organization/organization.component.html:30</note>
+        <note category="location">src/app/components/organization/organization.component.html:47</note>
       </notes>
       <segment>
         <source>Join</source>
@@ -321,53 +337,62 @@
     </unit>
     <unit id="5674286808255988565">
       <notes>
-        <note category="location">src/app/components/organization/organization.component.html:38</note>
-        <note category="location">src/app/forms/organization-create/organization-create.component.html:11</note>
+        <note category="location">src/app/components/organization/organization.component.html:53</note>
+        <note category="location">src/app/forms/organization-create/organization-create.component.html:4</note>
       </notes>
       <segment>
         <source>Create</source>
       </segment>
     </unit>
-    <unit id="sensor.register.success">
+    <unit id="form.register.invalid">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.ts:32</note>
-      </notes>
-      <segment>
-        <source>Sensor registered</source>
-      </segment>
-    </unit>
-    <unit id="sensor.register.invalid">
-      <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.ts:33</note>
+        <note category="location">src/app/forms/device/device.component.ts:33</note>
       </notes>
       <segment>
         <source>The form is invalid</source>
       </segment>
     </unit>
-    <unit id="sensor.register.failure">
+    <unit id="device.register.success">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.ts:34</note>
+        <note category="location">src/app/forms/device/device.component.ts:34</note>
       </notes>
       <segment>
-        <source>An error has occurred during registration:</source>
+        <source>Saved!</source>
       </segment>
     </unit>
-    <unit id="sensor.register.org">
+    <unit id="device.register.failure">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.ts:35</note>
+        <note category="location">src/app/forms/device/device.component.ts:35</note>
       </notes>
       <segment>
-        <source>You need to join an organization first</source>
+        <source>An error has occurred during saving:</source>
+      </segment>
+    </unit>
+    <unit id="step.confirm.title">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.ts:37</note>
+      </notes>
+      <segment>
+        <source>Save the step!</source>
+      </segment>
+    </unit>
+    <unit id="step.confirm.body">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.ts:38</note>
+      </notes>
+      <segment>
+        <source>You need to save before continuing</source>
       </segment>
     </unit>
     <unit id="8953033926734869941">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:24</note>
-        <note category="location">src/app/forms/sensors/sensors.component.html:17</note>
+        <note category="location">src/app/forms/device/device.component.html:23</note>
+        <note category="location">src/app/forms/devices/devices.component.html:17</note>
         <note category="location">src/app/forms/organization-join/organization-join.component.html:4</note>
         <note category="location">src/app/forms/organization-join/organization-join.component.html:11</note>
-        <note category="location">src/app/forms/organization-create/organization-create.component.html:3</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:11</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:19</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:9</note>
       </notes>
       <segment>
         <source>Name</source>
@@ -375,148 +400,138 @@
     </unit>
     <unit id="6411448806393999934">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:25</note>
+        <note category="location">src/app/forms/device/device.component.html:24</note>
       </notes>
       <segment>
         <source>Enter name</source>
       </segment>
     </unit>
-    <unit id="7396349278616493092">
-      <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:37</note>
-      </notes>
-      <segment>
-        <source>Aim</source>
-      </segment>
-    </unit>
     <unit id="8254163730790501097">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:37</note>
-        <note category="location">src/app/forms/sensor/sensor.component.html:41</note>
-        <note category="location">src/app/forms/sensor/sensor.component.html:46</note>
-        <note category="location">src/app/forms/sensor/sensor.component.html:51</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:3</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:22</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:26</note>
+        <note category="location">src/app/forms/device/device.component.html:33</note>
+        <note category="location">src/app/forms/device/device.component.html:37</note>
+        <note category="location">src/app/forms/device/device.component.html:42</note>
+        <note category="location">src/app/forms/device/device.component.html:46</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:4</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:30</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:52</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:61</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:70</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:74</note>
-        <note category="location">src/app/form-controls/sensor-theme/sensor-theme.component.html:2</note>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:37</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:80</note>
+        <note category="location">src/app/form-controls/theme/theme.component.html:2</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:14</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:28</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:3</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:42</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:46</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:50</note>
       </notes>
       <segment>
         <source> - Optional</source>
       </segment>
     </unit>
-    <unit id="457324318728193960">
+    <unit id="6148451069279650292">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:38</note>
+        <note category="location">src/app/forms/device/device.component.html:34</note>
       </notes>
       <segment>
-        <source>Aim of the sensor</source>
+        <source>Connectivity of the device</source>
       </segment>
     </unit>
     <unit id="4902817035128594900">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:41</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:26</note>
+        <note category="location">src/app/forms/device/device.component.html:37</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:30</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:19</note>
       </notes>
       <segment>
         <source>Description</source>
       </segment>
     </unit>
-    <unit id="2404547175180966423">
+    <unit id="2983700280697716345">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:43</note>
+        <note category="location">src/app/forms/device/device.component.html:38</note>
       </notes>
       <segment>
-        <source>Describe the sensor</source>
+        <source>Describe the device</source>
       </segment>
     </unit>
-    <unit id="859889886317613793">
+    <unit id="6961397537815994802">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:46</note>
-        <note category="location">src/app/forms/sensors/sensors.component.html:20</note>
+        <note category="location">src/app/forms/device/device.component.html:42</note>
       </notes>
       <segment>
-        <source>Manufacturer</source>
+        <source>Location name</source>
       </segment>
     </unit>
-    <unit id="4230848033571840888">
+    <unit id="5848511854419979538">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:48</note>
+        <note category="location">src/app/forms/device/device.component.html:43</note>
       </notes>
       <segment>
-        <source>Enter name of the manufacturer</source>
+        <source>Name of the device location</source>
       </segment>
     </unit>
-    <unit id="6013667688532279516">
+    <unit id="4662774993363931268">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:51</note>
+        <note category="location">src/app/forms/device/device.component.html:46</note>
       </notes>
       <segment>
-        <source>Documentation URL</source>
+        <source>Location description</source>
       </segment>
     </unit>
-    <unit id="5880667752120449727">
+    <unit id="7262219780925601360">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:53</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:53</note>
+        <note category="location">src/app/forms/device/device.component.html:47</note>
       </notes>
       <segment>
-        <source>Enter URL of documentation</source>
+        <source>Description of the device location</source>
       </segment>
     </unit>
-    <unit id="4452427314943113135">
+    <unit id="3768927257183755959">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:70</note>
+        <note category="location">src/app/forms/device/device.component.html:58</note>
+        <note category="location">src/app/forms/device/device.component.html:67</note>
+        <note category="location">src/app/forms/organization-join/organization-join.component.html:26</note>
+        <note category="location">src/app/forms/organization-users/organization-users.component.html:27</note>
       </notes>
       <segment>
-        <source>Previous</source>
+        <source>Save</source>
       </segment>
     </unit>
-    <unit id="7862928942621880455">
+    <unit id="1786120847907845120">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:10</note>
+        <note category="location">src/app/forms/device/device.component.html:10</note>
       </notes>
       <segment>
-        <source>Sensor Properties</source>
+        <source>Device Properties</source>
       </segment>
     </unit>
-    <unit id="5621000013601072703">
+    <unit id="5778514899777017666">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:11</note>
+        <note category="location">src/app/forms/device/device.component.html:11</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:3</note>
       </notes>
       <segment>
-        <source>Optional Sensor Properties</source>
+        <source>Sensors</source>
       </segment>
     </unit>
-    <unit id="7103242561722894475">
+    <unit id="5546023389249689964">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:12</note>
+        <note category="location">src/app/forms/device/device.component.html:12</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:4</note>
       </notes>
       <segment>
-        <source>Data Streams</source>
-      </segment>
-    </unit>
-    <unit id="4564411879911210622">
-      <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:13</note>
-      </notes>
-      <segment>
-        <source>Sensor Location</source>
+        <source>Datastreams</source>
       </segment>
     </unit>
     <unit id="3833692663709091545">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:29</note>
-        <note category="location">src/app/forms/organization-create/organization-create.component.html:6</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:18</note>
+        <note category="location">src/app/forms/device/device.component.html:28</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:26</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:5</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:15</note>
       </notes>
       <segment>
         <source>Name is required</source>
@@ -524,37 +539,18 @@
     </unit>
     <unit id="8104330900862727758">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:30</note>
+        <note category="location">src/app/forms/device/device.component.html:29</note>
       </notes>
       <segment>
         <source>Name must be at least 6 characters</source>
       </segment>
     </unit>
-    <unit id="8651329520452925938">
+    <unit id="6494659399288890250">
       <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:56</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:57</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:66</note>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:5</note>
+        <note category="location">src/app/forms/devices/devices.component.html:9</note>
       </notes>
       <segment>
-        <source>Not a valid URL</source>
-      </segment>
-    </unit>
-    <unit id="935187492052582731">
-      <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:72</note>
-      </notes>
-      <segment>
-        <source>Submit</source>
-      </segment>
-    </unit>
-    <unit id="3885497195825665706">
-      <notes>
-        <note category="location">src/app/forms/sensor/sensor.component.html:75</note>
-      </notes>
-      <segment>
-        <source>Next</source>
+        <source>My Devices</source>
       </segment>
     </unit>
     <unit id="8829497237648100098">
@@ -576,47 +572,15 @@
     <unit id="5481284030283031915">
       <notes>
         <note category="location">src/app/forms/organization-join/organization-join.component.html:12</note>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note>
       </notes>
       <segment>
         <source>Website</source>
       </segment>
     </unit>
-    <unit id="9044503995162566400">
-      <notes>
-        <note category="location">src/app/forms/organization-join/organization-join.component.html:13</note>
-      </notes>
-      <segment>
-        <source>Contact Name</source>
-      </segment>
-    </unit>
-    <unit id="1755327849942548232">
-      <notes>
-        <note category="location">src/app/forms/organization-join/organization-join.component.html:14</note>
-      </notes>
-      <segment>
-        <source>Contact Email</source>
-      </segment>
-    </unit>
-    <unit id="5373496340618282855">
-      <notes>
-        <note category="location">src/app/forms/organization-join/organization-join.component.html:15</note>
-      </notes>
-      <segment>
-        <source>Contact Phone</source>
-      </segment>
-    </unit>
-    <unit id="3768927257183755959">
-      <notes>
-        <note category="location">src/app/forms/organization-join/organization-join.component.html:36</note>
-      </notes>
-      <segment>
-        <source>Save</source>
-      </segment>
-    </unit>
     <unit id="register.failed">
       <notes>
-        <note category="location">src/app/forms/organization-create/organization-create.component.ts:22</note>
+        <note category="location">src/app/forms/organization-create/organization-create.component.ts:23</note>
       </notes>
       <segment>
         <source>Failed to register. Does the organization exist already?</source>
@@ -624,7 +588,7 @@
     </unit>
     <unit id="organization.update">
       <notes>
-        <note category="location">src/app/forms/organization-update/organization-update.component.ts:24</note>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:22</note>
       </notes>
       <segment>
         <source>Updated the organization.</source>
@@ -646,17 +610,57 @@
         <source>Update</source>
       </segment>
     </unit>
-    <unit id="5546023389249689964">
+    <unit id="no.users">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:3</note>
+        <note category="location">src/app/forms/organization-users/organization-users.component.ts:16</note>
       </notes>
       <segment>
-        <source>Datastreams</source>
+        <source>No users have been selected.</source>
+      </segment>
+    </unit>
+    <unit id="user.update">
+      <notes>
+        <note category="location">src/app/forms/organization-users/organization-users.component.ts:17</note>
+      </notes>
+      <segment>
+        <source>Update success.</source>
+      </segment>
+    </unit>
+    <unit id="4768749765465246664">
+      <notes>
+        <note category="location">src/app/forms/organization-users/organization-users.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Email</source>
+      </segment>
+    </unit>
+    <unit id="4145496584631696119">
+      <notes>
+        <note category="location">src/app/forms/organization-users/organization-users.component.html:8</note>
+      </notes>
+      <segment>
+        <source>Role</source>
+      </segment>
+    </unit>
+    <unit id="dataStream.delete.confirm.title">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.ts:26</note>
+      </notes>
+      <segment>
+        <source>Please confirm</source>
+      </segment>
+    </unit>
+    <unit id="dataStream.delete.confirm.body">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.ts:27</note>
+      </notes>
+      <segment>
+        <source>Do you really want to delete the datastream?</source>
       </segment>
     </unit>
     <unit id="1204967233239083847">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:4</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:12</note>
       </notes>
       <segment>
         <source>Add Datastream</source>
@@ -664,55 +668,47 @@
     </unit>
     <unit id="3874212695899678552">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:15</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:23</note>
       </notes>
       <segment>
         <source>Datastream name</source>
       </segment>
     </unit>
-    <unit id="4775550080689015987">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:22</note>
-      </notes>
-      <segment>
-        <source>Reason</source>
-      </segment>
-    </unit>
-    <unit id="3453795714433029022">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:23</note>
-      </notes>
-      <segment>
-        <source>Reason for the datastream</source>
-      </segment>
-    </unit>
     <unit id="4002306973832863531">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:27</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:31</note>
       </notes>
       <segment>
         <source>Describe datastream</source>
       </segment>
     </unit>
-    <unit id="4493082819727013565">
+    <unit id="268675840028420415">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:30</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:37</note>
       </notes>
       <segment>
-        <source>Observed Property</source>
+        <source>Data Quality</source>
       </segment>
     </unit>
-    <unit id="5828006391937583005">
+    <unit id="6536530852951551004">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:31</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:38</note>
       </notes>
       <segment>
-        <source>The property that is observed</source>
+        <source>The quality of the data</source>
+      </segment>
+    </unit>
+    <unit id="6929299219486908442">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:43</note>
+      </notes>
+      <segment>
+        <source>Is Active</source>
       </segment>
     </unit>
     <unit id="4316181475809137059">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:36</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:49</note>
       </notes>
       <segment>
         <source>Is Public</source>
@@ -720,15 +716,23 @@
     </unit>
     <unit id="2765996121940624988">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:42</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:55</note>
       </notes>
       <segment>
         <source>Is Open Data</source>
       </segment>
     </unit>
+    <unit id="4436992880774519416">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:61</note>
+      </notes>
+      <segment>
+        <source>Contains Personal Info</source>
+      </segment>
+    </unit>
     <unit id="4975476383611780549">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:48</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:67</note>
       </notes>
       <segment>
         <source>Is Reusable</source>
@@ -736,15 +740,25 @@
     </unit>
     <unit id="4895326106573044490">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:52</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:50</note>
       </notes>
       <segment>
         <source>Documentation</source>
       </segment>
     </unit>
+    <unit id="5880667752120449727">
+      <notes>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:72</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:51</note>
+      </notes>
+      <segment>
+        <source>Enter URL of documentation</source>
+      </segment>
+    </unit>
     <unit id="8732411010010701151">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:61</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:80</note>
       </notes>
       <segment>
         <source>Datalink</source>
@@ -752,58 +766,21 @@
     </unit>
     <unit id="3465033560498443683">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:62</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:81</note>
       </notes>
       <segment>
         <source>Enter URL of data</source>
       </segment>
     </unit>
-    <unit id="842818106493560934">
+    <unit id="8651329520452925938">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:70</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:76</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:85</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:12</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:55</note>
       </notes>
       <segment>
-        <source>Unit of measurement</source>
-      </segment>
-    </unit>
-    <unit id="4479497848859905863">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
-      </notes>
-      <segment>
-        <source>Unit of Measurement</source>
-      </segment>
-    </unit>
-    <unit id="3342278149916119635">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:74</note>
-      </notes>
-      <segment>
-        <source>Data Frequency / s</source>
-      </segment>
-    </unit>
-    <unit id="6122030973291308530">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:75</note>
-      </notes>
-      <segment>
-        <source>Frequency</source>
-      </segment>
-    </unit>
-    <unit id="2361149596254019287">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:78</note>
-      </notes>
-      <segment>
-        <source>Data Quality (worst - best)</source>
-      </segment>
-    </unit>
-    <unit id="3209056610537919480">
-      <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:79</note>
-      </notes>
-      <segment>
-        <source>Quality</source>
+        <source>Not a valid URL</source>
       </segment>
     </unit>
     <unit id="5551307948733637188">
@@ -814,17 +791,9 @@
         <source>Category is required</source>
       </segment>
     </unit>
-    <unit id="2258786061065425417">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:24</note>
-      </notes>
-      <segment>
-        <source>Type is required</source>
-      </segment>
-    </unit>
     <unit id="6595217940183311788">
       <notes>
-        <note category="location">src/app/form-controls/sensor-theme/sensor-theme.component.html:2</note>
+        <note category="location">src/app/form-controls/theme/theme.component.html:2</note>
       </notes>
       <segment>
         <source>Theme(s)</source>
@@ -836,6 +805,14 @@
       </notes>
       <segment>
         <source>Sensor status</source>
+      </segment>
+    </unit>
+    <unit id="8204176479746810612">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Active</source>
       </segment>
     </unit>
     <unit id="1859131936150262113">
@@ -856,7 +833,7 @@
     </unit>
     <unit id="471816275243265264">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:3</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:5</note>
       </notes>
       <segment>
         <source>Location</source>
@@ -864,7 +841,7 @@
     </unit>
     <unit id="5824839776083689686">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:6</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:8</note>
       </notes>
       <segment>
         <source>Select on map</source>
@@ -872,7 +849,7 @@
     </unit>
     <unit id="7397645067969084297">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:11</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:15</note>
       </notes>
       <segment>
         <source>Height (m)</source>
@@ -880,50 +857,138 @@
     </unit>
     <unit id="6049622808300788023">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:12</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:16</note>
       </notes>
       <segment>
         <source>Enter Height (m)</source>
       </segment>
     </unit>
-    <unit id="8347820833028221543">
+    <unit id="8194501875024843821">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:15,16</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:19,20</note>
       </notes>
       <segment>
         <source> Location and Height are required </source>
       </segment>
     </unit>
-    <unit id="2285642860983205776">
+    <unit id="1399584566118768300">
       <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>
       </notes>
       <segment>
-        <source>Contact Person Name</source>
+        <source>Contact Department Name</source>
       </segment>
     </unit>
-    <unit id="7172729113485968588">
-      <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:14</note>
-      </notes>
-      <segment>
-        <source>Contact Person Email</source>
-      </segment>
-    </unit>
-    <unit id="3643440439611422385">
+    <unit id="1302635200526128790">
       <notes>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
       </notes>
       <segment>
-        <source>Contact Person Phone</source>
+        <source>Contact Department Email</source>
       </segment>
     </unit>
-    <unit id="1661700081276407146">
+    <unit id="1472655155576051898">
       <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:17</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:28</note>
       </notes>
       <segment>
-        <source>Public e-mail must be a valid e-mail address</source>
+        <source>Contact Department Phone</source>
+      </segment>
+    </unit>
+    <unit id="3707491726414100509">
+      <notes>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:24</note>
+      </notes>
+      <segment>
+        <source>Contact e-mail must be a valid e-mail address</source>
+      </segment>
+    </unit>
+    <unit id="sensor.delete.confirm.title">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.ts:29</note>
+      </notes>
+      <segment>
+        <source>Please confirm</source>
+      </segment>
+    </unit>
+    <unit id="sensor.delete.confirm.body">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.ts:30</note>
+      </notes>
+      <segment>
+        <source>Do you really want to delete the sensor?</source>
+      </segment>
+    </unit>
+    <unit id="4658799793858495194">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:4</note>
+      </notes>
+      <segment>
+        <source>Add Sensor</source>
+      </segment>
+    </unit>
+    <unit id="1497810067203370427">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Sensor name</source>
+      </segment>
+    </unit>
+    <unit id="2404547175180966423">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:20</note>
+      </notes>
+      <segment>
+        <source>Describe the sensor</source>
+      </segment>
+    </unit>
+    <unit id="859889886317613793">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:42</note>
+      </notes>
+      <segment>
+        <source>Manufacturer</source>
+      </segment>
+    </unit>
+    <unit id="7889254064940700973">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:43</note>
+      </notes>
+      <segment>
+        <source>The sensor manufacturer</source>
+      </segment>
+    </unit>
+    <unit id="4348920359154187664">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:46</note>
+      </notes>
+      <segment>
+        <source>Supplier</source>
+      </segment>
+    </unit>
+    <unit id="5053098491167761310">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:47</note>
+      </notes>
+      <segment>
+        <source>The sensor supplier</source>
+      </segment>
+    </unit>
+    <unit id="6240684629381435026">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:24</note>
+      </notes>
+      <segment>
+        <source>Description is required</source>
+      </segment>
+    </unit>
+    <unit id="2258786061065425417">
+      <notes>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:37</note>
+      </notes>
+      <segment>
+        <source>Type is required</source>
       </segment>
     </unit>
     <unit id="type.beacon">
@@ -952,7 +1017,7 @@
     </unit>
     <unit id="type.weather">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:36</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:40</note>
       </notes>
       <segment>
         <source>Weather Station</source>
@@ -960,7 +1025,7 @@
     </unit>
     <unit id="type.gauge">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:37</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:41</note>
       </notes>
       <segment>
         <source>Wind Gauge</source>
@@ -968,7 +1033,7 @@
     </unit>
     <unit id="type.container">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:38</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:42</note>
       </notes>
       <segment>
         <source>Waste Container</source>
@@ -976,7 +1041,7 @@
     </unit>
     <unit id="type.dust">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:39</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:43</note>
       </notes>
       <segment>
         <source>Fine Dust Sensor</source>
@@ -984,7 +1049,7 @@
     </unit>
     <unit id="type.uv">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:40</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:44</note>
       </notes>
       <segment>
         <source>UV-Sensor</source>
@@ -992,7 +1057,7 @@
     </unit>
     <unit id="type.light">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:41</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:45</note>
       </notes>
       <segment>
         <source>Light Cell</source>
@@ -1000,7 +1065,7 @@
     </unit>
     <unit id="type.motion">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:42</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:46</note>
       </notes>
       <segment>
         <source>Motion Sensor</source>
@@ -1008,7 +1073,7 @@
     </unit>
     <unit id="type.fire">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:43</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:47</note>
       </notes>
       <segment>
         <source>Fire Detector</source>
@@ -1016,7 +1081,7 @@
     </unit>
     <unit id="type.water">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:44</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:48</note>
       </notes>
       <segment>
         <source>Waterlevel Meter</source>
@@ -1024,7 +1089,7 @@
     </unit>
     <unit id="type.mic">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:45</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:49</note>
       </notes>
       <segment>
         <source>Microphone / Sound Meter</source>
@@ -1032,7 +1097,7 @@
     </unit>
     <unit id="type.counter">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:46</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:50</note>
       </notes>
       <segment>
         <source>Pedometer Counter</source>
@@ -1040,7 +1105,7 @@
     </unit>
     <unit id="type.radar">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:47</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:51</note>
       </notes>
       <segment>
         <source>Radar Detector</source>
@@ -1048,7 +1113,7 @@
     </unit>
     <unit id="type.gsm">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:48</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:52</note>
       </notes>
       <segment>
         <source>GSM Sensor</source>
@@ -1056,7 +1121,7 @@
     </unit>
     <unit id="type.detection">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:49</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:53</note>
       </notes>
       <segment>
         <source>Detection Loop</source>
@@ -1064,7 +1129,7 @@
     </unit>
     <unit id="type.height">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:50</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:54</note>
       </notes>
       <segment>
         <source>Height Detection Device</source>
@@ -1072,7 +1137,7 @@
     </unit>
     <unit id="type.environment">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:60</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:64</note>
       </notes>
       <segment>
         <source>Environmental Zone</source>
@@ -1080,7 +1145,7 @@
     </unit>
     <unit id="type.security">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:61</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:65</note>
       </notes>
       <segment>
         <source>Security Camera</source>
@@ -1088,7 +1153,7 @@
     </unit>
     <unit id="type.flashlight">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:62</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:66</note>
       </notes>
       <segment>
         <source>Traffic Flashlight</source>
@@ -1096,7 +1161,7 @@
     </unit>
     <unit id="type.navigation">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:70</note>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:74</note>
       </notes>
       <segment>
         <source>Navigation Beacon</source>

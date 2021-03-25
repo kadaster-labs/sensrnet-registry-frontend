@@ -45,7 +45,7 @@ export class ConnectionService {
     if (accessToken) {
       try {
         const token = jwtDecode(accessToken) as any;
-        claim = new Claim(token.sub, token.organizationId, token.exp, accessToken);
+        claim = new Claim(token.sub, token.exp, accessToken);
       } catch {
         claim = new Claim();
       }
@@ -81,7 +81,7 @@ export class ConnectionService {
     if (!response) {
       await this.logoutRedirect();
     } else {
-      claim = this.getClaimFromToken(response.accessToken);
+      claim = await this.getClaimFromToken(response.accessToken);
       this.claimSubject.next(claim);
     }
 
@@ -104,19 +104,9 @@ export class ConnectionService {
     await this.router.navigate(['/login']);
   }
 
-  public updateSocketOrganization() {
-    if (this.socket) {
-      let event = {};
-      if (this.currentClaim && this.currentClaim.organizationId) {
-        event = {organizationId: this.currentClaim.organizationId, ...event};
-      }
-      this.socket.emit('OrganizationUpdated', event);
-    }
-  }
-
   public connectSocket() {
     if (!this.socket) {
-      const namespace = 'sensor';
+      const namespace = 'device';
       const host = this.env.apiUrl.substring(0, this.env.apiUrl.lastIndexOf('/'));  // strip the /api part
 
       const connectionOptions = {
@@ -158,6 +148,12 @@ export class ConnectionService {
     if (this.socket) {
       await this.socket.close();
       this.socket = null;
+    }
+  }
+
+  public updateSocketLegalEntity(legalEntityId: string) {
+    if (this.socket) {
+      this.socket.emit('LegalEntityUpdated', {legalEntityId});
     }
   }
 

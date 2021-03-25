@@ -1,0 +1,49 @@
+<div [formGroup]="parentForm" class="form-group row">
+    <div class="col-12">
+        <span i18n>Sensors</span><span class="font-italic text-muted" i18n> - Optional</span><br>
+        <button type="button" class="btn btn-outline-secondary mt-2" (click)="addSensor()" i18n>Add Sensor</button>
+    </div>
+    <div formArrayName="sensors" *ngFor="let sensor of parentForm.get('sensors')['controls']; let i = index;" class="col-6 mt-3 form-group">
+        <div class="row py-3 bg-light border rounded" formGroupName="{{i}}">
+            <div class="col-12">
+                <label i18n>Name</label>
+                <button (click)="removeSensor(i)" type="button" class="close float-right" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input formControlName="name" type="text" placeholder="Sensor name" class="form-control" i18n-placeholder>
+                <div *ngIf="(getSensorElement(i, 'name').dirty || getSensorElement(i, 'name').touched || submitted) && getSensorElement(i, 'name').errors" class="invalid-input">
+                    <span class="required-text" *ngIf="getSensorElement(i, 'name').errors.required" i18n>Name is required</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <label i18n>Description</label>
+                <input class="form-control" type="text" formControlName="description" placeholder="Describe the sensor"
+                       [ngClass]="{ 'is-invalid': (getSensorElement(i, 'description').dirty || getSensorElement(i, 'description').touched || submitted) && getSensorElement(i, 'description').errors }"
+                       i18n-placeholder>
+                <div *ngIf="(getSensorElement(i, 'description').dirty || getSensorElement(i, 'description').touched || submitted) && getSensorElement(i, 'description').errors" class="invalid-input">
+                    <span class="required-text" *ngIf="getSensorElement(i, 'description').errors.required" i18n>Description is required</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <app-sensor-type formControlName="typeName" [submitted]="submitted"></app-sensor-type>
+            </div>
+            <div class="col-12">
+                <label><span i18n>Manufacturer</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                <input formControlName="manufacturer" type="text" placeholder="The sensor manufacturer" class="form-control" i18n-placeholder>
+            </div>
+            <div class="col-12">
+                <label><span i18n>Supplier</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                <input formControlName="supplier" type="text" placeholder="The sensor supplier" class="form-control" i18n-placeholder>
+            </div>
+            <div class="col-12">
+                <label><span i18n>Documentation</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                <input formControlName="documentation" type="text" placeholder="Enter URL of documentation" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && getSensorElement(i, 'documentation').errors }" i18n-placeholder>
+                <div *ngIf="(getSensorElement(i, 'documentation').dirty || getSensorElement(i, 'documentation').touched || submitted) && getSensorElement(i, 'documentation').errors"
+                     class="invalid-input">
+                    <span class="required-text" *ngIf="getSensorElement(i, 'documentation').errors.pattern" i18n>Not a valid URL</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

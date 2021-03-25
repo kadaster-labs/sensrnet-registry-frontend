@@ -1,0 +1,49 @@
+<div class="container-fluid">
+    <app-navbar locationClass="form"></app-navbar>
+    <div class="row form-header">
+        <div class="col-1">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="col-6">
+            <div>
+                <h3><span i18n>My Devices</span></h3>
+            </div>
+            <hr>
+            <table class="table table-striped table-hover table-bordered">
+                <caption class="hidden" i18n>Devices</caption>
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('name')"><span i18n>Name</span><em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('category')"><span i18n>Category</span><em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col" (click)="sortByAttribute('connectivity')"><span i18n>Connectivity</span><em class="fas fa-sort ml-2"></em></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let device of devices; let i = index" class="pointer" (click)="selectDevice(device)">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ device.name }}</td>
+                    <td>{{ getCategoryTranslation(device.category) }}</td>
+                    <td>{{ device.connectivity }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="d-flex justify-content-center">
+                <ul class="pagination mb-0">
+                    <li class="pointer" (click)="getPreviousPage()">
+                        <span><em class="fa fa-chevron-left"></em></span>
+                    </li>
+                    <li class="pointer active">
+                        <span class="content">{{ pageIndex + 1}}</span>
+                    </li>
+                    <li class="pointer" (click)="getNextPage()">
+                        <span><em class="fa fa-chevron-right"></em></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-5" style="height: 85vh; max-height: 85vh">
+            <app-map searchBarHeight="2rem"></app-map>
+        </div>
+    </div>
+</div>

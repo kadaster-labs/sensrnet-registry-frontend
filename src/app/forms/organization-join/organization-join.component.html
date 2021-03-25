@@ -10,25 +10,15 @@
             <th scope="col"></th>
             <th class="pointer" scope="col" i18n>Name</th>
             <th class="pointer" scope="col" i18n>Website</th>
-            <th class="pointer" scope="col" i18n>Contact Name</th>
-            <th class="pointer" scope="col" i18n>Contact Email</th>
-            <th class="pointer" scope="col" i18n>Contact Phone</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let organization of organizations"
-            (click)="selectOrganization(organization._id)"
-            class="pointer">
+        <tr *ngFor="let legalEntity of legalEntities" (click)="selectLegalEntity(legalEntity._id)" class="pointer">
             <th scope="row">
-                <input type="checkbox"
-                       class="pt-2 pb-1 my-0"
-                       [checked]="f.organization.value === organization._id">
+                <input type="checkbox" class="pt-2 pb-1 my-0" [checked]="f.legalEntity.value === legalEntity._id">
             </th>
-            <td>{{ organization._id }}</td>
-            <td>{{ organization.website }}</td>
-            <td>{{ organization.contactName }}</td>
-            <td>{{ organization.contactEmail }}</td>
-            <td>{{ organization.contactPhone }}</td>
+            <td>{{ legalEntity.name }}</td>
+            <td>{{ legalEntity.website }}</td>
         </tr>
         </tbody>
     </table>
