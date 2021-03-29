@@ -69,7 +69,6 @@ export class SensorComponent implements ControlValueAccessor {
   }
 
   public getSensorElement(i, elem) {
-    // console.log((this.parentForm.get('sensors') as FormArray).at(i).get(elem));
     return this.parentForm.get(`sensors.${i}.${elem}`);
   }
 
