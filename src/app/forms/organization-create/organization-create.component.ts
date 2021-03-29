@@ -52,8 +52,8 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
         const result = await this.legalEntityService.register(legalEntity).toPromise() as LegalEntityId;
         if (result && result.legalEntityId) {
-          this.setLegalEntityId.emit(result.legalEntityId);
           this.connectionService.updateSocketLegalEntity(result.legalEntityId);
+          this.setLegalEntityId.emit(result.legalEntityId);
         }
       } catch {
         this.alertService.error(this.registerFailedMessage);

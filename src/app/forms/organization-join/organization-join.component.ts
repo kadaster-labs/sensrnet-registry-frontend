@@ -77,8 +77,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
         const userUpdate: UserUpdateBody = {legalEntityId};
         await this.userService.update(userUpdate).toPromise();
 
-        this.setLegalEntityId.emit(legalEntityId);
         this.connectionService.updateSocketLegalEntity(legalEntityId);
+        this.setLegalEntityId.emit(legalEntityId);
       } catch (error) {
         this.alertService.error(error.message);
       }

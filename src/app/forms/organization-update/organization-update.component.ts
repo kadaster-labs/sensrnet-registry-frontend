@@ -65,8 +65,8 @@ export class OrganizationUpdateComponent implements OnInit {
     };
     try {
       await this.userService.update(userUpdate).toPromise();
-      this.setLegalEntityId.emit(null);
 
+      this.setLegalEntityId.emit(null);
       this.connectionService.updateSocketLegalEntity(null);
     } catch (error) {
       this.alertService.error(error.message);
