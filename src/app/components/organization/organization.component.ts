@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { LegalEntityService } from '../../services/legal-entity.service';
+import {ILegalEntity} from '../../model/legalEntity';
 
 enum UpdateView {
   Join = 0,
@@ -16,8 +17,11 @@ enum OrganizationView {
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit {
-  public legalEntity;
+export class OrganizationComponent implements OnInit, OnDestroy {
+  public legalEntityId: string;
+  public legalEntity: ILegalEntity;
+
+  public subscriptions = [];
 
   public UpdateViewEnum = UpdateView;
   public OrganizationViewEnum = OrganizationView;
@@ -30,10 +34,44 @@ export class OrganizationComponent implements OnInit {
   ) {}
 
   async getLegalEntity() {
-    this.legalEntity = await this.legalEntityService.get().toPromise();
+    return await this.legalEntityService.get().toPromise();
+  }
+
+  setLegalEntity(legalEntity) {
+    this.legalEntity = legalEntity;
+  }
+
+  async setLegalEntityId(legalEntityId: string) {
+    this.legalEntityId = legalEntityId;
+
+    if (!legalEntityId) {
+      this.setLegalEntity(null);
+    } else {
+      this.setLegalEntity(await this.getLegalEntity());
+    }
   }
 
   async ngOnInit(): Promise<void> {
-    await this.getLegalEntity();
+    this.setLegalEntity(await this.getLegalEntity());
+
+    const { onRegister, onUpdate, onRemove } = await this.legalEntityService.subscribe();
+
+    this.subscriptions.push(onRegister.subscribe((legalEntity: ILegalEntity) => {
+      if (this.legalEntityId === legalEntity._id) {
+        this.setLegalEntity(legalEntity);
+      }
+    }));
+
+    this.subscriptions.push(onUpdate.subscribe((legalEntity: ILegalEntity) => {
+      this.setLegalEntity(legalEntity);
+    }));
+
+    this.subscriptions.push(onRemove.subscribe(_ => {
+      this.setLegalEntity(null);
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

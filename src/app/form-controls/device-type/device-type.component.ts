@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { Category, TypeSensor, getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
 import { Component, forwardRef, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormBuilder, FormControl, Validators,
   FormGroup } from '@angular/forms';

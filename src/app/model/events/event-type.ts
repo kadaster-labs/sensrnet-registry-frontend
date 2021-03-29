@@ -4,4 +4,10 @@ export enum EventType {
   DeviceRegistered = 'DeviceRegistered',
   DeviceUpdated = 'DeviceUpdated',
   DeviceRemoved = 'DeviceRemoved',
+  OrganizationRegistered = 'OrganizationRegistered',
+  OrganizationUpdated = 'OrganizationUpdated',
+  LegalEntityRemoved = 'LegalEntityRemoved',
+  PublicContactDetailsAdded = 'PublicContactDetailsAdded',
+  ContactDetailsUpdated = 'ContactDetailsUpdated',
+  ContactDetailsRemoved = 'ContactDetailsRemoved',
 }

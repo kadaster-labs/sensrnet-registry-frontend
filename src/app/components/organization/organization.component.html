@@ -32,7 +32,7 @@
                     </label>
                 </div>
                 <div *ngIf="activeOrganizationView == OrganizationViewEnum.View">
-                    <app-organization-update [legalEntity]="legalEntity" (updateLegalEntity)="getLegalEntity()"></app-organization-update>
+                    <app-organization-update [legalEntity]="legalEntity" (setLegalEntityId)="setLegalEntityId($event)"></app-organization-update>
                 </div>
                 <div *ngIf="activeOrganizationView == OrganizationViewEnum.Users">
                     <app-organization-users></app-organization-users>
@@ -54,10 +54,10 @@
                     </label>
                 </div>
                 <div *ngIf="activeUpdateView == UpdateViewEnum.Join">
-                    <app-organization-join (updateLegalEntity)="getLegalEntity()"></app-organization-join>
+                    <app-organization-join (setLegalEntityId)="setLegalEntityId($event)"></app-organization-join>
                 </div>
                 <div *ngIf="activeUpdateView == UpdateViewEnum.Create">
-                    <app-organization-create (updateLegalEntity)="getLegalEntity()"></app-organization-create>
+                    <app-organization-create (setLegalEntityId)="setLegalEntityId($event)"></app-organization-create>
                 </div>
             </ng-template>
         </div>

@@ -15,7 +15,7 @@ import {UserUpdateBody} from '../../model/bodies/user-update';
   styleUrls: ['./organization-join.component.scss']
 })
 export class OrganizationJoinComponent implements OnInit, OnDestroy {
-  @Output() updateLegalEntity = new EventEmitter<boolean>();
+  @Output() setLegalEntityId = new EventEmitter<string>();
 
   public form: FormGroup;
   public submitted = false;
@@ -76,7 +76,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
         const legalEntityId = this.form.value.legalEntity;
         const userUpdate: UserUpdateBody = {legalEntityId};
         await this.userService.update(userUpdate).toPromise();
-        this.updateLegalEntity.emit();
+
+        this.setLegalEntityId.emit(legalEntityId);
         this.connectionService.updateSocketLegalEntity(legalEntityId);
       } catch (error) {
         this.alertService.error(error.message);
