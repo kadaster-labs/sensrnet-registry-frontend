@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import {UserUpdateBody} from '../../model/bodies/user-update';
 import {LegalEntityService} from '../../services/legal-entity.service';
-import {ConnectionService} from "../../services/connection.service";
+import {ConnectionService} from '../../services/connection.service';
 
 @Component({
   selector: 'app-organization-update',
@@ -14,12 +14,12 @@ import {ConnectionService} from "../../services/connection.service";
 })
 export class OrganizationUpdateComponent implements OnInit {
   @Input() public legalEntity: ILegalEntity;
-  @Output() updateLegalEntity = new EventEmitter<boolean>();
+  @Output() setLegalEntityId = new EventEmitter<string>();
 
   public form: FormGroup;
   public submitted = false;
 
-  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
   public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
 
   constructor(
@@ -65,7 +65,8 @@ export class OrganizationUpdateComponent implements OnInit {
     };
     try {
       await this.userService.update(userUpdate).toPromise();
-      this.updateLegalEntity.emit();
+
+      this.setLegalEntityId.emit(null);
       this.connectionService.updateSocketLegalEntity(null);
     } catch (error) {
       this.alertService.error(error.message);

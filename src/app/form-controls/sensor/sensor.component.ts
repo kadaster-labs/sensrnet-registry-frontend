@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {ModalService} from '../../services/modal.service';
 import {DeviceService} from '../../services/device.service';
@@ -21,7 +21,7 @@ export class SensorComponent implements ControlValueAccessor {
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
 
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public confirmTitleString = $localize`:@@sensor.delete.confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@sensor.delete.confirm.body:Do you really want to delete the sensor?`;

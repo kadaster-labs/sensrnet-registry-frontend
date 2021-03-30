@@ -5,7 +5,7 @@ import { LegalEntityId } from '../../model/bodies/legal-entity-id';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {IRegisterLegalEntityBody, LegalEntityService} from '../../services/legal-entity.service';
 import {IContactDetails} from '../../model/legalEntity';
-import {ConnectionService} from "../../services/connection.service";
+import {ConnectionService} from '../../services/connection.service';
 
 @Component({
   selector: 'app-organization-create',
@@ -13,13 +13,13 @@ import {ConnectionService} from "../../services/connection.service";
   styleUrls: ['./organization-create.component.scss']
 })
 export class OrganizationCreateComponent implements OnInit, OnDestroy {
-  @Output() updateLegalEntity = new EventEmitter<boolean>();
+  @Output() setLegalEntityId = new EventEmitter<string>();
 
   public form: FormGroup;
   public submitted = false;
   public subscriptions = [];
 
-  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public registerFailedMessage = $localize`:@@register.failed:Failed to register. Does the organization exist already?`;
 
@@ -52,8 +52,8 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
 
         const result = await this.legalEntityService.register(legalEntity).toPromise() as LegalEntityId;
         if (result && result.legalEntityId) {
-          this.updateLegalEntity.emit();
           this.connectionService.updateSocketLegalEntity(result.legalEntityId);
+          this.setLegalEntityId.emit(result.legalEntityId);
         }
       } catch {
         this.alertService.error(this.registerFailedMessage);

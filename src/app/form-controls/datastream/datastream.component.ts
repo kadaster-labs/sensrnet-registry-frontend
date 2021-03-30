@@ -21,7 +21,7 @@ export class DataStreamComponent implements ControlValueAccessor {
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
 
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public confirmTitleString = $localize`:@@dataStream.delete.confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@dataStream.delete.confirm.body:Do you really want to delete the datastream?`;

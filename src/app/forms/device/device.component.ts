@@ -25,6 +25,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
   public subscriptions: Subscription[] = [];
 
+  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
+
   public deviceForm: FormGroup;
   public sensorForm: FormGroup;
 
@@ -206,10 +208,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
         id: sensor._id,
         name: [sensor.name, Validators.required],
         description: [sensor.description, Validators.required],
-        typeName: sensor.type ? {value: sensor.type} : null,
+        typeName: [sensor.type ? {value: sensor.type} : null, Validators.required],
         manufacturer: sensor.manufacturer,
         supplier: sensor.supplier,
-        documentation: sensor.documentation,
+        documentation: [sensor.documentation, [Validators.pattern(this.urlRegex)]],
         dataStreams,
       }));
       this.sensorForm.markAsPristine();

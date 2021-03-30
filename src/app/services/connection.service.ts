@@ -106,7 +106,7 @@ export class ConnectionService {
 
   public connectSocket() {
     if (!this.socket) {
-      const namespace = 'device';
+      const namespace = 'sensrnet';
       const host = this.env.apiUrl.substring(0, this.env.apiUrl.lastIndexOf('/'));  // strip the /api part
 
       const connectionOptions = {
