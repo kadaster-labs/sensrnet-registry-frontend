@@ -1,83 +1,102 @@
 <div [formGroup]="parentForm" class="form-group row">
-    <div class="col-12">
-        <span i18n>Datastreams</span><span class="font-italic text-muted" i18n> - Optional</span><br>
-        <button type="button" class="btn btn-outline-secondary mt-2" (click)="addDataStream()" i18n>Add Datastream</button>
-    </div>
-    <div formArrayName="dataStreams"
-         *ngFor="let dataStream of parentForm.get('dataStreams')['controls']; let i = index;"
-         class="col-6 mt-3 form-group">
-        <div class="row py-3 bg-light border rounded" formGroupName="{{i}}">
-            <div class="col-12">
-                <label i18n>Name</label>
-                <button (click)="removeDataStream(i)" type="button" class="close float-right" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <input formControlName="name" type="text" placeholder="Datastream name" class="form-control" i18n-placeholder>
-                <div *ngIf="(getDataStreamElement(i, 'name').dirty || getDataStreamElement(i, 'name').touched || submitted) && getDataStreamElement(i, 'name').errors"
-                     class="invalid-input">
-                    <span class="required-text" *ngIf="getDataStreamElement(i, 'name').errors.required" i18n>Name is required</span>
+    <div class="col-12" *ngIf="parentForm.get('sensors')['controls'].length;else noSensors">
+        <div class="col-12 m-0 p-0">
+            <span i18n>Datastreams</span><span class="font-italic text-muted" i18n> - Optional</span><br>
+        </div>
+        <div formArrayName="sensors" *ngFor="let sensor of parentForm.get('sensors')['controls']; let i = index;" class="col-12 p-0 mx-0 mt-3 form-group">
+            <div class="row py-3 bg-light border rounded" formGroupName="{{i}}">
+                <div class="col-12">
+                    <span>Sensor: {{ sensor.get('name').value }}</span>
                 </div>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Reason</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="reason" type="text" placeholder="Reason for the datastream" class="form-control" i18n-placeholder>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="description" type="text" placeholder="Describe datastream" class="form-control" i18n-placeholder>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Observed Property</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="observedProperty" type="text" placeholder="The property that is observed" class="form-control" i18n-placeholder>
-            </div>
-            <div class="col-md-4 mt-1 text-left">
-                <label>
-                    <input type="checkbox" formControlName="isPublic" class="mr-2">
-                    <span i18n>Is Public</span>
-                </label>
-            </div>
-            <div class="col-md-4 mt-1 text-center">
-                <label>
-                    <input type="checkbox" formControlName="isOpenData" class="mr-2">
-                    <span i18n>Is Open Data</span>
-                </label>
-            </div>
-            <div class="col-md-4 mt-1 text-right">
-                <label>
-                    <input type="checkbox" formControlName="isReusable" class="mr-2">
-                    <span i18n>Is Reusable</span>
-                </label>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Documentation</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="documentationUrl" type="text" placeholder="Enter URL of documentation" class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, 'documentationUrl').errors }" i18n-placeholder>
-                <div *ngIf="(getDataStreamElement(i, 'documentationUrl').dirty || getDataStreamElement(i, 'documentationUrl').touched || submitted) && getDataStreamElement(i, 'documentationUrl').errors"
-                     class="invalid-input">
-                    <span class="required-text" *ngIf="getDataStreamElement(i, 'documentationUrl').errors.pattern" i18n>Not a valid URL</span>
+                <div class="col-12">
+                    <button type="button" class="btn btn-outline-secondary mt-2" (click)="addDataStream(i)" i18n>Add Datastream</button>
                 </div>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Datalink</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="dataLink" type="text" placeholder="Enter URL of data" class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, 'dataLink').errors }" i18n-placeholder>
-                <div *ngIf="(getDataStreamElement(i, 'dataLink').dirty || getDataStreamElement(i, 'dataLink').touched || submitted) && getDataStreamElement(i, 'dataLink').errors"
-                     class="invalid-input">
-                    <span class="required-text" *ngIf="getDataStreamElement(i, 'dataLink').errors.pattern" i18n>Not a valid URL</span>
+                <div class="col-12 px-0 mx-0">
+                    <div class="row">
+                        <div formArrayName="dataStreams" *ngFor="let dataStream of sensor.get('dataStreams')['controls']; let j = index;" class="mt-3 col-6 form-group">
+                            <div class="row py-3 border bg-white" formGroupName="{{j}}">
+                                <div class="col-12">
+                                    <label i18n>Name</label>
+                                    <button (click)="removeDataStream(i, j)" type="button" class="close float-right" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <input formControlName="name" type="text" placeholder="Datastream name" class="form-control" i18n-placeholder>
+                                    <div *ngIf="(getDataStreamElement(i, j, 'name').dirty || getDataStreamElement(i, j, 'name').touched || submitted) && getDataStreamElement(i, j, 'name').errors"
+                                         class="invalid-input">
+                                        <span class="required-text" *ngIf="getDataStreamElement(i, j, 'name').errors.required" i18n>Name is required</span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label><span i18n>Description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                                    <input formControlName="description" type="text" placeholder="Describe datastream" class="form-control" i18n-placeholder>
+                                </div>
+                                <div class="col-12">
+                                    <app-sensor-theme formControlName="theme" [submitted]="submitted"></app-sensor-theme>
+                                </div>
+                                <div class="col-12">
+                                    <label><span i18n>Data Quality</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                                    <input formControlName="dataQuality" type="text" placeholder="The quality of the data" class="form-control" i18n-placeholder>
+                                </div>
+                                <div class="col-md-4 mt-1 text-left">
+                                    <label>
+                                        <input type="checkbox" formControlName="isActive" class="mr-2">
+                                        <span i18n>Is Active</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 mt-1 text-left">
+                                    <label>
+                                        <input type="checkbox" formControlName="isPublic" class="mr-2">
+                                        <span i18n>Is Public</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 mt-1 text-center">
+                                    <label>
+                                        <input type="checkbox" formControlName="isOpenData" class="mr-2">
+                                        <span i18n>Is Open Data</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 mt-1">
+                                    <label>
+                                        <input type="checkbox" formControlName="containsPersonalInfoData" class="mr-2">
+                                        <span i18n>Contains Personal Info</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 mt-1">
+                                    <label>
+                                        <input type="checkbox" formControlName="isReusable" class="mr-2">
+                                        <span i18n>Is Reusable</span>
+                                    </label>
+                                </div>
+                                <div class="col-12">
+                                    <label><span i18n>Documentation</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                                    <input formControlName="documentation" type="text" placeholder="Enter URL of documentation" class="form-control"
+                                           [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, j, 'documentation').errors }" i18n-placeholder>
+                                    <div *ngIf="(getDataStreamElement(i, j, 'documentation').dirty || getDataStreamElement(i, j, 'documentation').touched || submitted) && getDataStreamElement(i, j, 'documentation').errors"
+                                         class="invalid-input">
+                                        <span class="required-text" *ngIf="getDataStreamElement(i, j, 'documentation').errors.pattern" i18n>Not a valid URL</span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label><span i18n>Datalink</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                                    <input formControlName="dataLink" type="text" placeholder="Enter URL of data" class="form-control"
+                                           [ngClass]="{ 'is-invalid': submitted && getDataStreamElement(i, j, 'dataLink').errors }" i18n-placeholder>
+                                    <div *ngIf="(getDataStreamElement(i, j, 'dataLink').dirty || getDataStreamElement(i, j, 'dataLink').touched || submitted) && getDataStreamElement(i, j, 'dataLink').errors"
+                                         class="invalid-input">
+                                        <span class="required-text" *ngIf="getDataStreamElement(i, j, 'dataLink').errors.pattern" i18n>Not a valid URL</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Unit of measurement</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="unitOfMeasurement" type="text" placeholder="Unit of Measurement" class="form-control" i18n-placeholder>
-            </div>
-            <div class="col-12">
-                <label><span i18n>Data Frequency / s</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                <input formControlName="dataFrequency" type="number" placeholder="Frequency" class="form-control" i18n-placeholder>
-            </div>
-            <div class="col-12">
-                <label i18n>Data Quality (worst - best)</label>
-                <input formControlName="dataQuality" type="range" step=0.01 min="0" max="1" placeholder="Quality" class="form-control p-0" i18n-placeholder>
             </div>
         </div>
     </div>
+    <ng-template #noSensors>
+        <div class="row">
+            <div class="col-12">
+                <span>Create a sensor first!</span>
+            </div>
+        </div>
+    </ng-template>
 </div>

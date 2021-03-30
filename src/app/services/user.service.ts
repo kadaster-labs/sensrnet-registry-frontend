@@ -13,12 +13,20 @@ export class UserService {
     private readonly connectionService: ConnectionService,
     ) {}
 
+  public retrieve() {
+    return this.http.get(`${this.env.apiUrl}/user`);
+  }
+
+  public register(user: User) {
+    return this.http.post(`${this.env.apiUrl}/user`, user);
+  }
+
   public update(user: UserUpdateBody) {
     return this.http.put(`${this.env.apiUrl}/user`, user);
   }
 
-  public hasJoinedOrganization(): boolean {
-    const claim = this.connectionService.currentClaims;
-    return !!(claim && claim.organizationId);
+  public updateById(userId: string, user: Record<string, any>) {
+    console.log(user);
+    return this.http.put(`${this.env.apiUrl}/user/${userId}`, user);
   }
 }

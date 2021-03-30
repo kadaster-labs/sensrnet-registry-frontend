@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <app-navbar locationClass="form"></app-navbar>
+    <div class="row form-header">
+        <div class="col-1">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div [ngClass]="{'col-6': activeStepIndex === 0, 'col-11': activeStepIndex !== 0 }">
+            <div class="row">
+                <div class="col-6">
+                    <h3 *ngIf="activeStepIndex === 0" i18n>Device Properties</h3>
+                    <h3 *ngIf="activeStepIndex === 1" i18n>Sensors</h3>
+                    <h3 *ngIf="activeStepIndex === 2" i18n>Datastreams</h3>
+                </div>
+                <div class="col-6 mt-2 text-right">
+                    <span *ngFor="let _ of [].constructor(getStepCount()); let i = index" [ngClass]="getStepClasses(i)" (click)="goToStep(i)" class="step pointer"></span>
+                </div>
+            </div>
+            <hr>
+            <form [formGroup]="deviceForm" (ngSubmit)="submitDevice()">
+                <div [ngStyle]="{display: activeStepIndex === 0 ? 'block' : 'none'}">
+                    <app-device-type formControlName="category" [submitted]="submitted" (sensorType)="setNameFromCategory($event)"></app-device-type>
+                    <div class="form-group mb-4">
+                        <label i18n>Name</label>
+                        <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
+                            [ngClass]="{ 'is-invalid': (deviceControls.name.dirty || deviceControls.name.touched || submitted) && deviceControls.name.errors }"
+                            i18n-placeholder>
+                        <div *ngIf="(deviceControls.name.dirty || deviceControls.name.touched || submitted) && deviceControls.name.errors" class="invalid-input">
+                            <span class="required-text" *ngIf="deviceControls.name.errors.required" i18n>Name is required</span>
+                            <span class="required-text" *ngIf="deviceControls.name.errors.minlength" i18n>Name must be at least 6 characters</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="connectivity"><span i18n>Connectivity</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                        <input class="form-control" type="text" formControlName="connectivity" placeholder="Connectivity of the device" i18n-placeholder>
+                    </div>
+                    <div class="form-group">
+                        <label for="description"><span i18n>Description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                        <textarea class="form-control" type="text" formControlName="description" placeholder="Describe the device" i18n-placeholder></textarea>
+                    </div>
+                    <app-sensor-location formControlName="location" [submitted]="submitted"></app-sensor-location>
+                    <div class="form-group">
+                        <label for="locationName"><span i18n>Location name</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                        <input class="form-control" type="text" formControlName="locationName" placeholder="Name of the device location" i18n-placeholder>
+                    </div>
+                    <div class="form-group">
+                        <label for="locationDescription"><span i18n>Location description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                        <textarea class="form-control" type="text" formControlName="locationDescription" placeholder="Description of the device location" i18n-placeholder></textarea>
+                    </div>
+                    <hr class="my-2">
+                    <button type="submit" class="btn btn-primary btn-lg mr-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)">Next</button>
+                </div>
+            </form>
+            <form [formGroup]="sensorForm" (ngSubmit)="submitSensors()">
+                <div [ngStyle]="{display: activeStepIndex === 1 ? 'block' : 'none'}">
+                    <app-sensor formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-sensor>
+                    <hr class="my-2">
+                    <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg mr-2" (click)="goToStep(activeStepIndex - 1)">Previous</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)">Next</button>
+                </div>
+            </form>
+            <form [formGroup]="sensorForm" (ngSubmit)="submitDataStreams()">
+                <div [ngStyle]="{display: activeStepIndex === 2 ? 'block' : 'none'}">
+                    <app-datastream formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
+                    <hr class="my-2">
+                    <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex - 1)">Previous</button>
+                </div>
+            </form>
+        </div>
+        <div *ngIf="activeStepIndex === 0" class="col-5" style="height: 85vh; max-height: 85vh">
+            <app-map searchBarHeight="2rem" [clearLocationHighLight]="!deviceId"></app-map>
+        </div>
+    </div>
+</div>

@@ -1,37 +1,36 @@
 import proj4 from 'proj4';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 
 import Overlay from 'ol/Overlay';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import { Cluster } from 'ol/source';
+import {Cluster} from 'ol/source';
 import Stroke from 'ol/style/Stroke';
-import { FitOptions } from 'ol/View';
+import {FitOptions} from 'ol/View';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import { extend, Extent } from 'ol/extent';
+import {extend, Extent, getBottomLeft, getTopRight} from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
-import { getBottomLeft, getTopRight } from 'ol/extent';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
-import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
 
-import { SearchComponentEvent } from 'generieke-geo-componenten-search';
-import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
-import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
+import {SearchComponentEvent} from 'generieke-geo-componenten-search';
+import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
+import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
 
-import { ISensor } from '../../model/bodies/sensor-body';
-import { ModalService } from '../../services/modal.service';
-import { SensorService } from '../../services/sensor.service';
-import { LocationService } from '../../services/location.service';
-import { ConnectionService } from '../../services/connection.service';
-import { Category, getCategoryTranslation, getTypeTranslation } from '../../model/bodies/sensorTypes';
+import {IDevice} from '../../model/bodies/device-model';
+import {AlertService} from '../../services/alert.service';
+import {ModalService} from '../../services/modal.service';
+import {DeviceService} from '../../services/device.service';
+import {LocationService} from '../../services/location.service';
+import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
+
 
 @Component({
   selector: 'app-map',
@@ -46,11 +45,10 @@ export class MapComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private httpClient: HttpClient,
+    private alertService: AlertService,
     private modalService: ModalService,
-    private sensorService: SensorService,
+    private deviceService: DeviceService,
     private locationService: LocationService,
-    private connectionService: ConnectionService,
-    private oidcSecurityService: OidcSecurityService,
   ) {}
 
   public mapName = 'srn';
@@ -58,9 +56,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public mapUpdated;
   public overlayVisible = false;
-  public selectedSensor: ISensor;
+  public selectedDevice: IDevice;
 
-  public getTypeTranslation = getTypeTranslation;
   public getCategoryTranslation = getCategoryTranslation;
 
   public popupOverlay: Overlay;
@@ -96,86 +93,50 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public locateMeString = $localize`:@@map.locate:Locate me`;
   public confirmTitleString = $localize`:@@map.confirm.title:Please confirm`;
-  public confirmBodyString = $localize`:@@map.confirm.body:Do you really want to delete the sensor?`;
+  public confirmBodyString = $localize`:@@map.confirm.body:Do you really want to delete the device?`;
   public geoLocationNotSupportedString = $localize`:@@map.geo.support:Geolocation is not supported by this browser.`;
 
-  private static sensorToFeatureProperties(sensor: ISensor) {
+  private static sensorToFeatureProperties(device: IDevice) {
     return {
-      sensor,
-      name: sensor.name,
-      category: sensor.category,
-      typeName: sensor.typeName,
-      active: sensor.active,
-      aim: sensor.aim,
-      description: sensor.description,
-      manufacturer: sensor.manufacturer,
-      theme: sensor.theme,
-      nodeId: sensor.nodeId,
+      device,
+      name: device.name,
+      canEdit: device.canEdit,
+      description: device.description,
+      category: device.category,
+      connectivity: device.connectivity,
+      locationDetails: device.locationDetails,
+      location: device.location,
     };
   }
 
   public getStyleCache() {
     const styleCache = {};
     for (const item of [true, false]) {
-      for (const item1 of Object.keys(Category).filter(String)) {
-        for (const item2 of [true, false]) {
-          switch (item2) {
-            case true:
-              const styleNameActive = item + '_' + item1 + '_active';
-              const styleActive = [new Style({
-                image: new CircleStyle({
-                  radius: 15,
-                  fill: new Fill({
-                    color: this.getNodeColor(item, 0.9),
-                  }),
-                  stroke: new Stroke({
-                    color: '#fff',
-                    width: 1.5
-                  })
-                })
-              }), new Style({
-                image: new Icon({
-                  scale: 0.25,
-                  src: `/assets/icons/${item1}_op.png`
-                })
-              })
-              ];
+      for (const item1 of Object.keys(Category)) {
+        const styleName = `${item}_${item1}`;
+        const styleActive = [new Style({
+          image: new CircleStyle({
+            radius: 15,
+            fill: new Fill({
+              color: this.getNodeColor(item, 0.9),
+            }),
+            stroke: new Stroke({
+              color: '#fff',
+              width: 1.5
+            })
+          })
+        }), new Style({
+          image: new Icon({
+            scale: 0.25,
+            src: `/assets/icons/${item1}_op.png`
+          })
+        })];
 
-              for (const style of Object.values(styleActive)) {
-                style.getImage().load();
-              }
-              styleCache[styleNameActive] = styleActive;
-              break;
-
-            case false:
-              const styleNameInactive = item + '_' + item1 + '_inactive';
-              const styleInActive = [new Style({
-                image: new CircleStyle({
-                  radius: 15,
-                  fill: new Fill({
-                    color: this.getNodeColor(item, 0.25),
-                  }),
-                  stroke: new Stroke({
-                    color: '#fff',
-                    width: 1.5
-                  })
-                })
-              }), new Style({
-                image: new Icon({
-                  scale: 0.25,
-                  src: `/assets/icons/${item1}_op.png`
-                })
-              })
-              ];
-
-              for (const style of Object.values(styleInActive)) {
-                style.getImage().load();
-              }
-              styleCache[styleNameInactive] = styleInActive;
-
-              break;
-          }
+        for (const style of Object.values(styleActive)) {
+          style.getImage().load();
         }
+
+        styleCache[styleName] = styleActive;
       }
     }
 
@@ -193,19 +154,12 @@ export class MapComponent implements OnInit, OnDestroy {
       let style: Style[];
 
       const FEATURES_ = feature.get('features');
-      let numberOfFeatures = FEATURES_.length;
+      const numberOfFeatures = FEATURES_.length;
       if (numberOfFeatures === 1) {
-        const active = feature.get('features')[0].values_.active;
         const category = feature.get('features')[0].values_.category;
-        const ownsSensor = this.ownsSensor(feature.get('features')[0].values_.sensor);
+        const ownsDevice = this.ownsDevice(feature.get('features')[0].values_.device);
 
-        if (!active) {
-          numberOfFeatures = `${ownsSensor}_${category}_inactive`;
-          style = styleCache[numberOfFeatures];
-        } else {
-          numberOfFeatures = `${ownsSensor}_${category}_active`;
-          style = styleCache[numberOfFeatures];
-        }
+        style = styleCache[`${ownsDevice}_${category}`];
       } else {
         style = styleCache[numberOfFeatures];
       }
@@ -234,28 +188,16 @@ export class MapComponent implements OnInit, OnDestroy {
     };
 
     const styleSelectedCluster = (feature) => {
-      let styleFeatures;
       const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
-        const active = feature.get('features')[0].values_.active;
-        const sensorType = feature.get('features')[0].values_.typeName[0];
-        const ownsSensor = this.ownsSensor(feature.get('features')[0].values_.sensor);
-
-        let style: Style[];
-        if (active) {
-          styleFeatures = `${ownsSensor}_${sensorType}_active`;
-          style = styleCache[styleFeatures];
-        } else {
-          styleFeatures = `${ownsSensor}_${sensorType}_inactive`;
-          style = styleCache[styleFeatures];
-        }
-
-        return style;
+        const category = feature.get('features')[0].values_.category;
+        const ownsDevice = this.ownsDevice(feature.get('features')[0].values_.device);
+        return styleCache[`${ownsDevice}_${category}`];
       }
     };
 
     this.vectorSource = new VectorSource({
-      features
+      features,
     });
 
     this.clusterSource = new Cluster({
@@ -296,7 +238,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const geometry = new Feature({
           geometry: feature.values_.geometry,
         });
-        this.selectedSensor = feature.values_.sensor;
+        this.selectedDevice = feature.values_.device;
         this.showOverlay(feature.values_.geometry.flatCoordinates);
 
         this.highlightFeature(geometry);
@@ -307,8 +249,8 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  public updateMap(sensors) {
-    const featuresData: Array<object> = sensors.map((sensor) => this.sensorToFeature(sensor));
+  public updateMap(devices) {
+    const featuresData: Array<object> = devices.map((device) => this.deviceToFeature(device));
     const features: Array<Feature> = new GeoJSON().readFeatures({
       features: featuresData,
       type: 'FeatureCollection',
@@ -333,34 +275,33 @@ export class MapComponent implements OnInit, OnDestroy {
     return ownerType ? `rgba(0,160,60, ${opacity})` : `rgba(19, 65, 115, ${opacity})`;
   }
 
-  public updateSensor(updatedSensor: ISensor) {
-    const props = MapComponent.sensorToFeatureProperties(updatedSensor);
+  public updateDevice(updatedDevice: IDevice) {
+    const props = MapComponent.sensorToFeatureProperties(updatedDevice);
 
-    const sensor = this.vectorSource.getFeatureById(updatedSensor._id);
-    if (sensor) {  // In case the sensor is currently visible on the map: update map.
-      sensor.setProperties(props);
+    const device = this.vectorSource.getFeatureById(updatedDevice._id);
+    if (device) {  // In case the sensor is currently visible on the map: update map.
+      device.setProperties(props);
       const geom: Geometry = new Point(proj4(this.epsgWGS84, this.epsgRD, [
-        updatedSensor.location.coordinates[0], updatedSensor.location.coordinates[1]
+        updatedDevice.location.coordinates[0], updatedDevice.location.coordinates[1]
       ]));
-      sensor.setGeometry(geom);
+      device.setGeometry(geom);
       this.clearLocationLayer();
 
-      if (this.selectedSensor && this.selectedSensor._id === updatedSensor._id) {
-        this.selectedSensor = updatedSensor;  // In case the sensor is selected: update overlay.
+      if (this.selectedDevice && this.selectedDevice._id === updatedDevice._id) {
+        this.selectedDevice = updatedDevice;  // In case the sensor is selected: update overlay.
       }
     }
   }
 
-  public sensorDeleted(deletedSensor: ISensor) {
+  public deviceDeleted(deletedDevice: IDevice) {
     this.locationService.hideLocationHighlight();
-
-    const sensor = this.vectorSource.getFeatureById(deletedSensor._id);
-    if (sensor) {  // In case the sensor is currently visible on the map: update map.
-      if (this.selectedSensor && this.selectedSensor._id === deletedSensor._id) {  // In case the sensor is selected.
+    const device = this.vectorSource.getFeatureById(deletedDevice._id);
+    if (device) {  // In case the sensor is currently visible on the map: update map.
+      if (this.selectedDevice && this.selectedDevice._id === deletedDevice._id) {  // In case the sensor is selected.
         this.hideOverlay();
-        this.selectedSensor = null;
+        this.selectedDevice = null;
       }
-      this.vectorSource.removeFeature(sensor);
+      this.vectorSource.removeFeature(device);
     }
   }
 
@@ -438,14 +379,15 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  private sensorToFeature(newSensor: ISensor): object {
+  private deviceToFeature(newDevice: IDevice): object {
     return {
       geometry: {
-        coordinates: proj4(this.epsgWGS84, this.epsgRD, [newSensor.location.coordinates[0], newSensor.location.coordinates[1]]),
+        coordinates: proj4(this.epsgWGS84, this.epsgRD,
+          [newDevice.location.coordinates[0], newDevice.location.coordinates[1]]),
         type: 'Point',
       },
-      id: newSensor._id,
-      properties: MapComponent.sensorToFeatureProperties(newSensor),
+      id: newDevice._id,
+      properties: MapComponent.sensorToFeatureProperties(newDevice),
       type: 'Feature',
     };
   }
@@ -543,23 +485,25 @@ export class MapComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public ownsSensor(sensor): boolean {
-    const claim = this.connectionService.currentClaims;
-    return claim && claim.organizationId && sensor.organizations ? sensor.organizations.some(e => e.id === claim.organizationId) : false;
+  public ownsDevice(device): boolean {
+    return device.canEdit;
   }
 
-  public async editSensor(): Promise<void> {
-    await this.router.navigate([`/sensor/${this.selectedSensor._id}`]);
+  public async editDevice(): Promise<void> {
+    await this.router.navigate([`/device/${this.selectedDevice._id}`]);
   }
 
-  public async deleteSensor(): Promise<void> {
+  public async deleteDevice(): Promise<void> {
     this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
-      .then((confirmed) => {
+      .then(async confirmed => {
         if (confirmed) {
-          this.sensorService.unregister(this.selectedSensor._id);
+          try {
+            await this.deviceService.unregister(this.selectedDevice._id);
+          } catch (e) {
+            this.alertService.error(e.message);
+          }
         }
-      })
-      .catch(() => console.log('User dismissed the dialog.'));
+      }).catch(() => console.log('User dismissed the dialog.'));
   }
 
   public async ngOnInit(): Promise<void> {
@@ -587,11 +531,11 @@ export class MapComponent implements OnInit, OnDestroy {
         const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
         const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
 
-        const sensors = await this.sensorService.getSensors(bottomLeft[0].toString(), bottomLeft[1].toString(),
+        const devices = await this.deviceService.getDevices(bottomLeft[0].toString(), bottomLeft[1].toString(),
           topRight[0].toString(), topRight[1].toString());
 
-        if (sensors) {
-          this.updateMap(sensors);
+        if (devices) {
+          this.updateMap(devices);
         }
       }
     };
@@ -601,28 +545,29 @@ export class MapComponent implements OnInit, OnDestroy {
       this.myLayers = data as Theme[];
     }, () => {}));
 
-    const { onRegister, onUpdate, onDelete } = await this.sensorService.subscribe();
+    const { onLocate, onUpdate, onRemove } = await this.deviceService.subscribe();
 
-    this.subscriptions.push(onRegister.subscribe((newSensor: ISensor) => {
-      const feature: object = this.sensorToFeature(newSensor);
+    this.subscriptions.push(onLocate.subscribe((newDevice: IDevice) => {
+      const feature: object = this.deviceToFeature(newDevice);
       const newFeature = new GeoJSON().readFeature(feature);
       this.vectorSource.addFeature(newFeature);
     }));
 
-    this.subscriptions.push(onUpdate.subscribe((updatedSensor: ISensor) => {
-      this.updateSensor(updatedSensor);
+    this.subscriptions.push(onUpdate.subscribe((updatedDevice: IDevice) => {
+      this.updateDevice(updatedDevice);
     }));
 
-    this.subscriptions.push(onDelete.subscribe((deletedSensor: ISensor) => {
-      this.sensorDeleted(deletedSensor);
+    this.subscriptions.push(onRemove.subscribe((removedDevice: IDevice) => {
+      this.deviceDeleted(removedDevice);
     }));
 
-    this.subscriptions.push(this.locationService.showLocation$.subscribe((sensor) => {
+    this.subscriptions.push(this.locationService.showLocation$.subscribe((deviceLocation) => {
       this.removeLocationFeatures();
 
-      if (sensor) {
+      if (deviceLocation) {
         const locationFeature = new Feature({
-          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[1], sensor.coordinates[0]])),
+          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD,
+            [deviceLocation.coordinates[1], deviceLocation.coordinates[0]])),
         });
         this.setLocation(locationFeature);
       } else {
@@ -630,12 +575,13 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.subscriptions.push(this.locationService.locationHighlight$.subscribe((sensor) => {
+    this.subscriptions.push(this.locationService.locationHighlight$.subscribe((deviceLocation) => {
       this.removeHighlight();
 
-      if (sensor) {
+      if (deviceLocation) {
         const geometry = new Feature({
-          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD, [sensor.coordinates[0], sensor.coordinates[1]]))
+          geometry: new Point(proj4(this.epsgWGS84, this.epsgRD,
+            [deviceLocation.coordinates[0], deviceLocation.coordinates[1]]))
         });
 
         this.highlightFeature(geometry);
@@ -648,8 +594,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const subscription of this.subscriptions) {
-      subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

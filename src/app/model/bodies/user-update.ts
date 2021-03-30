@@ -1,5 +1,7 @@
 export class UserUpdateBody {
   constructor(
-    public organization?: string,
+    public password?: string,
+    public legalEntityId?: string,
+    public leaveLegalEntity?: boolean,
   ) { }
 }

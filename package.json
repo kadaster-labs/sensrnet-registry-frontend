@@ -1,6 +1,6 @@
 {
   "name": "sensrnet",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config src/proxy.conf.json --configuration=en",
@@ -36,6 +36,7 @@
     "generieke-geo-componenten-print": "^4.0.0",
     "generieke-geo-componenten-search": "^6.0.1",
     "jquery": "^3.3.1",
+    "jwt-decode": "^3.1.1",
     "ol": "^6.3.1",
     "ol-ext": "^3.1.12",
     "proj4": "^2.5.0",

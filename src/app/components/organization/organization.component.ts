@@ -1,10 +1,15 @@
-import { Claims } from '../../model/claim';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConnectionService } from '../../services/connection.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { LegalEntityService } from '../../services/legal-entity.service';
+import {ILegalEntity} from '../../model/legalEntity';
 
 enum UpdateView {
   Join = 0,
   Create = 1,
+}
+
+enum OrganizationView {
+  View = 0,
+  Users = 1,
 }
 
 @Component({
@@ -13,27 +18,60 @@ enum UpdateView {
   styleUrls: ['./organization.component.scss']
 })
 export class OrganizationComponent implements OnInit, OnDestroy {
-  public organizationId;
+  public legalEntityId: string;
+  public legalEntity: ILegalEntity;
+
   public subscriptions = [];
 
   public UpdateViewEnum = UpdateView;
+  public OrganizationViewEnum = OrganizationView;
+
   public activeUpdateView = this.UpdateViewEnum.Join;
+  public activeOrganizationView = this.OrganizationViewEnum.View;
 
   constructor(
-    private readonly connectionService: ConnectionService,
+    private legalEntityService: LegalEntityService,
   ) {}
 
-  ngOnInit(): void {
-    this.subscriptions.push(this.connectionService.claim$.subscribe(async (claims: Claims) => {
-      if (claims && claims.organizationId) {
-        this.organizationId = claims.organizationId;
-      } else {
-        this.organizationId = null;
+  async getLegalEntity() {
+    return await this.legalEntityService.get().toPromise();
+  }
+
+  setLegalEntity(legalEntity) {
+    this.legalEntity = legalEntity;
+  }
+
+  async setLegalEntityId(legalEntityId: string) {
+    this.legalEntityId = legalEntityId;
+
+    if (!legalEntityId) {
+      this.setLegalEntity(null);
+    } else {
+      this.setLegalEntity(await this.getLegalEntity());
+    }
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.setLegalEntity(await this.getLegalEntity());
+
+    const { onRegister, onUpdate, onRemove } = await this.legalEntityService.subscribe();
+
+    this.subscriptions.push(onRegister.subscribe((legalEntity: ILegalEntity) => {
+      if (this.legalEntityId === legalEntity._id) {
+        this.setLegalEntity(legalEntity);
       }
+    }));
+
+    this.subscriptions.push(onUpdate.subscribe((legalEntity: ILegalEntity) => {
+      this.setLegalEntity(legalEntity);
+    }));
+
+    this.subscriptions.push(onRemove.subscribe(_ => {
+      this.setLegalEntity(null);
     }));
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

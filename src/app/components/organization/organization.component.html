@@ -7,42 +7,57 @@
         <div class="col-11">
             <div>
                 <h3>
-                    <span *ngIf="organizationId;else noorg">
-                        {{ organizationId }}
+                    <span *ngIf="legalEntity;else noLegalEntity">
+                        <span i18n>My Organization</span>
                     </span>
-                    <ng-template #noorg>
+                    <ng-template #noLegalEntity>
                         <span i18n>Organization</span>
                     </ng-template>
                 </h3>
             </div>
             <hr>
-            <div *ngIf="organizationId;else create">
-                <app-organization-update></app-organization-update>
-            </div>
-            <ng-template #create>
+            <div *ngIf="legalEntity;else createLegalEntity">
                 <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
                     <label class="btn btn-primary active">
-                        <input type="radio"
-                               name="options"
-                               autocomplete="off"
+                        <input type="radio" name="options" autocomplete="off"
+                               [checked]="activeOrganizationView == OrganizationViewEnum.View"
+                               (click)="activeOrganizationView = OrganizationViewEnum.View">
+                        <span i18n>Details</span>
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="options" autocomplete="off"
+                               [checked]="activeOrganizationView == OrganizationViewEnum.Users"
+                               (click)="activeOrganizationView = OrganizationViewEnum.Users">
+                        <span i18n>Users</span>
+                    </label>
+                </div>
+                <div *ngIf="activeOrganizationView == OrganizationViewEnum.View">
+                    <app-organization-update [legalEntity]="legalEntity" (setLegalEntityId)="setLegalEntityId($event)"></app-organization-update>
+                </div>
+                <div *ngIf="activeOrganizationView == OrganizationViewEnum.Users">
+                    <app-organization-users></app-organization-users>
+                </div>
+            </div>
+            <ng-template #createLegalEntity>
+                <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="options" autocomplete="off"
                                [checked]="activeUpdateView == UpdateViewEnum.Join"
                                (click)="activeUpdateView = UpdateViewEnum.Join">
                         <span i18n>Join</span>
                     </label>
                     <label class="btn btn-primary">
-                        <input type="radio"
-                               name="options"
-                               autocomplete="off"
+                        <input type="radio" name="options" autocomplete="off"
                                [checked]="activeUpdateView == UpdateViewEnum.Create"
                                (click)="activeUpdateView = UpdateViewEnum.Create">
                         <span i18n>Create</span>
                     </label>
                 </div>
                 <div *ngIf="activeUpdateView == UpdateViewEnum.Join">
-                    <app-organization-join></app-organization-join>
+                    <app-organization-join (setLegalEntityId)="setLegalEntityId($event)"></app-organization-join>
                 </div>
                 <div *ngIf="activeUpdateView == UpdateViewEnum.Create">
-                    <app-organization-create></app-organization-create>
+                    <app-organization-create (setLegalEntityId)="setLegalEntityId($event)"></app-organization-create>
                 </div>
             </ng-template>
         </div>

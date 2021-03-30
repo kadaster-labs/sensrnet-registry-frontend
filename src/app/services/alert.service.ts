@@ -26,7 +26,7 @@ export class AlertService {
     return this.subject.asObservable();
   }
 
-  public success(message: string, keepAfterRouteChange = false, timeoutDuration = null) {
+  public success(message: string, keepAfterRouteChange = false, timeoutDuration = 4000) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
 
@@ -35,7 +35,7 @@ export class AlertService {
     }
   }
 
-  public error(message: string, keepAfterRouteChange = false, timeoutDuration = null) {
+  public error(message: string, keepAfterRouteChange = false, timeoutDuration = 4000) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'error', text: message });
 

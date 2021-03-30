@@ -1,0 +1,16 @@
+<div [formGroup]="form" class="form-group">
+    <label for="type"><span i18n>Type</span></label>
+    <select formControlName="value" class="form-control selectpicker" data-live-search="true">
+        <ng-container *ngFor="let sensorType of sensorTypes">
+            <option class="font-weight-bold" [value]="sensorType.name">
+                {{ sensorType.name }}
+            </option>
+            <option class="pl-5" *ngFor="let specificSensorType of sensorType.types" [value]="specificSensorType">
+                {{ specificSensorType }}
+            </option>
+        </ng-container>
+    </select>
+    <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors" class="invalid-input">
+        <span class="required-text" *ngIf="f.value.errors.required" i18n>Type is required</span>
+    </div>
+</div>

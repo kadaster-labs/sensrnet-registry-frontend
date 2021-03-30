@@ -11,22 +11,22 @@ export interface SensorThemeFormValues {
 
 @Component({
   selector: 'app-sensor-theme',
-  templateUrl: './sensor-theme.component.html',
-  styleUrls: ['./sensor-theme.component.scss'],
+  templateUrl: './theme.component.html',
+  styleUrls: ['./theme.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SensorThemeComponent),
+      useExisting: forwardRef(() => ThemeComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => SensorThemeComponent),
+      useExisting: forwardRef(() => ThemeComponent),
       multi: true,
     },
   ],
 })
-export class SensorThemeComponent implements ControlValueAccessor, OnDestroy, AfterViewInit {
+export class ThemeComponent implements ControlValueAccessor, OnDestroy, AfterViewInit {
   public form: FormGroup;
   public subscriptions: Subscription[] = [];
 

@@ -21,15 +21,17 @@ import { ViewerComponent } from './viewer/viewer.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { SensorComponent } from './forms/sensor/sensor.component';
+import { ErrorInterceptor } from './helpers/error.interceptor';
+import { DeviceComponent } from './forms/device/device.component';
+import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { SensorsComponent } from './forms/sensors/sensors.component';
+import { DevicesComponent } from './forms/devices/devices.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
-import { SensorTypeComponent } from './form-controls/sensor-type/sensor-type.component';
+import { DeviceTypeComponent } from './form-controls/device-type/device-type.component';
 import { OrganizationComponent } from './components/organization/organization.component';
-import { SensorThemeComponent } from './form-controls/sensor-theme/sensor-theme.component';
+import { ThemeComponent } from './form-controls/theme/theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { OrganizationJoinComponent } from './forms/organization-join/organization-join.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
@@ -37,6 +39,9 @@ import { OrganizationCreateComponent } from './forms/organization-create/organiz
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
+import {SensorComponent} from './form-controls/sensor/sensor.component';
+import {OrganizationUsersComponent} from './forms/organization-users/organization-users.component';
+import {TypeComponent} from './form-controls/type/type.component';
 
 @NgModule({
   declarations: [
@@ -45,17 +50,21 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
     LanguageSwitcherComponent,
     ViewerComponent,
     LoginComponent,
-    SensorComponent,
-    SensorThemeComponent,
+    RegisterComponent,
+    DeviceComponent,
+    ThemeComponent,
+    TypeComponent,
     SensorLocationComponent,
-    SensorTypeComponent,
+    DeviceTypeComponent,
     OrganizationUpdateComponent,
     SensorStatusComponent,
     NavBarComponent,
     SidebarComponent,
     MapComponent,
-    SensorsComponent,
+    DevicesComponent,
     DataStreamComponent,
+    SensorComponent,
+    OrganizationUsersComponent,
     ModalComponent,
     OrganizationComponent,
     OrganizationJoinComponent,

@@ -1,13 +1,13 @@
 import { AlertService } from '../../services/alert.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { OrganizationService } from '../../services/organization.service';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import { LegalEntityService } from '../../services/legal-entity.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Organization } from '../../model/organization';
+import { ILegalEntity } from '../../model/legalEntity';
 import { UserService } from '../../services/user.service';
 import { ConnectionService } from '../../services/connection.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import {UserUpdateBody} from '../../model/bodies/user-update';
 
 @Component({
   selector: 'app-organization-join',
@@ -15,11 +15,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./organization-join.component.scss']
 })
 export class OrganizationJoinComponent implements OnInit, OnDestroy {
+  @Output() setLegalEntityId = new EventEmitter<string>();
+
   public form: FormGroup;
   public submitted = false;
 
   public subscriptions = [];
-  public organizations = [];
+  public legalEntities = [];
 
   private filterChanged: Subject<string> = new Subject<string>();
 
@@ -29,28 +31,27 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
-    private readonly organizationService: OrganizationService,
+    private readonly legalEntityService: LegalEntityService,
   ) {}
 
   get f() {
     return this.form.controls;
   }
 
-  async getOrganizations(name?: string) {
-    const organizationPromise = this.organizationService.getOrganizations(name).toPromise();
-    const organizations = await organizationPromise;
-    if (organizations) {
-      this.organizations = organizations as Organization[];
+  async getLegalEntities(name?: string) {
+    const legalEntities = await this.legalEntityService.getLegalEntities(name).toPromise();
+    if (legalEntities) {
+      this.legalEntities = legalEntities as ILegalEntity[];
     } else {
-      this.organizations = [];
+      this.legalEntities = [];
     }
   }
 
-  selectOrganization(organizationId: string) {
-    if (organizationId === this.form.get('organization').value) {
-      this.form.patchValue({ organization: '' });
+  selectLegalEntity(legalEntityId: string) {
+    if (legalEntityId === this.form.get('legalEntity').value) {
+      this.form.patchValue({ legalEntity: '' });
     } else {
-      this.form.patchValue({ organization: organizationId });
+      this.form.patchValue({ legalEntity: legalEntityId });
     }
   }
 
@@ -60,27 +61,25 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.form = this.formBuilder.group({
-      organization: new FormControl('', Validators.required),
+      legalEntity: new FormControl('', Validators.required),
     });
 
-    await this.getOrganizations();
+    await this.getLegalEntities();
     this.subscriptions.push(this.filterChanged
-      .pipe(
-        debounceTime(750),
-      )
-      .subscribe((website) => {
-        this.getOrganizations(website);
-      }));
+      .pipe(debounceTime(750))
+      .subscribe(name => this.getLegalEntities(name)));
   }
 
   public async submit() {
     this.submitted = true;
     if (this.form.valid) {
       try {
-        await this.userService.update(this.form.value).toPromise();
-        await this.connectionService.refreshToken();
-        this.connectionService.updateSocketOrganization();
-        this.router.navigate(['/viewer']);
+        const legalEntityId = this.form.value.legalEntity;
+        const userUpdate: UserUpdateBody = {legalEntityId};
+        await this.userService.update(userUpdate).toPromise();
+
+        this.connectionService.updateSocketLegalEntity(legalEntityId);
+        this.setLegalEntityId.emit(legalEntityId);
       } catch (error) {
         this.alertService.error(error.message);
       }
@@ -89,6 +88,6 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

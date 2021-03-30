@@ -14,8 +14,8 @@ export class NavBarComponent {
   ) {}
 
   public async toggleMenu() {
-    if (this.router.url === '/viewer') {
-      await this.router.navigate(['/sensor']);
+    if (this.router.url === '/') {
+      await this.router.navigate(['/device']);
     } else {
       await this.router.navigate(['/viewer']);
     }
