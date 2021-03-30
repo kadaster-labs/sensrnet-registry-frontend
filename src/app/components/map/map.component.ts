@@ -1,35 +1,36 @@
 import proj4 from 'proj4';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import Overlay from 'ol/Overlay';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import {Cluster} from 'ol/source';
+import { Cluster } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
-import {FitOptions} from 'ol/View';
+import { FitOptions } from 'ol/View';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import {extend, Extent, getBottomLeft, getTopRight} from 'ol/extent';
+import { Coordinate } from 'ol/coordinate';
+import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
+import SearchNominatim from 'ol-ext/control/SearchNominatim';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
-import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
+import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 
-import {SearchComponentEvent} from 'generieke-geo-componenten-search';
-import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
-import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
+import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
+import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
 
-import {IDevice} from '../../model/bodies/device-model';
-import {AlertService} from '../../services/alert.service';
-import {ModalService} from '../../services/modal.service';
-import {DeviceService} from '../../services/device.service';
-import {LocationService} from '../../services/location.service';
-import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
+import { IDevice } from '../../model/bodies/device-model';
+import { AlertService } from '../../services/alert.service';
+import { ModalService } from '../../services/modal.service';
+import { DeviceService } from '../../services/device.service';
+import { LocationService } from '../../services/location.service';
+import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
 
 
 @Component({
@@ -49,7 +50,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private deviceService: DeviceService,
     private locationService: LocationService,
-  ) {}
+  ) { }
 
   public mapName = 'srn';
   public subscriptions = [];
@@ -305,10 +306,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleEvent(event: SearchComponentEvent) {
-    this.mapService.zoomToPdokResult(event, this.mapName);
-  }
-
   public handleMapEvents(mapEvent: MapComponentEvent) {
     const map = this.mapService.getMap(this.mapName);
 
@@ -451,8 +448,23 @@ export class MapComponent implements OnInit, OnDestroy {
   private zoomToPoint(point: Point) {
     const view = this.mapService.getMap(this.mapName).getView();
     view.fit(point, {
+      duration: 250,
       maxZoom: 10,
     });
+  }
+
+  private zoomToExtent(extent: Extent) {
+    const view = this.mapService.getMap(this.mapName).getView();
+    const resolution = view.getResolutionForExtent(extent, this.mapService.getMap(this.mapName).getSize());
+    const zoom = view.getZoomForResolution(resolution);
+    const center = getCenter(extent);
+
+    setTimeout(() => {
+      view.animate({
+        center,
+        zoom: Math.min(zoom, 16)
+      });
+    }, 250);
   }
 
   private zoomToPosition(position: Position) {
@@ -483,6 +495,50 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.getMap(this.mapName).addControl(new Control({
       element: locate,
     }));
+  }
+
+  /**
+ * Adds a search button on the map which can be used to search for a location
+ * Searches using the open source OSM Nominatim
+ * https://viglino.github.io/ol-ext/doc/doc-pages/ol.control.SearchNominatim.html
+ */
+  private addSearchButton(): void {
+    // Set the search control
+    const search = new SearchNominatim({
+      format: 'geojson',
+      placeholder: 'Voer locatie in',
+      polygon: $('#polygon').prop('checked'),
+      position: true,
+    });
+
+    search.on('select', (event) => {
+      if (event.search.class === 'place') {
+        // if the search result is a single point, zoom to it
+        const coordsRD: Coordinate = proj4(this.epsgWGS84, this.epsgRD, event.coordinate);
+        const point = new Point(coordsRD);
+
+        this.zoomToPoint(point);
+      } else {
+        // if the search result contains an area, zoom to its extent
+        // Nominatim returns coordinate in string Array of different order in WGS84
+        const min = [
+          parseFloat(event.search.boundingbox[2]),
+          parseFloat(event.search.boundingbox[0]),
+        ];
+        const max = [
+          parseFloat(event.search.boundingbox[3]),
+          parseFloat(event.search.boundingbox[1]),
+        ];
+        const extent: Extent = [
+          ...proj4(this.epsgWGS84, this.epsgRD, min),
+          ...proj4(this.epsgWGS84, this.epsgRD, max),
+        ] as Extent;
+
+        this.zoomToExtent(extent);
+      }
+    });
+
+    this.mapService.getMap(this.mapName).addControl(search);
   }
 
   public ownsDevice(device): boolean {
@@ -536,7 +592,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
       this.myLayers = data as Theme[];
-    }, () => {}));
+    }, () => { }));
 
     const { onLocate, onUpdate, onRemove } = await this.deviceService.subscribe();
 
@@ -581,6 +637,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
+    this.addSearchButton();
     if (window.location.protocol === 'https:') {
       this.addFindMeButton();
     }

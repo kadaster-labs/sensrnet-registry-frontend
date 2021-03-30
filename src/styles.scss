@@ -10,6 +10,7 @@ $font-size-base: 1.25rem;
 @import "bootstrap/scss/bootstrap.scss";
 @import "bootstrap-select/dist/css/bootstrap-select.min.css";
 @import "ol/ol.css";
+@import "ol-ext/dist/ol-ext.min.css";
 
 .ol-overlaycontainer-stopevent .ol-zoom {
   top: auto;

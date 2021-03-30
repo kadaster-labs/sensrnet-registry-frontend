@@ -1,9 +1,5 @@
 <div class="container-fluid h-100">
     <div class="row">
-        <ggc-search (searchComponentEventEmitter)="handleEvent($event)"
-                    placeholderTextAndAriaLabel="Search for location"
-                    i18n-placeholderTextAndAriaLabel
-                    id="search" class="p-0 m-0" [style.top]="searchBarHeight"></ggc-search>
         <ggc-dataset-tree [themes]="myLayers"
                           (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
                           [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"

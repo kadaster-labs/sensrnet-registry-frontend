@@ -6,7 +6,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { GgcMapModule } from 'generieke-geo-componenten-map';
-import { GgcSearchModule } from 'generieke-geo-componenten-search';
 import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
 import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
 
@@ -50,7 +49,8 @@ import {TypeComponent} from './form-controls/type/type.component';
     LoginComponent,
     RegisterComponent,
     DeviceComponent,
-    ThemeComponent,
+
+
     TypeComponent,
     SensorLocationComponent,
     DeviceTypeComponent,
@@ -74,7 +74,6 @@ import {TypeComponent} from './form-controls/type/type.component';
     ReactiveFormsModule,
     FormsModule,
     GgcMapModule.forRoot(),
-    GgcSearchModule,
     GgcDatasetTreeModule,
     GgcDatasetLegendModule,
     HttpClientModule,
