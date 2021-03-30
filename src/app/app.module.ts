@@ -5,14 +5,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import { GgcMapModule } from 'generieke-geo-componenten-map';
-import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
-import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
-
 import { AppComponent } from './app.component';
 import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
+import { MapService } from './components/map/map.service';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ViewerComponent } from './viewer/viewer.component';
 import { NavBarComponent } from './navbar/navbar.component';
@@ -25,10 +22,10 @@ import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { DevicesComponent } from './forms/devices/devices.component';
+import { ThemeComponent } from './form-controls/theme/theme.component';
 import { DataStreamComponent } from './form-controls/datastream/datastream.component';
 import { DeviceTypeComponent } from './form-controls/device-type/device-type.component';
 import { OrganizationComponent } from './components/organization/organization.component';
-import { ThemeComponent } from './form-controls/theme/theme.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
 import { OrganizationJoinComponent } from './forms/organization-join/organization-join.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
@@ -49,8 +46,7 @@ import {TypeComponent} from './form-controls/type/type.component';
     LoginComponent,
     RegisterComponent,
     DeviceComponent,
-
-
+    ThemeComponent,
     TypeComponent,
     SensorLocationComponent,
     DeviceTypeComponent,
@@ -73,12 +69,10 @@ import {TypeComponent} from './form-controls/type/type.component';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    GgcMapModule.forRoot(),
-    GgcDatasetTreeModule,
-    GgcDatasetLegendModule,
     HttpClientModule,
     NgbModule,
   ], providers: [
+    MapService,
     ModalService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

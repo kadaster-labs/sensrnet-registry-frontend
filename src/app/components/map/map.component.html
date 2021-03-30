@@ -1,11 +1,5 @@
 <div class="container-fluid h-100">
     <div class="row">
-        <ggc-dataset-tree [themes]="myLayers"
-                          (datasetTreeEventEmitter)="handleDatasetTreeEvents($event)"
-                          [currentMapResolution]="currentMapResolution" [iconCollapsed]="iconCollapsed"
-                          [iconExpanded]="iconExpanded" [iconChecked]="iconChecked" [iconUnchecked]="iconUnchecked"
-                          [iconInfoUrl]="iconInfoUrl" [hideTree]="hideTreeDataset"
-                          id="layers" class="p-0 m-0"></ggc-dataset-tree>
         <div id="popup" class="ol-popup bg-white border-0 hidden mb-5">
             <div *ngIf="overlayVisible" class="row border border-bottom-0 mx-0">
                 <div class="col-12 mx-0 mt-2">
@@ -60,26 +54,7 @@
     </div>
     <div class="row h-100">
         <div class="h-100 vw-100">
-            <ggc-map [mapName]="mapName" (events)="handleMapEvents($event)" [maxZoomlevel]="20"></ggc-map>
-            <ggc-wmts-layer *ngFor="let dataset of activeWmtsDatasets" [layerName]="dataset.services[0].layers[0].name"
-                [url]="dataset.services[0].url" [layer]="dataset.services[0].layers[0].technicalName"
-                [mapName]="mapName" [minResolution]="dataset.services[0].layers[0].minResolution"
-                [maxResolution]="dataset.services[0].layers[0].maxResolution"
-                [zIndex]="dataset.services[0].layers[0].zIndex"
-                [attributions]="dataset.services[0].layers[0].attributions">
-            </ggc-wmts-layer>
-            <ggc-wms-layer *ngFor="let dataset of activeWmsDatasets" [layerName]="dataset.services[0].layers[0].name"
-                [url]="dataset.services[0].url" [layers]="dataset.services[0].layers[0].technicalName"
-                [mapName]="mapName" [attributions]="dataset.services[0].layers[0].attributions"
-                [minResolution]="dataset.services[0].layers[0].minResolution"
-                [maxResolution]="dataset.services[0].layers[0].maxResolution"
-                [zIndex]="dataset.services[0].layers[0].zIndex">
-            </ggc-wms-layer>
-            <ggc-map-details-container>
-                <ggc-mouse-position [mapName]="mapName"></ggc-mouse-position>
-                <ggc-scale-denominator [mapName]="mapName"></ggc-scale-denominator>
-                <ggc-scale-line [mapName]="mapName"></ggc-scale-line>
-            </ggc-map-details-container>
+            <div id="map" class="h-100" style="width: 100%;"></div>
         </div>
     </div>
 </div>
