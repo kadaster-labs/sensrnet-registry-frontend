@@ -5,6 +5,7 @@ import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { get as getProjection } from 'ol/proj';
 import { Extent } from 'ol/extent';
+import { defaults as defaultControls, ScaleLine } from 'ol/control';
 
 /**
  * Openlayers map service to acces maps by id
@@ -37,6 +38,11 @@ export class MapService {
     dutchProjection.setExtent(extent);
 
     const map = new Map({
+      controls: defaultControls().extend([
+        new ScaleLine({
+          units: 'metric',
+        })
+      ]),
       target: id,
       view: new View({
         center: [155000, 463000],
