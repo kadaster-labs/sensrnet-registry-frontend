@@ -21,9 +21,7 @@ import { ViewerComponent } from './viewer/viewer.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { ErrorInterceptor } from './helpers/error.interceptor';
 import { DeviceComponent } from './forms/device/device.component';
-import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
@@ -50,7 +48,6 @@ import {TypeComponent} from './form-controls/type/type.component';
     LanguageSwitcherComponent,
     ViewerComponent,
     LoginComponent,
-    RegisterComponent,
     DeviceComponent,
     ThemeComponent,
     TypeComponent,

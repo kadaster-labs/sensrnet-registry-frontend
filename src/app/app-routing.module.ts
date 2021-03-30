@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ViewerComponent } from './viewer/viewer.component';
 import { DeviceComponent } from './forms/device/device.component';
-import { RegisterComponent } from './register/register.component';
 import { DevicesComponent } from './forms/devices/devices.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 

@@ -1,11 +1,12 @@
-import {IContactDetails, ILegalEntity} from '../../model/legalEntity';
+import { Router } from '@angular/router';
+import { IContactDetails, ILegalEntity } from '../../model/legalEntity';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import {UserUpdateBody} from '../../model/bodies/user-update';
-import {LegalEntityService} from '../../services/legal-entity.service';
-import {ConnectionService} from '../../services/connection.service';
+import { UserUpdateBody } from '../../model/bodies/user-update';
+import { LegalEntityService } from '../../services/legal-entity.service';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-organization-update',
@@ -29,7 +30,7 @@ export class OrganizationUpdateComponent implements OnInit {
     private readonly alertService: AlertService,
     private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
-  ) {}
+  ) { }
 
   get f() {
     return this.form.controls;

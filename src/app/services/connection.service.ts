@@ -11,7 +11,7 @@ export class SocketEvent {
   constructor(
     public namespace?: string,
     public event?: any,
-  ) {}
+  ) { }
 }
 
 @Injectable({ providedIn: 'root' })
@@ -34,40 +34,14 @@ export class ConnectionService {
     private readonly oidcSecurityService: OidcSecurityService,
   ) {
     this.claim$.subscribe(claims => {
-      if (!this.socket && claims && claims.organizationId) {
+      if (!this.socket && claims) {
         this.connectSocket();
       }
     });
   }
 
-  public getClaimFromToken(accessToken: string): Claim {
-    let claim;
-    if (accessToken) {
-      try {
-        const token = jwtDecode(accessToken) as any;
-        claim = new Claim(token.sub, token.exp, accessToken);
-      } catch {
-        claim = new Claim();
-      }
-    } else {
-      claim = new Claim();
-    }
-
-    return claim;
-  }
-
-  public get currentClaim(): Claim {
-    return this.claimSubject.value;
-  }
-
-  public login(username: string, password: string) {
-    return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
-      .pipe(map((data) => {
-        const claim = this.getClaimFromToken(data.accessToken);
-        this.claimSubject.next(claim);
-
-        return data;
-      }));
+  public get currentClaims(): Claims {
+    return this.claimsSubject.value;
   }
 
   public clearClaim() {
@@ -75,14 +49,16 @@ export class ConnectionService {
   }
 
   public async refreshToken(): Promise<void> {
-    const response = await this.http.get<any>(`${this.env.apiUrl}/user`).toPromise() as Claims;
-
-    if (!response) {
-      await this.logoutRedirect();
-    } else {
-      claim = await this.getClaimFromToken(response.accessToken);
-      this.claimSubject.next(claim);
+    console.log('refreshToken');
+    let response;
+    try {
+      response = await this.http.get<any>(`${this.env.apiUrl}/legalentity`).toPromise() as Claims;
+    } catch {
+      return this.logoutRedirect();
     }
+
+    // if (!response) {
+    // }
 
     this.claimsSubject.next(response);
   }
@@ -145,7 +121,7 @@ export class ConnectionService {
 
   public updateSocketLegalEntity(legalEntityId: string) {
     if (this.socket) {
-      this.socket.emit('LegalEntityUpdated', {legalEntityId});
+      this.socket.emit('LegalEntityUpdated', { legalEntityId });
     }
   }
 

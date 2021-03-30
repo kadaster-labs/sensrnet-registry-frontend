@@ -17,10 +17,6 @@ export class UserService {
     return this.http.get(`${this.env.apiUrl}/user`);
   }
 
-  public register(user: User) {
-    return this.http.post(`${this.env.apiUrl}/user`, user);
-  }
-
   public update(user: UserUpdateBody) {
     return this.http.put(`${this.env.apiUrl}/user`, user);
   }
