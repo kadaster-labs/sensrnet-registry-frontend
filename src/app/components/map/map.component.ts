@@ -527,15 +527,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private addLayerSwitcher(): void {
-    console.log('addlayerswitcher');
-
-    const osmLayer = new TileLayer({
-      visible: true,
-      source: new OSM()
-    });
-    osmLayer.set('title', 'OpenStreetMap');  // A layer must have a title to appear in the layerswitcher
-    osmLayer.set('type', 'base');
-
     // Geldigheidsgebied van het tiling schema in RD-coördinaten:
     const projectionExtent: Extent = [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999];
     const projection = new Projection({ code: 'EPSG:28992', units: 'm', extent: projectionExtent });
@@ -570,36 +561,31 @@ export class MapComponent implements OnInit, OnDestroy {
     brtLayer.set('title', 'BRT');
     brtLayer.set('type', 'base');
 
-    const watercolorWithLabelsGroup = new Group({
-
-      visible: false,
-      layers: [
-        new TileLayer({
-          source: new Stamen({
-            layer: 'watercolor'
-          })
+    const luchtfotoLayer = new TileLayer({
+      visible: true,
+      source: new WMTS({
+        attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
+        url: 'https://service.pdok.nl/hwh/luchtfotorgb/wmts/v1_0?',
+        layer: 'Actueel_ortho25',
+        matrixSet: 'EPSG:28992',
+        format: 'image/png',
+        projection,
+        tileGrid: new WMTSTileGrid({
+          origin: getTopLeft(projectionExtent),
+          resolutions,
+          matrixIds
         }),
-        new TileLayer({
-          source: new Stamen({
-            layer: 'terrain-labels'
-          })
-        })
-      ]
+        style: 'default',
+        wrapX: false
+      })
     });
-    watercolorWithLabelsGroup.set('title', 'Water color with labels');
-    // Setting the layers type to 'base' results
-    // in it having a radio button and only one
-    // base layer being visibile at a time
-    watercolorWithLabelsGroup.set('type', 'base');
-    // Setting combine to true causes sub-layers to be hidden
-    // in the layerswitcher, only the parent is shown
-    watercolorWithLabelsGroup.set('combine', true);
+    luchtfotoLayer.set('title', 'Luchtfoto');
+    luchtfotoLayer.set('type', 'base');
 
     const baseLayers = new Group({
       layers: [
-        watercolorWithLabelsGroup,
-        osmLayer,
-        brtLayer
+        luchtfotoLayer,
+        brtLayer,
       ]
     });
     baseLayers.set('title', 'Base maps');
