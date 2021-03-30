@@ -40,12 +40,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/env.js",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/kadaster-huisstijl/dist/assets",
-                "output": "./assets/"
-              }
+              "src/env.js"
             ],
             "styles": [
               "src/styles.scss"
