@@ -81,8 +81,8 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
 
         this.connectionService.updateSocketLegalEntity(legalEntityId);
         this.setLegalEntityId.emit(legalEntityId);
-      } catch (error) {
-        this.alertService.error(error.message);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
     }
     this.submitted = false;

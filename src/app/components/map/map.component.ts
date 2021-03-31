@@ -504,7 +504,7 @@ export class MapComponent implements OnInit, OnDestroy {
           try {
             await this.deviceService.unregister(this.selectedDevice._id);
           } catch (e) {
-            this.alertService.error(e.message);
+            this.alertService.error(e.error.message);
           }
         }
       }).catch(() => console.log('User dismissed the dialog.'));
