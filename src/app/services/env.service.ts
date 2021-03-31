@@ -7,13 +7,13 @@ export class EnvService {
   public apiUrl = '';
 
   // issuer endpoint
-  public oidc_issuer = '';
+  public oidcIssuer = '';
 
   // well known endpoint (in case it is at non default location)
-  public oidc_well_known = '';
+  public oidcWellKnown = '';
 
   // client name
-  public oidc_client_id = ''
+  public oidcClientId = '';
 
   constructor() {
   }

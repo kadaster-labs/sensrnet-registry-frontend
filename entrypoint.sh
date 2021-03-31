@@ -13,21 +13,21 @@ replace_envs () {
 replace_envs_oidc_issuer () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.oidc_issuer = '/dex'@window.__env.oidc_issuer = '${OIDC_ISSUER}'@" ${dir}env.js
+    sed -i "s@window.__env.oidcIssuer = '/dex'@window.__env.oidcIssuer = '${OIDC_ISSUER}'@" ${dir}env.js
   done
 }
 
 replace_envs_oidc_well_known () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.oidc_well_known = '/dex'@window.__env.oidc_well_known = '${OIDC_WELL_KNOWN}'@" ${dir}env.js
+    sed -i "s@window.__env.oidcWellKnown = '/dex'@window.__env.oidcWellKnown = '${OIDC_WELL_KNOWN}'@" ${dir}env.js
   done
 }
 
 replace_envs_oidc_client_id () {
   for dir in /usr/share/nginx/html/*/
   do
-    sed -i "s@window.__env.oidc_client_id = 'registry-frontend'@window.__env.oidc_client_id = '${OIDC_CLIENT_ID}'@" ${dir}env.js
+    sed -i "s@window.__env.oidcClientId = 'registry-frontend'@window.__env.oidcClientId = '${OIDC_CLIENT_ID}'@" ${dir}env.js
   done
 }
 

@@ -3,7 +3,7 @@
   // these placeholders are actually used to find and replace to set enviroment variables.
   // DO NOT CHANGE!!
   window.__env.apiUrl = 'api';
-  window.__env.oidc_issuer = '/dex';
-  window.__env.oidc_well_known = '/dex';
-  window.__env.oidc_client_id = 'registry-frontend';
+  window.__env.oidcIssuer = '/dex';
+  window.__env.oidcWellKnown = '/dex';
+  window.__env.oidcClientId = 'registry-frontend';
 }(this));

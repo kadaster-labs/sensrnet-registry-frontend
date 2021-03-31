@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { IContactDetails, ILegalEntity } from '../../model/legalEntity';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
@@ -24,7 +23,6 @@ export class OrganizationUpdateComponent implements OnInit {
   public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
 
   constructor(
-    private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly alertService: AlertService,

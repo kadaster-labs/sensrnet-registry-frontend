@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 
@@ -8,7 +7,6 @@ export class AppComponent {
   public title = $localize`:@@app.title:Sensor Registry`;
 
   constructor(
-    private router: Router,
     private titleService: Title,
   ) {
     this.setTitle(this.title);

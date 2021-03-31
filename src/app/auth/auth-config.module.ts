@@ -6,17 +6,17 @@ import { environment } from '../../environments/environment';
 export function configureAuth(oidcConfigService: OidcConfigService, envService: EnvService): () => Promise<any> {
   return () =>
     oidcConfigService.withConfig({
-      stsServer: envService.oidc_issuer,
-      authWellknownEndpoint: envService.oidc_well_known,
+      stsServer: envService.oidcIssuer,
+      authWellknownEndpoint: envService.oidcWellKnown,
       redirectUrl: window.location.origin,
       postLogoutRedirectUri: window.location.origin,
-      clientId: envService.oidc_client_id,
+      clientId: envService.oidcClientId,
       scope: 'openid profile email',
       responseType: 'id_token token',
       silentRenew: true,
       silentRenewUrl: window.location.origin + '/silent-renew.html',
       renewTimeBeforeTokenExpiresInSeconds: 10,
-      secureRoutes: [ // where to send the id token to
+      secureRoutes: [ // on which routes to include the id_token (our own backend)
         envService.apiUrl,
       ],
       logLevel: environment.production ? LogLevel.None : LogLevel.Debug,

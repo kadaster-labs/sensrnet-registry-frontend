@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { LegalEntityService } from '../../services/legal-entity.service';
@@ -27,7 +26,6 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
   private filterChanged: Subject<string> = new Subject<string>();
 
   constructor(
-    private readonly router: Router,
     private readonly alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,

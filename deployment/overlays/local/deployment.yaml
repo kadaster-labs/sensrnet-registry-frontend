@@ -10,3 +10,10 @@ spec:
         name: registry-frontend
         imagePullPolicy: Never
         resources: {}
+        env:
+          - name: OIDC_ISSUER
+            value: http://localhost/dex
+          - name: OIDC_WELL_KNOWN
+            value: http://localhost/dex
+          - name: OIDC_CLIENT_ID
+            value: registry-frontend

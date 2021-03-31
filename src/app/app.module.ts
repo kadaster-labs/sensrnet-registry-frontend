@@ -13,7 +13,7 @@ import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend
 import { AppComponent } from './app.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 import { ErrorInterceptor } from './auth/error.interceptor';
-import { AuthInterceptor } from './auth/jwt.interceptor';
+import { AuthInterceptor } from './auth/auth.interceptor';
 import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
