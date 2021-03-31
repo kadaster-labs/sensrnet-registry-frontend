@@ -71,8 +71,8 @@ export class OrganizationUsersComponent implements OnInit {
         } else {
           this.alertService.error(this.noUsersSelectedMessage);
         }
-      } catch (error) {
-        this.alertService.error(error.message);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
     }
     this.submitted = false;

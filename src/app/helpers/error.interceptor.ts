@@ -28,6 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (error.status === 403) {
             error.message = `You do not have the required rights to perform this operation`;
           }
+          console.log(error);
           throw error;
         }
 

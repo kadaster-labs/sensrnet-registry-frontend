@@ -69,10 +69,10 @@ export class DataStreamComponent implements ControlValueAccessor {
         if (confirmed) {
           if (sensorId && dataStreamId) {
             try {
-              await this.deviceService.removeDataStream(this.deviceId, sensorId, dataStreamId).toPromise();
+              await this.deviceService.removeDataStream(this.deviceId, sensorId, 'paars').toPromise();
               dataStreams.removeAt(dataStreamIndex);
             } catch (e) {
-              this.alertService.error(e.message);
+              this.alertService.error(e.error.message);
             }
           } else {
             dataStreams.removeAt(dataStreamIndex);
