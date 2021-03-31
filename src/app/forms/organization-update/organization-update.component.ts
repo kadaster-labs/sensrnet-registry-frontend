@@ -68,8 +68,8 @@ export class OrganizationUpdateComponent implements OnInit {
 
       this.setLegalEntityId.emit(null);
       this.connectionService.updateSocketLegalEntity(null);
-    } catch (error) {
-      this.alertService.error(error.message);
+    } catch (e) {
+      this.alertService.error(e.error.message);
     }
   }
 
@@ -108,8 +108,8 @@ export class OrganizationUpdateComponent implements OnInit {
         }
 
         this.alertService.success(this.updateSuccessMessage);
-      } catch (error) {
-        this.alertService.error(error.message);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
       this.submitted = false;
     }

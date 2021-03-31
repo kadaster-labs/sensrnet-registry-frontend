@@ -24,7 +24,6 @@ export class UserService {
   }
 
   public updateById(userId: string, user: Record<string, any>) {
-    console.log(user);
     return this.http.put(`${this.env.apiUrl}/user/${userId}`, user);
   }
 }
