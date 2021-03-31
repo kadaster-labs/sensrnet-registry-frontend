@@ -514,7 +514,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
       if (auth) {
-        this.connectionService.refreshToken();
+        this.connectionService.refreshLegalEntity();
       }
     });
 

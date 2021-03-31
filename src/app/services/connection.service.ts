@@ -1,9 +1,9 @@
-import { Claims } from '../model/claim';
 import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { EnvService } from './env.service';
 import { HttpClient } from '@angular/common/http';
+import { ILegalEntity } from '../model/legalEntity';
 import { BehaviorSubject, Subject, Observable, Subscriber } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
@@ -18,8 +18,8 @@ export class SocketEvent {
 export class ConnectionService {
   private socket: SocketIOClient.Socket;
 
-  private claimsSubject: BehaviorSubject<Claims> = new BehaviorSubject<Claims>(null);
-  public claim$: Observable<Claims> = this.claimsSubject.asObservable();
+  private legalEntitySubject: BehaviorSubject<ILegalEntity> = new BehaviorSubject<ILegalEntity>(null);
+  public legalEntity$: Observable<ILegalEntity> = this.legalEntitySubject.asObservable();
 
   // Routing the events using a separate observable is necessary because a socket connection may not exist at the
   // time some component tries to subscribe to an endpoint.
@@ -33,38 +33,36 @@ export class ConnectionService {
     private readonly http: HttpClient,
     private readonly oidcSecurityService: OidcSecurityService,
   ) {
-    this.claim$.subscribe(claims => {
-      if (!this.socket && claims) {
+    this.legalEntity$.subscribe(legalEntity => {
+      if (!this.socket && legalEntity) {
         this.connectSocket();
       }
     });
   }
 
-  public get currentClaims(): Claims {
-    return this.claimsSubject.value;
+  public get currentLegalEntity(): ILegalEntity {
+    return this.legalEntitySubject.value;
   }
 
-  public clearClaim() {
-    this.claimsSubject.next(null);
+  public clearLegalEntity() {
+    this.legalEntitySubject.next(null);
   }
 
-  public async refreshToken(): Promise<void> {
-    console.log('refreshToken');
+  public async refreshLegalEntity(): Promise<void> {
     let response;
     try {
-      response = await this.http.get<any>(`${this.env.apiUrl}/legalentity`).toPromise() as Claims;
+      response = await this.http.get<any>(`${this.env.apiUrl}/legalentity`).toPromise() as ILegalEntity;
     } catch {
       return this.logoutRedirect();
     }
 
-    // if (!response) {
-    // }
-
-    this.claimsSubject.next(response);
+    if (response) {
+      this.legalEntitySubject.next(response);
+    }
   }
 
   public async logout() {
-    this.clearClaim();
+    this.clearLegalEntity();
     this.oidcSecurityService.logoffLocal();
   }
 
