@@ -391,8 +391,8 @@
         <note category="location">src/app/forms/organization-join/organization-join.component.html:4</note>
         <note category="location">src/app/forms/organization-join/organization-join.component.html:11</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:19</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:9</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:9</note>
       </notes>
       <segment>
         <source>Name</source>
@@ -418,14 +418,14 @@
         <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:80</note>
         <note category="location">src/app/form-controls/theme/theme.component.html:2</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:3</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:31</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:35</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:39</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:28</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:3</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:31</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:35</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:39</note>
       </notes>
       <segment>
         <source> - Optional</source>
@@ -491,6 +491,7 @@
     </unit>
     <unit id="3768927257183755959">
       <notes>
+        <note category="location">src/app/forms/device/device.component.html:50</note>
         <note category="location">src/app/forms/device/device.component.html:58</note>
         <note category="location">src/app/forms/device/device.component.html:67</note>
         <note category="location">src/app/forms/organization-join/organization-join.component.html:26</note>
@@ -498,6 +499,24 @@
       </notes>
       <segment>
         <source>Save</source>
+      </segment>
+    </unit>
+    <unit id="3885497195825665706">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.html:51</note>
+        <note category="location">src/app/forms/device/device.component.html:60</note>
+      </notes>
+      <segment>
+        <source>Next</source>
+      </segment>
+    </unit>
+    <unit id="4452427314943113135">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.html:59</note>
+        <note category="location">src/app/forms/device/device.component.html:68</note>
+      </notes>
+      <segment>
+        <source>Previous</source>
       </segment>
     </unit>
     <unit id="1786120847907845120">
@@ -530,8 +549,8 @@
       <notes>
         <note category="location">src/app/forms/device/device.component.html:28</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:26</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:15</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:5</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:15</note>
       </notes>
       <segment>
         <source>Name is required</source>
@@ -776,11 +795,29 @@
       <notes>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:76</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:85</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:44</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:12</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:44</note>
       </notes>
       <segment>
         <source>Not a valid URL</source>
+      </segment>
+    </unit>
+    <unit id="5407108135061216703">
+      <notes>
+        <note category="location">src/app/form-controls/device-type/device-type.component.html:5</note>
+        <note category="location">src/app/form-controls/theme/theme.component.html:3</note>
+        <note category="location">src/app/form-controls/type/type.component.html:3</note>
+      </notes>
+      <segment>
+        <source>Nothing selected</source>
+      </segment>
+    </unit>
+    <unit id="5551307948733637188">
+      <notes>
+        <note category="location">src/app/form-controls/device-type/device-type.component.html:11</note>
+      </notes>
+      <segment>
+        <source>Category is required</source>
       </segment>
     </unit>
     <unit id="6595217940183311788">
@@ -791,12 +828,36 @@
         <source>Theme(s)</source>
       </segment>
     </unit>
-    <unit id="5551307948733637188">
+    <unit id="1755726504733757199">
       <notes>
-        <note category="location">src/app/form-controls/device-type/device-type.component.html:11</note>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
       </notes>
       <segment>
-        <source>Category is required</source>
+        <source>Sensor status</source>
+      </segment>
+    </unit>
+    <unit id="8204176479746810612">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Active</source>
+      </segment>
+    </unit>
+    <unit id="1859131936150262113">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Inactive</source>
+      </segment>
+    </unit>
+    <unit id="5701779805166837861">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
+      </notes>
+      <segment>
+        <source>Status is required</source>
       </segment>
     </unit>
     <unit id="471816275243265264">
@@ -839,36 +900,36 @@
         <source> Location and Height are required </source>
       </segment>
     </unit>
-    <unit id="1755726504733757199">
+    <unit id="1399584566118768300">
       <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>
       </notes>
       <segment>
-        <source>Sensor status</source>
+        <source>Contact Department Name</source>
       </segment>
     </unit>
-    <unit id="8204176479746810612">
+    <unit id="1302635200526128790">
       <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
       </notes>
       <segment>
-        <source>Active</source>
+        <source>Contact Department Email</source>
       </segment>
     </unit>
-    <unit id="1859131936150262113">
+    <unit id="1472655155576051898">
       <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:28</note>
       </notes>
       <segment>
-        <source>Inactive</source>
+        <source>Contact Department Phone</source>
       </segment>
     </unit>
-    <unit id="5701779805166837861">
+    <unit id="3707491726414100509">
       <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
+        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:24</note>
       </notes>
       <segment>
-        <source>Status is required</source>
+        <source>Contact e-mail must be a valid e-mail address</source>
       </segment>
     </unit>
     <unit id="sensor.delete.confirm.title">
@@ -951,38 +1012,6 @@
         <source>Description is required</source>
       </segment>
     </unit>
-    <unit id="1399584566118768300">
-      <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>
-      </notes>
-      <segment>
-        <source>Contact Department Name</source>
-      </segment>
-    </unit>
-    <unit id="1302635200526128790">
-      <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
-      </notes>
-      <segment>
-        <source>Contact Department Email</source>
-      </segment>
-    </unit>
-    <unit id="1472655155576051898">
-      <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:28</note>
-      </notes>
-      <segment>
-        <source>Contact Department Phone</source>
-      </segment>
-    </unit>
-    <unit id="3707491726414100509">
-      <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:24</note>
-      </notes>
-      <segment>
-        <source>Contact e-mail must be a valid e-mail address</source>
-      </segment>
-    </unit>
     <unit id="8650499415827640724">
       <notes>
         <note category="location">src/app/form-controls/type/type.component.html:2</note>
@@ -997,6 +1026,30 @@
       </notes>
       <segment>
         <source>Type is required</source>
+      </segment>
+    </unit>
+    <unit id="type.beacon">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:8</note>
+      </notes>
+      <segment>
+        <source>Beacon</source>
+      </segment>
+    </unit>
+    <unit id="type.sensor">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:9</note>
+      </notes>
+      <segment>
+        <source>Sensor</source>
+      </segment>
+    </unit>
+    <unit id="type.camera">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTypes.ts:10</note>
+      </notes>
+      <segment>
+        <source>Camera</source>
       </segment>
     </unit>
     <unit id="theme.energy">
@@ -1157,30 +1210,6 @@
       </notes>
       <segment>
         <source>Health</source>
-      </segment>
-    </unit>
-    <unit id="type.beacon">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:8</note>
-      </notes>
-      <segment>
-        <source>Beacon</source>
-      </segment>
-    </unit>
-    <unit id="type.sensor">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:9</note>
-      </notes>
-      <segment>
-        <source>Sensor</source>
-      </segment>
-    </unit>
-    <unit id="type.camera">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:10</note>
-      </notes>
-      <segment>
-        <source>Camera</source>
       </segment>
     </unit>
     <unit id="ngb.alert.close">

@@ -47,8 +47,8 @@
                         <textarea class="form-control" type="text" formControlName="locationDescription" placeholder="Description of the device location" i18n-placeholder></textarea>
                     </div>
                     <hr class="my-2">
-                    <button type="submit" class="btn btn-primary btn-lg mr-2">Save</button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)">Next</button>
+                    <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)" i18n>Next</button>
                 </div>
             </form>
             <form [formGroup]="sensorForm" (ngSubmit)="submitSensors()">
@@ -56,8 +56,8 @@
                     <app-sensor formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-sensor>
                     <hr class="my-2">
                     <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg mr-2" (click)="goToStep(activeStepIndex - 1)">Previous</button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)">Next</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg mr-2" (click)="goToStep(activeStepIndex - 1)" i18n>Previous</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)" i18n>Next</button>
                 </div>
             </form>
             <form [formGroup]="sensorForm" (ngSubmit)="submitDataStreams()">
@@ -65,7 +65,7 @@
                     <app-datastream formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
                     <hr class="my-2">
                     <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex - 1)">Previous</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex - 1)" i18n>Previous</button>
                 </div>
             </form>
         </div>

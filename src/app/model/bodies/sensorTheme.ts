@@ -19,7 +19,6 @@ export enum SensorTheme {
   Construction = 'Construction',
   Housing = 'Housing',
   Health = 'Health',
-
 }
 
 export const SensorThemeTranslation = {

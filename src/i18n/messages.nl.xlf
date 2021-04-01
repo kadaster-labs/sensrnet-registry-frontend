@@ -619,10 +619,24 @@
     </unit><unit id="3768927257183755959">
       <notes>
         
-      <note category="location">src/app/forms/device/device.component.html:58</note><note category="location">src/app/forms/device/device.component.html:67</note><note category="location">src/app/forms/organization-join/organization-join.component.html:26</note><note category="location">src/app/forms/organization-users/organization-users.component.html:27</note></notes>
+      <note category="location">src/app/forms/device/device.component.html:50</note><note category="location">src/app/forms/device/device.component.html:58</note><note category="location">src/app/forms/device/device.component.html:67</note><note category="location">src/app/forms/organization-join/organization-join.component.html:26</note><note category="location">src/app/forms/organization-users/organization-users.component.html:27</note></notes>
       <segment state="translated">
         <source>Save</source>
       <target>Opslaan</target></segment>
+    </unit><unit id="4452427314943113135">
+      <notes>
+        
+      <note category="location">src/app/forms/device/device.component.html:59</note><note category="location">src/app/forms/device/device.component.html:68</note></notes>
+      <segment state="translated">
+        <source>Previous</source>
+      <target>Vorige</target></segment>
+    </unit><unit id="3885497195825665706">
+      <notes>
+        
+      <note category="location">src/app/forms/device/device.component.html:51</note><note category="location">src/app/forms/device/device.component.html:60</note></notes>
+      <segment state="translated">
+        <source>Next</source>
+      <target>Volgende</target></segment>
     </unit><unit id="1786120847907845120">
       <notes>
         <note category="location">src/app/forms/device/device.component.html:10</note>
@@ -671,7 +685,7 @@
       </notes>
       <segment state="translated">
         <source>Update success.</source>
-      <target>Update geslaags.</target></segment>
+      <target>Update geslaagd.</target></segment>
     </unit><unit id="4768749765465246664">
       <notes>
         <note category="location">src/app/forms/organization-users/organization-users.component.html:7</note>
@@ -1008,6 +1022,15 @@
       <segment state="translated">
         <source>Status is required</source>
       <target>Status is vereist</target></segment>
+    </unit><unit id="5407108135061216703">
+      <notes>
+        <note category="location">src/app/form-controls/device-type/device-type.component.html:5</note>
+        <note category="location">src/app/form-controls/theme/theme.component.html:3</note>
+        <note category="location">src/app/form-controls/type/type.component.html:3</note>
+      </notes>
+      <segment state="translated">
+        <source>Nothing selected</source>
+      <target>Niets geselecteerd</target></segment>
     </unit><unit id="6595217940183311788">
       <notes>
         
@@ -1112,7 +1135,7 @@
       </notes>
       <segment state="translated">
         <source>Welcome to SensRNet</source>
-      <target>Welkom bij Sensrnet</target></segment>
+      <target>Welkom bij SensRNet</target></segment>
     </unit><unit id="2454050363478003966">
       <notes>
         
