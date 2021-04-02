@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
-import { SensorTypes } from '../../model/bodies/sensorTypes';
-import {Component, forwardRef, OnDestroy, Input, AfterViewInit, OnInit} from '@angular/core';
+import { getSensorTypesTranslation } from '../../model/bodies/sensorTypes';
+import {Component, forwardRef, OnDestroy, Input, AfterViewInit, OnInit, Inject} from '@angular/core';
+import {LOCALE_ID} from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -38,10 +39,11 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
     this.onTouched();
   }
 
-  public sensorTypes = SensorTypes;
+  public sensorTypes = getSensorTypesTranslation(this.locale);
 
   constructor(
     private formBuilder: FormBuilder,
+    @Inject(LOCALE_ID)  private locale: string,
   ) {
     this.form = this.formBuilder.group({
       value: new FormControl([]),

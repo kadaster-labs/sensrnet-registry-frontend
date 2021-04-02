@@ -2,11 +2,11 @@
     <label for="type"><span i18n>Type</span></label>
     <select formControlName="value" class="form-control selectpicker" title="Nothing selected" data-live-search="true" i18n-title>
         <ng-container *ngFor="let sensorType of sensorTypes">
-            <option class="font-weight-bold" [value]="sensorType.name">
-                {{ sensorType.name }}
+            <option class="font-weight-bold" [value]="sensorType.key">
+                {{ sensorType.value }}
             </option>
-            <option class="pl-5" *ngFor="let specificSensorType of sensorType.types" [value]="specificSensorType">
-                {{ specificSensorType }}
+            <option class="pl-5" *ngFor="let specificSensorType of sensorType.types" [value]="specificSensorType.key">
+                {{ specificSensorType.value }}
             </option>
         </ng-container>
     </select>
