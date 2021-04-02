@@ -849,141 +849,141 @@
       <target>Camera</target></segment>
     </unit><unit id="theme.energy">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:26</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:25</note></notes>
       <segment state="translated">
         <source>Energy</source>
       <target>Energie</target></segment>
     </unit><unit id="theme.agriculture">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:27</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:26</note></notes>
       <segment state="translated">
         <source>Agriculture</source>
       <target>Landbouw, visserij, voedselkwaliteit</target></segment>
     </unit><unit id="theme.transport">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:28</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:27</note></notes>
       <segment state="translated">
         <source>Transport</source>
       <target>Transport</target></segment>
     </unit><unit id="theme.waste">
       <notes>
         
-      <note category="location">src/app/model/bodies/sensorTheme.ts:29</note></notes>
+      <note category="location">src/app/model/bodies/sensorTheme.ts:28</note></notes>
       <segment state="translated">
         <source>Waste</source>
       <target>Afval</target></segment>
     </unit><unit id="theme.soilandunderground">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:30</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:29</note></notes>
       <segment state="translated">
         <source>SoilAndUnderground</source>
       <target>Bodem</target></segment>
     </unit><unit id="theme.sound">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:31</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:30</note></notes>
       <segment state="translated">
         <source>Sound</source>
       <target>Geluid</target></segment>
     </unit><unit id="theme.environmentalchange">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:32</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:31</note></notes>
       <segment state="translated">
         <source>EnvironmentalChange</source>
       <target>Klimaatverandering</target></segment>
     </unit><unit id="theme.air">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:33</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:32</note></notes>
       <segment state="translated">
         <source>Air</source>
       <target>Lucht</target></segment>
     </unit><unit id="theme.natureandlandscape">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:34</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:33</note></notes>
       <segment state="translated">
         <source>NatureAndLandscape</source>
       <target>Natuur- en landschapsbeheer</target></segment>
     </unit><unit id="theme.water">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:35</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:34</note></notes>
       <segment state="translated">
         <source>Water</source>
       <target>Water</target></segment>
     </unit><unit id="theme.safety">
       <notes>
         
-      <note category="location">src/app/model/bodies/sensorTheme.ts:36</note></notes>
+      <note category="location">src/app/model/bodies/sensorTheme.ts:35</note></notes>
       <segment state="translated">
         <source>Safety</source>
       <target>Veiligheid</target></segment>
     </unit><unit id="theme.spatialplanning">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:37</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:36</note></notes>
       <segment state="translated">
         <source>SpatialPlanning</source>
       <target>Ruimtelijke ordening</target></segment>
     </unit><unit id="theme.watermanagement">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:38</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:37</note></notes>
       <segment state="translated">
         <source>Watermanagement</source>
       <target>Waterbeheer</target></segment>
     </unit><unit id="theme.aviation">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:39</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:38</note></notes>
       <segment state="translated">
         <source>Aviation</source>
       <target>Luchtvaart</target></segment>
     </unit><unit id="theme.publictransport">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:40</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:39</note></notes>
       <segment state="translated">
         <source>PublicTransport</source>
       <target>Openbaar vervoer</target></segment>
     </unit><unit id="theme.railandroadtraffic">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:41</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:40</note></notes>
       <segment state="translated">
         <source>RailAndRoadTraffic</source>
       <target>Rail- en wegverkeer</target></segment>
     </unit><unit id="theme.shipping">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:42</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:41</note></notes>
       <segment state="translated">
         <source>Shipping</source>
       <target>Scheepvaart</target></segment>
     </unit><unit id="theme.construction">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:43</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:42</note></notes>
       <segment state="translated">
         <source>Construction</source>
       <target>Bouwen en verbouwen</target></segment>
     </unit><unit id="theme.housing">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:44</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:43</note></notes>
       <segment state="translated">
         <source>Housing</source>
       <target>Woningmarkt</target></segment>
     </unit><unit id="theme.health">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:45</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/sensorTheme.ts:44</note></notes>
       <segment state="translated">
         <source>Health</source>
       <target>Gezondheidsrisico's</target></segment>
@@ -1066,12 +1066,12 @@
       <segment state="translated">
         <source>Enter Height (m)</source>
       <target>Hoogte Invoeren (m)</target></segment>
-    </unit><unit id="8194501875024843821">
+    </unit><unit id="2153354553220190862">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:19,20</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:18</note>
       </notes>
       <segment state="translated">
-        <source> Location and Height are required </source>
+        <source>Location and Height are required</source>
       <target>Locatie en hoogte zijn vereist</target></segment>
     </unit><unit id="1399584566118768300">
       <notes>

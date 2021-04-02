@@ -9,22 +9,6 @@
         <source>Sensor Registry</source>
       </segment>
     </unit>
-    <unit id="modal.accept">
-      <notes>
-        <note category="location">src/app/services/modal.service.ts:9</note>
-      </notes>
-      <segment>
-        <source>OK</source>
-      </segment>
-    </unit>
-    <unit id="modal.decline">
-      <notes>
-        <note category="location">src/app/services/modal.service.ts:10</note>
-      </notes>
-      <segment>
-        <source>Cancel</source>
-      </segment>
-    </unit>
     <unit id="login.failed">
       <notes>
         <note category="location">src/app/login/login.component.ts:18</note>
@@ -94,6 +78,22 @@
       </notes>
       <segment>
         <source>Password is required</source>
+      </segment>
+    </unit>
+    <unit id="modal.accept">
+      <notes>
+        <note category="location">src/app/services/modal.service.ts:9</note>
+      </notes>
+      <segment>
+        <source>OK</source>
+      </segment>
+    </unit>
+    <unit id="modal.decline">
+      <notes>
+        <note category="location">src/app/services/modal.service.ts:10</note>
+      </notes>
+      <segment>
+        <source>Cancel</source>
       </segment>
     </unit>
     <unit id="3103656649990667741">
@@ -597,14 +597,6 @@
         <source>Website</source>
       </segment>
     </unit>
-    <unit id="register.failed">
-      <notes>
-        <note category="location">src/app/forms/organization-create/organization-create.component.ts:24</note>
-      </notes>
-      <segment>
-        <source>Failed to register. Does the organization exist already?</source>
-      </segment>
-    </unit>
     <unit id="organization.update">
       <notes>
         <note category="location">src/app/forms/organization-update/organization-update.component.ts:23</note>
@@ -627,6 +619,14 @@
       </notes>
       <segment>
         <source>Update</source>
+      </segment>
+    </unit>
+    <unit id="register.failed">
+      <notes>
+        <note category="location">src/app/forms/organization-create/organization-create.component.ts:24</note>
+      </notes>
+      <segment>
+        <source>Failed to register. Does the organization exist already?</source>
       </segment>
     </unit>
     <unit id="no.users">
@@ -828,38 +828,6 @@
         <source>Theme(s)</source>
       </segment>
     </unit>
-    <unit id="1755726504733757199">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
-      </notes>
-      <segment>
-        <source>Sensor status</source>
-      </segment>
-    </unit>
-    <unit id="8204176479746810612">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
-      </notes>
-      <segment>
-        <source>Active</source>
-      </segment>
-    </unit>
-    <unit id="1859131936150262113">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
-      </notes>
-      <segment>
-        <source>Inactive</source>
-      </segment>
-    </unit>
-    <unit id="5701779805166837861">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
-      </notes>
-      <segment>
-        <source>Status is required</source>
-      </segment>
-    </unit>
     <unit id="471816275243265264">
       <notes>
         <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:5</note>
@@ -892,12 +860,44 @@
         <source>Enter Height (m)</source>
       </segment>
     </unit>
-    <unit id="8194501875024843821">
+    <unit id="2153354553220190862">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:19,20</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:18</note>
       </notes>
       <segment>
-        <source> Location and Height are required </source>
+        <source>Location and Height are required</source>
+      </segment>
+    </unit>
+    <unit id="1755726504733757199">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
+      </notes>
+      <segment>
+        <source>Sensor status</source>
+      </segment>
+    </unit>
+    <unit id="8204176479746810612">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Active</source>
+      </segment>
+    </unit>
+    <unit id="1859131936150262113">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Inactive</source>
+      </segment>
+    </unit>
+    <unit id="5701779805166837861">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
+      </notes>
+      <segment>
+        <source>Status is required</source>
       </segment>
     </unit>
     <unit id="1399584566118768300">
@@ -1054,7 +1054,7 @@
     </unit>
     <unit id="theme.energy">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:26</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:25</note>
       </notes>
       <segment>
         <source>Energy</source>
@@ -1062,7 +1062,7 @@
     </unit>
     <unit id="theme.agriculture">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:27</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:26</note>
       </notes>
       <segment>
         <source>Agriculture</source>
@@ -1070,7 +1070,7 @@
     </unit>
     <unit id="theme.transport">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:28</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:27</note>
       </notes>
       <segment>
         <source>Transport</source>
@@ -1078,7 +1078,7 @@
     </unit>
     <unit id="theme.waste">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:29</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:28</note>
       </notes>
       <segment>
         <source>Waste</source>
@@ -1086,7 +1086,7 @@
     </unit>
     <unit id="theme.soilandunderground">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:30</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:29</note>
       </notes>
       <segment>
         <source>SoilAndUnderground</source>
@@ -1094,7 +1094,7 @@
     </unit>
     <unit id="theme.sound">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:31</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:30</note>
       </notes>
       <segment>
         <source>Sound</source>
@@ -1102,7 +1102,7 @@
     </unit>
     <unit id="theme.environmentalchange">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:32</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:31</note>
       </notes>
       <segment>
         <source>EnvironmentalChange</source>
@@ -1110,7 +1110,7 @@
     </unit>
     <unit id="theme.air">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:33</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:32</note>
       </notes>
       <segment>
         <source>Air</source>
@@ -1118,7 +1118,7 @@
     </unit>
     <unit id="theme.natureandlandscape">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:34</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:33</note>
       </notes>
       <segment>
         <source>NatureAndLandscape</source>
@@ -1126,7 +1126,7 @@
     </unit>
     <unit id="theme.water">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:35</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:34</note>
       </notes>
       <segment>
         <source>Water</source>
@@ -1134,7 +1134,7 @@
     </unit>
     <unit id="theme.safety">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:36</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:35</note>
       </notes>
       <segment>
         <source>Safety</source>
@@ -1142,7 +1142,7 @@
     </unit>
     <unit id="theme.spatialplanning">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:37</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:36</note>
       </notes>
       <segment>
         <source>SpatialPlanning</source>
@@ -1150,7 +1150,7 @@
     </unit>
     <unit id="theme.watermanagement">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:38</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:37</note>
       </notes>
       <segment>
         <source>Watermanagement</source>
@@ -1158,7 +1158,7 @@
     </unit>
     <unit id="theme.aviation">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:39</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:38</note>
       </notes>
       <segment>
         <source>Aviation</source>
@@ -1166,7 +1166,7 @@
     </unit>
     <unit id="theme.publictransport">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:40</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:39</note>
       </notes>
       <segment>
         <source>PublicTransport</source>
@@ -1174,7 +1174,7 @@
     </unit>
     <unit id="theme.railandroadtraffic">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:41</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:40</note>
       </notes>
       <segment>
         <source>RailAndRoadTraffic</source>
@@ -1182,7 +1182,7 @@
     </unit>
     <unit id="theme.shipping">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:42</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:41</note>
       </notes>
       <segment>
         <source>Shipping</source>
@@ -1190,7 +1190,7 @@
     </unit>
     <unit id="theme.construction">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:43</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:42</note>
       </notes>
       <segment>
         <source>Construction</source>
@@ -1198,7 +1198,7 @@
     </unit>
     <unit id="theme.housing">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:44</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:43</note>
       </notes>
       <segment>
         <source>Housing</source>
@@ -1206,7 +1206,7 @@
     </unit>
     <unit id="theme.health">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:45</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:44</note>
       </notes>
       <segment>
         <source>Health</source>
