@@ -18,10 +18,10 @@ export function getCategoryTranslation(category) {
  * Translations of this 'table' is based on arrays with EN as the key and other
  * translations as the values. Structure of the arrays are:
  * [key in EN (so also value for EN), NL, optional other languages]
- * 
+ *
  * Besides the translations there's also hierarchy in this table for grouping
  * on a more generic level. This results in a json structure:
- * 
+ *
  * {
  *    key: '',           // group key
  *    value: ''          // translation value; for EN same as the key
@@ -32,7 +32,7 @@ export function getCategoryTranslation(category) {
  *      }
  *    ]
  * }
- * 
+ *
  * First row of the array is the generic level key/translation.
  */
 
@@ -388,39 +388,35 @@ let sensorTypesEN = null;
 let sensorTypesNL = null;
 
 export function getSensorTypesTranslation(locale: string = 'en') {
-  let current_locale = locale != null ? locale : 'en';
+  const currentLocale = locale != null ? locale : 'en';
 
-  switch (current_locale) {
+  switch (currentLocale) {
     case 'nl':
       buildNL();
       return sensorTypesNL;
-      break;
-
     case 'en':
     default:
       buildEN();
       return sensorTypesEN;
-      break;
   }
-
 }
 
 function buildEN() {
   if (sensorTypesEN == null) {
-    sensorTypesEN = buildSensorTypesObject(0)
+    sensorTypesEN = buildSensorTypesObject(0);
   }
   return sensorTypesEN;
 }
 
 function buildNL() {
   if (sensorTypesNL == null) {
-    sensorTypesNL = buildSensorTypesObject(1)
+    sensorTypesNL = buildSensorTypesObject(1);
   }
   return sensorTypesNL;
 }
 
-function buildSensorTypesObject(translationColumn: number): Object {
-  let sensorTypes = [
+function buildSensorTypesObject(translationColumn: number): Record<string, any>[] {
+  return [
     fromArrayToSensorTypesObject(soundSensorTypesArrayWithTranslations, translationColumn),
     fromArrayToSensorTypesObject(chemicalSensorTypesArrayWithTranslations, translationColumn),
     fromArrayToSensorTypesObject(electricCurrentSensorTypesArrayWithTranslations, translationColumn),
@@ -433,26 +429,19 @@ function buildSensorTypesObject(translationColumn: number): Object {
     fromArrayToSensorTypesObject(temperatureSensorTypesArrayWithTranslations, translationColumn),
     fromArrayToSensorTypesObject(proximitySensorTypesArrayWithTranslations, translationColumn),
     fromArrayToSensorTypesObject(otherTypesArrayWithTranslations, translationColumn),
-
   ];
-
-  console.debug('succesfully built the sensorTypes object for translation column', translationColumn);
-
-  return sensorTypes;
 }
 
-function fromArrayToSensorTypesObject(ar: string[][], languageColumn: number = 0): Object {
-  let obj = {
+function fromArrayToSensorTypesObject(ar: string[][], languageColumn: number = 0): Record<string, any> {
+  const obj = {
     key: ar[0][0],
     value: ar[0][languageColumn],
     types: []
-  }
+  };
+
   for (let index = 1; index < ar.length; index++) {
     const element = ar[index];
-    obj.types.push({
-      key: ar[index][0],
-      value: ar[index][languageColumn]
-    })
+    obj.types.push({key: element[0], value: element[languageColumn]});
   }
   return obj;
 }
