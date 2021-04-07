@@ -45,7 +45,8 @@
                 "glob": "**/*",
                 "input": "./node_modules/kadaster-huisstijl/dist/assets",
                 "output": "./assets/"
-              }
+              },
+              "src/silent-renew.html"
             ],
             "styles": [
               "src/styles.scss"

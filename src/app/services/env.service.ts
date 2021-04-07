@@ -6,6 +6,15 @@ export class EnvService {
   // API url
   public apiUrl = '';
 
+  // issuer endpoint
+  public oidcIssuer = '';
+
+  // well known endpoint (in case it is at non default location)
+  public oidcWellKnown = '';
+
+  // client name
+  public oidcClientId = '';
+
   constructor() {
   }
 
