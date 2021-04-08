@@ -1,0 +1,50 @@
+<div class="container-fluid">
+    <app-navbar locationClass="form"></app-navbar>
+    <div class="row form-header">
+        <div class="col-1">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="col-11">
+            <div>
+                <h3>
+                    <span>Observation Goals</span>
+                </h3>
+            </div>
+            <hr>
+            <table class="table table-striped table-hover table-bordered">
+                <caption class="hidden" i18n>Observation Goals</caption>
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th class= "pointer" scope="col"><span i18n>Name</span><em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col"><span i18n>Description</span><em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col"><span i18n>Legal Ground</span><em class="fas fa-sort ml-2"></em></th>
+                    <th class= "pointer" scope="col"><span i18n>Legal Ground Link</span><em class="fas fa-sort ml-2"></em></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let observationGoal of observationGoals; let i = index" class="pointer">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ observationGoal.name }}</td>
+                    <td>{{ observationGoal.description }}</td>
+                    <td>{{ observationGoal.legalGround }}</td>
+                    <td>{{ observationGoal.legalGroundLink }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="d-flex justify-content-center">
+                <ul class="pagination mb-0">
+                    <li class="pointer" (click)="getPreviousPage()">
+                        <span><em class="fa fa-chevron-left"></em></span>
+                    </li>
+                    <li class="pointer active">
+                        <span class="content">{{ pageIndex + 1}}</span>
+                    </li>
+                    <li class="pointer" (click)="getNextPage()">
+                        <span><em class="fa fa-chevron-right"></em></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

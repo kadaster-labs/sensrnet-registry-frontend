@@ -40,6 +40,8 @@ import { OrganizationContactComponent } from './form-controls/organization-conta
 import {SensorComponent} from './form-controls/sensor/sensor.component';
 import {OrganizationUsersComponent} from './forms/organization-users/organization-users.component';
 import {TypeComponent} from './form-controls/type/type.component';
+import {ObservationGoalsComponent} from './components/observation-goals/observation-goals.component';
+import {ObservationGoalComponent} from './forms/observation-goal/observation-goal.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import {TypeComponent} from './form-controls/type/type.component';
     SensorComponent,
     OrganizationUsersComponent,
     ModalComponent,
+    ObservationGoalComponent,
+    ObservationGoalsComponent,
     OrganizationComponent,
     OrganizationJoinComponent,
     OrganizationCreateComponent,
@@ -72,7 +76,7 @@ import {TypeComponent} from './form-controls/type/type.component';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    GgcMapModule.forRoot(),
+    GgcMapModule,
     GgcSearchModule,
     GgcDatasetTreeModule,
     GgcDatasetLegendModule,

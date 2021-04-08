@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG
 import {ModalService} from '../../services/modal.service';
 import {AlertService} from '../../services/alert.service';
 import {DeviceService} from '../../services/device.service';
+import { ObservationGoalService} from '../../services/observation-goal.service';
+import { switchMap } from 'rxjs/operators';
+import { ViewChildren } from '@angular/core';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-datastream',
@@ -21,16 +27,20 @@ export class DataStreamComponent implements ControlValueAccessor {
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
 
+  @ViewChildren('observationGoals') observationGoalsElements;
+
   private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public confirmTitleString = $localize`:@@dataStream.delete.confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@dataStream.delete.confirm.body:Do you really want to delete the datastream?`;
+  public goalConfirmString = $localize`:@@goal.delete.confirm.body:Do you really want to delete the observation goal?`;
 
   constructor(
     private formBuilder: FormBuilder,
     private modalService: ModalService,
     private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
+    private observationGoalService: ObservationGoalService,
     ) {}
 
   createDataStream(): FormGroup {
@@ -48,6 +58,7 @@ export class DataStreamComponent implements ControlValueAccessor {
       isReusable: true,
       documentation: [null, [Validators.pattern(this.urlRegex)]],
       dataLink: [null, [Validators.pattern(this.urlRegex)]],
+      observationGoals: [[]],
     });
   }
 
@@ -110,6 +121,39 @@ export class DataStreamComponent implements ControlValueAccessor {
   public writeValue(value) {
     if (value) {
       this.value = value;
+    }
+  }
+
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap( x =>  this.observationGoalService.getObservationGoals(0, 15, x))
+    )
+
+  formatObservationGoal(value: any) {
+    return value.name;
+  }
+
+  addObservationGoal(sensorIndex, dataStreamIndex, $e) {
+    $e.preventDefault();
+
+    this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value.push($e.item);
+    this.observationGoalsElements.toArray().map(x => x.nativeElement.value = '');
+  }
+
+  removeObservationGoal(sensorIndex, dataStreamIndex, item) {
+    const observationGoals = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value;
+
+    let observationGoalIndex = null;
+    for (let i = 0; i < observationGoals.length; i++) {
+      if (observationGoals[i]._id === item._id) {
+        observationGoalIndex = i;
+      }
+    }
+
+    if (observationGoalIndex !== null) {
+      observationGoals.splice(observationGoalIndex, 1);
     }
   }
 }

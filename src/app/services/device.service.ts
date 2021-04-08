@@ -4,9 +4,8 @@ import { Observable, Subscriber } from 'rxjs';
 import { ISensor } from '../model/bodies/sensor-body';
 import { EventType } from '../model/events/event-type';
 import { ConnectionService } from './connection.service';
-import { SensorTheme } from '../model/bodies/sensorTheme';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import {IDevice, ILocationDetails} from '../model/bodies/device-model';
+import {IDevice} from '../model/bodies/device-model';
 
 export interface IRegisterLocationBody {
   location: number[];
@@ -169,28 +168,6 @@ export class DeviceService {
     return this.http.delete(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}`);
   }
 
-  /** Retrieve sensors */
-  public async getSensors(bottomLeftLongitude?: string, bottomLeftLatitude?: string, upperRightLongitude?: string,
-                          upperRightLatitude?: string) {
-    let params = new HttpParams();
-    if (bottomLeftLongitude) {
-      params = params.set('bottomLeftLongitude', bottomLeftLongitude);
-    }
-    if (bottomLeftLatitude) {
-      params = params.set('bottomLeftLatitude', bottomLeftLatitude);
-    }
-    if (upperRightLongitude) {
-      params = params.set('upperRightLongitude', upperRightLongitude);
-    }
-    if (upperRightLatitude) {
-      params = params.set('upperRightLatitude', upperRightLatitude);
-    }
-
-    const url = `${this.env.apiUrl}/sensor?${params.toString()}`;
-    const sensorPromise = this.http.get(url).toPromise();
-    return await sensorPromise as ISensor[];
-  }
-
   public async getDevices(bottomLeftLongitude?: string, bottomLeftLatitude?: string, upperRightLongitude?: string,
                           upperRightLatitude?: string) {
     let params = new HttpParams();
@@ -273,5 +250,15 @@ export class DeviceService {
   /** Retrieve a single device */
   public get(id: string) {
     return this.http.get(`${this.env.apiUrl}/device/${id}`);
+  }
+
+  public linkObservationGoal(deviceId: string, sensorId: string, dataStreamId: string, observationGoalId: string) {
+    const url = `${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}/linkgoal`;
+    return this.http.put(url, {observationGoalId});
+  }
+
+  public unlinkObservationGoal(deviceId: string, sensorId: string, dataStreamId: string, observationGoalId: string) {
+    const url = `${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}/unlinkgoal`;
+    return this.http.put(url, {observationGoalId});
   }
 }
