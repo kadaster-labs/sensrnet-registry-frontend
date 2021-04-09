@@ -1,35 +1,37 @@
 import proj4 from 'proj4';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import Overlay from 'ol/Overlay';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import {Cluster} from 'ol/source';
+import { Cluster } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
-import {FitOptions} from 'ol/View';
+import { FitOptions } from 'ol/View';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import {extend, Extent, getBottomLeft, getTopRight} from 'ol/extent';
+import { extend, Extent, getBottomLeft, getTopRight } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
-import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
+import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
-import {SearchComponentEvent} from 'generieke-geo-componenten-search';
-import {Dataset, DatasetTreeEvent, Theme} from 'generieke-geo-componenten-dataset-tree';
-import {MapComponentEvent, MapComponentEventTypes, MapService} from 'generieke-geo-componenten-map';
+import { SearchComponentEvent } from 'generieke-geo-componenten-search';
+import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
+import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
 
-import {IDevice} from '../../model/bodies/device-model';
-import {AlertService} from '../../services/alert.service';
-import {ModalService} from '../../services/modal.service';
-import {DeviceService} from '../../services/device.service';
-import {LocationService} from '../../services/location.service';
-import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
+import { IDevice } from '../../model/bodies/device-model';
+import { AlertService } from '../../services/alert.service';
+import { ModalService } from '../../services/modal.service';
+import { DeviceService } from '../../services/device.service';
+import { LocationService } from '../../services/location.service';
+import { ConnectionService } from '../../services/connection.service';
+import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
 
 
 @Component({
@@ -49,7 +51,9 @@ export class MapComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private deviceService: DeviceService,
     private locationService: LocationService,
-  ) {}
+    private connectionService: ConnectionService,
+    private oidcSecurityService: OidcSecurityService,
+  ) { }
 
   public mapName = 'srn';
   public subscriptions = [];
@@ -500,13 +504,20 @@ export class MapComponent implements OnInit, OnDestroy {
           try {
             await this.deviceService.unregister(this.selectedDevice._id);
           } catch (e) {
-            this.alertService.error(e.message);
+            this.alertService.error(e.error.message);
           }
         }
       }).catch(() => console.log('User dismissed the dialog.'));
   }
 
   public async ngOnInit(): Promise<void> {
+
+    this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
+      if (auth) {
+        this.connectionService.refreshLegalEntity();
+      }
+    });
+
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
@@ -536,7 +547,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
       this.myLayers = data as Theme[];
-    }, () => {}));
+    }, () => { }));
 
     const { onLocate, onUpdate, onRemove } = await this.deviceService.subscribe();
 

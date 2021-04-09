@@ -9,22 +9,6 @@
         <source>Sensor Registry</source>
       </segment>
     </unit>
-    <unit id="modal.accept">
-      <notes>
-        <note category="location">src/app/services/modal.service.ts:9</note>
-      </notes>
-      <segment>
-        <source>OK</source>
-      </segment>
-    </unit>
-    <unit id="modal.decline">
-      <notes>
-        <note category="location">src/app/services/modal.service.ts:10</note>
-      </notes>
-      <segment>
-        <source>Cancel</source>
-      </segment>
-    </unit>
     <unit id="login.failed">
       <notes>
         <note category="location">src/app/login/login.component.ts:18</note>
@@ -94,6 +78,22 @@
       </notes>
       <segment>
         <source>Password is required</source>
+      </segment>
+    </unit>
+    <unit id="modal.accept">
+      <notes>
+        <note category="location">src/app/services/modal.service.ts:9</note>
+      </notes>
+      <segment>
+        <source>OK</source>
+      </segment>
+    </unit>
+    <unit id="modal.decline">
+      <notes>
+        <note category="location">src/app/services/modal.service.ts:10</note>
+      </notes>
+      <segment>
+        <source>Cancel</source>
       </segment>
     </unit>
     <unit id="3103656649990667741">
@@ -254,7 +254,7 @@
       <notes>
         <note category="location">src/app/components/map/map.component.html:30</note>
         <note category="location">src/app/forms/devices/devices.component.html:18</note>
-        <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:3</note>
+        <note category="location">src/app/form-controls/device-type/device-type.component.html:3</note>
       </notes>
       <segment>
         <source>Category</source>
@@ -346,7 +346,7 @@
     </unit>
     <unit id="form.register.invalid">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:33</note>
+        <note category="location">src/app/forms/device/device.component.ts:35</note>
       </notes>
       <segment>
         <source>The form is invalid</source>
@@ -354,7 +354,7 @@
     </unit>
     <unit id="device.register.success">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:34</note>
+        <note category="location">src/app/forms/device/device.component.ts:36</note>
       </notes>
       <segment>
         <source>Saved!</source>
@@ -362,7 +362,7 @@
     </unit>
     <unit id="device.register.failure">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:35</note>
+        <note category="location">src/app/forms/device/device.component.ts:37</note>
       </notes>
       <segment>
         <source>An error has occurred during saving:</source>
@@ -370,7 +370,7 @@
     </unit>
     <unit id="step.confirm.title">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:37</note>
+        <note category="location">src/app/forms/device/device.component.ts:39</note>
       </notes>
       <segment>
         <source>Save the step!</source>
@@ -378,7 +378,7 @@
     </unit>
     <unit id="step.confirm.body">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:38</note>
+        <note category="location">src/app/forms/device/device.component.ts:40</note>
       </notes>
       <segment>
         <source>You need to save before continuing</source>
@@ -423,9 +423,9 @@
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:28</note>
         <note category="location">src/app/form-controls/sensor/sensor.component.html:3</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:42</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:46</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:50</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:31</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:35</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:39</note>
       </notes>
       <segment>
         <source> - Optional</source>
@@ -491,6 +491,7 @@
     </unit>
     <unit id="3768927257183755959">
       <notes>
+        <note category="location">src/app/forms/device/device.component.html:50</note>
         <note category="location">src/app/forms/device/device.component.html:58</note>
         <note category="location">src/app/forms/device/device.component.html:67</note>
         <note category="location">src/app/forms/organization-join/organization-join.component.html:26</note>
@@ -498,6 +499,24 @@
       </notes>
       <segment>
         <source>Save</source>
+      </segment>
+    </unit>
+    <unit id="3885497195825665706">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.html:51</note>
+        <note category="location">src/app/forms/device/device.component.html:60</note>
+      </notes>
+      <segment>
+        <source>Next</source>
+      </segment>
+    </unit>
+    <unit id="4452427314943113135">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.html:59</note>
+        <note category="location">src/app/forms/device/device.component.html:68</note>
+      </notes>
+      <segment>
+        <source>Previous</source>
       </segment>
     </unit>
     <unit id="1786120847907845120">
@@ -578,17 +597,9 @@
         <source>Website</source>
       </segment>
     </unit>
-    <unit id="register.failed">
-      <notes>
-        <note category="location">src/app/forms/organization-create/organization-create.component.ts:23</note>
-      </notes>
-      <segment>
-        <source>Failed to register. Does the organization exist already?</source>
-      </segment>
-    </unit>
     <unit id="organization.update">
       <notes>
-        <note category="location">src/app/forms/organization-update/organization-update.component.ts:22</note>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:23</note>
       </notes>
       <segment>
         <source>Updated the organization.</source>
@@ -608,6 +619,14 @@
       </notes>
       <segment>
         <source>Update</source>
+      </segment>
+    </unit>
+    <unit id="register.failed">
+      <notes>
+        <note category="location">src/app/forms/organization-create/organization-create.component.ts:24</note>
+      </notes>
+      <segment>
+        <source>Failed to register. Does the organization exist already?</source>
       </segment>
     </unit>
     <unit id="no.users">
@@ -741,7 +760,7 @@
     <unit id="4895326106573044490">
       <notes>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:50</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:39</note>
       </notes>
       <segment>
         <source>Documentation</source>
@@ -750,7 +769,7 @@
     <unit id="5880667752120449727">
       <notes>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:72</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:51</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:40</note>
       </notes>
       <segment>
         <source>Enter URL of documentation</source>
@@ -777,15 +796,25 @@
         <note category="location">src/app/form-controls/datastream/datastream.component.html:76</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:85</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:12</note>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:55</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:44</note>
       </notes>
       <segment>
         <source>Not a valid URL</source>
       </segment>
     </unit>
+    <unit id="5407108135061216703">
+      <notes>
+        <note category="location">src/app/form-controls/device-type/device-type.component.html:5</note>
+        <note category="location">src/app/form-controls/theme/theme.component.html:3</note>
+        <note category="location">src/app/form-controls/type/type.component.html:3</note>
+      </notes>
+      <segment>
+        <source>Nothing selected</source>
+      </segment>
+    </unit>
     <unit id="5551307948733637188">
       <notes>
-        <note category="location">src/app/form-controls/sensor-type/sensor-type.component.html:11</note>
+        <note category="location">src/app/form-controls/device-type/device-type.component.html:11</note>
       </notes>
       <segment>
         <source>Category is required</source>
@@ -797,38 +826,6 @@
       </notes>
       <segment>
         <source>Theme(s)</source>
-      </segment>
-    </unit>
-    <unit id="1755726504733757199">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
-      </notes>
-      <segment>
-        <source>Sensor status</source>
-      </segment>
-    </unit>
-    <unit id="8204176479746810612">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
-      </notes>
-      <segment>
-        <source>Active</source>
-      </segment>
-    </unit>
-    <unit id="1859131936150262113">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
-      </notes>
-      <segment>
-        <source>Inactive</source>
-      </segment>
-    </unit>
-    <unit id="5701779805166837861">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
-      </notes>
-      <segment>
-        <source>Status is required</source>
       </segment>
     </unit>
     <unit id="471816275243265264">
@@ -863,12 +860,44 @@
         <source>Enter Height (m)</source>
       </segment>
     </unit>
-    <unit id="8194501875024843821">
+    <unit id="2153354553220190862">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:19,20</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:18</note>
       </notes>
       <segment>
-        <source> Location and Height are required </source>
+        <source>Location and Height are required</source>
+      </segment>
+    </unit>
+    <unit id="1755726504733757199">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:2</note>
+      </notes>
+      <segment>
+        <source>Sensor status</source>
+      </segment>
+    </unit>
+    <unit id="8204176479746810612">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Active</source>
+      </segment>
+    </unit>
+    <unit id="1859131936150262113">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Inactive</source>
+      </segment>
+    </unit>
+    <unit id="5701779805166837861">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:18</note>
+      </notes>
+      <segment>
+        <source>Status is required</source>
       </segment>
     </unit>
     <unit id="1399584566118768300">
@@ -905,7 +934,7 @@
     </unit>
     <unit id="sensor.delete.confirm.title">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.ts:29</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.ts:26</note>
       </notes>
       <segment>
         <source>Please confirm</source>
@@ -913,7 +942,7 @@
     </unit>
     <unit id="sensor.delete.confirm.body">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.ts:30</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.ts:27</note>
       </notes>
       <segment>
         <source>Do you really want to delete the sensor?</source>
@@ -945,7 +974,7 @@
     </unit>
     <unit id="859889886317613793">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:42</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:31</note>
       </notes>
       <segment>
         <source>Manufacturer</source>
@@ -953,7 +982,7 @@
     </unit>
     <unit id="7889254064940700973">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:43</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:32</note>
       </notes>
       <segment>
         <source>The sensor manufacturer</source>
@@ -961,7 +990,7 @@
     </unit>
     <unit id="4348920359154187664">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:46</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:35</note>
       </notes>
       <segment>
         <source>Supplier</source>
@@ -969,7 +998,7 @@
     </unit>
     <unit id="5053098491167761310">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:47</note>
+        <note category="location">src/app/form-controls/sensor/sensor.component.html:36</note>
       </notes>
       <segment>
         <source>The sensor supplier</source>
@@ -983,9 +1012,17 @@
         <source>Description is required</source>
       </segment>
     </unit>
+    <unit id="8650499415827640724">
+      <notes>
+        <note category="location">src/app/form-controls/type/type.component.html:2</note>
+      </notes>
+      <segment>
+        <source>Type</source>
+      </segment>
+    </unit>
     <unit id="2258786061065425417">
       <notes>
-        <note category="location">src/app/form-controls/sensor/sensor.component.html:37</note>
+        <note category="location">src/app/form-controls/type/type.component.html:14</note>
       </notes>
       <segment>
         <source>Type is required</source>
@@ -1015,212 +1052,164 @@
         <source>Camera</source>
       </segment>
     </unit>
-    <unit id="type.weather">
+    <unit id="theme.energy">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:40</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:25</note>
       </notes>
       <segment>
-        <source>Weather Station</source>
+        <source>Energy</source>
       </segment>
     </unit>
-    <unit id="type.gauge">
+    <unit id="theme.agriculture">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:41</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:26</note>
       </notes>
       <segment>
-        <source>Wind Gauge</source>
+        <source>Agriculture</source>
       </segment>
     </unit>
-    <unit id="type.container">
+    <unit id="theme.transport">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:42</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:27</note>
       </notes>
       <segment>
-        <source>Waste Container</source>
-      </segment>
-    </unit>
-    <unit id="type.dust">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:43</note>
-      </notes>
-      <segment>
-        <source>Fine Dust Sensor</source>
-      </segment>
-    </unit>
-    <unit id="type.uv">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:44</note>
-      </notes>
-      <segment>
-        <source>UV-Sensor</source>
-      </segment>
-    </unit>
-    <unit id="type.light">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:45</note>
-      </notes>
-      <segment>
-        <source>Light Cell</source>
-      </segment>
-    </unit>
-    <unit id="type.motion">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:46</note>
-      </notes>
-      <segment>
-        <source>Motion Sensor</source>
-      </segment>
-    </unit>
-    <unit id="type.fire">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:47</note>
-      </notes>
-      <segment>
-        <source>Fire Detector</source>
-      </segment>
-    </unit>
-    <unit id="type.water">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:48</note>
-      </notes>
-      <segment>
-        <source>Waterlevel Meter</source>
-      </segment>
-    </unit>
-    <unit id="type.mic">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:49</note>
-      </notes>
-      <segment>
-        <source>Microphone / Sound Meter</source>
-      </segment>
-    </unit>
-    <unit id="type.counter">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:50</note>
-      </notes>
-      <segment>
-        <source>Pedometer Counter</source>
-      </segment>
-    </unit>
-    <unit id="type.radar">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:51</note>
-      </notes>
-      <segment>
-        <source>Radar Detector</source>
-      </segment>
-    </unit>
-    <unit id="type.gsm">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:52</note>
-      </notes>
-      <segment>
-        <source>GSM Sensor</source>
-      </segment>
-    </unit>
-    <unit id="type.detection">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:53</note>
-      </notes>
-      <segment>
-        <source>Detection Loop</source>
-      </segment>
-    </unit>
-    <unit id="type.height">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:54</note>
-      </notes>
-      <segment>
-        <source>Height Detection Device</source>
-      </segment>
-    </unit>
-    <unit id="type.environment">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:64</note>
-      </notes>
-      <segment>
-        <source>Environmental Zone</source>
-      </segment>
-    </unit>
-    <unit id="type.security">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:65</note>
-      </notes>
-      <segment>
-        <source>Security Camera</source>
-      </segment>
-    </unit>
-    <unit id="type.flashlight">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:66</note>
-      </notes>
-      <segment>
-        <source>Traffic Flashlight</source>
-      </segment>
-    </unit>
-    <unit id="type.navigation">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTypes.ts:74</note>
-      </notes>
-      <segment>
-        <source>Navigation Beacon</source>
-      </segment>
-    </unit>
-    <unit id="theme.weather">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:12</note>
-      </notes>
-      <segment>
-        <source>Weather</source>
-      </segment>
-    </unit>
-    <unit id="theme.nature">
-      <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:13</note>
-      </notes>
-      <segment>
-        <source>Nature and Environment</source>
+        <source>Transport</source>
       </segment>
     </unit>
     <unit id="theme.waste">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:14</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:28</note>
       </notes>
       <segment>
         <source>Waste</source>
       </segment>
     </unit>
+    <unit id="theme.soilandunderground">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:29</note>
+      </notes>
+      <segment>
+        <source>SoilAndUnderground</source>
+      </segment>
+    </unit>
+    <unit id="theme.sound">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:30</note>
+      </notes>
+      <segment>
+        <source>Sound</source>
+      </segment>
+    </unit>
+    <unit id="theme.environmentalchange">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:31</note>
+      </notes>
+      <segment>
+        <source>EnvironmentalChange</source>
+      </segment>
+    </unit>
+    <unit id="theme.air">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:32</note>
+      </notes>
+      <segment>
+        <source>Air</source>
+      </segment>
+    </unit>
+    <unit id="theme.natureandlandscape">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:33</note>
+      </notes>
+      <segment>
+        <source>NatureAndLandscape</source>
+      </segment>
+    </unit>
+    <unit id="theme.water">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:34</note>
+      </notes>
+      <segment>
+        <source>Water</source>
+      </segment>
+    </unit>
     <unit id="theme.safety">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:15</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:35</note>
       </notes>
       <segment>
         <source>Safety</source>
       </segment>
     </unit>
-    <unit id="theme.mobility">
+    <unit id="theme.spatialplanning">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:16</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:36</note>
       </notes>
       <segment>
-        <source>Mobility</source>
+        <source>SpatialPlanning</source>
       </segment>
     </unit>
-    <unit id="theme.soil">
+    <unit id="theme.watermanagement">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:17</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:37</note>
       </notes>
       <segment>
-        <source>Soil and Underground</source>
+        <source>Watermanagement</source>
       </segment>
     </unit>
-    <unit id="theme.other">
+    <unit id="theme.aviation">
       <notes>
-        <note category="location">src/app/model/bodies/sensorTheme.ts:18</note>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:38</note>
       </notes>
       <segment>
-        <source>Other</source>
+        <source>Aviation</source>
+      </segment>
+    </unit>
+    <unit id="theme.publictransport">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:39</note>
+      </notes>
+      <segment>
+        <source>PublicTransport</source>
+      </segment>
+    </unit>
+    <unit id="theme.railandroadtraffic">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:40</note>
+      </notes>
+      <segment>
+        <source>RailAndRoadTraffic</source>
+      </segment>
+    </unit>
+    <unit id="theme.shipping">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:41</note>
+      </notes>
+      <segment>
+        <source>Shipping</source>
+      </segment>
+    </unit>
+    <unit id="theme.construction">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:42</note>
+      </notes>
+      <segment>
+        <source>Construction</source>
+      </segment>
+    </unit>
+    <unit id="theme.housing">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:43</note>
+      </notes>
+      <segment>
+        <source>Housing</source>
+      </segment>
+    </unit>
+    <unit id="theme.health">
+      <notes>
+        <note category="location">src/app/model/bodies/sensorTheme.ts:44</note>
+      </notes>
+      <segment>
+        <source>Health</source>
       </segment>
     </unit>
     <unit id="ngb.alert.close">

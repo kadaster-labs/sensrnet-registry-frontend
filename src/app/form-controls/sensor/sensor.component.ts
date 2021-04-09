@@ -64,7 +64,7 @@ export class SensorComponent implements ControlValueAccessor {
         sensors.removeAt(index);
       }
     } catch (e) {
-      this.alertService.error(e.message);
+      this.alertService.error(e.error.message);
     }
   }
 

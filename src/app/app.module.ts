@@ -11,17 +11,17 @@ import { GgcDatasetTreeModule } from 'generieke-geo-componenten-dataset-tree';
 import { GgcDatasetLegendModule } from 'generieke-geo-componenten-dataset-legend';
 
 import { AppComponent } from './app.component';
+import { AuthConfigModule } from './auth/auth-config.module';
+import { ErrorInterceptor } from './auth/error.interceptor';
+import { AuthInterceptor } from './auth/auth.interceptor';
 import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
-import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ViewerComponent } from './viewer/viewer.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { ErrorInterceptor } from './helpers/error.interceptor';
 import { DeviceComponent } from './forms/device/device.component';
-import { RegisterComponent } from './register/register.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ModalComponent } from './components/modal/modal.component';
@@ -48,7 +48,6 @@ import {TypeComponent} from './form-controls/type/type.component';
     LanguageSwitcherComponent,
     ViewerComponent,
     LoginComponent,
-    RegisterComponent,
     DeviceComponent,
     ThemeComponent,
     TypeComponent,
@@ -79,9 +78,10 @@ import {TypeComponent} from './form-controls/type/type.component';
     GgcDatasetLegendModule,
     HttpClientModule,
     NgbModule,
+    AuthConfigModule,
   ], providers: [
     ModalService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     EnvServiceProvider,
   ], bootstrap: [

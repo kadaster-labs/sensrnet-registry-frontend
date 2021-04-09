@@ -40,7 +40,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/env.js"
+              "src/env.js",
+              "src/silent-renew.html"
             ],
             "styles": [
               "src/styles.scss"

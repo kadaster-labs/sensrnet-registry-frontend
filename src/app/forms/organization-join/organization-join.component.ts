@@ -1,5 +1,5 @@
 import { AlertService } from '../../services/alert.service';
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ILegalEntity } from '../../model/legalEntity';
@@ -7,7 +7,7 @@ import { UserService } from '../../services/user.service';
 import { ConnectionService } from '../../services/connection.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import {UserUpdateBody} from '../../model/bodies/user-update';
+import { UserUpdateBody } from '../../model/bodies/user-update';
 
 @Component({
   selector: 'app-organization-join',
@@ -26,12 +26,12 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
   private filterChanged: Subject<string> = new Subject<string>();
 
   constructor(
-    private alertService: AlertService,
+    private readonly alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
-  ) {}
+  ) { }
 
   get f() {
     return this.form.controls;
@@ -74,13 +74,13 @@ export class OrganizationJoinComponent implements OnInit, OnDestroy {
     if (this.form.valid) {
       try {
         const legalEntityId = this.form.value.legalEntity;
-        const userUpdate: UserUpdateBody = {legalEntityId};
+        const userUpdate: UserUpdateBody = { legalEntityId };
         await this.userService.update(userUpdate).toPromise();
 
         this.connectionService.updateSocketLegalEntity(legalEntityId);
         this.setLegalEntityId.emit(legalEntityId);
-      } catch (error) {
-        this.alertService.error(error.message);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
     }
     this.submitted = false;

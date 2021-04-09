@@ -1,6 +1,6 @@
 <div [formGroup]="form" class="form-group">
     <label for="theme"><span i18n>Theme(s)</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-    <select formControlName="value" class="form-control selectpicker" multiple>
+    <select formControlName="value" class="form-control selectpicker" multiple title="Nothing selected" i18n-title>
         <option *ngFor="let type of sensorThemesList" [value]="type">
             {{ sensorThemeTranslation[type] }}
         </option>

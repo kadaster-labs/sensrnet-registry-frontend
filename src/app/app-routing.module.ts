@@ -3,14 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ViewerComponent } from './viewer/viewer.component';
 import { DeviceComponent } from './forms/device/device.component';
-import { RegisterComponent } from './register/register.component';
 import { DevicesComponent } from './forms/devices/devices.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 
 const routes: Routes = [
-  { path: '', component: ViewerComponent },
+  { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+
+  { path: 'viewer', component: ViewerComponent },
 
   { path: 'organization', component: OrganizationComponent },
 
@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'devices', component: DevicesComponent },
 
   // otherwise redirect to viewer
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

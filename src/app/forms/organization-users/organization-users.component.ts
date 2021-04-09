@@ -1,7 +1,8 @@
+import jwt_decode from 'jwt-decode';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
-import { ConnectionService } from '../../services/connection.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -24,7 +25,7 @@ export class OrganizationUsersComponent implements OnInit {
     private alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
-    private readonly connectionService: ConnectionService,
+    private readonly oidcSecurityService: OidcSecurityService,
   ) {}
 
   get f() {
@@ -52,7 +53,10 @@ export class OrganizationUsersComponent implements OnInit {
       userId: new FormControl('', Validators.required),
     });
 
-    this.userId = this.connectionService.currentClaim.userId;
+    const token = this.oidcSecurityService.getIdToken();
+    const decoded = jwt_decode(token) as any;
+    this.userId = decoded.sub;
+
     await this.getUsers();
   }
 
@@ -71,8 +75,8 @@ export class OrganizationUsersComponent implements OnInit {
         } else {
           this.alertService.error(this.noUsersSelectedMessage);
         }
-      } catch (error) {
-        this.alertService.error(error.message);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
     }
     this.submitted = false;
