@@ -9,9 +9,6 @@ export class EnvService {
   // issuer endpoint
   public oidcIssuer = '';
 
-  // well known endpoint (in case it is at non default location)
-  public oidcWellKnown = '';
-
   // client name
   public oidcClientId = '';
 
