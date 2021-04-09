@@ -1,26 +1,25 @@
-import jwtDecode from 'jwt-decode';
-import { map } from 'rxjs/operators';
-import { Claim } from '../model/claim';
 import * as io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { EnvService } from './env.service';
 import { HttpClient } from '@angular/common/http';
+import { ILegalEntity } from '../model/legalEntity';
 import { BehaviorSubject, Subject, Observable, Subscriber } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 export class SocketEvent {
   constructor(
     public namespace?: string,
     public event?: any,
-  ) {}
+  ) { }
 }
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionService {
   private socket: SocketIOClient.Socket;
 
-  private claimSubject: BehaviorSubject<Claim> = new BehaviorSubject<Claim>(null);
-  public claim$: Observable<Claim> = this.claimSubject.asObservable();
+  private legalEntitySubject: BehaviorSubject<ILegalEntity> = new BehaviorSubject<ILegalEntity>(null);
+  public legalEntity$: Observable<ILegalEntity> = this.legalEntitySubject.asObservable();
 
   // Routing the events using a separate observable is necessary because a socket connection may not exist at the
   // time some component tries to subscribe to an endpoint.
@@ -29,73 +28,42 @@ export class ConnectionService {
   private nameSpaceObservables: Record<string, Observable<any>> = {};
 
   constructor(
-    private router: Router,
+    private readonly router: Router,
+    private readonly env: EnvService,
     private readonly http: HttpClient,
-    private env: EnvService,
+    private readonly oidcSecurityService: OidcSecurityService,
   ) {
-    this.claim$.subscribe(claim => {
-      if (!this.socket && claim && claim.accessToken) {
+    this.legalEntity$.subscribe(legalEntity => {
+      if (!this.socket && legalEntity) {
         this.connectSocket();
       }
     });
   }
 
-  public getClaimFromToken(accessToken: string): Claim {
-    let claim;
-    if (accessToken) {
-      try {
-        const token = jwtDecode(accessToken) as any;
-        claim = new Claim(token.sub, token.exp, accessToken);
-      } catch {
-        claim = new Claim();
-      }
-    } else {
-      claim = new Claim();
+  public get currentLegalEntity(): ILegalEntity {
+    return this.legalEntitySubject.value;
+  }
+
+  public clearLegalEntity() {
+    this.legalEntitySubject.next(null);
+  }
+
+  public async refreshLegalEntity(): Promise<void> {
+    let response;
+    try {
+      response = await this.http.get<any>(`${this.env.apiUrl}/legalentity`).toPromise() as ILegalEntity;
+    } catch {
+      return this.logoutRedirect();
     }
 
-    return claim;
-  }
-
-  public get currentClaim(): Claim {
-    return this.claimSubject.value;
-  }
-
-  public login(username: string, password: string) {
-    return this.http.post<any>(`${this.env.apiUrl}/auth/login`, { username, password })
-      .pipe(map((data) => {
-        const claim = this.getClaimFromToken(data.accessToken);
-        this.claimSubject.next(claim);
-
-        return data;
-      }));
-  }
-
-  public clearClaim() {
-    this.claimSubject.next(null);
-  }
-
-  public async refreshClaim(): Promise<Claim> {
-    const response = await this.http.post<any>(`${this.env.apiUrl}/auth/refresh`, null).toPromise();
-
-    let claim;
-    if (!response) {
-      await this.logoutRedirect();
-    } else {
-      claim = await this.getClaimFromToken(response.accessToken);
-      this.claimSubject.next(claim);
+    if (response) {
+      this.legalEntitySubject.next(response);
     }
-
-    return claim;
   }
 
   public async logout() {
-    this.clearClaim();
-
-    try {
-      await this.http.post<void>(`${this.env.apiUrl}/auth/logout`, null).toPromise();
-    } catch (error) {
-      console.error(`Something went wrong when logging out: ${error}.`);
-    }
+    this.clearLegalEntity();
+    this.oidcSecurityService.logoffLocal();
   }
 
   public async logoutRedirect() {
@@ -114,16 +82,14 @@ export class ConnectionService {
         transportOptions: undefined,
       };
 
-      const claim = this.currentClaim;
-      if (claim && claim.accessToken) {
-        connectionOptions.transportOptions = {
-          polling: {
-            extraHeaders: {
-              Authorization: `Bearer ${claim.accessToken}`,
-            }
+      const token = this.oidcSecurityService.getIdToken();
+      connectionOptions.transportOptions = {
+        polling: {
+          extraHeaders: {
+            Authorization: `Bearer ${token}`,
           }
-        };
-      }
+        }
+      };
 
       const url = `${host}/${namespace}`;
       this.socket = io(url, connectionOptions);
@@ -153,7 +119,7 @@ export class ConnectionService {
 
   public updateSocketLegalEntity(legalEntityId: string) {
     if (this.socket) {
-      this.socket.emit('LegalEntityUpdated', {legalEntityId});
+      this.socket.emit('LegalEntityUpdated', { legalEntityId });
     }
   }
 

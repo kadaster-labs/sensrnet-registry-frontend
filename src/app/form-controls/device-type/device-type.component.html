@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="category" i18n>Category</label>
         <select data-container="body" class="form-control" formControlName="category"
-            [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
+            [ngClass]="{ 'is-invalid': submitted && f.category.errors }" title="Nothing selected" i18n-title>
             <option *ngFor="let item of sensorCategories | keyvalue" [value]="item.key">
                 {{ getCategoryTranslation(item.value) }}
             </option>

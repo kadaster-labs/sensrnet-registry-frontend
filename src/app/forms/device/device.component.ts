@@ -255,7 +255,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           this.alertService.success(this.saveSuccessMessage);
         }
       } catch (e) {
-        this.alertService.error(e.message);
+        this.alertService.error(e.error.message);
       }
 
       this.submitted = false;
@@ -283,7 +283,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.alertService.success(this.saveSuccessMessage);
         this.submitted = false;
       } catch (e) {
-        this.alertService.error(`${this.saveFailedMessage}: ${e.message}.`);
+        this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
       }
     }
   }
@@ -309,7 +309,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           sensorEntry.patchValue({id: sensorResult.sensorId});
         } catch (e) {
           failed = true;
-          this.alertService.error(e.message);
+          this.alertService.error(e.error.message);
         }
       } else {
         const sensorUpdate: Record<string, any> = {};
@@ -340,7 +340,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.alertService.success(this.saveSuccessMessage);
           }
         } catch (e) {
-          this.alertService.error(e.message);
+          this.alertService.error(e.error.message);
         }
 
         this.submitted = false;
@@ -387,7 +387,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
               dataStreamEntry.patchValue({id: dataStreamResult.dataStreamId});
             } catch (e) {
               failed = true;
-              this.alertService.error(e.message);
+              this.alertService.error(e.error.message);
             }
           } else {
             const dataStreamUpdate: Record<string, any> = {};
@@ -435,7 +435,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.alertService.success(this.saveSuccessMessage, false, 4000);
           }
         } catch (e) {
-          this.alertService.error(e.message, false, 4000);
+          this.alertService.error(e.error.message, false, 4000);
         }
       }
     }

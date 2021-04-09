@@ -10,8 +10,42 @@ replace_envs () {
   done
 }
 
+replace_envs_oidc_issuer () {
+  for dir in /usr/share/nginx/html/*/
+  do
+    sed -i "s@window.__env.oidcIssuer = '/dex'@window.__env.oidcIssuer = '${OIDC_ISSUER}'@" ${dir}env.js
+  done
+}
+
+replace_envs_oidc_well_known () {
+  for dir in /usr/share/nginx/html/*/
+  do
+    sed -i "s@window.__env.oidcWellKnown = '/dex'@window.__env.oidcWellKnown = '${OIDC_WELL_KNOWN}'@" ${dir}env.js
+  done
+}
+
+replace_envs_oidc_client_id () {
+  for dir in /usr/share/nginx/html/*/
+  do
+    sed -i "s@window.__env.oidcClientId = 'registry-frontend'@window.__env.oidcClientId = '${OIDC_CLIENT_ID}'@" ${dir}env.js
+  done
+}
+
 if [[ ! -z "$API_URL" ]]; then
   replace_envs
+fi
+
+if [[ ! -z "$OIDC_ISSUER" ]]; then
+  replace_envs_oidc_issuer
+fi
+
+if [[ ! -z "$OIDC_WELL_KNOWN" ]]; then
+  replace_envs_oidc_well_known
+fi
+
+
+if [[ ! -z "$OIDC_CLIENT_ID" ]]; then
+  replace_envs_oidc_client_id
 fi
 
 if [ "$1" = "run" ]; then

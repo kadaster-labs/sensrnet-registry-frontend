@@ -12,6 +12,7 @@ import WMTS from 'ol/source/WMTS';
 import Stroke from 'ol/style/Stroke';
 import { FitOptions } from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
+import { Cluster } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
@@ -22,7 +23,6 @@ import Projection from 'ol/proj/Projection';
 import { MapBrowserEvent, Overlay } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import LayerSwitcher from 'ol-layerswitcher';
-import { Cluster, OSM, Stamen } from 'ol/source';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SearchNominatim from 'ol-ext/control/SearchNominatim';
@@ -31,13 +31,15 @@ import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import { extend, Extent, getBottomLeft, getCenter, getTopRight, getTopLeft, getWidth } from 'ol/extent';
 
 import { MapService } from './map.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+
 import { IDevice } from '../../model/bodies/device-model';
 import { AlertService } from '../../services/alert.service';
 import { ModalService } from '../../services/modal.service';
 import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
-import { Position } from 'geojson';
+import { ConnectionService } from '../../services/connection.service';
 
 
 @Component({
@@ -58,6 +60,8 @@ export class MapComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private deviceService: DeviceService,
     private locationService: LocationService,
+    private connectionService: ConnectionService,
+    private oidcSecurityService: OidcSecurityService,
   ) { }
 
   public map: OlMap;
@@ -341,11 +345,11 @@ export class MapComponent implements OnInit, OnDestroy {
       const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
       const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
 
-      const sensors = await this.deviceService.getDevices(bottomLeft[0].toString(), bottomLeft[1].toString(),
-        topRight[0].toString(), topRight[1].toString());
+      const devices = await this.deviceService.getDevices(bottomLeft[0].toString(), bottomLeft[1].toString(),
+          topRight[0].toString(), topRight[1].toString());
 
-      if (sensors) {
-        this.updateMap(sensors);
+      if (devices) {
+        this.updateMap(devices);
       }
     }
   }
@@ -473,7 +477,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const view = this.map.getView();
     view.fit(point, {
       duration: 250,
-      maxZoom: 10,
+      maxZoom: 14,
     });
   }
 
@@ -617,9 +621,7 @@ export class MapComponent implements OnInit, OnDestroy {
     search.on('select', (event) => {
       if (event.search.class === 'place') {
         // if the search result is a single point, zoom to it
-        const coordsRD: Coordinate = proj4(this.epsgWGS84, this.epsgRD, event.coordinate);
-        const point = new Point(coordsRD);
-
+        const point = new Point(event.coordinate);
         this.zoomToPoint(point);
       } else {
         // if the search result contains an area, zoom to its extent
@@ -659,13 +661,20 @@ export class MapComponent implements OnInit, OnDestroy {
           try {
             await this.deviceService.unregister(this.selectedDevice._id);
           } catch (e) {
-            this.alertService.error(e.message);
+            this.alertService.error(e.error.message);
           }
         }
       }).catch(() => console.log('User dismissed the dialog.'));
   }
 
   public async ngOnInit(): Promise<void> {
+
+    this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
+      if (auth) {
+        this.connectionService.refreshLegalEntity();
+      }
+    });
+
     this.locationService.hideLocationMarker();
     if (this.clearLocationHighLight) {
       this.locationService.hideLocationHighlight();
