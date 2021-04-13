@@ -7,7 +7,6 @@ export function configureAuth(oidcConfigService: OidcConfigService, envService: 
   return () =>
     oidcConfigService.withConfig({
       stsServer: envService.oidcIssuer,
-      authWellknownEndpoint: envService.oidcWellKnown,
       redirectUrl: window.location.origin,
       postLogoutRedirectUri: window.location.origin,
       clientId: envService.oidcClientId,
