@@ -85,9 +85,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           } else {
             try {
               await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch (e) {
-              console.log('dismissed modal');
-            }
+            } catch {}
           }
         } else if (this.activeStepIndex === 2) {
           let allRegistered = true;
@@ -107,9 +105,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           } else {
             try {
               await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch (e) {
-              console.log('dismissed modal');
-            }
+            } catch {}
           }
         }
       }
@@ -170,13 +166,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     this.deviceForm.patchValue({
       id: device._id,
-      category: { category: device.category || '' },
-      name: device.name || '',
-      connectivity: device.connectivity || '',
-      description: device.description || '',
+      category: { category: device.category || null },
+      name: device.name || null,
+      connectivity: device.connectivity || null,
+      description: device.description || null,
       location: { longitude, latitude, height },
-      locationName: device.locationDetails && device.locationDetails.name ? device.locationDetails.name : '',
-      locationDescription: device.locationDetails && device.locationDetails.description ? device.locationDetails.description : '',
+      locationName: device.locationDetails && device.locationDetails.name ? device.locationDetails.name : null,
+      locationDescription: device.locationDetails && device.locationDetails.description ? device.locationDetails.description : null,
     });
     this.deviceForm.markAsPristine();
 
@@ -299,6 +295,33 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
       }
     }
+  }
+
+  public async updateObservationGoals(sensorId, dataStreamId, observationGoalIds) {
+    const device = await this.deviceService.get(this.deviceId).toPromise() as IDevice;
+    const deviceDataStreams = device && device.dataStreams ? device.dataStreams.filter(
+      x => x._id === dataStreamId) : [];
+
+    const promises = [];
+    if (deviceDataStreams.length) {
+      const existingObservationGoalIds = deviceDataStreams[0].observationGoalIds;
+      for (const observationGoalId of observationGoalIds) {
+        if (!existingObservationGoalIds || !existingObservationGoalIds.includes(observationGoalId)) {
+          promises.push(this.deviceService.linkObservationGoal(this.deviceId, sensorId, dataStreamId,
+            observationGoalId).toPromise());
+        }
+      }
+      if (existingObservationGoalIds) {
+        for (const existingObservationGoalId of existingObservationGoalIds) {
+          if (!observationGoalIds.includes(existingObservationGoalId)) {
+            promises.push(this.deviceService.unlinkObservationGoal(this.deviceId, sensorId, dataStreamId,
+              existingObservationGoalId).toPromise());
+          }
+        }
+      }
+    }
+
+    await Promise.all(promises);
   }
 
   public async registerSensors() {
@@ -447,26 +470,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
             if (dataStreamFormValue.observationGoals) {
               const observationGoalIds = dataStreamFormValue.observationGoals.map(x => x._id);
-              const device = await this.deviceService.get(this.deviceId).toPromise() as IDevice;
-              const deviceDataStreams = device && device.dataStreams ? device.dataStreams.filter(
-                x => x._id === dataStreamId) : [];
-              if (deviceDataStreams.length) {
-                const existingObservationGoalIds = deviceDataStreams[0].observationGoalIds;
-                for (const observationGoalId of observationGoalIds) {
-                  if (!existingObservationGoalIds || !existingObservationGoalIds.includes(observationGoalId)) {
-                    await this.deviceService.linkObservationGoal(this.deviceId, sensorId, dataStreamId,
-                      observationGoalId).toPromise();
-                  }
-                }
-                if (existingObservationGoalIds) {
-                  for (const existingObservationGoalId of existingObservationGoalIds) {
-                    if (!observationGoalIds.includes(existingObservationGoalId)) {
-                      await this.deviceService.unlinkObservationGoal(this.deviceId, sensorId, dataStreamId,
-                        existingObservationGoalId).toPromise();
-                    }
-                  }
-                }
-              }
+              await this.updateObservationGoals(sensorId, dataStreamId, observationGoalIds);
             }
 
             if (Object.keys(dataStreamUpdate).length) {

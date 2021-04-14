@@ -48,10 +48,16 @@ export class ObservationGoalService {
     return this.http.get(`${this.env.apiUrl}/observationgoal/${observationGoalId}`);
   }
 
-  public getObservationGoals(pageIndex, pageSize, name?) {
-    let url = `${this.env.apiUrl}/observationgoal?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    if (name) {
-      url += `&name=${name}`;
+  public getObservationGoals(args: Record<string, any>) {
+    let url = `${this.env.apiUrl}/observationgoal?pageIndex=${args.pageIndex}&pageSize=${args.pageSize}`;
+    if (args.name) {
+      url += `&name=${args.name}`;
+    }
+    if (args.sortField) {
+      url += `&sortField=${args.sortField}`;
+    }
+    if (args.sortDirection) {
+      url += `&sortDirection=${args.sortDirection}`;
     }
 
     return this.http.get(url);

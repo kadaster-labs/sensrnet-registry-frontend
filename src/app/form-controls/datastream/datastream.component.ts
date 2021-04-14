@@ -1,14 +1,12 @@
-import { Component, forwardRef, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
-import {ModalService} from '../../services/modal.service';
-import {AlertService} from '../../services/alert.service';
-import {DeviceService} from '../../services/device.service';
-import { ObservationGoalService} from '../../services/observation-goal.service';
-import { switchMap } from 'rxjs/operators';
-import { ViewChildren } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
+import { ViewChildren } from '@angular/core';
+import { ModalService } from '../../services/modal.service';
+import { AlertService } from '../../services/alert.service';
+import { Component, forwardRef, Input } from '@angular/core';
+import { DeviceService } from '../../services/device.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ObservationGoalService} from '../../services/observation-goal.service';
+import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-datastream',
@@ -33,14 +31,13 @@ export class DataStreamComponent implements ControlValueAccessor {
 
   public confirmTitleString = $localize`:@@dataStream.delete.confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@dataStream.delete.confirm.body:Do you really want to delete the datastream?`;
-  public goalConfirmString = $localize`:@@goal.delete.confirm.body:Do you really want to delete the observation goal?`;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private modalService: ModalService,
+    private readonly formBuilder: FormBuilder,
+    private readonly modalService: ModalService,
     private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
-    private observationGoalService: ObservationGoalService,
+    private readonly observationGoalService: ObservationGoalService,
     ) {}
 
   createDataStream(): FormGroup {
@@ -124,21 +121,19 @@ export class DataStreamComponent implements ControlValueAccessor {
     }
   }
 
-  search = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      switchMap( x =>  this.observationGoalService.getObservationGoals(0, 15, x))
-    )
-
-  formatObservationGoal(value: any) {
-    return value.name;
+  formatObservationGoal(observationGoal: any) {
+    return observationGoal.name;
   }
 
   addObservationGoal(sensorIndex, dataStreamIndex, $e) {
     $e.preventDefault();
 
-    this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value.push($e.item);
+    const newGoal = $e.item;
+    const goals = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value;
+    if (!goals.some(x => x._id === newGoal._id)) {
+      goals.push($e.item);
+    }
+
     this.observationGoalsElements.toArray().map(x => x.nativeElement.value = '');
   }
 
@@ -156,4 +151,13 @@ export class DataStreamComponent implements ControlValueAccessor {
       observationGoals.splice(observationGoalIndex, 1);
     }
   }
+
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap( x =>  this.observationGoalService.getObservationGoals({
+        pageIndex: 0, pageSize: 15, name: x,
+      }))
+    )
 }

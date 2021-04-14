@@ -41,7 +41,7 @@ import {SensorComponent} from './form-controls/sensor/sensor.component';
 import {OrganizationUsersComponent} from './forms/organization-users/organization-users.component';
 import {TypeComponent} from './form-controls/type/type.component';
 import {ObservationGoalsComponent} from './components/observation-goals/observation-goals.component';
-import {ObservationGoalComponent} from './forms/observation-goal/observation-goal.component';
+import {ObservationGoalComponent} from './components/observation-goal/observation-goal.component';
 
 @NgModule({
   declarations: [

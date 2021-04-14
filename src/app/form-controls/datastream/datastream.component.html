@@ -87,11 +87,11 @@
                                 </div>
                                 <div class="col-12">
                                     <label><span i18n>Observation Goals</span><span class="font-italic text-muted" i18n> - Optional</span></label>
-                                    <div class="form-control">
-                                        <span class="btn btn-primary btn-sm selected h-100" *ngFor="let observationGoal of getDataStreamElement(i, j, 'observationGoals').value">
+                                    <div class="form-control tags-input-wrapper">
+                                        <span class="btn btn-primary btn-sm selected input-tag" *ngFor="let observationGoal of getDataStreamElement(i, j, 'observationGoals').value">
                                             <span class="observation-goal-wrapper">{{observationGoal.name}}<span class="close-selected" (click)="removeObservationGoal(i, j, observationGoal)">&nbsp;x</span></span>
                                         </span>
-                                        <input #observationGoals type="text" class="input" [resultFormatter]="formatObservationGoal" [ngbTypeahead]="search" (selectItem)="addObservationGoal(i, j, $event)" autofocus placeholder="Observation goal name..."/>
+                                        <input #observationGoals type="text" class="input py-0" [resultFormatter]="formatObservationGoal" [ngbTypeahead]="search" (selectItem)="addObservationGoal(i, j, $event)" autofocus placeholder="Observation goal name..."/>
                                     </div>
                                 </div>
                             </div>

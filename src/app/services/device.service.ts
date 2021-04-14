@@ -190,12 +190,14 @@ export class DeviceService {
     return await devicePromise as IDevice[];
   }
 
-  public async getMyDevices(legalEntityId, pageIndex, pageSize) {
+  public async getMyDevices(legalEntityId, pageIndex, pageSize, sortField, sortDirection) {
     let devices;
     if (legalEntityId) {
       let params = new HttpParams();
       params = params.set('pageSize', pageSize);
       params = params.set('pageIndex', pageIndex);
+      params = params.set('sortField', sortField);
+      params = params.set('sortDirection', sortDirection);
       params = params.set('legalEntityId', legalEntityId);
 
       const url = `${this.env.apiUrl}/device?${params.toString()}`;

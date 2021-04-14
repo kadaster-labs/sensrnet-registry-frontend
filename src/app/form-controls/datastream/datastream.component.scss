@@ -5,10 +5,16 @@
   outline: 0;
 }
 
-.selected {
+.tags-input-wrapper {
+  height: auto !important;
+  position: relative !important;
+}
+
+.input-tag {
   margin-right: 0.2rem;
   position: relative;
   top: -3px;
+  height: 20px;
 }
 
 .observation-goal-wrapper {

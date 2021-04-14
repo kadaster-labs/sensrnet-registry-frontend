@@ -5,19 +5,28 @@
             <app-sidebar></app-sidebar>
         </div>
         <div class="col-11">
+            <div>
+                <h3>
+                    <span>
+                        <span i18n>Observation Goal</span>
+                    </span>
+                </h3>
+            </div>
+            <hr>
             <form [formGroup]="form" (ngSubmit)="submit()">
                 <div class="form-group">
                     <label for="name" i18n>Name</label>
                     <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div class="required-text" *ngIf="f.name.errors.required" i18n>Name is required</div>
+                        <div class="required-text" *ngIf="f.name.errors.minlength" i18n>Name must be at least 4 characters</div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="description"><span i18n>Description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                    <label for="description"><span i18n>Description</span></label>
                     <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
                     <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                        <div class="required-text" *ngIf="f.description.errors.pattern" i18n>Description is required</div>
+                        <div class="required-text" *ngIf="f.description.errors.required" i18n>Description is required</div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -28,10 +37,17 @@
                 <div class="form-group">
                     <label for="legalGroundLink"><span i18n>Legal Ground Link</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                     <input type="text" formControlName="legalGroundLink" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.legalGroundLink.errors }" />
-                    <div *ngIf="submitted && f.legalGroundLink.errors" class="invalid-feedback"></div>
+                    <div *ngIf="submitted && f.legalGroundLink.errors" class="invalid-feedback">
+                        <div class="required-text" *ngIf="f.legalGroundLink.errors.pattern" i18n>Not a valid URL</div>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit" i18n>Create</button>
+                <div *ngIf="observationGoalId; else registerObservationGoal" class="row mx-0">
+                    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit" i18n>Update</button>
+                </div>
+                <ng-template #registerObservationGoal>
+                    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit" i18n>Register</button>
+                </ng-template>
             </form>
         </div>
     </div>

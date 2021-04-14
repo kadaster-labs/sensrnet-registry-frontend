@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ISensor } from '../../model/bodies/sensor-body';
 import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
 import {LegalEntityService} from '../../services/legal-entity.service';
+import {IDevice} from '../../model/bodies/device-model';
+import {Router} from '@angular/router';
+import {ModalService} from '../../services/modal.service';
+import {AlertService} from '../../services/alert.service';
 
 @Component({
   selector: 'app-devices',
@@ -12,33 +15,53 @@ import {LegalEntityService} from '../../services/legal-entity.service';
 })
 export class DevicesComponent implements OnInit {
   public legalEntity;
-  public devices = [];
-  public ascending = true;
+  public devices: IDevice[] = [];
 
   public pageIndex = 0;
   public pageSize = 15;
 
+  public sortField = 'name';
+  public sortDirections = {ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING'};
+  public sortDirection = this.sortDirections.ASCENDING;
+
   public getCategoryTranslation = getCategoryTranslation;
 
+  public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
+  public confirmBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device?`;
+  public joinOrganizationString = $localize`:@@join.organization:You need to join an organization first.`;
+
   constructor(
+    private readonly router: Router,
+    private readonly modalService: ModalService,
+    private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
     private readonly legalEntityService: LegalEntityService,
   ) {}
 
-  public sortByAttribute(attribute) {
-    const toString = attribute === 'category' ? x => getCategoryTranslation(x) : x => x;
-
-    this.ascending = !this.ascending;
-    this.devices.sort((a, b) => {
-      const aString = toString(a[attribute]);
-      const bString = toString(b[attribute]);
-      return aString > bString ? 1 : (aString === bString) ? ((aString > bString) ? 1 : -1) : -1;
-    });
-
-    if (!this.ascending) {
-      this.devices.reverse();
+  getSortClass(sortField) {
+    let sortClass;
+    if (this.sortField === sortField) {
+      if (this.sortDirection === this.sortDirections.ASCENDING) {
+        sortClass = 'fas fa-sort-up';
+      } else {
+        sortClass = 'fas fa-sort-down';
+      }
+    } else {
+      sortClass = 'fas fa-sort';
     }
+
+    return sortClass;
+  }
+
+  public async setSort(sortField) {
+    if (sortField === this.sortField) {
+      this.sortDirection = (this.sortDirection === this.sortDirections.ASCENDING ?
+        this.sortDirections.DESCENDING : this.sortDirections.ASCENDING);
+    }
+
+    this.sortField = sortField;
+    await this.getPage(this.pageIndex);
   }
 
   public async getPreviousPage() {
@@ -52,20 +75,46 @@ export class DevicesComponent implements OnInit {
   }
 
   public async getPage(pageIndex) {
-    this.pageIndex = pageIndex;
-
     if (this.legalEntity && this.legalEntity._id) {
-      this.devices = await this.deviceService.getMyDevices(this.legalEntity._id, this.pageIndex, this.pageSize);
+      this.devices = await this.deviceService.getMyDevices(this.legalEntity._id, pageIndex, this.pageSize,
+        this.sortField, this.sortDirection);
     } else {
       this.devices = [];
     }
+
+    this.pageIndex = pageIndex;
   }
 
-  public selectDevice(sensor: ISensor) {
+  public async editDevice(deviceId: string): Promise<void> {
+    await this.router.navigate([`/device/${deviceId}`]);
+  }
+
+  public async deleteDevice(deviceId: string): Promise<void> {
+    try {
+      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+      if (confirmed) {
+        try {
+          await this.deviceService.unregister(deviceId);
+        } catch (e) {
+          this.alertService.error(e.error.message);
+        }
+      }
+    } catch {}
+  }
+
+  public selectDevice(sensor: IDevice) {
     this.locationService.highlightLocation({
       type: 'Point',
       coordinates: sensor.location.coordinates
     });
+  }
+
+  public async registerDevice() {
+    if (this.legalEntity) {
+      await this.router.navigate(['/device']);
+    } else {
+      this.alertService.error(this.joinOrganizationString);
+    }
   }
 
   public async ngOnInit(): Promise<void> {
