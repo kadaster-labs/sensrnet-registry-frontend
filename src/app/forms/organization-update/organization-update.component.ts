@@ -6,6 +6,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { UserUpdateBody } from '../../model/bodies/user-update';
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { ConnectionService } from '../../services/connection.service';
+import { urlRegex } from '../../helpers/form.helpers';
 
 @Component({
   selector: 'app-organization-update',
@@ -19,7 +20,6 @@ export class OrganizationUpdateComponent implements OnInit {
   public form: FormGroup;
   public submitted = false;
 
-  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
   public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
 
   constructor(
@@ -52,7 +52,7 @@ export class OrganizationUpdateComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       name: [this.legalEntity ? this.legalEntity.name : null, [Validators.required]],
-      website: [this.legalEntity ? this.legalEntity.website : null, [Validators.pattern(this.urlRegex)]],
+      website: [this.legalEntity ? this.legalEntity.website : null, [Validators.pattern(urlRegex)]],
       contactName: [contactName],
       contactPhone: [contactPhone],
       contactEmail: [contactEmail, [Validators.email]],

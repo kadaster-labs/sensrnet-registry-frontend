@@ -1,8 +1,13 @@
+import { Observable } from 'rxjs';
+import { ViewChildren } from '@angular/core';
+import { urlRegex } from '../../helpers/form.helpers';
+import { ModalService } from '../../services/modal.service';
+import { AlertService } from '../../services/alert.service';
 import { Component, forwardRef, Input } from '@angular/core';
+import { DeviceService } from '../../services/device.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ObservationGoalService} from '../../services/observation-goal.service';
 import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
-import {ModalService} from '../../services/modal.service';
-import {AlertService} from '../../services/alert.service';
-import {DeviceService} from '../../services/device.service';
 
 @Component({
   selector: 'app-datastream',
@@ -21,16 +26,17 @@ export class DataStreamComponent implements ControlValueAccessor {
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
 
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
+  @ViewChildren('observationGoals') observationGoalsElements;
 
   public confirmTitleString = $localize`:@@dataStream.delete.confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@dataStream.delete.confirm.body:Do you really want to delete the datastream?`;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private modalService: ModalService,
+    private readonly formBuilder: FormBuilder,
+    private readonly modalService: ModalService,
     private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
+    private readonly observationGoalService: ObservationGoalService,
     ) {}
 
   createDataStream(): FormGroup {
@@ -46,8 +52,9 @@ export class DataStreamComponent implements ControlValueAccessor {
       isOpenData: true,
       containsPersonalInfoData: false,
       isReusable: true,
-      documentation: [null, [Validators.pattern(this.urlRegex)]],
-      dataLink: [null, [Validators.pattern(this.urlRegex)]],
+      documentation: [null, [Validators.pattern(urlRegex)]],
+      dataLink: [null, [Validators.pattern(urlRegex)]],
+      observationGoals: [[]],
     });
   }
 
@@ -112,4 +119,44 @@ export class DataStreamComponent implements ControlValueAccessor {
       this.value = value;
     }
   }
+
+  formatObservationGoal(observationGoal: any) {
+    return observationGoal.name;
+  }
+
+  addObservationGoal(sensorIndex, dataStreamIndex, $e) {
+    $e.preventDefault();
+
+    const newGoal = $e.item;
+    const goals = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value;
+    if (!goals.some(x => x._id === newGoal._id)) {
+      goals.push($e.item);
+    }
+
+    this.observationGoalsElements.toArray().map(x => x.nativeElement.value = '');
+  }
+
+  removeObservationGoal(sensorIndex, dataStreamIndex, item) {
+    const observationGoals = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value;
+
+    let observationGoalIndex = null;
+    for (let i = 0; i < observationGoals.length; i++) {
+      if (observationGoals[i]._id === item._id) {
+        observationGoalIndex = i;
+      }
+    }
+
+    if (observationGoalIndex !== null) {
+      observationGoals.splice(observationGoalIndex, 1);
+    }
+  }
+
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap( x =>  this.observationGoalService.getObservationGoals({
+        pageIndex: 0, pageSize: 15, name: x,
+      }))
+    )
 }

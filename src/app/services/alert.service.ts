@@ -26,9 +26,18 @@ export class AlertService {
     return this.subject.asObservable();
   }
 
-  public success(message: string, keepAfterRouteChange = false, timeoutDuration = 4000) {
+  public success(message: string, keepAfterRouteChange= false, timeoutDuration= 4000) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
+
+    if (timeoutDuration) {
+      setTimeout(() => { this.clear(); }, timeoutDuration);
+    }
+  }
+
+  public warning(message: string, keepAfterRouteChange = false, timeoutDuration = 4000) {
+    this.keepAfterRouteChange = keepAfterRouteChange;
+    this.subject.next({ type: 'warning', text: message });
 
     if (timeoutDuration) {
       setTimeout(() => { this.clear(); }, timeoutDuration);
