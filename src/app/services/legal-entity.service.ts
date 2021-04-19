@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { EnvService } from './env.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IContactDetails, ILegalEntity } from '../model/legalEntity';
-import {Observable, Subscriber} from 'rxjs';
-import {EventType} from '../model/events/event-type';
-import {ConnectionService} from './connection.service';
+import { Observable, Subscriber } from 'rxjs';
+import { EventType } from '../model/events/event-type';
+import { ConnectionService } from './connection.service';
 
 export interface IRegisterLegalEntityBody {
   _id?: string;

@@ -71,7 +71,9 @@ export class DevicesComponent implements OnInit {
   }
 
   public async getNextPage() {
-    await this.getPage(this.pageIndex + 1);
+    if (this.devices.length === this.pageSize) {
+      await this.getPage(this.pageIndex + 1);
+    }
   }
 
   public async getPage(pageIndex) {
@@ -90,16 +92,14 @@ export class DevicesComponent implements OnInit {
   }
 
   public async deleteDevice(deviceId: string): Promise<void> {
-    try {
-      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
-      if (confirmed) {
-        try {
-          await this.deviceService.unregister(deviceId);
-        } catch (e) {
-          this.alertService.error(e.error.message);
-        }
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+    if (confirmed) {
+      try {
+        await this.deviceService.unregister(deviceId);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
-    } catch {}
+    }
   }
 
   public selectDevice(sensor: IDevice) {

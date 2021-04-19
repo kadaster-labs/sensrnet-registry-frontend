@@ -1,5 +1,4 @@
-import {Validators, FormArray, FormGroup, FormBuilder} from '@angular/forms';
-import { IDevice } from '../../model/bodies/device-model';
+import {Validators, FormGroup, FormBuilder} from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
@@ -7,7 +6,8 @@ import {
   IRegisterObservationGoalBody, IUpdateObservationGoalBody,
   ObservationGoalService
 } from '../../services/observation-goal.service';
-import {AlertService} from '../../services/alert.service';
+import { AlertService } from '../../services/alert.service';
+import { urlRegex } from '../../helpers/form.helpers';
 
 @Component({
   selector: 'app-observation-goal',
@@ -20,8 +20,6 @@ export class ObservationGoalComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public submitted = false;
   public subscriptions = [];
-
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -107,7 +105,7 @@ export class ObservationGoalComponent implements OnInit, OnDestroy {
       name: [null, [Validators.required, Validators.minLength(4)]],
       description: [null, [Validators.required]],
       legalGround: null,
-      legalGroundLink: [null, [Validators.pattern(this.urlRegex)]],
+      legalGroundLink: [null, [Validators.pattern(urlRegex)]],
     });
 
     this.subscriptions.push(

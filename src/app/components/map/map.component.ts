@@ -498,16 +498,14 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async deleteDevice(): Promise<void> {
-    try {
-      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
-      if (confirmed) {
-        try {
-          await this.deviceService.unregister(this.selectedDevice._id);
-        } catch (e) {
-          this.alertService.error(e.error.message);
-        }
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+    if (confirmed) {
+      try {
+        await this.deviceService.unregister(this.selectedDevice._id);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
-    } catch {}
+    }
   }
 
   public async ngOnInit(): Promise<void> {

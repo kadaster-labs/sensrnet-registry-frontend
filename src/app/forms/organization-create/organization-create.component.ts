@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IRegisterLegalEntityBody, LegalEntityService } from '../../services/legal-entity.service';
 import { IContactDetails } from '../../model/legalEntity';
 import { ConnectionService } from '../../services/connection.service';
+import { urlRegex } from '../../helpers/form.helpers';
 
 @Component({
   selector: 'app-organization-create',
@@ -17,8 +18,6 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public submitted = false;
   public subscriptions = [];
-
-  public urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public registerFailedMessage = $localize`:@@register.failed:Failed to register. Does the organization exist already?`;
 
@@ -63,7 +62,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required]],
-      website: ['', [Validators.pattern(this.urlRegex)]],
+      website: ['', [Validators.pattern(urlRegex)]],
       contactName: [''],
       contactPhone: [''],
       contactEmail: ['', [Validators.email]],

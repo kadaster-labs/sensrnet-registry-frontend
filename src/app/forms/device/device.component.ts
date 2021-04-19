@@ -10,8 +10,8 @@ import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { DeviceService, IRegisterDataStreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDataStreamBody,
   IUpdateDeviceBody, IUpdateSensorBody,
 } from '../../services/device.service';
-import {ObservationGoalService} from '../../services/observation-goal.service';
-
+import { ObservationGoalService } from '../../services/observation-goal.service';
+import { urlRegex } from '../../helpers/form.helpers';
 
 @Component({
   selector: 'app-device',
@@ -25,8 +25,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public activeStepIndex = 0;
 
   public subscriptions: Subscription[] = [];
-
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public deviceForm: FormGroup;
   public sensorForm: FormGroup;
@@ -220,7 +218,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         typeName: [sensor.type ? {value: sensor.type} : null, Validators.required],
         manufacturer: sensor.manufacturer,
         supplier: sensor.supplier,
-        documentation: [sensor.documentation, [Validators.pattern(this.urlRegex)]],
+        documentation: [sensor.documentation, [Validators.pattern(urlRegex)]],
         dataStreams,
       }));
       this.sensorForm.markAsPristine();

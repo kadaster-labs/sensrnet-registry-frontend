@@ -39,7 +39,9 @@ export class ObservationGoalsComponent implements OnInit, OnDestroy {
   }
 
   public async getNextPage() {
-    await this.getPage(this.pageIndex + 1);
+    if (this.observationGoals.length === this.pageSize) {
+      await this.getPage(this.pageIndex + 1);
+    }
   }
 
   public async getPage(pageIndex) {
@@ -56,20 +58,18 @@ export class ObservationGoalsComponent implements OnInit, OnDestroy {
   }
 
   public async removeObservationGoal(observationGoalId: string): Promise<void> {
-    try {
-      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
 
-      if (confirmed) {
-        try {
-          await this.observationGoalService.delete(observationGoalId).toPromise();
-          await this.getPage(this.pageIndex);
+    if (confirmed) {
+      try {
+        await this.observationGoalService.delete(observationGoalId).toPromise();
+        await this.getPage(this.pageIndex);
 
-          this.alertService.success(this.successString);
-        } catch (e) {
-          this.alertService.error(e.error.message);
-        }
+        this.alertService.success(this.successString);
+      } catch (e) {
+        this.alertService.error(e.error.message);
       }
-    } catch {}
+    }
   }
 
   getSortClass(sortField) {

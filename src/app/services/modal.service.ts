@@ -20,7 +20,7 @@ export class ModalService {
     });
   }
 
-  public confirm(
+  public async confirm(
     title: string,
     message: string,
     btnOkText: string = this.btnOkText,
@@ -32,6 +32,13 @@ export class ModalService {
     modalRef.componentInstance.btnOkText = btnOkText;
     modalRef.componentInstance.btnCancelText = btnCancelText;
 
-    return modalRef.result;
+    let result;
+    try {
+      result = await modalRef.result;
+    } catch {
+      result = false;
+    }
+
+    return result;
   }
 }

@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { ViewChildren } from '@angular/core';
+import { urlRegex } from '../../helpers/form.helpers';
 import { ModalService } from '../../services/modal.service';
 import { AlertService } from '../../services/alert.service';
 import { Component, forwardRef, Input } from '@angular/core';
@@ -27,8 +28,6 @@ export class DataStreamComponent implements ControlValueAccessor {
 
   @ViewChildren('observationGoals') observationGoalsElements;
 
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
-
   public confirmTitleString = $localize`:@@dataStream.delete.confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@dataStream.delete.confirm.body:Do you really want to delete the datastream?`;
 
@@ -53,8 +52,8 @@ export class DataStreamComponent implements ControlValueAccessor {
       isOpenData: true,
       containsPersonalInfoData: false,
       isReusable: true,
-      documentation: [null, [Validators.pattern(this.urlRegex)]],
-      dataLink: [null, [Validators.pattern(this.urlRegex)]],
+      documentation: [null, [Validators.pattern(urlRegex)]],
+      dataLink: [null, [Validators.pattern(urlRegex)]],
       observationGoals: [[]],
     });
   }
