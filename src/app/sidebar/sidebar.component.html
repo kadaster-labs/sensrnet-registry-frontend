@@ -7,15 +7,15 @@
                     <br>
                     <em class="side-text" i18n>Devices</em>
                 </a>
+                <a class="sidebar-link text-center mb-2" routerLink="/observationgoals" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                    <em class="fas fa-bullseye fa-lg mx-1"></em>
+                    <br>
+                    <em class="side-text mx-1" i18n>Observation Goals</em>
+                </a>
                 <a class="sidebar-link text-center mb-2" routerLink="/organization" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
                     <em class="fas fa-city fa-lg mx-1"></em>
                     <br>
                     <em class="side-text mx-1" i18n>Organization</em>
-                </a>
-                <a class="sidebar-link text-center mb-2" routerLink="/observationgoals" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-                    <em class="fas fa-balance-scale-right fa-lg mx-1"></em>
-                    <br>
-                    <em class="side-text mx-1" i18n>Observation Goals</em>
                 </a>
                 <a class="sidebar-link text-center" (click)="logout()">
                     <em class="fas fa-sign-out-alt mx-1"></em>

@@ -8,6 +8,7 @@ export interface IObservationGoal {
   description: string;
   legalGround?: string;
   legalGroundLink?: string;
+  canEdit?: boolean;
 }
 
 export interface IRegisterObservationGoalBody {
