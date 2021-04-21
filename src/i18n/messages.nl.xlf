@@ -1223,7 +1223,7 @@
       </notes>
       <segment state="translated">
         <source>Observation Goals</source>
-      <target>Observatie Doellen</target></segment>
+      <target>Observatie Doelen</target></segment>
     </unit><unit id="3193976279273491157">
       <notes>
         <note category="location">src/app/components/observation-goals/observation-goals.component.html:44</note>
