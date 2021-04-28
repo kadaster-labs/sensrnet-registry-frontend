@@ -617,10 +617,9 @@ export class MapComponent implements OnInit, OnDestroy {
    * Makes use of the 'Locatieserver' of PDOK (Dutch address lookup) https://github.com/PDOK/locatieserver/wiki
    */
   private addSearchButton(): void {
-    // Set the search control
     const search = new SearchPDOK({
       className: 'search-bar',
-      placeholder: 'Enter location',
+      placeholder: $localize`Enter location`,
     }) as any;
 
     search.on('select', (event) => {
