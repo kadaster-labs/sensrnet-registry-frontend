@@ -25,11 +25,11 @@ import VectorSource from 'ol/source/Vector';
 import LayerSwitcher from 'ol-layerswitcher';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
-import SearchNominatim from 'ol-ext/control/SearchNominatim';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import { extend, Extent, getBottomLeft, getCenter, getTopRight, getTopLeft, getWidth } from 'ol/extent';
 
+import { SearchPDOK } from './searchPDOK';
 import { MapService } from './map.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
@@ -611,36 +611,20 @@ export class MapComponent implements OnInit, OnDestroy {
    */
   private addSearchButton(): void {
     // Set the search control
-    const search = new SearchNominatim({
-      format: 'geojson',
+    const search = new SearchPDOK({
+      className: 'search-bar',
       placeholder: 'Voer locatie in',
-      polygon: $('#polygon').prop('checked'),
-      position: true,
-    });
+    }) as any;
 
     search.on('select', (event) => {
-      if (event.search.class === 'place') {
-        // if the search result is a single point, zoom to it
-        const point = new Point(event.coordinate);
-        this.zoomToPoint(point);
+      let point: Point;
+      if (event.search instanceof Feature) {
+        point = event.search.getGeometry();
       } else {
-        // if the search result contains an area, zoom to its extent
-        // Nominatim returns coordinate in string Array of different order in WGS84
-        const min = [
-          parseFloat(event.search.boundingbox[2]),
-          parseFloat(event.search.boundingbox[0]),
-        ];
-        const max = [
-          parseFloat(event.search.boundingbox[3]),
-          parseFloat(event.search.boundingbox[1]),
-        ];
-        const extent: Extent = [
-          ...proj4(this.epsgWGS84, this.epsgRD, min),
-          ...proj4(this.epsgWGS84, this.epsgRD, max),
-        ] as Extent;
-
-        this.zoomToExtent(extent);
+        point = new Point(event.search.values_.geometry.flatCoordinates);
       }
+
+      this.zoomToPoint(point);
     });
 
     this.map.addControl(search);
