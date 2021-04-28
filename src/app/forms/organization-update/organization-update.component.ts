@@ -56,7 +56,7 @@ export class OrganizationUpdateComponent implements OnInit {
       website: [this.legalEntity ? this.legalEntity.website : null, [Validators.pattern(urlRegex)]],
       contactName: [contactName],
       contactPhone: [contactPhone],
-      contactEmail: [contactEmail, [Validators.email, createOrganizationMailValidator()]],
+      contactEmail: [contactEmail, [createOrganizationMailValidator()]],
     });
   }
 

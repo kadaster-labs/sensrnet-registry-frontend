@@ -66,7 +66,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
       website: ['', [Validators.pattern(urlRegex)]],
       contactName: [''],
       contactPhone: [''],
-      contactEmail: ['', [Validators.email, createOrganizationMailValidator()]],
+      contactEmail: ['', [createOrganizationMailValidator()]],
     });
   }
 
