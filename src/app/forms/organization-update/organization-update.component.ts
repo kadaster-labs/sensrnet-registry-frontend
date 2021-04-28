@@ -7,6 +7,7 @@ import { UserUpdateBody } from '../../model/bodies/user-update';
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { ConnectionService } from '../../services/connection.service';
 import { urlRegex } from '../../helpers/form.helpers';
+import {createOrganizationMailValidator} from '../../validators/organization-mail.validator';
 
 @Component({
   selector: 'app-organization-update',
@@ -55,7 +56,7 @@ export class OrganizationUpdateComponent implements OnInit {
       website: [this.legalEntity ? this.legalEntity.website : null, [Validators.pattern(urlRegex)]],
       contactName: [contactName],
       contactPhone: [contactPhone],
-      contactEmail: [contactEmail, [Validators.email]],
+      contactEmail: [contactEmail, [Validators.email, createOrganizationMailValidator()]],
     });
   }
 
