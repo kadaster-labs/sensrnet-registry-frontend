@@ -324,38 +324,73 @@
       <segment state="translated">
         <source>Logout</source>
       <target>Afmelden</target></segment>
+    </unit><unit id="4526390416021631012">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:49</note>
+      </notes>
+      <segment state="translated">
+        <source>BAG</source>
+      <target>BAG - Panden</target></segment>
+    </unit><unit id="5086643504817308506">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:62</note>
+      </notes>
+      <segment state="translated">
+        <source>Overlays</source>
+      <target>Overige kaarten</target></segment>
+    </unit><unit id="673924298154786464">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:69</note>
+      </notes>
+      <segment state="translated">
+        <source>BRT</source>
+      <target>BRT Achtergrondkaart</target></segment>
+    </unit><unit id="651663933193825521">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:91</note>
+      </notes>
+      <segment state="translated">
+        <source>Aerial photo</source>
+      <target>PDOK Luchtfoto (25cm)</target></segment>
+    </unit><unit id="6475608532557687416">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:112</note>
+      </notes>
+      <segment state="translated">
+        <source>Base maps</source>
+      <target>Achtergrond kaarten</target></segment>
     </unit><unit id="map.locate">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:104</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:99</note></notes>
       <segment state="translated">
         <source>Locate me</source>
       <target>Vind mij</target></segment>
     </unit><unit id="map.confirm.title">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:105</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:100</note></notes>
       <segment state="translated">
         <source>Please confirm</source>
       <target>Bevestig</target></segment>
     </unit><unit id="map.confirm.body">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:106</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:101</note></notes>
       <segment state="translated">
         <source>Do you really want to delete the device?</source>
       <target>Weet u zeker dat u de sensor wilt verwijderen?</target></segment>
     </unit><unit id="map.geo.support">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:107</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:102</note></notes>
       <segment state="translated">
         <source>Geolocation is not supported by this browser.</source>
       <target>Locatie wordt niet ondersteunt door deze browser.</target></segment>
     </unit><unit id="1177467005869954871">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:623</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:552</note></notes>
       <segment state="translated">
         <source>Enter location</source>
       <target>Voer locatie in</target></segment>

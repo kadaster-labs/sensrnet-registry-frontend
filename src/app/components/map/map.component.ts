@@ -5,21 +5,16 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 
 import OlMap from 'ol/Map';
-import { Group } from 'ol/layer';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import WMTS from 'ol/source/WMTS';
 import { Cluster } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
 import { FitOptions } from 'ol/View';
 import { MultiPoint } from 'ol/geom';
-import TileLayer from 'ol/layer/Tile';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import Projection from 'ol/proj/Projection';
 import { MapBrowserEvent, Overlay } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import LayerSwitcher from 'ol-layerswitcher';
@@ -27,7 +22,7 @@ import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
-import { extend, Extent, getBottomLeft, getCenter, getTopRight, getTopLeft, getWidth } from 'ol/extent';
+import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
 
 import { SearchPDOK } from './searchPDOK';
 import { MapService } from './map.service';
@@ -539,71 +534,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private addLayerSwitcher(): void {
-    // Geldigheidsgebied van het tiling schema in RD-coördinaten:
-    const projectionExtent: Extent = [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999];
-    const projection = new Projection({ code: 'EPSG:28992', units: 'm', extent: projectionExtent });
-    // Resoluties (pixels per meter) van de zoomniveaus:
-    const resolutions = [3440.640, 1720.320, 860.160, 430.080, 215.040, 107.520, 53.760, 26.880, 13.440, 6.720, 3.360, 1.680, 0.840, 0.420, 0.210];
-    const size = getWidth(projectionExtent) / 256;
-    // Er zijn 15 (0 tot 14) zoomniveaus beschikbaar van de WMTS-service voor de BRT-Achtergrondkaart:
-    const matrixIds = new Array(15);
-    for (let z = 0; z < 15; ++z) {
-      matrixIds[z] = 'EPSG:28992:' + z;
-    }
-
-    const brtLayer = new TileLayer({
-      visible: true,
-      opacity: 0.7,
-      source: new WMTS({
-        attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
-        url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
-        layer: 'brtachtergrondkaart',
-        matrixSet: 'EPSG:28992',
-        format: 'image/png',
-        projection,
-        tileGrid: new WMTSTileGrid({
-          origin: getTopLeft(projectionExtent),
-          resolutions,
-          matrixIds
-        }),
-        style: 'default',
-        wrapX: false
-      })
-    });
-    brtLayer.set('title', 'BRT');
-    brtLayer.set('type', 'base');
-
-    const luchtfotoLayer = new TileLayer({
-      visible: true,
-      source: new WMTS({
-        attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
-        url: 'https://service.pdok.nl/hwh/luchtfotorgb/wmts/v1_0?',
-        layer: 'Actueel_ortho25',
-        matrixSet: 'EPSG:28992',
-        format: 'image/png',
-        projection,
-        tileGrid: new WMTSTileGrid({
-          origin: getTopLeft(projectionExtent),
-          resolutions,
-          matrixIds
-        }),
-        style: 'default',
-        wrapX: false
-      })
-    });
-    luchtfotoLayer.set('title', 'Luchtfoto');
-    luchtfotoLayer.set('type', 'base');
-
-    const baseLayers = new Group({
-      layers: [
-        luchtfotoLayer,
-        brtLayer,
-      ]
-    });
-    baseLayers.set('title', 'Base maps');
-
-    this.map.setLayerGroup(baseLayers);
-
     const layerSwitcher = new LayerSwitcher({
       reverse: true,
       groupSelectStyle: 'children'

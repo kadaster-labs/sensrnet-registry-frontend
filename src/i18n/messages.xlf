@@ -99,9 +99,49 @@
         <source>Logout</source>
       </segment>
     </unit>
+    <unit id="4526390416021631012">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:49</note>
+      </notes>
+      <segment>
+        <source>BAG</source>
+      </segment>
+    </unit>
+    <unit id="5086643504817308506">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:62</note>
+      </notes>
+      <segment>
+        <source>Overlays</source>
+      </segment>
+    </unit>
+    <unit id="673924298154786464">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:69</note>
+      </notes>
+      <segment>
+        <source>BRT</source>
+      </segment>
+    </unit>
+    <unit id="651663933193825521">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:91</note>
+      </notes>
+      <segment>
+        <source>Aerial photo</source>
+      </segment>
+    </unit>
+    <unit id="6475608532557687416">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:112</note>
+      </notes>
+      <segment>
+        <source>Base maps</source>
+      </segment>
+    </unit>
     <unit id="map.locate">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:104</note>
+        <note category="location">src/app/components/map/map.component.ts:99</note>
       </notes>
       <segment>
         <source>Locate me</source>
@@ -109,7 +149,7 @@
     </unit>
     <unit id="map.confirm.title">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:105</note>
+        <note category="location">src/app/components/map/map.component.ts:100</note>
       </notes>
       <segment>
         <source>Please confirm</source>
@@ -117,7 +157,7 @@
     </unit>
     <unit id="map.confirm.body">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:106</note>
+        <note category="location">src/app/components/map/map.component.ts:101</note>
       </notes>
       <segment>
         <source>Do you really want to delete the device?</source>
@@ -125,7 +165,7 @@
     </unit>
     <unit id="map.geo.support">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:107</note>
+        <note category="location">src/app/components/map/map.component.ts:102</note>
       </notes>
       <segment>
         <source>Geolocation is not supported by this browser.</source>
@@ -133,7 +173,7 @@
     </unit>
     <unit id="1177467005869954871">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:623</note>
+        <note category="location">src/app/components/map/map.component.ts:552</note>
       </notes>
       <segment>
         <source>Enter location</source>
