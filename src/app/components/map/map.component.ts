@@ -12,12 +12,12 @@ import WMTS from 'ol/source/WMTS';
 import { Cluster } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
 import { FitOptions } from 'ol/View';
+import { MultiPoint } from 'ol/geom';
 import TileLayer from 'ol/layer/Tile';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import { Coordinate } from 'ol/coordinate';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import Projection from 'ol/proj/Projection';
 import { MapBrowserEvent, Overlay } from 'ol';
@@ -502,6 +502,14 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoomToPoint(point);
   }
 
+  private zoomToGeometry(geometry: Geometry): void {
+    if (geometry instanceof Point) {
+      this.zoomToPoint(geometry);
+    } else {
+      this.zoomToExtent(geometry.getExtent());
+    }
+  }
+
   private findMe() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position: globalThis.Position) => {
@@ -606,25 +614,31 @@ export class MapComponent implements OnInit, OnDestroy {
 
   /**
    * Adds a search button on the map which can be used to search for a location
-   * Searches using the open source OSM Nominatim
-   * https://viglino.github.io/ol-ext/doc/doc-pages/ol.control.SearchNominatim.html
+   * Makes use of the 'Locatieserver' of PDOK (Dutch address lookup) https://github.com/PDOK/locatieserver/wiki
    */
   private addSearchButton(): void {
     // Set the search control
     const search = new SearchPDOK({
       className: 'search-bar',
-      placeholder: 'Voer locatie in',
+      placeholder: 'Enter location',
     }) as any;
 
     search.on('select', (event) => {
-      let point: Point;
+      let feature: Feature;
       if (event.search instanceof Feature) {
-        point = event.search.getGeometry();
+        feature = event.search;
       } else {
-        point = new Point(event.search.values_.geometry.flatCoordinates);
+        const values = event.search.values_;
+        const geometry = new MultiPoint(values.geometry.flatCoordinates, values.geometry.layout);
+
+        feature = new Feature({
+          geometry,
+          name: values.name,
+          type: values.type,
+        });
       }
 
-      this.zoomToPoint(point);
+      this.zoomToGeometry(feature.getGeometry());
     });
 
     this.map.addControl(search);

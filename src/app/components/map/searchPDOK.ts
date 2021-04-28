@@ -1,6 +1,8 @@
-import SearchJSON from 'ol-ext/control/SearchJSON';
 import { Feature } from 'ol';
-import Point from 'ol/geom/Point';
+import { Geometry } from 'ol/geom';
+import { GeoJSON } from 'ol/format';
+import { wktToGeoJSON } from '@terraformer/wkt';
+import SearchJSON from 'ol-ext/control/SearchJSON';
 
 export class SearchPDOK extends SearchJSON {
 
@@ -12,6 +14,7 @@ export class SearchPDOK extends SearchJSON {
   }
 
   requestData(query) {
+    // SearchJSON doesn't allow for additional parameters by default, therefore add 'fl' here
     return {
       q: query,
       fl: '*',
@@ -19,23 +22,22 @@ export class SearchPDOK extends SearchJSON {
   }
 
   handleResponse(response): Feature[] {
-    console.log(response);
     const features: Feature[] = [];
-    const regex: RegExp = /[+-]?\d+(\.\d+)?/g;
 
     response.response.docs.forEach(doc => {
-      const coordinates = doc.centroide_rd.match(regex).map((v) => parseFloat(v));
+      const geometry: Geometry = (doc.type === 'adres') ? wktToGeoJSON(doc.centroide_rd) : wktToGeoJSON(doc.geometrie_rd);
 
-      features.push(new Feature({
-        geometry: new Point(coordinates),
-        name: doc.weergavenaam,
-      }));
+      const feature: Feature = new GeoJSON().readFeature(geometry);
+      feature.set('type', doc.type);
+      feature.set('name', doc.weergavenaam);
+
+      features.push(feature);
     });
 
     return features;
   }
 
-  getTitle(feature) {
+  getTitle(feature): string {
     return feature.values_.name;
   }
 }
