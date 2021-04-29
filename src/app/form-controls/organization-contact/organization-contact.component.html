@@ -21,7 +21,11 @@
     <label for="contactEmail"><span i18n>Contact Department Email</span><span class="font-italic text-muted" i18n> - Optional</span></label>
     <input type="text" formControlName="contactEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('contactEmail').errors }" />
     <div *ngIf="submitted && f.get('contactEmail').errors" class="invalid-feedback">
-        <div class="required-text" *ngIf="f.get('contactEmail').errors.email" i18n>Contact e-mail must be a valid e-mail address</div>
+        <div class="required-text" *ngIf="f.get('contactEmail').errors.mismatch">
+            <span i18n>Contact department e-mail must be valid and contain either </span>
+            <span>{{ getSupportedDomainNamesString() }}</span>
+            <span>.</span>
+        </div>
     </div>
 </div>
 <div [formGroup]="parentForm" class="form-group">

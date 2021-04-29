@@ -6,6 +6,7 @@ import { IRegisterLegalEntityBody, LegalEntityService } from '../../services/leg
 import { IContactDetails } from '../../model/legalEntity';
 import { ConnectionService } from '../../services/connection.service';
 import { urlRegex } from '../../helpers/form.helpers';
+import { createOrganizationMailValidator } from '../../validators/organization-mail.validator';
 
 @Component({
   selector: 'app-organization-create',
@@ -55,8 +56,8 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
       } catch {
         this.alertService.error(this.registerFailedMessage);
       }
+      this.submitted = false;
     }
-    this.submitted = false;
   }
 
   ngOnInit(): void {
@@ -65,7 +66,7 @@ export class OrganizationCreateComponent implements OnInit, OnDestroy {
       website: ['', [Validators.pattern(urlRegex)]],
       contactName: [''],
       contactPhone: [''],
-      contactEmail: ['', [Validators.email]],
+      contactEmail: ['', [createOrganizationMailValidator()]],
     });
   }
 
