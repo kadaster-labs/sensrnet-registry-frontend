@@ -6,7 +6,7 @@ import { IRegisterLegalEntityBody, LegalEntityService } from '../../services/leg
 import { IContactDetails } from '../../model/legalEntity';
 import { ConnectionService } from '../../services/connection.service';
 import { urlRegex } from '../../helpers/form.helpers';
-import {createOrganizationMailValidator} from '../../validators/organization-mail.validator';
+import { createOrganizationMailValidator } from '../../validators/organization-mail.validator';
 
 @Component({
   selector: 'app-organization-create',

@@ -11,6 +11,8 @@ export class OrganizationContactComponent {
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
 
+  public orString = $localize`or`;
+
   public getSupportedDomainNamesString() {
     let stringValue = '';
 
@@ -19,7 +21,7 @@ export class OrganizationContactComponent {
       if (i === supportedDomainNamesLength - 1) {
         stringValue += `'${supportedNames[i]}'`;
       } else if (i === supportedDomainNamesLength - 2) {
-        stringValue += `'${supportedNames[i]}' or `;
+        stringValue += `'${supportedNames[i]}' ${this.orString} `;
       } else {
         stringValue += `'${supportedNames[i]}', `;
       }

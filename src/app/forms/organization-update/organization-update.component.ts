@@ -7,7 +7,7 @@ import { UserUpdateBody } from '../../model/bodies/user-update';
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { ConnectionService } from '../../services/connection.service';
 import { urlRegex } from '../../helpers/form.helpers';
-import {createOrganizationMailValidator} from '../../validators/organization-mail.validator';
+import { createOrganizationMailValidator } from '../../validators/organization-mail.validator';
 
 @Component({
   selector: 'app-organization-update',
