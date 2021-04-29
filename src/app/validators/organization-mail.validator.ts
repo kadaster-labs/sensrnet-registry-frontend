@@ -1,7 +1,8 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export const supportedDomainNames = [
-  'info', 'sensor', 'beheer', 'privacy', 'kcc', 'service', 'klant', 'gemeente'
+export const supportedNames = [
+  'info', 'sensor', 'beheer', 'privacy', 'kcc', 'service', 'klant', 'gemeente', 'support', 'help', 'ondersteuning',
+  'informatie', 'management', 'team', 'afdeling', 'data',
 ];
 
 export function createOrganizationMailValidator(): ValidatorFn {
@@ -12,7 +13,7 @@ export function createOrganizationMailValidator(): ValidatorFn {
       return null;
     }
 
-    const domainsRegexPart = supportedDomainNames.join('|');
+    const domainsRegexPart = supportedNames.join('|');
     const emailMatchesDomains = new RegExp(`^.*(${domainsRegexPart}).*@.+[.].+$`).test(value);
 
     return !emailMatchesDomains ? {mismatch: true} : null;

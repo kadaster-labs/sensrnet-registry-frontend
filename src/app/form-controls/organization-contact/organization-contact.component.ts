@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { supportedDomainNames } from '../../validators/organization-mail.validator';
+import { supportedNames } from '../../validators/organization-mail.validator';
 
 @Component({
   selector: 'app-organization-contact',
@@ -14,14 +14,14 @@ export class OrganizationContactComponent {
   public getSupportedDomainNamesString() {
     let stringValue = '';
 
-    const supportedDomainNamesLength = supportedDomainNames.length;
+    const supportedDomainNamesLength = supportedNames.length;
     for (let i = 0; i < supportedDomainNamesLength; i++) {
       if (i === supportedDomainNamesLength - 1) {
-        stringValue += `'${supportedDomainNames[i]}'`;
+        stringValue += `'${supportedNames[i]}'`;
       } else if (i === supportedDomainNamesLength - 2) {
-        stringValue += `'${supportedDomainNames[i]}' or `;
+        stringValue += `'${supportedNames[i]}' or `;
       } else {
-        stringValue += `'${supportedDomainNames[i]}', `;
+        stringValue += `'${supportedNames[i]}', `;
       }
     }
 
