@@ -33,9 +33,11 @@ import { OrganizationCreateComponent } from './forms/organization-create/organiz
 import { OrganizationUpdateComponent } from './forms/organization-update/organization-update.component';
 import { EnvServiceProvider } from './services/env.service.provider';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
-import {SensorComponent} from './form-controls/sensor/sensor.component';
-import {OrganizationUsersComponent} from './forms/organization-users/organization-users.component';
-import {TypeComponent} from './form-controls/type/type.component';
+import { SensorComponent } from './form-controls/sensor/sensor.component';
+import { OrganizationUsersComponent } from './forms/organization-users/organization-users.component';
+import { TypeComponent } from './form-controls/type/type.component';
+import { ObservationGoalsComponent } from './components/observation-goals/observation-goals.component';
+import { ObservationGoalComponent } from './components/observation-goal/observation-goal.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import {TypeComponent} from './form-controls/type/type.component';
     SensorComponent,
     OrganizationUsersComponent,
     ModalComponent,
+    ObservationGoalComponent,
+    ObservationGoalsComponent,
     OrganizationComponent,
     OrganizationJoinComponent,
     OrganizationCreateComponent,

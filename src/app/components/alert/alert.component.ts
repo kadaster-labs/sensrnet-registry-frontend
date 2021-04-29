@@ -22,6 +22,9 @@ export class AlertComponent implements OnInit, OnDestroy {
           case 'success':
             message.cssClass = 'alert alert-success';
             break;
+          case 'warning':
+            message.cssClass = 'alert alert-warning';
+            break;
           case 'error':
             message.cssClass = 'alert alert-danger';
             break;

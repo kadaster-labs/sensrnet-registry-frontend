@@ -97,8 +97,8 @@ export class MapComponent implements OnInit, OnDestroy {
   public iconInfoUrl = 'fas fa-info-circle';
 
   public locateMeString = $localize`:@@map.locate:Locate me`;
-  public confirmTitleString = $localize`:@@map.confirm.title:Please confirm`;
-  public confirmBodyString = $localize`:@@map.confirm.body:Do you really want to delete the device?`;
+  public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
+  public confirmBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device?`;
   public geoLocationNotSupportedString = $localize`:@@map.geo.support:Geolocation is not supported by this browser.`;
 
   private static sensorToFeatureProperties(device: IDevice) {
@@ -582,16 +582,14 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async deleteDevice(): Promise<void> {
-    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
-      .then(async confirmed => {
-        if (confirmed) {
-          try {
-            await this.deviceService.unregister(this.selectedDevice._id);
-          } catch (e) {
-            this.alertService.error(e.error.message);
-          }
-        }
-      }).catch(() => console.log('User dismissed the dialog.'));
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+    if (confirmed) {
+      try {
+        await this.deviceService.unregister(this.selectedDevice._id);
+      } catch (e) {
+        this.alertService.error(e.error.message);
+      }
+    }
   }
 
   public async ngOnInit(): Promise<void> {

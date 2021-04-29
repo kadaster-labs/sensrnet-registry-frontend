@@ -54,7 +54,9 @@ export class ThemeComponent implements ControlValueAccessor, OnDestroy, AfterVie
       value: new FormControl([]),
     });
 
-    this.sensorThemesList = Object.keys(this.sensorThemes).filter(String);
+    this.sensorThemesList = Object.keys(this.sensorThemes).filter(String).sort((a, b) => {
+      return this.sensorThemeTranslation[a].localeCompare(this.sensorThemeTranslation[b]);
+    });
 
     this.subscriptions.push(
       // any time the inner form changes update the parent of any change
