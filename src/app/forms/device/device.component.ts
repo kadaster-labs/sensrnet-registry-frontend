@@ -10,7 +10,8 @@ import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { DeviceService, IRegisterDataStreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDataStreamBody,
   IUpdateDeviceBody, IUpdateSensorBody,
 } from '../../services/device.service';
-
+import { ObservationGoalService } from '../../services/observation-goal.service';
+import { urlRegex } from '../../helpers/form.helpers';
 
 @Component({
   selector: 'app-device',
@@ -24,8 +25,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public activeStepIndex = 0;
 
   public subscriptions: Subscription[] = [];
-
-  private urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*([/#!?=\\w]+)?';
 
   public deviceForm: FormGroup;
   public sensorForm: FormGroup;
@@ -47,6 +46,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService,
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
+    private readonly observationGoalService: ObservationGoalService,
   ) {}
 
   get deviceControls() {
@@ -83,9 +83,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           } else {
             try {
               await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch (e) {
-              console.log('dismissed modal');
-            }
+            } catch {}
           }
         } else if (this.activeStepIndex === 2) {
           let allRegistered = true;
@@ -105,9 +103,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           } else {
             try {
               await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch (e) {
-              console.log('dismissed modal');
-            }
+            } catch {}
           }
         }
       }
@@ -155,7 +151,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     return { active: this.activeStepIndex === pageIndex, finished: this.activeStepIndex > pageIndex };
   }
 
-  public setDevice(device: IDevice): void {
+  public async setDevice(device: IDevice): Promise<void> {
     this.locationService.highlightLocation({
       type: 'Point',
       coordinates: device.location.coordinates
@@ -168,13 +164,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     this.deviceForm.patchValue({
       id: device._id,
-      category: { category: device.category || '' },
-      name: device.name || '',
-      connectivity: device.connectivity || '',
-      description: device.description || '',
+      category: { category: device.category || null },
+      name: device.name || null,
+      connectivity: device.connectivity || null,
+      description: device.description || null,
       location: { longitude, latitude, height },
-      locationName: device.locationDetails && device.locationDetails.name ? device.locationDetails.name : '',
-      locationDescription: device.locationDetails && device.locationDetails.description ? device.locationDetails.description : '',
+      locationName: device.locationDetails && device.locationDetails.name ? device.locationDetails.name : null,
+      locationDescription: device.locationDetails && device.locationDetails.description ? device.locationDetails.description : null,
     });
     this.deviceForm.markAsPristine();
 
@@ -186,6 +182,16 @@ export class DeviceComponent implements OnInit, OnDestroy {
       if (device.dataStreams) {
         for (const dataStream of device.dataStreams) {
           if (dataStream.sensorId === sensor._id) {
+            const observationGoals = [];
+            if (dataStream.observationGoalIds) {
+              for (const observationGoalId of dataStream.observationGoalIds) {
+                const observationGoal = await this.observationGoalService.get(observationGoalId).toPromise();
+                if (observationGoal) {
+                  observationGoals.push(observationGoal);
+                }
+              }
+            }
+
             dataStreams.push(this.formBuilder.group({
               id: dataStream._id,
               name: [dataStream.name, Validators.required],
@@ -199,6 +205,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
               isReusable: !!dataStream.isReusable,
               documentation: dataStream.documentation,
               dataLink: dataStream.dataLink,
+              observationGoals: [observationGoals],
             }));
           }
         }
@@ -211,7 +218,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         typeName: [sensor.type ? {value: sensor.type} : null, Validators.required],
         manufacturer: sensor.manufacturer,
         supplier: sensor.supplier,
-        documentation: [sensor.documentation, [Validators.pattern(this.urlRegex)]],
+        documentation: [sensor.documentation, [Validators.pattern(urlRegex)]],
         dataStreams,
       }));
       this.sensorForm.markAsPristine();
@@ -286,6 +293,33 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
       }
     }
+  }
+
+  public async updateObservationGoals(sensorId, dataStreamId, observationGoalIds) {
+    const device = await this.deviceService.get(this.deviceId).toPromise() as IDevice;
+    const deviceDataStreams = device && device.dataStreams ? device.dataStreams.filter(
+      x => x._id === dataStreamId) : [];
+
+    const promises = [];
+    if (deviceDataStreams.length) {
+      const existingObservationGoalIds = deviceDataStreams[0].observationGoalIds;
+      for (const observationGoalId of observationGoalIds) {
+        if (!existingObservationGoalIds || !existingObservationGoalIds.includes(observationGoalId)) {
+          promises.push(this.deviceService.linkObservationGoal(this.deviceId, sensorId, dataStreamId,
+            observationGoalId).toPromise());
+        }
+      }
+      if (existingObservationGoalIds) {
+        for (const existingObservationGoalId of existingObservationGoalIds) {
+          if (!observationGoalIds.includes(existingObservationGoalId)) {
+            promises.push(this.deviceService.unlinkObservationGoal(this.deviceId, sensorId, dataStreamId,
+              existingObservationGoalId).toPromise());
+          }
+        }
+      }
+    }
+
+    await Promise.all(promises);
   }
 
   public async registerSensors() {
@@ -385,6 +419,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
               const dataStreamResult: Record<string, any> = await this.deviceService.registerDataStream(this.deviceId,
                 sensorId, dataStream).toPromise();
               dataStreamEntry.patchValue({id: dataStreamResult.dataStreamId});
+
+              if (dataStreamFormValue.observationGoals) {
+                for (const observationGoal of dataStreamFormValue.observationGoals) {
+                  await this.deviceService.linkObservationGoal(this.deviceId, sensorId, dataStreamResult.dataStreamId,
+                    observationGoal._id).toPromise();
+                }
+              }
             } catch (e) {
               failed = true;
               this.alertService.error(e.error.message);
@@ -423,6 +464,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
             }
             if (dataStreamEntry.get('dataLink').dirty) {
               dataStreamUpdate.dataLink = dataStreamFormValue.dataLink;
+            }
+
+            if (dataStreamFormValue.observationGoals) {
+              const observationGoalIds = dataStreamFormValue.observationGoals.map(x => x._id);
+              await this.updateObservationGoals(sensorId, dataStreamId, observationGoalIds);
             }
 
             if (Object.keys(dataStreamUpdate).length) {

@@ -4,6 +4,5 @@
   // DO NOT CHANGE!!
   window.__env.apiUrl = 'api';
   window.__env.oidcIssuer = '/dex';
-  window.__env.oidcWellKnown = '/dex';
   window.__env.oidcClientId = 'registry-frontend';
 }(this));

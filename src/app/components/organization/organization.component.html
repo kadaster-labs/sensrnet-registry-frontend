@@ -5,32 +5,54 @@
             <app-sidebar></app-sidebar>
         </div>
         <div class="col-11">
-            <div>
-                <h3>
-                    <span *ngIf="legalEntity;else noLegalEntity">
-                        <span i18n>My Organization</span>
-                    </span>
-                    <ng-template #noLegalEntity>
-                        <span i18n>Organization</span>
+            <div class="row">
+                <div *ngIf="legalEntity" class="col-md-6 col-sm-12">
+                    <div *ngIf="activeOrganizationView == OrganizationViewEnum.View;else viewUsers">
+                        <h3><span i18n>Organization</span></h3>
+                    </div>
+                    <ng-template #viewUsers>
+                        <h3><span i18n>Organization Users</span></h3>
                     </ng-template>
-                </h3>
+                </div>
+                <div *ngIf="!legalEntity" class="col-md-6 col-sm-12">
+                    <div *ngIf="activeUpdateView == UpdateViewEnum.Join;else registerActive">
+                        <h3><span i18n>Join Organization</span></h3>
+                    </div>
+                    <ng-template #registerActive>
+                        <h3><span i18n>Register Organization</span></h3>
+                    </ng-template>
+                </div>
+                <div *ngIf="legalEntity" class="col-md-6 col-sm-12">
+                    <div *ngIf="activeOrganizationView == OrganizationViewEnum.View;else viewUsers">
+                        <a type="button" class="btn btn-primary float-right" (click)="activeOrganizationView = OrganizationViewEnum.Users">
+                            <span class="mr-2" i18n>Organization Users</span>
+                            <i class="ml-1 fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <ng-template #viewUsers>
+                        <a type="button" class="btn btn-primary float-right" (click)="activeOrganizationView = OrganizationViewEnum.View">
+                            <span class="mr-2" i18n>Organization Details</span>
+                            <i class="ml-1 fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </ng-template>
+                </div>
+                <div *ngIf="!legalEntity" class="col-md-6 col-sm-12">
+                    <div *ngIf="activeUpdateView == UpdateViewEnum.Join;else registerActive">
+                        <a type="button" class="btn btn-primary float-right" (click)="activeUpdateView = UpdateViewEnum.Create">
+                            <span class="mr-2" i18n>Register Organization</span>
+                            <i class="ml-1 fas fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <ng-template #registerActive>
+                        <a type="button" class="btn btn-primary float-right" (click)="activeUpdateView = UpdateViewEnum.Join">
+                            <span class="mr-2" i18n>Join Organization</span>
+                            <i class="ml-1 fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </ng-template>
+                </div>
             </div>
             <hr>
             <div *ngIf="legalEntity;else createLegalEntity">
-                <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
-                    <label class="btn btn-primary active">
-                        <input type="radio" name="options" autocomplete="off"
-                               [checked]="activeOrganizationView == OrganizationViewEnum.View"
-                               (click)="activeOrganizationView = OrganizationViewEnum.View">
-                        <span i18n>Details</span>
-                    </label>
-                    <label class="btn btn-primary">
-                        <input type="radio" name="options" autocomplete="off"
-                               [checked]="activeOrganizationView == OrganizationViewEnum.Users"
-                               (click)="activeOrganizationView = OrganizationViewEnum.Users">
-                        <span i18n>Users</span>
-                    </label>
-                </div>
                 <div *ngIf="activeOrganizationView == OrganizationViewEnum.View">
                     <app-organization-update [legalEntity]="legalEntity" (setLegalEntityId)="setLegalEntityId($event)"></app-organization-update>
                 </div>
@@ -39,20 +61,6 @@
                 </div>
             </div>
             <ng-template #createLegalEntity>
-                <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
-                    <label class="btn btn-primary active">
-                        <input type="radio" name="options" autocomplete="off"
-                               [checked]="activeUpdateView == UpdateViewEnum.Join"
-                               (click)="activeUpdateView = UpdateViewEnum.Join">
-                        <span i18n>Join</span>
-                    </label>
-                    <label class="btn btn-primary">
-                        <input type="radio" name="options" autocomplete="off"
-                               [checked]="activeUpdateView == UpdateViewEnum.Create"
-                               (click)="activeUpdateView = UpdateViewEnum.Create">
-                        <span i18n>Create</span>
-                    </label>
-                </div>
                 <div *ngIf="activeUpdateView == UpdateViewEnum.Join">
                     <app-organization-join (setLegalEntityId)="setLegalEntityId($event)"></app-organization-join>
                 </div>
