@@ -490,7 +490,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }, 250);
   }
 
-  private zoomToPosition(position: globalThis.Position) {
+  private zoomToPosition(position: GeolocationPosition) {
     const coords = [position.coords.longitude, position.coords.latitude];
     const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
     const point = new Point(coordsRD);
@@ -507,7 +507,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private findMe() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: globalThis.Position) => {
+      navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
         this.zoomToPosition(position);
       });
     } else {
