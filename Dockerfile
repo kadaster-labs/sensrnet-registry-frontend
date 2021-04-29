@@ -12,7 +12,6 @@ ARG NO_PROXY=$no_proxy
 WORKDIR /app
 
 COPY ./package*.json ./
-COPY .npmrc ./
 RUN npm ci
 
 COPY src src

@@ -29,8 +29,6 @@ Before starting with development, you'll need the following things:
 - Angular CLI: `npm install -g @angular/cli`
 - Install dependencies: `npm install` 
 
-*Note: this project contains some closed source Kadaster dependencies. This is planned to change, but for now it means that this project can only be built when connected to the Kadaster VPN. The NPM registry is set in `.npmrc`.*
-
 The VS Code editor with ESLint plugin is recommended, but not required.
 
 ## Project structure
