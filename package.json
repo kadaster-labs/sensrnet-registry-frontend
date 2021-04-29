@@ -25,21 +25,18 @@
     "@angular/router": "^11.0.5",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ngx-i18nsupport/tooling": "^8.0.3",
+    "@terraformer/wkt": "^2.0.7",
     "angular-auth-oidc-client": "11.6.2",
     "bootstrap": "^4.5.0",
     "bootstrap-select": "^1.13.18",
     "core-js": "^2.6.11",
-    "generieke-geo-componenten-dataset-legend": "^4.0.1",
-    "generieke-geo-componenten-dataset-tree": "^4.1.0",
-    "generieke-geo-componenten-feature-info": "^6.0.0",
-    "generieke-geo-componenten-map": "^8.0.0",
-    "generieke-geo-componenten-print": "^4.0.0",
-    "generieke-geo-componenten-search": "^6.0.1",
     "jquery": "^3.3.1",
     "jwt-decode": "^3.1.1",
     "ol": "^6.3.1",
     "ol-ext": "^3.1.12",
+    "ol-layerswitcher": "^3.8.3",
     "proj4": "^2.5.0",
+    "resize-observer-polyfill": "^1.5.1",
     "rxjs": "~6.5.4",
     "socket.io-client": "^2.3.0",
     "tslib": "^2.0.0",
@@ -72,6 +69,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.0"
+    "typescript": "^4.0.7"
   }
 }

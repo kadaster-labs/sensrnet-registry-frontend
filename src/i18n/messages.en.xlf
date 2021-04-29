@@ -3,8 +3,8 @@
   <file original="ng.template" id="ngi18n">
     <unit id="app.title">
       <notes>
-        <note category="location">src/app/app.component.ts:9</note>
-      </notes>
+        
+      <note category="location">src/app/app.component.ts:7</note></notes>
       <segment state="final">
         <source>Sensor Registry</source>
       <target>Sensor Registry</target></segment>
@@ -25,15 +25,15 @@
       <target>Cancel</target></segment>
     </unit><unit id="login.failed">
       <notes>
-        <note category="location">src/app/login/login.component.ts:18</note>
-      </notes>
+        
+      <note category="location">src/app/login/login.component.ts:14</note></notes>
       <segment state="final">
         <source>Failed to login: Supply valid credentials.</source>
       <target>Failed to login: Supply valid credentials.</target></segment>
     </unit><unit id="ngb.alert.close">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note></notes>
       <segment state="translated">
         <source>Close</source>
       <target>Close</target></segment>
@@ -41,7 +41,7 @@
     <unit id="ngb.carousel.previous">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:90</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:90</note></notes>
       <segment state="translated">
         <source>Previous</source>
       <target>Previous</target></segment>
@@ -49,7 +49,7 @@
     <unit id="ngb.carousel.next">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:111</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:111</note></notes>
       <segment state="translated">
         <source>Next</source>
       <target>Next</target></segment>
@@ -58,7 +58,7 @@
       <notes>
         
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:24</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:36</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:24</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:36</note></notes>
       <segment state="translated">
         <source>Previous month</source>
       <target>Previous month</target></segment>
@@ -67,7 +67,7 @@
       <notes>
         
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:52</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:69</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:52</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:69</note></notes>
       <segment state="translated">
         <source>Next month</source>
       <target>Next month</target></segment>
@@ -76,7 +76,7 @@
       <notes>
         
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:43</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:43</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
       <segment state="translated">
         <source>Select month</source>
       <target>Select month</target></segment>
@@ -85,7 +85,7 @@
       <notes>
         
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
       <segment state="translated">
         <source>Select year</source>
       <target>Select year</target></segment>
@@ -93,7 +93,7 @@
     <unit id="ngb.pagination.first">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:147</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:147</note></notes>
       <segment state="translated">
         <source>««</source>
       <target>««</target></segment>
@@ -101,7 +101,7 @@
     <unit id="ngb.pagination.previous">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:155</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:155</note></notes>
       <segment state="translated">
         <source>«</source>
       <target>«</target></segment>
@@ -109,7 +109,7 @@
     <unit id="ngb.pagination.next">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:163</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:163</note></notes>
       <segment state="translated">
         <source>»</source>
       <target>»</target></segment>
@@ -117,7 +117,7 @@
     <unit id="ngb.pagination.last">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:172</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:172</note></notes>
       <segment state="translated">
         <source>»»</source>
       <target>»»</target></segment>
@@ -125,7 +125,7 @@
     <unit id="ngb.pagination.first-aria">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:183</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:183</note></notes>
       <segment state="translated">
         <source>First</source>
       <target>First</target></segment>
@@ -133,7 +133,7 @@
     <unit id="ngb.pagination.previous-aria">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
       <segment state="translated">
         <source>Previous</source>
       <target>Previous</target></segment>
@@ -141,7 +141,7 @@
     <unit id="ngb.pagination.next-aria">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
       <segment state="translated">
         <source>Next</source>
       <target>Next</target></segment>
@@ -149,7 +149,7 @@
     <unit id="ngb.pagination.last-aria">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
       <segment state="translated">
         <source>Last</source>
       <target>Last</target></segment>
@@ -157,7 +157,7 @@
     <unit id="ngb.progressbar.value">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.ts:23</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.ts:23</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></target></segment>
@@ -165,7 +165,7 @@
     <unit id="ngb.timepicker.increment-hours">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:74</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:74</note></notes>
       <segment state="translated">
         <source>Increment hours</source>
       <target>Increment hours</target></segment>
@@ -173,7 +173,7 @@
     <unit id="ngb.timepicker.HH">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:46</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:46</note></notes>
       <segment state="translated">
         <source>HH</source>
       <target>HH</target></segment>
@@ -181,7 +181,7 @@
     <unit id="ngb.timepicker.hours">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:52</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:52</note></notes>
       <segment state="translated">
         <source>Hours</source>
       <target>Hours</target></segment>
@@ -189,7 +189,7 @@
     <unit id="ngb.timepicker.decrement-hours">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:83</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:83</note></notes>
       <segment state="translated">
         <source>Decrement hours</source>
       <target>Decrement hours</target></segment>
@@ -197,7 +197,7 @@
     <unit id="ngb.timepicker.increment-minutes">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:91</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:91</note></notes>
       <segment state="translated">
         <source>Increment minutes</source>
       <target>Increment minutes</target></segment>
@@ -205,7 +205,7 @@
     <unit id="ngb.timepicker.MM">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:61</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:61</note></notes>
       <segment state="translated">
         <source>MM</source>
       <target>MM</target></segment>
@@ -213,7 +213,7 @@
     <unit id="ngb.timepicker.minutes">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:67</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:67</note></notes>
       <segment state="translated">
         <source>Minutes</source>
       <target>Minutes</target></segment>
@@ -221,7 +221,7 @@
     <unit id="ngb.timepicker.decrement-minutes">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:98</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:98</note></notes>
       <segment state="translated">
         <source>Decrement minutes</source>
       <target>Decrement minutes</target></segment>
@@ -229,7 +229,7 @@
     <unit id="ngb.timepicker.increment-seconds">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:139</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:139</note></notes>
       <segment state="translated">
         <source>Increment seconds</source>
       <target>Increment seconds</target></segment>
@@ -237,7 +237,7 @@
     <unit id="ngb.timepicker.SS">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:108</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:108</note></notes>
       <segment state="translated">
         <source>SS</source>
       <target>SS</target></segment>
@@ -245,7 +245,7 @@
     <unit id="ngb.timepicker.seconds">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:129</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:129</note></notes>
       <segment state="translated">
         <source>Seconds</source>
       <target>Seconds</target></segment>
@@ -253,7 +253,7 @@
     <unit id="ngb.timepicker.decrement-seconds">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
       <segment state="translated">
         <source>Decrement seconds</source>
       <target>Decrement seconds</target></segment>
@@ -261,7 +261,7 @@
     <unit id="ngb.timepicker.PM">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></target></segment>
@@ -269,7 +269,7 @@
     <unit id="ngb.timepicker.AM">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></target></segment>
@@ -277,7 +277,7 @@
     <unit id="ngb.toast.close-aria">
       <notes>
         
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/toast/toast.ts:71</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/fesm5/@ng-bootstrap/ng-bootstrap/toast/toast.ts:71</note></notes>
       <segment state="translated">
         <source>Close</source>
       <target>Close</target></segment>
@@ -324,77 +324,76 @@
       <segment state="final">
         <source>Logout</source>
       <target>Logout</target></segment>
-    </unit><unit id="register.success">
+    </unit><unit id="4526390416021631012">
       <notes>
-        
-        
-      <note category="location">src/app/register/register.component.ts:18</note></notes>
-      <segment state="final">
-        <source>Registration successful</source>
-      <target>Registration successful</target></segment>
-    </unit><unit id="register.failure">
-      <notes>
-        
-      <note category="location">src/app/register/register.component.ts:19</note></notes>
-      <segment state="final">
-        <source>Registration failed. Does the account exist already?</source>
-      <target>Registration failed. Does the account exist already?</target></segment>
-    </unit><unit id="2159130950882492111">
-      <notes>
-        <note category="location">src/app/register/register.component.html:28</note>
+        <note category="location">src/app/components/map/map.service.ts:49</note>
       </notes>
       <segment state="final">
-        <source>Cancel</source>
-      <target>Cancel</target></segment>
-    </unit><unit id="7533721054360206796">
+        <source>BAG</source>
+      <target>BAG</target></segment>
+    </unit><unit id="5086643504817308506">
       <notes>
-        <note category="location">src/app/register/register.component.html:12</note>
+        <note category="location">src/app/components/map/map.service.ts:62</note>
       </notes>
       <segment state="final">
-        <source>E-mail must be a valid e-mail address</source>
-      <target>E-mail must be a valid e-mail address</target></segment>
-    </unit><unit id="6446631772000124223">
+        <source>Overlays</source>
+      <target>Overlays</target></segment>
+    </unit><unit id="673924298154786464">
       <notes>
-        <note category="location">src/app/register/register.component.html:20</note>
+        <note category="location">src/app/components/map/map.service.ts:69</note>
       </notes>
       <segment state="final">
-        <source>Password must be at least 6 characters</source>
-      <target>Password must be at least 6 characters</target></segment>
+        <source>BRT</source>
+      <target>BRT</target></segment>
+    </unit><unit id="651663933193825521">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:91</note>
+      </notes>
+      <segment state="final">
+        <source>Aerial photo</source>
+      <target>Aerial photo</target></segment>
+    </unit><unit id="6475608532557687416">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:112</note>
+      </notes>
+      <segment state="final">
+        <source>Base maps</source>
+      <target>Base maps</target></segment>
     </unit><unit id="map.locate">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:94</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:99</note></notes>
       <segment state="final">
         <source>Locate me</source>
       <target>Locate me</target></segment>
     </unit><unit id="map.confirm.title">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:95</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:100</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
     </unit><unit id="map.confirm.body">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:96</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:101</note></notes>
       <segment state="final">
         <source>Do you really want to delete the device?</source>
       <target>Do you really want to delete the device?</target></segment>
     </unit><unit id="map.geo.support">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:97</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:102</note></notes>
       <segment state="final">
         <source>Geolocation is not supported by this browser.</source>
       <target>Geolocation is not supported by this browser.</target></segment>
-    </unit><unit id="800975943269756056">
+    </unit><unit id="1177467005869954871">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:4</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:552</note></notes>
       <segment state="final">
-        <source>Search for location</source>
-      <target>Search for location</target></segment>
+        <source>Enter location</source>
+      <target>Enter location</target></segment>
     </unit><unit id="8307140841776883735">
       <notes>
         
@@ -647,7 +646,7 @@
     </unit><unit id="register.failed">
       <notes>
         
-      <note category="location">src/app/forms/organization-create/organization-create.component.ts:24</note></notes>
+      <note category="location">src/app/forms/organization-create/organization-create.component.ts:23</note></notes>
       <segment state="final">
         <source>Failed to register. Does the organization exist already?</source>
       <target>Failed to register. Does the organization exist already?</target></segment>
@@ -674,15 +673,15 @@
       <target>Update</target></segment>
     </unit><unit id="no.users">
       <notes>
-        <note category="location">src/app/forms/organization-users/organization-users.component.ts:16</note>
-      </notes>
+        
+      <note category="location">src/app/forms/organization-users/organization-users.component.ts:17</note></notes>
       <segment state="final">
         <source>No users have been selected.</source>
       <target>No users have been selected.</target></segment>
     </unit><unit id="user.update">
       <notes>
-        <note category="location">src/app/forms/organization-users/organization-users.component.ts:17</note>
-      </notes>
+        
+      <note category="location">src/app/forms/organization-users/organization-users.component.ts:18</note></notes>
       <segment state="final">
         <source>Update success.</source>
       <target>Update success.</target></segment>
@@ -1139,38 +1138,10 @@
     </unit><unit id="2454050363478003966">
       <notes>
         
-      <note category="location">src/app/login/login.component.html:18</note><note category="location">src/app/login/login.component.html:37</note></notes>
+      <note category="location">src/app/login/login.component.html:20</note></notes>
       <segment state="translated">
         <source>Login</source>
       <target>Login</target></segment>
-    </unit><unit id="1890300073702152532">
-      <notes>
-        
-      <note category="location">src/app/login/login.component.html:21</note><note category="location">src/app/register/register.component.html:8</note></notes>
-      <segment state="translated">
-        <source>E-mail</source>
-      <target>E-mail</target></segment>
-    </unit><unit id="6466460354973690677">
-      <notes>
-        
-      <note category="location">src/app/login/login.component.html:24</note><note category="location">src/app/register/register.component.html:11</note></notes>
-      <segment state="final">
-        <source>E-mail is required</source>
-      <target>E-mail is required</target></segment>
-    </unit><unit id="1431416938026210429">
-      <notes>
-        
-      <note category="location">src/app/login/login.component.html:28</note><note category="location">src/app/register/register.component.html:16</note></notes>
-      <segment state="final">
-        <source>Password</source>
-      <target>Password</target></segment>
-    </unit><unit id="205044832662301680">
-      <notes>
-        
-      <note category="location">src/app/login/login.component.html:31</note><note category="location">src/app/register/register.component.html:19</note></notes>
-      <segment state="final">
-        <source>Password is required</source>
-      <target>Password is required</target></segment>
     </unit><unit id="3103656649990667741">
       <notes>
         <note category="location">src/app/navbar/navbar.component.html:4</note>
@@ -1209,47 +1180,40 @@
       <segment state="final">
         <source>Sensors</source>
       <target>Sensors</target></segment>
-    </unit><unit id="3301086086650990787">
-      <notes>
-        
-      <note category="location">src/app/login/login.component.html:39</note><note category="location">src/app/register/register.component.html:5</note><note category="location">src/app/register/register.component.html:26</note></notes>
-      <segment state="final">
-        <source>Register</source>
-      <target>Register</target></segment>
     </unit><unit id="8455841993733304388">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:20</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.html:10</note></notes>
       <segment state="final">
         <source>Sensor details</source>
       <target>Sensor details</target></segment>
     </unit><unit id="1650073357556875190">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:23</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.html:13</note></notes>
       <segment state="final">
         <source>Attribute</source>
       <target>Attribute</target></segment>
     </unit><unit id="6555318547274416232">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:24</note>
-      </notes>
+        
+      <note category="location">src/app/components/map/map.component.html:14</note></notes>
       <segment state="final">
         <source>Value</source>
       <target>Value</target></segment>
     </unit><unit id="1806667489382256324">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.html:30</note><note category="location">src/app/forms/devices/devices.component.html:18</note><note category="location">src/app/form-controls/device-type/device-type.component.html:3</note></notes>
+      <note category="location">src/app/components/map/map.component.html:20</note><note category="location">src/app/forms/devices/devices.component.html:18</note><note category="location">src/app/form-controls/device-type/device-type.component.html:3</note></notes>
       <segment state="final">
         <source>Category</source>
       <target>Category</target></segment>
     </unit><unit id="2887948366226336935">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:38</note>
-        <note category="location">src/app/forms/device/device.component.html:33</note>
-        <note category="location">src/app/forms/devices/devices.component.html:19</note>
-      </notes>
+        
+        
+        
+      <note category="location">src/app/components/map/map.component.html:28</note><note category="location">src/app/forms/device/device.component.html:33</note><note category="location">src/app/forms/devices/devices.component.html:19</note></notes>
       <segment state="final">
         <source>Connectivity</source>
       <target>Connectivity</target></segment>
@@ -1263,21 +1227,21 @@
     </unit><unit id="7585826646011739428">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.html:50</note></notes>
+      <note category="location">src/app/components/map/map.component.html:40</note></notes>
       <segment state="final">
         <source>Edit</source>
       <target>Edit</target></segment>
     </unit><unit id="7022070615528435141">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.html:53</note></notes>
+      <note category="location">src/app/components/map/map.component.html:43</note></notes>
       <segment state="final">
         <source>Delete</source>
       <target>Delete</target></segment>
     </unit><unit id="2509141182388535183">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.html:58</note></notes>
+      <note category="location">src/app/components/map/map.component.html:48</note></notes>
       <segment state="final">
         <source>View</source>
       <target>View</target></segment>
