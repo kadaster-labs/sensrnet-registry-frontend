@@ -2,13 +2,6 @@
 # First Stage : to install and build dependences
 FROM node:12.18.4 as builder
 
-ARG http_proxy="http://ssl-proxy.cs.kadaster.nl:8080"
-ARG https_proxy="http://ssl-proxy.cs.kadaster.nl:8080"
-ARG HTTP_PROXY=$http_proxy
-ARG HTTPS_PROXY=$http_proxy
-ARG no_proxy="localhost,127.0.0.1,kadaster.nl"
-ARG NO_PROXY=$no_proxy
-
 WORKDIR /app
 
 COPY ./package*.json ./
