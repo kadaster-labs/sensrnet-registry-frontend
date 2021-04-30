@@ -15,15 +15,6 @@ label {
   font-weight: bold;
 }
 
-::ng-deep .ol-search {
-  top: calc(.5em + 60px);
-
-  .copy {
-    // If you end up using OpenStreetMap map or search results, we'll need to attribute them
-    display: none;
-  }
-}
-
 ::ng-deep #layers {
   right: 1vw;
   bottom: 6vh;

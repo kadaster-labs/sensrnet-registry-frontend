@@ -1,10 +1,10 @@
 @import "../../styles";
 
 .navbar.form {
-  background-color: $theme-color-primary !important;
+  background-color: $light !important;
 
   a {
-    color: $theme-color-text !important;
+    color: $bar-text-color !important;
   }
 }
 

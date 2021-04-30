@@ -1,14 +1,14 @@
 @import "../../styles";
 
 .sidebar-link {
-  color: $theme-color-text !important;
+  color: $bar-text-color !important;
   cursor: pointer !important;
 }
 
 .sidebar-link:hover {
-  background-color: $theme-color-primary !important;
+  background-color: $light !important;
 }
 
 .active {
-  color: #007bff !important;
+  color: $primary !important;
 }

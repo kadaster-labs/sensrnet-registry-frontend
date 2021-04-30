@@ -1,9 +1,4 @@
 // Your variable overrides
-$body-bg: white;
-$font-size-base: 1.25rem;
-
-// Load client specific theme
-@import 'theme';
 
 // Bootstrap and its default variables
 @import "bootstrap/scss/bootstrap.scss";
@@ -11,6 +6,8 @@ $font-size-base: 1.25rem;
 @import "ol/ol.css";
 @import "ol-ext/dist/ol-ext.min.css";
 @import "ol-layerswitcher/dist/ol-layerswitcher.css";
+
+$bar-text-color: $dark;
 
 .ol-overlaycontainer-stopevent .ol-zoom {
   top: auto;
