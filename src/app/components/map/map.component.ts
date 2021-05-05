@@ -90,12 +90,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public clusterMaxZoom = 15;
 
-  public iconCollapsed = 'fas fa-chevron-right';
-  public iconExpanded = 'fas fa-chevron-left';
-  public iconUnchecked = 'far fa-square';
-  public iconChecked = 'far fa-check-square';
-  public iconInfoUrl = 'fas fa-info-circle';
-
   public locateMeString = $localize`:@@map.locate:Locate me`;
   public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
   public confirmBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device?`;

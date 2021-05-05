@@ -14,27 +14,26 @@
                 <div class="col-md-6 col-sm-12">
                     <a type="button" class="btn btn-primary float-right" (click)="registerDevice()">
                         <span class="mr-2" i18n>Register Device</span>
-                        <i class="ml-1 fas fa-plus" aria-hidden="true"></i>
+                        <fa-icon icon="plus" class="ml-1"></fa-icon>
                     </a>
                 </div>
             </div>
             <hr>
-            <table class="table table-striped table-hover table-bordered">
-                <caption class="hidden" i18n>Devices</caption>
+            <table class="table table-striped table-hover table-bordered" aria-label="Table of devices">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th class="pointer w-35 hover-shadow" scope="col" (click)="setSort('name')">
                         <span i18n>Name</span>
-                        <em [ngClass]="getSortClass('name')" class="ml-2"></em>
+                        <fa-icon [icon]="getSortClass('name')" class="ml-2"></fa-icon>
                     </th>
                     <th class="pointer w-20 hover-shadow" scope="col" (click)="setSort('category')">
                         <span i18n>Category</span>
-                        <em [ngClass]="getSortClass('category')" class="ml-2"></em>
+                        <fa-icon [icon]="getSortClass('category')" class="ml-2"></fa-icon>
                     </th>
                     <th class="pointer w-25 hover-shadow" scope="col" (click)="setSort('connectivity')">
                         <span i18n>Connectivity</span>
-                        <em [ngClass]="getSortClass('connectivity')" class="ml-2"></em>
+                        <fa-icon [icon]="getSortClass('connectivity')" class="ml-2"></fa-icon>
                     </th>
                     <th class="w-10" scope="col">
                         <span i18n>Actions</span>
@@ -48,15 +47,11 @@
                     <td (click)="selectDevice(device)">{{ getCategoryTranslation(device.category) }}</td>
                     <td (click)="selectDevice(device)">{{ device.connectivity }}</td>
                     <td class="px-1 pt-1 pb-0 m-0">
-                        <button type="button" class="btn btn-primary btn-sm p-1 mt-1 mb-1 mx-1" (click)="editDevice(device._id)">
-                            <span>
-                                <em class="fas fa-pencil-alt m-1"></em>
-                            </span>
+                        <button type="button" class="btn btn-primary btn-sm mx-1 my-1" (click)="editDevice(device._id)">
+                                <fa-icon icon="pencil-alt"></fa-icon>
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm p-1 mt-1 mb-1 mx-0" (click)="deleteDevice(device._id)">
-                            <span>
-                                <em class="fas fa-trash-alt m-1"></em>
-                            </span>
+                        <button type="button" class="btn btn-danger btn-sm mx-0 my-1" (click)="deleteDevice(device._id)">
+                            <fa-icon icon="trash-alt"></fa-icon>
                         </button>
                     </td>
                 </tr>
@@ -64,14 +59,14 @@
             </table>
             <nav class="d-flex justify-content-center">
                 <ul class="pagination mb-0">
-                    <li class="pointer" (click)="getPreviousPage()">
-                        <span><em class="fa fa-chevron-left"></em></span>
+                    <li class="page-item" (click)="getPreviousPage()">
+                        <fa-icon icon="chevron-left" class="page-link"></fa-icon>
                     </li>
-                    <li class="pointer active">
-                        <span class="content">{{ pageIndex + 1}}</span>
+                    <li class="page-item active">
+                        <span class="page-link content">{{ pageIndex + 1}}</span>
                     </li>
-                    <li class="pointer" (click)="getNextPage()">
-                        <span><em class="fa fa-chevron-right"></em></span>
+                    <li class="page-item" (click)="getNextPage()">
+                        <fa-icon icon="chevron-right" class="page-link"></fa-icon>
                     </li>
                 </ul>
             </nav>

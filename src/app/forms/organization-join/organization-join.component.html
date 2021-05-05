@@ -3,8 +3,7 @@
         <label i18n>Filter</label>
         <input (keyup)="filterInputChanged($event.target.value)" type="text" class="form-control" placeholder="Name" i18n-placeholder/>
     </div>
-    <table class="table table-striped table-hover table-bordered">
-        <caption class="hidden" i18n>Organizations</caption>
+    <table class="table table-striped table-hover table-bordered" aria-label="Table of organizations">
         <thead>
         <tr>
             <th scope="col"></th>

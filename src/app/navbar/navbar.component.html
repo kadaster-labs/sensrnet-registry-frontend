@@ -1,17 +1,19 @@
-<nav class="navbar navbar-fixed-top" [ngClass]="locationClass">
-    <span class="ml-4 mr-4 mt-0">
-        <a routerLink="" class="navbar-header mx-4 text-decoration-none d-block">
-            <span i18n>SensRNet Registration App</span>
-        </a>
-    </span>
-    <ul class="navbar-nav mr-auto nav nav-pills mt-1">
-        <li>
-            <a role="button" class="navbar-menu-item" (click)="toggleMenu()" routerLinkActive="active">
-                <span i18n>Menu</span>
-            </a>
-        </li>
-        <li id="language-switcher">
-            <app-language-switcher></app-language-switcher>
-        </li>
-    </ul>
+<nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light" [ngClass]="{'form navbar-light bg-light': locationClass === 'form'}">
+    <a class="navbar-brand mx-4" routerLink="" i18n>
+        SensRNet Registration App
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" (click)="toggleMenu()" routerLinkActive="active" i18n>
+                    Menu
+                </a>
+            </li>
+        </ul>
+        <app-language-switcher id="language-switcher"></app-language-switcher>
+    </div>
 </nav>
