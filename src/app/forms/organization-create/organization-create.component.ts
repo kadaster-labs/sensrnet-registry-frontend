@@ -11,7 +11,6 @@ import { createOrganizationMailValidator } from '../../validators/organization-m
 @Component({
   selector: 'app-organization-create',
   templateUrl: './organization-create.component.html',
-  styleUrls: ['./organization-create.component.scss']
 })
 export class OrganizationCreateComponent implements OnInit, OnDestroy {
   @Output() setLegalEntityId = new EventEmitter<string>();

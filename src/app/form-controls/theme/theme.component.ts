@@ -12,7 +12,6 @@ export interface SensorThemeFormValues {
 @Component({
   selector: 'app-sensor-theme',
   templateUrl: './theme.component.html',
-  styleUrls: ['./theme.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
