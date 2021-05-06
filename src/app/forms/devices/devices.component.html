@@ -23,7 +23,7 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th class="pointer w-35 hover-shadow" scope="col" (click)="setSort('name')">
+                    <th class="pointer w-30 hover-shadow" scope="col" (click)="setSort('name')">
                         <span i18n>Name</span>
                         <fa-icon [icon]="getSortClass('name')" class="ml-2"></fa-icon>
                     </th>
@@ -35,7 +35,7 @@
                         <span i18n>Connectivity</span>
                         <fa-icon [icon]="getSortClass('connectivity')" class="ml-2"></fa-icon>
                     </th>
-                    <th class="w-10" scope="col">
+                    <th class="w-15" scope="col">
                         <span i18n>Actions</span>
                     </th>
                 </tr>
@@ -72,7 +72,7 @@
             </nav>
         </div>
         <div class="col-5" style="height: 85vh; max-height: 85vh">
-            <app-map searchBarHeight="2rem"></app-map>
+            <app-map searchBarHeight="1.5rem"></app-map>
         </div>
     </div>
 </div>

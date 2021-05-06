@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light" [ngClass]="{'form navbar-light bg-light': locationClass === 'form'}">
-    <a class="navbar-brand mx-4" routerLink="" i18n>
+<nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light pl-1 pr-3 py-2" [ngClass]="{'form navbar-light bg-light w-100': locationClass === 'form', 'fit-content': locationClass !== 'form'}">
+    <a class="navbar-brand mx-4 pt-1" routerLink="" i18n>
         SensRNet Registration App
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
@@ -7,7 +7,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav" [ngClass]="{'mr-auto': locationClass === 'form'}">
             <li class="nav-item active">
                 <a class="nav-link" (click)="toggleMenu()" routerLinkActive="active" i18n>
                     Menu
