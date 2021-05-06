@@ -6,7 +6,7 @@
             <button type="button" class="btn btn-outline-secondary" [ngClass]="{ 'btn-outline-success': form.valid }"
                     (click)="selectLocation = true">
                 <span class="mr-2" i18n>Select on map</span>
-                <i *ngIf="form.valid" class="far fa-check-square" aria-hidden="true"></i>
+                <fa-icon [icon]="['far', 'check-square']" *ngIf="form.valid" aria-hidden="true"></fa-icon>
             </button>
         </div>
         </div>

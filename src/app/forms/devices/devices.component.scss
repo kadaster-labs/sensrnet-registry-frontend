@@ -1,11 +1,9 @@
-.form-header {
-  margin-top: 72px;
-}
+@import "../../../styles";
 
 .pointer {
   cursor: pointer;
 }
 
 .pagination > .active > span {
-  background-color: #007bff !important;
+  background-color: $primary !important;
 }

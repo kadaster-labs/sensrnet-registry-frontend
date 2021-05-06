@@ -43,12 +43,12 @@ export class DevicesComponent implements OnInit {
     let sortClass;
     if (this.sortField === sortField) {
       if (this.sortDirection === this.sortDirections.ASCENDING) {
-        sortClass = 'fas fa-sort-up';
+        sortClass = 'sort-up';
       } else {
-        sortClass = 'fas fa-sort-down';
+        sortClass = 'sort-down';
       }
     } else {
-      sortClass = 'fas fa-sort';
+      sortClass = 'sort';
     }
 
     return sortClass;

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -38,6 +39,8 @@ import { OrganizationUsersComponent } from './forms/organization-users/organizat
 import { TypeComponent } from './form-controls/type/type.component';
 import { ObservationGoalsComponent } from './components/observation-goals/observation-goals.component';
 import { ObservationGoalComponent } from './components/observation-goal/observation-goal.component';
+import * as freeRegularSvgIcons from '@fortawesome/free-regular-svg-icons';
+import * as freeSolidSvgIcons from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
   declarations: [
@@ -73,6 +76,7 @@ import { ObservationGoalComponent } from './components/observation-goal/observat
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    FontAwesomeModule,
     NgbModule,
     AuthConfigModule,
   ], providers: [
@@ -86,4 +90,27 @@ import { ObservationGoalComponent } from './components/observation-goal/observat
   ],
 })
 
-export class AppModule {}
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    // import font-awesome icons here to enable tree-shaking, making use of the "Icon Library" methodology, more info
+    // here: https://github.com/FortAwesome/angular-fontawesome/blob/master/docs/usage.md#methodologies
+    library.addIcons(
+      freeRegularSvgIcons.faCheckSquare,
+      freeSolidSvgIcons.faArrowRight,
+      freeSolidSvgIcons.faBullseye,
+      freeSolidSvgIcons.faChevronLeft,
+      freeSolidSvgIcons.faChevronRight,
+      freeSolidSvgIcons.faCity,
+      freeSolidSvgIcons.faEye,
+      freeSolidSvgIcons.faInfoCircle,
+      freeSolidSvgIcons.faLanguage,
+      freeSolidSvgIcons.faPencilAlt,
+      freeSolidSvgIcons.faPlus,
+      freeSolidSvgIcons.faSignOutAlt,
+      freeSolidSvgIcons.faSort,
+      freeSolidSvgIcons.faSortDown,
+      freeSolidSvgIcons.faSortUp,
+      freeSolidSvgIcons.faTrashAlt
+    );
+  }
+}
