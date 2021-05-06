@@ -76,11 +76,11 @@ export class MapService {
       title: $localize`BRT`,
       type: 'base',
       visible: true,
-      opacity: 0.7,
+      opacity: 1,
       source: new WMTS({
         attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
         url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
-        layer: 'brtachtergrondkaart',
+        layer: 'brtachtergrondkaartgrijs',
         matrixSet: 'EPSG:28992',
         format: 'image/png',
         projection: this.projection,

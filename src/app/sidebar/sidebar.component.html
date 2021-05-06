@@ -1,30 +1,28 @@
-<nav class="sidebar">
-    <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="sidebar-link text-center mb-2" routerLink="/devices" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-                    <fa-icon icon="eye" class="mr-2"></fa-icon>
-                    <br>
-                    <em class="side-text" i18n>Devices</em>
-                </a>
-                <a class="sidebar-link text-center mb-2" routerLink="/observationgoals" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-                    <fa-icon icon="bullseye" class="mr-2"></fa-icon>
-                    <br>
-                    <em class="side-text mx-1" i18n>Observation Goals</em>
-                </a>
-                <a class="sidebar-link text-center mb-2" routerLink="/organization" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-                    <fa-icon icon="city" class="mr-2"></fa-icon>
-                    <br>
-                    <em class="side-text mx-1" i18n>Organization</em>
-                </a>
-                <a class="sidebar-link text-center" (click)="logout()">
-                    <fa-icon icon="sign-out-alt" class="mr-2"></fa-icon>
-                    <br>
-                    <em class="side-text" i18n>Logout</em>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-
+<div class="d-flex flex-column">
+    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+        <li class="nav-item">
+            <a routerLink="/devices" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="py-2 my-1 d-flex align-items-center justify-content-center link-dark text-decoration-none row sidebar-link">
+                <fa-icon icon="eye" class="col-12"></fa-icon>
+                <em class="col-12 side-text" i18n>Devices</em>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/observationgoals" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="py-2 my-1 d-flex align-items-center justify-content-center link-dark text-decoration-none row sidebar-link">
+                <fa-icon icon="bullseye" class="col-12"></fa-icon>
+                <em class="col-12 side-text" i18n>Observation Goals</em>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/organization" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="py-2 my-1 d-flex align-items-center justify-content-center link-dark text-decoration-none row sidebar-link">
+                <fa-icon icon="city" class="col-12"></fa-icon>
+                <em class="col-12 side-text" i18n>Organization</em>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a (click)="logout()" class="py-2 my-1 d-flex align-items-center justify-content-center link-dark text-decoration-none row sidebar-link">
+                <fa-icon icon="sign-out-alt" class="col-12"></fa-icon>
+                <em class="col-12 side-text" i18n>Logout</em>
+            </a>
+        </li>
+    </ul>
+</div>

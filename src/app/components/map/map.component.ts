@@ -2,7 +2,7 @@ import proj4 from 'proj4';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import ResizeObserver from 'resize-observer-polyfill';
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, HostBinding, OnDestroy, OnInit } from '@angular/core';
 
 import OlMap from 'ol/Map';
 import Feature from 'ol/Feature';
@@ -43,7 +43,8 @@ import { ConnectionService } from '../../services/connection.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-  @Input() searchBarHeight;
+
+  @HostBinding('style.--searchBarHeight') @Input() searchBarHeight;
   @Input() clearLocationHighLight = true;
 
   constructor(
@@ -77,9 +78,6 @@ export class MapComponent implements OnInit, OnDestroy {
   public clusterLayer: AnimatedCluster;
   public selectLocationLayer: VectorLayer;
   public selectLocationSource: VectorSource<Geometry>;
-
-  public currentZoomlevel: number = undefined;
-  public currentMapResolution: number = undefined;
 
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 ' +
     '+y_0=463000 +ellps=bessel +units=m +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,' +
@@ -542,9 +540,13 @@ export class MapComponent implements OnInit, OnDestroy {
    */
   private addSearchButton(): void {
     const search = new SearchPDOK({
+      minLength: 1,
+      maxHistory: -1,
+      collapsed: false,
       className: 'search-bar',
       placeholder: $localize`Enter location`,
     }) as any;
+    search.clearHistory();
 
     search.on('select', (event) => {
       let feature: Feature;

@@ -11,17 +11,13 @@ $form-group-margin-bottom: 0.75rem;
 @import "ol-ext/dist/ol-ext.min.css";
 @import "ol-layerswitcher/dist/ol-layerswitcher.css";
 
-$bar-text-color: $dark;
+$bar-text-color: $gray-700;
 
 .ol-overlaycontainer-stopevent .ol-zoom {
   top: auto;
   right: 0.5em;
   bottom: 2.5em;
   left: auto;
-}
-
-.ol-overlaycontainer-stopevent .ol-search {
-  top: calc(.5em + 75px);
 }
 
 .ol-overlaycontainer-stopevent .locate {
@@ -97,8 +93,16 @@ label {
   width: 10%;
 }
 
+.w-15 {
+  width: 15%;
+}
+
 .w-20 {
   width: 20%;
+}
+
+.w-30 {
+  width: 30%;
 }
 
 .w-35 {
