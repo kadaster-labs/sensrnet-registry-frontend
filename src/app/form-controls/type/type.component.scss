@@ -1,0 +1,13 @@
+@import "../../../styles.scss";
+
+::ng-deep .bootstrap-select {
+  border: $input-border-width solid $input-border-color !important;
+
+  .dropdown-toggle {
+    background-color: white;
+  }
+
+  .dropdown-menu {
+    z-index: $zindex-popover;
+  }
+}
