@@ -80,8 +80,8 @@ label {
     width: 17.5rem;
     max-width: 17.5rem;
 
-    li:hover {
-      color: $gray-600;
+    li {
+      padding: .5rem;
     }
 
     li:hover {
