@@ -1,12 +1,13 @@
-<div class="btn-group">
-    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-        aria-expanded="false">
+<div class="dropdown">
+    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false" id="dropdownMenuButton">
         <fa-icon icon="language"></fa-icon>
         <span class="ml-2" i18n>Language</span>
     </button>
-    <ul class="dropdown-menu dropdown-menu-right">
-        <li *ngFor="let language of allLanguages; let i=index">
-            <a href="/{{language.lang}}{{getCurrentRoute()}}">{{ language.name }}</a>
-        </li>
-    </ul>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" *ngFor="let language of allLanguages; let i=index"
+        href="/{{language.lang}}{{getCurrentRoute()}}">
+            {{ language.name }}
+        </a>
+    </div>
 </div>
