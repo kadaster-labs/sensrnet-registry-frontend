@@ -564,7 +564,6 @@ export class MapComponent implements OnInit, OnDestroy {
       }
 
       this.zoomToGeometry(feature.getGeometry());
-      search.collapse();
     });
 
     this.map.addControl(search);
@@ -646,8 +645,6 @@ export class MapComponent implements OnInit, OnDestroy {
         this.highlightFeature(geometry);
       }
     }));
-
-    console.log(this.searchBarHeight);
 
     this.addSearchButton();
     this.addLayerSwitcher();
