@@ -1,4 +1,5 @@
+@import "../../../styles.scss";
+
 div.alert {
-  z-index: 100;
-  margin-bottom: 0;
+  top: $nav-link-height + $nav-link-padding-y * 2 + $navbar-padding-y * 2 - $nav-divider-margin-y;
 }
