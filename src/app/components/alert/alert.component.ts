@@ -4,8 +4,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-alert',
-  styleUrls: ['./alert.component.css'],
-  templateUrl: 'alert.component.html',
+  templateUrl: './alert.component.html',
+  styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent implements OnInit, OnDestroy {
   public message: any;

@@ -1,37 +1,40 @@
 import proj4 from 'proj4';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import ResizeObserver from 'resize-observer-polyfill';
+import { Component, ElementRef, Input, HostBinding, OnDestroy, OnInit } from '@angular/core';
 
-import Overlay from 'ol/Overlay';
+import OlMap from 'ol/Map';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { Cluster } from 'ol/source';
 import Stroke from 'ol/style/Stroke';
 import { FitOptions } from 'ol/View';
+import { MultiPoint } from 'ol/geom';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import Control from 'ol/control/Control';
 import VectorLayer from 'ol/layer/Vector';
-import { extend, Extent, getBottomLeft, getTopRight } from 'ol/extent';
+import { MapBrowserEvent, Overlay } from 'ol';
 import VectorSource from 'ol/source/Vector';
+import LayerSwitcher from 'ol-layerswitcher';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
 
-import { SearchComponentEvent } from 'generieke-geo-componenten-search';
-import { Dataset, DatasetTreeEvent, Theme } from 'generieke-geo-componenten-dataset-tree';
-import { MapComponentEvent, MapComponentEventTypes, MapService } from 'generieke-geo-componenten-map';
+import { SearchPDOK } from './searchPDOK';
+import { MapService } from './map.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 import { IDevice } from '../../model/bodies/device-model';
 import { AlertService } from '../../services/alert.service';
 import { ModalService } from '../../services/modal.service';
 import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
-import { ConnectionService } from '../../services/connection.service';
 import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { ConnectionService } from '../../services/connection.service';
 
 
 @Component({
@@ -40,11 +43,13 @@ import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-  @Input() searchBarHeight;
+
+  @HostBinding('style.--searchBarHeight') @Input() searchBarHeight;
   @Input() clearLocationHighLight = true;
 
   constructor(
     private router: Router,
+    private elementRef: ElementRef,
     private mapService: MapService,
     private httpClient: HttpClient,
     private alertService: AlertService,
@@ -55,7 +60,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private oidcSecurityService: OidcSecurityService,
   ) { }
 
-  public mapName = 'srn';
+  public map: OlMap;
   public subscriptions = [];
 
   public mapUpdated;
@@ -66,34 +71,22 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public popupOverlay: Overlay;
   public clusterSource: Cluster;
-  public vectorSource: VectorSource;
+  public vectorSource: VectorSource<any>;
   public highlightLayer: VectorLayer;
   public selectCluster: SelectCluster;
-  public highlightSource: VectorSource;
+  public highlightSource: VectorSource<Geometry>;
   public clusterLayer: AnimatedCluster;
   public selectLocationLayer: VectorLayer;
-  public selectLocationSource: VectorSource;
-
-  public activeWmsDatasets: Dataset[] = [];
-  public activeWmtsDatasets: Dataset[] = [];
-  public currentZoomlevel: number = undefined;
-  public currentMapResolution: number = undefined;
+  public selectLocationSource: VectorSource<Geometry>;
 
   private epsgRD = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 ' +
     '+y_0=463000 +ellps=bessel +units=m +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,' +
     '-1.8703473836068,4.0812 +no_defs';
   private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
-  public myLayers: Theme[];
   public hideTreeDataset = false;
 
   public clusterMaxZoom = 15;
-
-  public iconCollapsed = 'fas fa-chevron-right';
-  public iconExpanded = 'fas fa-chevron-left';
-  public iconUnchecked = 'far fa-square';
-  public iconChecked = 'far fa-check-square';
-  public iconInfoUrl = 'fas fa-info-circle';
 
   public locateMeString = $localize`:@@map.locate:Locate me`;
   public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
@@ -148,6 +141,22 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public initMap() {
+    this.map = this.mapService.getMap();
+    const mapElement = this.elementRef.nativeElement.querySelector('#map');
+    this.map.setTarget(mapElement);
+
+    // Observe map resizes
+    // https://openlayers.org/en/latest/doc/faq.html#user-content-why-is-zooming-or-clicking-off-inaccurate
+    const sizeObserver = new ResizeObserver(() => {
+      this.map.updateSize();
+    });
+    sizeObserver.observe(mapElement);
+
+    this.addMapEvents();
+  }
+
+
+  public initFeatures() {
     const features: Array<Feature> = new GeoJSON().readFeatures({
       features: [],
       type: 'FeatureCollection',
@@ -192,7 +201,7 @@ export class MapComponent implements OnInit, OnDestroy {
     };
 
     const styleSelectedCluster = (feature) => {
-      const zoomLevel = this.mapService.getMap(this.mapName).getView().getZoom();
+      const zoomLevel = this.map.getView().getZoom();
       if (feature.values_.hasOwnProperty('selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
         const category = feature.get('features')[0].values_.category;
         const ownsDevice = this.ownsDevice(feature.get('features')[0].values_.device);
@@ -213,25 +222,24 @@ export class MapComponent implements OnInit, OnDestroy {
       name: 'Cluster',
       source: this.clusterSource,
       style: styleCluster,
+      zIndex: 1,
     });
 
-    const map = this.mapService.getMap(this.mapName);
-    this.clusterLayer.setZIndex(10);
-    map.addLayer(this.clusterLayer);
+    this.map.addLayer(this.clusterLayer);
 
     this.selectCluster = new SelectCluster({
       pointRadius: 40,
       style: styleCluster,
       featureStyle: styleSelectedCluster,
     });
-    map.addInteraction(this.selectCluster);
+    this.map.addInteraction(this.selectCluster);
 
     this.popupOverlay = new Overlay({
       autoPan: false,
       positioning: OverlayPositioning.BOTTOM_CENTER,
       element: document.getElementById('popup')
     });
-    map.addOverlay(this.popupOverlay);
+    this.map.addOverlay(this.popupOverlay);
 
     this.selectCluster.getFeatures().on(['add'], (event) => {
       this.removeHighlight();
@@ -262,6 +270,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.vectorSource.clear();
     this.vectorSource.addFeatures(features);
+
+    // TODO features do not show without removing and re-adding the layer. Check if there is a better way
+    this.map.removeLayer(this.clusterLayer);
+    this.map.addLayer(this.clusterLayer);
   }
 
   public showOverlay(coordinates) {
@@ -309,78 +321,71 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleEvent(event: SearchComponentEvent) {
-    this.mapService.zoomToPdokResult(event, this.mapName);
-  }
+  private async onMoveEnd(event: MapBrowserEvent) {
+    const map = event.map;
 
-  public handleMapEvents(mapEvent: MapComponentEvent) {
-    const map = this.mapService.getMap(this.mapName);
+    const currentRequestTimestamp = new Date().valueOf();
+    if (!this.mapUpdated || currentRequestTimestamp - this.mapUpdated > 500) { // In case of e.g. resizing window.
+      this.mapUpdated = currentRequestTimestamp;
 
-    if (mapEvent.type === MapComponentEventTypes.ZOOMEND) {
-      this.currentMapResolution = map.getView().getResolution();
-      this.currentZoomlevel = this.mapService.getMap(this.mapName).getView().getZoom();
-    } else if (mapEvent.type === MapComponentEventTypes.SINGLECLICK) {
-      const mapCoordinateRD = mapEvent.value.coordinate;
-      const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
+      const extent = map.getView().calculateExtent(map.getSize());
+      const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
+      const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
 
-      this.hideOverlay();
-      this.removeHighlight();
+      const devices = await this.deviceService.getDevices(bottomLeft[0].toString(), bottomLeft[1].toString(),
+          topRight[0].toString(), topRight[1].toString());
 
-      this.locationService.setLocation({
-        type: 'Point',
-        coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0]
-      });
-
-      map.forEachFeatureAtPixel(mapEvent.value.pixel, (data) => {
-        const features = data.getProperties().features;
-
-        // check if feature is a cluster with multiple features
-        if (features.length < 2) {
-          return;
-        }
-
-        // determine extent for new view
-        const extent: Extent = features[0].getGeometry().getExtent().slice(0) as Extent;
-        features.forEach((f: Feature) => { extend(extent, f.getGeometry().getExtent()); });
-
-        // if we're already zoomed in, zoom in no more. Setting maxZoom in fit() also does this to some extent, however,
-        // in that case the camera is also centered. Returning early here also prevents the unnecessary panning.
-        if (map.getView().getZoom() > this.clusterMaxZoom) {
-          return;
-        }
-
-        const size = this.mapService.getMap(this.mapName).getSize();  // [width, height]
-        const fitOptions: FitOptions = {
-          duration: 1000,
-          maxZoom: this.clusterMaxZoom + 1,
-          padding: [size[1] * 0.2, size[0] * 0.2, size[1] * 0.2, size[0] * 0.2],  // up, right, down, left
-          size,
-        };
-        this.mapService.getMap(this.mapName).getView().fit(extent, fitOptions);
-      });
+      if (devices) {
+        this.updateMap(devices);
+      }
     }
   }
 
-  public handleDatasetTreeEvents(event: DatasetTreeEvent) {
-    if (event.type === 'layerActivated') {
-      const deactivatedService = event.value.services[0];
-      if (deactivatedService.type === 'wms') {
-        this.activeWmsDatasets.push(event.value);
-      } else if (deactivatedService.type === 'wmts') {
-        this.activeWmtsDatasets.push(event.value);
+  private onSingleClick(event: MapBrowserEvent) {
+    console.log(event);
+    const mapCoordinateRD = event.coordinate;
+    const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
+
+    this.hideOverlay();
+    this.removeHighlight();
+
+    this.locationService.setLocation({
+      type: 'Point',
+      coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
+    });
+
+    event.map.forEachFeatureAtPixel(event.pixel, (data) => {
+      const features = data.getProperties().features;
+
+      // check if feature is a cluster with multiple features
+      if (features.length < 2) {
+        return;
       }
-    } else if (event.type === 'layerDeactivated') {
-      const deactivatedService = event.value.services[0];
-      if (deactivatedService.type === 'wms') {
-        this.activeWmsDatasets = this.activeWmsDatasets.filter((dataset) =>
-          dataset.services[0].layers[0].technicalName !== deactivatedService.layers[0].technicalName);
-        this.activeWmsDatasets = this.activeWmsDatasets.filter((dataset) => dataset.services.length > 0);
-      } else if (deactivatedService.type === 'wmts') {
-        this.activeWmtsDatasets = this.activeWmtsDatasets.filter((dataset) =>
-          dataset.services[0].layers[0].technicalName !== deactivatedService.layers[0].technicalName);
-        this.activeWmtsDatasets = this.activeWmtsDatasets.filter((dataset) => dataset.services.length > 0);
+
+      // determine extent for new view
+      const extent: Extent = features[0].getGeometry().getExtent().slice(0) as Extent;
+      features.forEach((f: Feature<Geometry>) => { extend(extent, f.getGeometry().getExtent()); });
+
+      // if we're already zoomed in, zoom in no more. Setting maxZoom in fit() also does this to some extent, however,
+      // in that case the camera is also centered. Returning early here also prevents the unnecessary panning.
+      if (event.map.getView().getZoom() > this.clusterMaxZoom) {
+        return;
       }
-    }
+
+      const size = this.map.getSize();  // [width, height]
+      const fitOptions: FitOptions = {
+        duration: 1000,
+        maxZoom: this.clusterMaxZoom + 1,
+        padding: [size[1] * 0.2, size[0] * 0.2, size[1] * 0.2, size[0] * 0.2],  // up, right, down, left
+        size,
+      };
+      this.map.getView().fit(extent, fitOptions);
+    });
+  }
+
+  public addMapEvents() {
+    this.map.on('moveend', this.onMoveEnd.bind(this));
+    this.map.on('singleclick', this.onSingleClick.bind(this));
   }
 
   private deviceToFeature(newDevice: IDevice): object {
@@ -414,21 +419,22 @@ export class MapComponent implements OnInit, OnDestroy {
           }),
         }),
       }),
+      zIndex: 3,
     });
-    this.selectLocationLayer.setZIndex(25);
-    this.mapService.getMap(this.mapName).addLayer(this.selectLocationLayer);
+
+    this.map.addLayer(this.selectLocationLayer);
   }
 
   public removeLocationFeatures() {
-    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
+    this.map.removeLayer(this.selectLocationLayer);
   }
 
   public clearLocationLayer() {
-    this.mapService.getMap(this.mapName).removeLayer(this.selectLocationLayer);
+    this.map.removeLayer(this.selectLocationLayer);
   }
 
   public highlightFeature(feature: Feature) {
-    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
+    this.map.removeLayer(this.highlightLayer);
     this.highlightSource = new VectorSource({
       features: [feature],
     });
@@ -442,33 +448,58 @@ export class MapComponent implements OnInit, OnDestroy {
             width: 2,
           }),
         }),
-      })], opacity: 0.7,
+      })],
+      opacity: 0.7,
+      zIndex: 2,
     });
-    this.highlightLayer.setZIndex(20);
-    this.mapService.getMap(this.mapName).addLayer(this.highlightLayer);
+
+    this.map.addLayer(this.highlightLayer);
   }
 
   public removeHighlight() {
-    this.mapService.getMap(this.mapName).removeLayer(this.highlightLayer);
+    this.map.removeLayer(this.highlightLayer);
   }
 
   private zoomToPoint(point: Point) {
-    const view = this.mapService.getMap(this.mapName).getView();
+    const view = this.map.getView();
     view.fit(point, {
-      maxZoom: 10,
+      duration: 250,
+      maxZoom: 14,
     });
   }
 
-  private zoomToPosition(position: Position) {
+  private zoomToExtent(extent: Extent) {
+    const view = this.map.getView();
+    const resolution = view.getResolutionForExtent(extent, this.map.getSize());
+    const zoom = view.getZoomForResolution(resolution);
+    const center = getCenter(extent);
+
+    setTimeout(() => {
+      view.animate({
+        center,
+        zoom: Math.min(zoom, 16)
+      });
+    }, 250);
+  }
+
+  private zoomToPosition(position: GeolocationPosition) {
     const coords = [position.coords.longitude, position.coords.latitude];
     const coordsRD = proj4(this.epsgWGS84, this.epsgRD, coords);
     const point = new Point(coordsRD);
     this.zoomToPoint(point);
   }
 
+  private zoomToGeometry(geometry: Geometry): void {
+    if (geometry instanceof Point) {
+      this.zoomToPoint(geometry);
+    } else {
+      this.zoomToExtent(geometry.getExtent());
+    }
+  }
+
   private findMe() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
+      navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
         this.zoomToPosition(position);
       });
     } else {
@@ -477,6 +508,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private addFindMeButton() {
+    if (window.location.protocol !== 'https:') {
+      console.warn('Geolocation only allowed over secure connections');
+      return;
+    }
+
     const locate = document.createElement('div');
     locate.className = 'ol-control ol-unselectable locate';
     locate.innerHTML = `<button title="${this.locateMeString}">◎</button>`;
@@ -484,9 +520,53 @@ export class MapComponent implements OnInit, OnDestroy {
       this.findMe();
     });
 
-    this.mapService.getMap(this.mapName).addControl(new Control({
+    this.map.addControl(new Control({
       element: locate,
     }));
+  }
+
+  private addLayerSwitcher(): void {
+    const layerSwitcher = new LayerSwitcher({
+      reverse: true,
+      groupSelectStyle: 'children'
+    });
+
+    this.map.addControl(layerSwitcher);
+  }
+
+  /**
+   * Adds a search button on the map which can be used to search for a location
+   * Makes use of the 'Locatieserver' of PDOK (Dutch address lookup) https://github.com/PDOK/locatieserver/wiki
+   */
+  private addSearchButton(): void {
+    const search = new SearchPDOK({
+      minLength: 1,
+      maxHistory: -1,
+      collapsed: false,
+      className: 'search-bar',
+      placeholder: $localize`Enter location`,
+    }) as any;
+    search.clearHistory();
+
+    search.on('select', (event) => {
+      let feature: Feature;
+      if (event.search instanceof Feature) {
+        feature = event.search;
+      } else {
+        const values = event.search.values_;
+        const geometry = new MultiPoint(values.geometry.flatCoordinates, values.geometry.layout);
+
+        feature = new Feature({
+          geometry,
+          name: values.name,
+          type: values.type,
+        });
+      }
+
+      this.zoomToGeometry(feature.getGeometry());
+    });
+
+    this.map.addControl(search);
   }
 
   public ownsDevice(device): boolean {
@@ -521,31 +601,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.locationService.hideLocationHighlight();
     }
     this.initMap();
-
-    const onMoveEnd = async (evt) => {
-      const evtMap = evt.map;
-
-      const currentRequestTimestamp = new Date().valueOf();
-      if (!this.mapUpdated || currentRequestTimestamp - this.mapUpdated > 500) {  // In case of e.g. resizing window.
-        this.mapUpdated = currentRequestTimestamp;
-
-        const extent = evtMap.getView().calculateExtent(evtMap.getSize());
-        const topRight = proj4(this.epsgRD, this.epsgWGS84, getTopRight(extent));
-        const bottomLeft = proj4(this.epsgRD, this.epsgWGS84, getBottomLeft(extent));
-
-        const devices = await this.deviceService.getDevices(bottomLeft[0].toString(), bottomLeft[1].toString(),
-          topRight[0].toString(), topRight[1].toString());
-
-        if (devices) {
-          this.updateMap(devices);
-        }
-      }
-    };
-    this.mapService.getMap(this.mapName).on('moveend', onMoveEnd);
-
-    this.subscriptions.push(this.httpClient.get('/assets/layers.json').subscribe((data) => {
-      this.myLayers = data as Theme[];
-    }, () => { }));
+    this.initFeatures();
 
     const { onLocate, onUpdate, onRemove } = await this.deviceService.subscribe();
 
@@ -590,12 +646,17 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }));
 
-    if (window.location.protocol === 'https:') {
-      this.addFindMeButton();
-    }
+    this.addSearchButton();
+    this.addLayerSwitcher();
+    this.addFindMeButton();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(x => x.unsubscribe());
+
+    // this.map actually lives in map.service.ts. If we let it live, all layers and listeners are re-added each time the
+    // map component is recreated. Instead of manually keeping track of it, just kill the map and recreate it next time.
+    // Perhaps not an efficient way, but at least keeps this component more predictable.
+    this.mapService.deleteMap();
   }
 }

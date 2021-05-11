@@ -41,11 +41,6 @@
               "src/favicon.ico",
               "src/assets",
               "src/env.js",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/kadaster-huisstijl/dist/assets",
-                "output": "./assets/"
-              },
               "src/silent-renew.html"
             ],
             "styles": [

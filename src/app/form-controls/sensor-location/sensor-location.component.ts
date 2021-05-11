@@ -14,7 +14,6 @@ export interface SensorLocationFormValues {
 @Component({
   selector: 'app-sensor-location',
   templateUrl: './sensor-location.component.html',
-  styleUrls: ['./sensor-location.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

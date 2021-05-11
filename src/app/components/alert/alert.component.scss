@@ -1,0 +1,5 @@
+@import "../../../styles.scss";
+
+div.alert {
+  top: $nav-link-height + $nav-link-padding-y * 2 + $navbar-padding-y * 2 - $nav-divider-margin-y;
+}

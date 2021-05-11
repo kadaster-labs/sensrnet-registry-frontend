@@ -12,7 +12,6 @@ import { createOrganizationMailValidator } from '../../validators/organization-m
 @Component({
   selector: 'app-organization-update',
   templateUrl: './organization-update.component.html',
-  styleUrls: ['./organization-update.component.scss']
 })
 export class OrganizationUpdateComponent implements OnInit {
   @Input() public legalEntity: ILegalEntity;

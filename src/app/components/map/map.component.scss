@@ -15,61 +15,82 @@ label {
   font-weight: bold;
 }
 
-::ng-deep #search {
-  left: 3rem;
-  width: 17em;
-  z-index: 100;
-  position: absolute;
-  background-color: white;
+::ng-deep .layer-switcher {
+  top: .5em;
+  background-color: rgba(0, 0, 0, 0);
 
-  div {
-    input {
-      height: 3em !important;
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-      border: 1.5px solid #A9A9A9 !important;
-    }
-    div {
-      button > span {
-        margin: 0 !important;
-      }
-      button:first-child {
-        width: 3.5em !important;
-        height: 3em !important;
-        background-color: white;
-        box-shadow: 0 0 !important;
-        border: 1.5px solid #A9A9A9 !important;
-      }
-      button:first-child + button {
-        width: 3.5em !important;
-        height: 3em !important;
-        background-color: white;
-        box-shadow: 0 0 !important;
-        border: 1.5px solid #A9A9A9 !important;
-        border-top-right-radius: 4px !important;
-        border-bottom-right-radius: 4px !important;
-      }
-    }
-  }
-  ul {
-    overflow-x: auto;
+  button {
+    background-color: rgba(255, 255, 255, .5);
   }
 }
 
-::ng-deep #layers {
-  right: 1vw;
-  bottom: 6vh;
+::ng-deep .search-bar {
+  padding: 0;
   z-index: 100;
-  width: 200px;
+  left: 1.75rem;
+  top: var(--searchBarHeight);
+  width: fit-content;
   position: absolute;
-  padding-right: 5em !important;
+  background-color: white;
 
-  div > button {
-    color: #606060 !important;
-    background-color: rgba(0, 0, 0, 0) !important;
+  button {
+    margin: 0;
+    width: 2.5rem;
+    max-width: 2.5rem;
+    height: 2.5rem;
+    color: $gray-600;
+    background-color: white;
+
+    border-radius: 4px 0 0 4px;
+    border: 1.5px solid $gray-500 !important;
   }
 
-  div > div {
-    background-color: white !important;
+  button:before {
+    width: .85em !important;
+    height: .85em !important;
+    top: .75em !important;
+    left: .75em !important;
   }
+
+  button:after {
+    width: .45em !important;
+    height: .15em !important;
+    top: 1.7em !important;
+    left: 1.5em !important;
+  }
+
+  button:hover, button:focus {
+    background-color: $light;
+  }
+
+  input {
+    margin: 0;
+    font-weight: 400;
+
+    width: 15rem;
+    max-width: 15rem;
+    height: 2.5rem;
+    padding: 0 0 0 .5rem;
+    border: 1.5px solid #A9A9A9 !important;
+    border-radius: 0 4px 4px 0 !important;
+  }
+
+  ul {
+    overflow-x: auto;
+    width: 17.5rem;
+    max-width: 17.5rem;
+
+    li {
+      padding: .5rem;
+    }
+
+    li:hover {
+      color: $gray-600;
+      background-color: $light;
+    }
+  }
+}
+
+::ng-deep .ol-search.ol-collapsed > button {
+  border-radius: 4px;
 }

@@ -5,7 +5,6 @@ import { supportedNames } from '../../validators/organization-mail.validator';
 @Component({
   selector: 'app-organization-contact',
   templateUrl: './organization-contact.component.html',
-  styleUrls: ['./organization-contact.component.scss'],
 })
 export class OrganizationContactComponent {
   @Input() public submitted: boolean;

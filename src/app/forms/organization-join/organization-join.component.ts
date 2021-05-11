@@ -12,7 +12,6 @@ import { UserUpdateBody } from '../../model/bodies/user-update';
 @Component({
   selector: 'app-organization-join',
   templateUrl: './organization-join.component.html',
-  styleUrls: ['./organization-join.component.scss']
 })
 export class OrganizationJoinComponent implements OnInit, OnDestroy {
   @Output() setLegalEntityId = new EventEmitter<string>();

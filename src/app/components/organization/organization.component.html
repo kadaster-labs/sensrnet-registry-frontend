@@ -26,13 +26,13 @@
                     <div *ngIf="activeOrganizationView == OrganizationViewEnum.View;else viewUsers">
                         <a type="button" class="btn btn-primary float-right" (click)="activeOrganizationView = OrganizationViewEnum.Users">
                             <span class="mr-2" i18n>Organization Users</span>
-                            <i class="ml-1 fas fa-arrow-right" aria-hidden="true"></i>
+                            <fa-icon icon="arrow-right" class="ml-1"></fa-icon>
                         </a>
                     </div>
                     <ng-template #viewUsers>
                         <a type="button" class="btn btn-primary float-right" (click)="activeOrganizationView = OrganizationViewEnum.View">
                             <span class="mr-2" i18n>Organization Details</span>
-                            <i class="ml-1 fas fa-arrow-right" aria-hidden="true"></i>
+                            <fa-icon icon="arrow-right" class="ml-1"></fa-icon>
                         </a>
                     </ng-template>
                 </div>
@@ -40,13 +40,13 @@
                     <div *ngIf="activeUpdateView == UpdateViewEnum.Join;else registerActive">
                         <a type="button" class="btn btn-primary float-right" (click)="activeUpdateView = UpdateViewEnum.Create">
                             <span class="mr-2" i18n>Register Organization</span>
-                            <i class="ml-1 fas fa-plus" aria-hidden="true"></i>
+                            <fa-icon icon="plus" class="ml-1"></fa-icon>
                         </a>
                     </div>
                     <ng-template #registerActive>
                         <a type="button" class="btn btn-primary float-right" (click)="activeUpdateView = UpdateViewEnum.Join">
                             <span class="mr-2" i18n>Join Organization</span>
-                            <i class="ml-1 fas fa-arrow-right" aria-hidden="true"></i>
+                            <fa-icon icon="arrow-right" class="ml-1"></fa-icon>
                         </a>
                     </ng-template>
                 </div>

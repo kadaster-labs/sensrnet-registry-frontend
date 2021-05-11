@@ -3,281 +3,289 @@
   <file original="ng.template" id="ngi18n">
     <unit id="app.title">
       <notes>
-        
+
       <note category="location">src/app/app.component.ts:7</note></notes>
       <segment state="final">
         <source>Sensor Registry</source>
       <target>Sensor Registry</target></segment>
     </unit><unit id="modal.accept">
       <notes>
-        
-        
+
+
       <note category="location">src/app/services/modal.service.ts:9</note></notes>
       <segment state="final">
         <source>OK</source>
       <target>OK</target></segment>
     </unit><unit id="modal.decline">
       <notes>
-        
+
       <note category="location">src/app/services/modal.service.ts:10</note></notes>
       <segment state="final">
         <source>Cancel</source>
       <target>Cancel</target></segment>
     </unit><unit id="login.failed">
       <notes>
-        
+
       <note category="location">src/app/login/login.component.ts:14</note></notes>
       <segment state="final">
         <source>Failed to login: Supply valid credentials.</source>
       <target>Failed to login: Supply valid credentials.</target></segment>
     </unit><unit id="ngb.alert.close">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/alert/alert.ts:74</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/alert/alert.ts:58</note></notes>
       <segment state="translated">
         <source>Close</source>
       <target>Close</target></segment>
+    </unit><unit id="ngb.carousel.slide-number">
+      <notes>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:114,118</note>
+        <note category="description">Currently selected slide number read by screen reader</note>
+      </notes>
+      <segment state="final">
+        <source> Slide <ph id="0" equiv="INTERPOLATION" disp="private _pauseO"/> of <ph id="1" equiv="INTERPOLATION_1" disp="Subject(false);"/> </source>
+      <target> Slide <ph id="0" equiv="INTERPOLATION" disp="private _pauseO"/> of <ph id="1" equiv="INTERPOLATION_1" disp="Subject(false);"/> </target></segment>
     </unit>
     <unit id="ngb.carousel.previous">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:90</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:132</note></notes>
       <segment state="translated">
         <source>Previous</source>
       <target>Previous</target></segment>
     </unit>
     <unit id="ngb.carousel.next">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts:109</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:147</note></notes>
       <segment state="translated">
         <source>Next</source>
       <target>Next</target></segment>
     </unit>
     <unit id="ngb.datepicker.previous-month">
       <notes>
-        
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:24</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:36</note></notes>
+
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:24</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:34</note></notes>
       <segment state="translated">
         <source>Previous month</source>
       <target>Previous month</target></segment>
     </unit>
     <unit id="ngb.datepicker.next-month">
       <notes>
-        
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:52</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts:69</note></notes>
+
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:44</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:57</note></notes>
       <segment state="translated">
         <source>Next month</source>
       <target>Next month</target></segment>
     </unit>
     <unit id="ngb.datepicker.select-month">
       <notes>
-        
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:42</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
+
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:43</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:49</note></notes>
       <segment state="translated">
         <source>Select month</source>
       <target>Select month</target></segment>
     </unit>
     <unit id="ngb.datepicker.select-year">
       <notes>
-        
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts:74</note></notes>
+
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:59</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:72</note></notes>
       <segment state="translated">
         <source>Select year</source>
       <target>Select year</target></segment>
     </unit>
     <unit id="ngb.pagination.first">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:147</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:182</note></notes>
       <segment state="translated">
         <source>««</source>
       <target>««</target></segment>
     </unit>
     <unit id="ngb.pagination.previous">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:155</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:186</note></notes>
       <segment state="translated">
         <source>«</source>
       <target>«</target></segment>
     </unit>
     <unit id="ngb.pagination.next">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:163</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:194</note></notes>
       <segment state="translated">
         <source>»</source>
       <target>»</target></segment>
     </unit>
     <unit id="ngb.pagination.last">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:171</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:201</note></notes>
       <segment state="translated">
         <source>»»</source>
       <target>»»</target></segment>
     </unit>
     <unit id="ngb.pagination.first-aria">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:180</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:208</note></notes>
       <segment state="translated">
         <source>First</source>
       <target>First</target></segment>
     </unit>
     <unit id="ngb.pagination.previous-aria">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:215</note></notes>
       <segment state="translated">
         <source>Previous</source>
       <target>Previous</target></segment>
     </unit>
     <unit id="ngb.pagination.next-aria">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:225</note></notes>
       <segment state="translated">
         <source>Next</source>
       <target>Next</target></segment>
     </unit>
     <unit id="ngb.pagination.last-aria">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts:404</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:232</note></notes>
       <segment state="translated">
         <source>Last</source>
       <target>Last</target></segment>
     </unit>
     <unit id="ngb.progressbar.value">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.ts:23</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts:31</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></target></segment>
     </unit>
     <unit id="ngb.timepicker.increment-hours">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:74</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:62</note></notes>
       <segment state="translated">
         <source>Increment hours</source>
       <target>Increment hours</target></segment>
     </unit>
     <unit id="ngb.timepicker.HH">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:46</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:40</note></notes>
       <segment state="translated">
         <source>HH</source>
       <target>HH</target></segment>
     </unit>
     <unit id="ngb.timepicker.hours">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:52</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:45</note></notes>
       <segment state="translated">
         <source>Hours</source>
       <target>Hours</target></segment>
     </unit>
     <unit id="ngb.timepicker.decrement-hours">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:83</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:67</note></notes>
       <segment state="translated">
         <source>Decrement hours</source>
       <target>Decrement hours</target></segment>
     </unit>
     <unit id="ngb.timepicker.increment-minutes">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:91</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:75</note></notes>
       <segment state="translated">
         <source>Increment minutes</source>
       <target>Increment minutes</target></segment>
     </unit>
     <unit id="ngb.timepicker.MM">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:61</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:52</note></notes>
       <segment state="translated">
         <source>MM</source>
       <target>MM</target></segment>
     </unit>
     <unit id="ngb.timepicker.minutes">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:67</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:57</note></notes>
       <segment state="translated">
         <source>Minutes</source>
       <target>Minutes</target></segment>
     </unit>
     <unit id="ngb.timepicker.decrement-minutes">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:98</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:82</note></notes>
       <segment state="translated">
         <source>Decrement minutes</source>
       <target>Decrement minutes</target></segment>
     </unit>
     <unit id="ngb.timepicker.increment-seconds">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:139</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:98</note></notes>
       <segment state="translated">
         <source>Increment seconds</source>
       <target>Increment seconds</target></segment>
     </unit>
     <unit id="ngb.timepicker.SS">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:108</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:85</note></notes>
       <segment state="translated">
         <source>SS</source>
       <target>SS</target></segment>
     </unit>
     <unit id="ngb.timepicker.seconds">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:129</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:90</note></notes>
       <segment state="translated">
         <source>Seconds</source>
       <target>Seconds</target></segment>
     </unit>
     <unit id="ngb.timepicker.decrement-seconds">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:105</note></notes>
       <segment state="translated">
         <source>Decrement seconds</source>
       <target>Decrement seconds</target></segment>
     </unit>
     <unit id="ngb.timepicker.PM">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:125</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getAfternoonPeriod() }}"/></target></segment>
     </unit>
     <unit id="ngb.timepicker.AM">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts:296</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:116</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></target></segment>
     </unit>
     <unit id="ngb.toast.close-aria">
       <notes>
-        
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm5/@ng-bootstrap/ng-bootstrap/toast/toast.ts:71</note></notes>
+
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/toast/toast.ts:76</note></notes>
       <segment state="translated">
         <source>Close</source>
       <target>Close</target></segment>
@@ -288,17 +296,9 @@
       <segment state="final">
         <source>Language</source>
       <target>Language</target></segment>
-    </unit><unit id="4555457172864212828">
-      <notes>
-        
-        
-      <note category="location">src/app/forms/organization-users/organization-users.component.html:3</note></notes>
-      <segment state="final">
-        <source>Users</source>
-      <target>Users</target></segment>
     </unit><unit id="3076687427621376223">
       <notes>
-        
+
       <note category="location">src/app/components/organization/organization.component.html:11</note><note category="location">src/app/sidebar/sidebar.component.html:18</note></notes>
       <segment state="final">
         <source>Organization</source>
@@ -336,41 +336,83 @@
       <target>Organization Details</target></segment>
     </unit><unit id="3797778920049399855">
       <notes>
-        <note category="location">src/app/sidebar/sidebar.component.html:23</note>
-      </notes>
+        
+      <note category="location">src/app/sidebar/sidebar.component.html:24</note></notes>
       <segment state="final">
         <source>Logout</source>
       <target>Logout</target></segment>
     </unit><unit id="map.locate">
       <notes>
-        
-      <note category="location">src/app/components/map/map.component.ts:98</note></notes>
+
+      <note category="location">src/app/components/map/map.component.ts:91</note></notes>
       <segment state="final">
         <source>Locate me</source>
       <target>Locate me</target></segment>
     </unit><unit id="confirm.title">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:99</note>
-        <note category="location">src/app/forms/devices/devices.component.ts:29</note>
-      </notes>
+        
+        
+      <note category="location">src/app/components/map/map.component.ts:92</note><note category="location">src/app/forms/devices/devices.component.ts:29</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
     </unit><unit id="delete.device.confirm.body">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:100</note>
-        <note category="location">src/app/forms/devices/devices.component.ts:30</note>
-      </notes>
+        
+        
+      <note category="location">src/app/components/map/map.component.ts:93</note><note category="location">src/app/forms/devices/devices.component.ts:30</note></notes>
       <segment state="final">
         <source>Do you really want to delete the device?</source>
       <target>Do you really want to delete the device?</target></segment>
     </unit><unit id="map.geo.support">
       <notes>
-        
-      <note category="location">src/app/components/map/map.component.ts:101</note></notes>
+
+      <note category="location">src/app/components/map/map.component.ts:94</note></notes>
       <segment state="final">
         <source>Geolocation is not supported by this browser.</source>
       <target>Geolocation is not supported by this browser.</target></segment>
+    </unit><unit id="1177467005869954871">
+      <notes>
+        
+      <note category="location">src/app/components/map/map.component.ts:547</note></notes>
+      <segment state="final">
+        <source>Enter location</source>
+      <target>Enter location</target></segment>
+    </unit><unit id="4526390416021631012">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:56</note>
+      </notes>
+      <segment state="final">
+        <source>BAG</source>
+      <target>BAG</target></segment>
+    </unit><unit id="5086643504817308506">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:69</note>
+      </notes>
+      <segment state="final">
+        <source>Overlays</source>
+      <target>Overlays</target></segment>
+    </unit><unit id="673924298154786464">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:76</note>
+      </notes>
+      <segment state="final">
+        <source>BRT</source>
+      <target>BRT</target></segment>
+    </unit><unit id="651663933193825521">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:98</note>
+      </notes>
+      <segment state="final">
+        <source>Aerial photo</source>
+      <target>Aerial photo</target></segment>
+    </unit><unit id="6475608532557687416">
+      <notes>
+        <note category="location">src/app/components/map/map.service.ts:119</note>
+      </notes>
+      <segment state="final">
+        <source>Base maps</source>
+      <target>Base maps</target></segment>
     </unit><unit id="4763592245324794974">
       <notes>
         <note category="location">src/app/components/observation-goal/observation-goal.component.html:11</note>
@@ -378,85 +420,78 @@
       <segment state="final">
         <source>Observation Goal</source>
       <target>Observation Goal</target></segment>
-    </unit><unit id="800975943269756056">
-      <notes>
-        <note category="location">src/app/components/map/map.component.html:4</note>
-      </notes>
-      <segment state="final">
-        <source>Search for location</source>
-      <target>Search for location</target></segment>
     </unit><unit id="8307140841776883735">
       <notes>
-        
-      <note category="location">src/app/forms/organization-join/organization-join.component.html:26</note></notes>
+
+      <note category="location">src/app/forms/organization-join/organization-join.component.html:25</note></notes>
       <segment state="final">
         <source>Join</source>
       <target>Join</target></segment>
     </unit><unit id="5674286808255988565">
       <notes>
-        
+
       <note category="location">src/app/forms/organization-create/organization-create.component.html:4</note></notes>
       <segment state="final">
         <source>Create</source>
       <target>Create</target></segment>
     </unit><unit id="form.register.invalid">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.ts:34</note></notes>
       <segment state="final">
         <source>The form is invalid</source>
       <target>The form is invalid</target></segment>
     </unit><unit id="device.register.success">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.ts:35</note></notes>
       <segment state="final">
         <source>Saved!</source>
       <target>Saved!</target></segment>
     </unit><unit id="device.register.failure">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.ts:36</note></notes>
       <segment state="final">
         <source>An error has occurred during saving:</source>
       <target>An error has occurred during saving:</target></segment>
     </unit><unit id="step.confirm.title">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.ts:38</note></notes>
       <segment state="final">
         <source>Save the step!</source>
       <target>Save the step!</target></segment>
     </unit><unit id="step.confirm.body">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.ts:39</note></notes>
       <segment state="final">
         <source>You need to save before continuing</source>
       <target>You need to save before continuing</target></segment>
     </unit><unit id="8953033926734869941">
       <notes>
-        
-        
-        
-        
-        
-      <note category="location">src/app/components/observation-goal/observation-goal.component.html:18</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:28</note><note category="location">src/app/form-controls/datastream/datastream.component.html:19</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note><note category="location">src/app/form-controls/sensor/sensor.component.html:9</note><note category="location">src/app/forms/device/device.component.html:23</note><note category="location">src/app/forms/devices/devices.component.html:28</note><note category="location">src/app/forms/organization-join/organization-join.component.html:4</note><note category="location">src/app/forms/organization-join/organization-join.component.html:11</note></notes>
+
+
+
+
+
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:18</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:27</note><note category="location">src/app/form-controls/datastream/datastream.component.html:19</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note><note category="location">src/app/form-controls/sensor/sensor.component.html:9</note><note category="location">src/app/forms/device/device.component.html:23</note><note category="location">src/app/forms/devices/devices.component.html:27</note><note category="location">src/app/forms/organization-join/organization-join.component.html:4</note><note category="location">src/app/forms/organization-join/organization-join.component.html:10</note></notes>
       <segment state="final">
         <source>Name</source>
       <target>Name</target></segment>
     </unit><unit id="6411448806393999934">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.html:24</note></notes>
       <segment state="final">
         <source>Enter name</source>
       <target>Enter name</target></segment>
     </unit><unit id="4902817035128594900">
       <notes>
-        
-        
-      <note category="location">src/app/components/observation-goal/observation-goal.component.html:26</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:32</note><note category="location">src/app/form-controls/datastream/datastream.component.html:30</note><note category="location">src/app/form-controls/sensor/sensor.component.html:19</note><note category="location">src/app/forms/device/device.component.html:37</note></notes>
+
+
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:26</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:31</note><note category="location">src/app/form-controls/datastream/datastream.component.html:30</note><note category="location">src/app/form-controls/sensor/sensor.component.html:19</note><note category="location">src/app/forms/device/device.component.html:37</note></notes>
       <segment state="final">
         <source>Description</source>
       <target>Description</target></segment>
@@ -497,51 +532,51 @@
       <target>Description of the device location</target></segment>
     </unit><unit id="2404547175180966423">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.html:20</note></notes>
       <segment state="final">
         <source>Describe the sensor</source>
       <target>Describe the sensor</target></segment>
     </unit><unit id="859889886317613793">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.html:31</note></notes>
       <segment state="final">
         <source>Manufacturer</source>
       <target>Manufacturer</target></segment>
     </unit><unit id="7889254064940700973">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.html:32</note></notes>
       <segment state="final">
         <source>The sensor manufacturer</source>
       <target>The sensor manufacturer</target></segment>
     </unit><unit id="4348920359154187664">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.html:35</note></notes>
       <segment state="final">
         <source>Supplier</source>
       <target>Supplier</target></segment>
     </unit><unit id="5053098491167761310">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.html:36</note></notes>
       <segment state="final">
         <source>The sensor supplier</source>
       <target>The sensor supplier</target></segment>
     </unit><unit id="6240684629381435026">
       <notes>
-        
+
       <note category="location">src/app/components/observation-goal/observation-goal.component.html:29</note><note category="location">src/app/form-controls/sensor/sensor.component.html:24</note></notes>
       <segment state="final">
         <source>Description is required</source>
       <target>Description is required</target></segment>
     </unit><unit id="6512935174543774942">
       <notes>
-        <note category="location">src/app/components/observation-goal/observation-goal.component.html:33</note>
-        <note category="location">src/app/components/observation-goals/observation-goals.component.html:36</note>
-      </notes>
+        
+        
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:33</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:35</note></notes>
       <segment state="final">
         <source>Legal Ground</source>
       <target>Legal Ground</target></segment>
@@ -554,17 +589,17 @@
       <target>Type</target></segment>
     </unit><unit id="5880667752120449727">
       <notes>
-        
-        
+
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:72</note><note category="location">src/app/form-controls/sensor/sensor.component.html:40</note></notes>
       <segment state="final">
         <source>Enter URL of documentation</source>
       <target>Enter URL of documentation</target></segment>
     </unit><unit id="3833692663709091545">
       <notes>
-        
-        
-        
+
+
+
       <note category="location">src/app/components/observation-goal/observation-goal.component.html:21</note><note category="location">src/app/form-controls/datastream/datastream.component.html:26</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:5</note><note category="location">src/app/form-controls/sensor/sensor.component.html:15</note><note category="location">src/app/forms/device/device.component.html:28</note></notes>
       <segment state="final">
         <source>Name is required</source>
@@ -578,14 +613,14 @@
       <target>Name must be at least 4 characters</target></segment>
     </unit><unit id="8104330900862727758">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.html:29</note></notes>
       <segment state="final">
         <source>Name must be at least 6 characters</source>
       <target>Name must be at least 6 characters</target></segment>
     </unit><unit id="6494659399288890250">
       <notes>
-        
+
       <note category="location">src/app/forms/devices/devices.component.html:11</note></notes>
       <segment state="final">
         <source>My Devices</source>
@@ -599,10 +634,10 @@
       <target>Register Device</target></segment>
     </unit><unit id="8651329520452925938">
       <notes>
-        
-        
-        
-        
+
+
+
+
       <note category="location">src/app/components/observation-goal/observation-goal.component.html:41</note><note category="location">src/app/form-controls/datastream/datastream.component.html:76</note><note category="location">src/app/form-controls/datastream/datastream.component.html:85</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:12</note><note category="location">src/app/form-controls/sensor/sensor.component.html:44</note></notes>
       <segment state="final">
         <source>Not a valid URL</source>
@@ -614,37 +649,30 @@
       <segment state="final">
         <source>Filter</source>
       <target>Filter</target></segment>
-    </unit><unit id="8539325943407755549">
-      <notes>
-        <note category="location">src/app/forms/organization-join/organization-join.component.html:7</note>
-      </notes>
-      <segment state="final">
-        <source>Organizations</source>
-      <target>Organizations</target></segment>
     </unit><unit id="5481284030283031915">
       <notes>
-        
-      <note category="location">src/app/forms/organization-join/organization-join.component.html:12</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note></notes>
+
+      <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note><note category="location">src/app/forms/organization-join/organization-join.component.html:11</note></notes>
       <segment state="final">
         <source>Website</source>
       <target>Website</target></segment>
     </unit><unit id="3768927257183755959">
       <notes>
-        
-      <note category="location">src/app/forms/device/device.component.html:50</note><note category="location">src/app/forms/device/device.component.html:58</note><note category="location">src/app/forms/device/device.component.html:67</note><note category="location">src/app/forms/organization-users/organization-users.component.html:27</note></notes>
+
+      <note category="location">src/app/forms/device/device.component.html:50</note><note category="location">src/app/forms/device/device.component.html:58</note><note category="location">src/app/forms/device/device.component.html:67</note><note category="location">src/app/forms/organization-users/organization-users.component.html:26</note></notes>
       <segment state="final">
         <source>Save</source>
       <target>Save</target></segment>
     </unit><unit id="4452427314943113135">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.html:59</note><note category="location">src/app/forms/device/device.component.html:68</note></notes>
       <segment state="final">
         <source>Previous</source>
       <target>Previous</target></segment>
     </unit><unit id="3885497195825665706">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.html:51</note><note category="location">src/app/forms/device/device.component.html:60</note></notes>
       <segment state="final">
         <source>Next</source>
@@ -658,15 +686,15 @@
       <target>Device Properties</target></segment>
     </unit><unit id="register.failed">
       <notes>
-        
-      <note category="location">src/app/forms/organization-create/organization-create.component.ts:23</note></notes>
+
+      <note category="location">src/app/forms/organization-create/organization-create.component.ts:22</note></notes>
       <segment state="final">
         <source>Failed to register. Does the organization exist already?</source>
       <target>Failed to register. Does the organization exist already?</target></segment>
     </unit><unit id="organization.update">
       <notes>
-        
-      <note category="location">src/app/forms/organization-update/organization-update.component.ts:24</note></notes>
+
+      <note category="location">src/app/forms/organization-update/organization-update.component.ts:23</note></notes>
       <segment state="final">
         <source>Updated the organization.</source>
       <target>Updated the organization.</target></segment>
@@ -679,72 +707,72 @@
       <target>Leave</target></segment>
     </unit><unit id="4021752662928002901">
       <notes>
-        
+
       <note category="location">src/app/components/observation-goal/observation-goal.component.html:46</note><note category="location">src/app/forms/organization-update/organization-update.component.html:5</note></notes>
       <segment state="final">
         <source>Update</source>
       <target>Update</target></segment>
     </unit><unit id="no.users">
       <notes>
-        
-      <note category="location">src/app/forms/organization-users/organization-users.component.ts:17</note></notes>
+
+      <note category="location">src/app/forms/organization-users/organization-users.component.ts:16</note></notes>
       <segment state="final">
         <source>No users have been selected.</source>
       <target>No users have been selected.</target></segment>
     </unit><unit id="user.update">
       <notes>
-        
-      <note category="location">src/app/forms/organization-users/organization-users.component.ts:18</note></notes>
+
+      <note category="location">src/app/forms/organization-users/organization-users.component.ts:17</note></notes>
       <segment state="final">
         <source>Update success.</source>
       <target>Update success.</target></segment>
     </unit><unit id="4768749765465246664">
       <notes>
-        <note category="location">src/app/forms/organization-users/organization-users.component.html:7</note>
-      </notes>
+        
+      <note category="location">src/app/forms/organization-users/organization-users.component.html:6</note></notes>
       <segment state="final">
         <source>Email</source>
       <target>Email</target></segment>
     </unit><unit id="4145496584631696119">
       <notes>
-        <note category="location">src/app/forms/organization-users/organization-users.component.html:8</note>
-      </notes>
+        
+      <note category="location">src/app/forms/organization-users/organization-users.component.html:7</note></notes>
       <segment state="final">
         <source>Role</source>
       <target>Role</target></segment>
     </unit><unit id="dataStream.delete.confirm.title">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.ts:31</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
     </unit><unit id="dataStream.delete.confirm.body">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.ts:32</note></notes>
       <segment state="final">
         <source>Do you really want to delete the datastream?</source>
       <target>Do you really want to delete the datastream?</target></segment>
     </unit><unit id="5546023389249689964">
       <notes>
-        
+
       <note category="location">src/app/forms/device/device.component.html:12</note><note category="location">src/app/form-controls/datastream/datastream.component.html:4</note></notes>
       <segment state="final">
         <source>Datastreams</source>
       <target>Datastreams</target></segment>
     </unit><unit id="8254163730790501097">
       <notes>
-        
+
       <note category="location">src/app/components/observation-goal/observation-goal.component.html:33</note><note category="location">src/app/components/observation-goal/observation-goal.component.html:38</note><note category="location">src/app/form-controls/datastream/datastream.component.html:4</note><note category="location">src/app/form-controls/datastream/datastream.component.html:30</note><note category="location">src/app/form-controls/datastream/datastream.component.html:37</note><note category="location">src/app/form-controls/datastream/datastream.component.html:71</note><note category="location">src/app/form-controls/datastream/datastream.component.html:80</note><note category="location">src/app/form-controls/datastream/datastream.component.html:89</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:32</note><note category="location">src/app/form-controls/sensor/sensor.component.html:3</note><note category="location">src/app/form-controls/sensor/sensor.component.html:31</note><note category="location">src/app/form-controls/sensor/sensor.component.html:35</note><note category="location">src/app/form-controls/sensor/sensor.component.html:39</note><note category="location">src/app/form-controls/theme/theme.component.html:2</note><note category="location">src/app/forms/device/device.component.html:33</note><note category="location">src/app/forms/device/device.component.html:37</note><note category="location">src/app/forms/device/device.component.html:42</note><note category="location">src/app/forms/device/device.component.html:46</note></notes>
       <segment state="final">
         <source> - Optional</source>
       <target> - Optional</target></segment>
     </unit><unit id="8964054827418343531">
       <notes>
-        <note category="location">src/app/components/observation-goal/observation-goal.component.html:38</note>
-        <note category="location">src/app/components/observation-goals/observation-goals.component.html:40</note>
-      </notes>
+        
+        
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:38</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:39</note></notes>
       <segment state="final">
         <source>Legal Ground Link</source>
       <target>Legal Ground Link</target></segment>
@@ -757,21 +785,21 @@
       <target>Connectivity of the device</target></segment>
     </unit><unit id="1204967233239083847">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:12</note></notes>
       <segment state="final">
         <source>Add Datastream</source>
       <target>Add Datastream</target></segment>
     </unit><unit id="3874212695899678552">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:23</note></notes>
       <segment state="final">
         <source>Datastream name</source>
       <target>Datastream name</target></segment>
     </unit><unit id="4002306973832863531">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:31</note></notes>
       <segment state="final">
         <source>Describe datastream</source>
@@ -799,14 +827,14 @@
       <target>Is Active</target></segment>
     </unit><unit id="4316181475809137059">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:49</note></notes>
       <segment state="final">
         <source>Is Public</source>
       <target>Is Public</target></segment>
     </unit><unit id="2765996121940624988">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:55</note></notes>
       <segment state="final">
         <source>Is Open Data</source>
@@ -820,203 +848,217 @@
       <target>Contains Personal Info</target></segment>
     </unit><unit id="4975476383611780549">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:67</note></notes>
       <segment state="final">
         <source>Is Reusable</source>
       <target>Is Reusable</target></segment>
     </unit><unit id="4895326106573044490">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note><note category="location">src/app/form-controls/sensor/sensor.component.html:39</note></notes>
       <segment state="final">
         <source>Documentation</source>
       <target>Documentation</target></segment>
     </unit><unit id="8732411010010701151">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:80</note></notes>
       <segment state="final">
         <source>Datalink</source>
       <target>Datalink</target></segment>
     </unit><unit id="3465033560498443683">
       <notes>
-        
+
       <note category="location">src/app/form-controls/datastream/datastream.component.html:81</note></notes>
       <segment state="final">
         <source>Enter URL of data</source>
       <target>Enter URL of data</target></segment>
     </unit><unit id="type.beacon">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTypes.ts:8</note></notes>
       <segment state="final">
         <source>Beacon</source>
       <target>Beacon</target></segment>
     </unit><unit id="type.sensor">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTypes.ts:9</note></notes>
       <segment state="final">
         <source>Sensor</source>
       <target>Sensor</target></segment>
     </unit><unit id="type.camera">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTypes.ts:10</note></notes>
       <segment state="final">
         <source>Camera</source>
       <target>Camera</target></segment>
+    </unit><unit id="8682931004646337355">
+      <notes>
+        <note category="location">src/app/navbar/navbar.component.html:3,4</note>
+      </notes>
+      <segment state="final">
+        <source> SensRNet Registration App </source>
+      <target> SensRNet Registration App </target></segment>
+    </unit><unit id="7054740365974781186">
+      <notes>
+        <note category="location">src/app/navbar/navbar.component.html:13,14</note>
+      </notes>
+      <segment state="final">
+        <source> Menu </source>
+      <target> Menu </target></segment>
     </unit><unit id="theme.energy">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:25</note></notes>
       <segment state="final">
         <source>Energy</source>
       <target>Energy</target></segment>
     </unit><unit id="theme.agriculture">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:26</note></notes>
       <segment state="final">
         <source>Agriculture</source>
       <target>Agriculture</target></segment>
     </unit><unit id="theme.transport">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:27</note></notes>
       <segment state="final">
         <source>Transport</source>
       <target>Transport</target></segment>
     </unit><unit id="theme.waste">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:28</note></notes>
       <segment state="final">
         <source>Waste</source>
       <target>Waste</target></segment>
     </unit><unit id="theme.soilandunderground">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:29</note></notes>
       <segment state="final">
         <source>SoilAndUnderground</source>
       <target>SoilAndUnderground</target></segment>
     </unit><unit id="theme.sound">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:30</note></notes>
       <segment state="final">
         <source>Sound</source>
       <target>Sound</target></segment>
     </unit><unit id="theme.environmentalchange">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:31</note></notes>
       <segment state="final">
         <source>EnvironmentalChange</source>
       <target>EnvironmentalChange</target></segment>
     </unit><unit id="theme.air">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:32</note></notes>
       <segment state="final">
         <source>Air</source>
       <target>Air</target></segment>
     </unit><unit id="theme.natureandlandscape">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:33</note></notes>
       <segment state="final">
         <source>NatureAndLandscape</source>
       <target>NatureAndLandscape</target></segment>
     </unit><unit id="theme.water">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:34</note></notes>
       <segment state="final">
         <source>Water</source>
       <target>Water</target></segment>
     </unit><unit id="theme.safety">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:35</note></notes>
       <segment state="final">
         <source>Safety</source>
       <target>Safety</target></segment>
     </unit><unit id="theme.spatialplanning">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:36</note></notes>
       <segment state="final">
         <source>SpatialPlanning</source>
       <target>SpatialPlanning</target></segment>
     </unit><unit id="theme.watermanagement">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:37</note></notes>
       <segment state="final">
         <source>Watermanagement</source>
       <target>Watermanagement</target></segment>
     </unit><unit id="theme.aviation">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:38</note></notes>
       <segment state="final">
         <source>Aviation</source>
       <target>Aviation</target></segment>
     </unit><unit id="theme.publictransport">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:39</note></notes>
       <segment state="final">
         <source>PublicTransport</source>
       <target>PublicTransport</target></segment>
     </unit><unit id="theme.railandroadtraffic">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:40</note></notes>
       <segment state="final">
         <source>RailAndRoadTraffic</source>
       <target>RailAndRoadTraffic</target></segment>
     </unit><unit id="theme.shipping">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:41</note></notes>
       <segment state="final">
         <source>Shipping</source>
       <target>Shipping</target></segment>
     </unit><unit id="theme.construction">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:42</note></notes>
       <segment state="final">
         <source>Construction</source>
       <target>Construction</target></segment>
     </unit><unit id="theme.housing">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:43</note></notes>
       <segment state="final">
         <source>Housing</source>
       <target>Housing</target></segment>
     </unit><unit id="theme.health">
       <notes>
-        
+
       <note category="location">src/app/model/bodies/sensorTheme.ts:44</note></notes>
       <segment state="final">
         <source>Health</source>
       <target>Health</target></segment>
     </unit><unit id="5551307948733637188">
       <notes>
-        
+
       <note category="location">src/app/form-controls/device-type/device-type.component.html:11</note></notes>
       <segment state="final">
         <source>Category is required</source>
       <target>Category is required</target></segment>
     </unit><unit id="2258786061065425417">
       <notes>
-        
+
       <note category="location">src/app/form-controls/type/type.component.html:14</note></notes>
       <segment state="final">
         <source>Type is required</source>
@@ -1053,35 +1095,35 @@
       <target>Nothing selected</target></segment>
     </unit><unit id="6595217940183311788">
       <notes>
-        
+
       <note category="location">src/app/form-controls/theme/theme.component.html:2</note></notes>
       <segment state="final">
         <source>Theme(s)</source>
       <target>Theme(s)</target></segment>
     </unit><unit id="471816275243265264">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:5</note></notes>
       <segment state="final">
         <source>Location</source>
       <target>Location</target></segment>
     </unit><unit id="5824839776083689686">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:8</note></notes>
       <segment state="final">
         <source>Select on map</source>
       <target>Select on map</target></segment>
     </unit><unit id="7397645067969084297">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:15</note></notes>
       <segment state="final">
         <source>Height (m)</source>
       <target>Height (m)</target></segment>
     </unit><unit id="6049622808300788023">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:16</note></notes>
       <segment state="final">
         <source>Enter Height (m)</source>
@@ -1116,28 +1158,28 @@
       <target>Contact department e-mail must be valid and contain either </target></segment>
     </unit><unit id="1472655155576051898">
       <notes>
-        
+
       <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:32</note></notes>
       <segment state="final">
         <source>Contact Department Phone</source>
       <target>Contact Department Phone</target></segment>
     </unit><unit id="6627551976444260400">
       <notes>
-        <note category="location">src/app/form-controls/organization-contact/organization-contact.component.ts:14</note>
-      </notes>
+        
+      <note category="location">src/app/form-controls/organization-contact/organization-contact.component.ts:13</note></notes>
       <segment state="final">
         <source>or</source>
       <target>or</target></segment>
     </unit><unit id="sensor.delete.confirm.title">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.ts:25</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
     </unit><unit id="sensor.delete.confirm.body">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor/sensor.component.ts:26</note></notes>
       <segment state="final">
         <source>Do you really want to delete the sensor?</source>
@@ -1165,30 +1207,16 @@
       <target>Welcome to SensRNet</target></segment>
     </unit><unit id="2454050363478003966">
       <notes>
-        
+
       <note category="location">src/app/login/login.component.html:20</note></notes>
       <segment state="translated">
         <source>Login</source>
       <target>Login</target></segment>
-    </unit><unit id="3103656649990667741">
-      <notes>
-        <note category="location">src/app/navbar/navbar.component.html:4</note>
-      </notes>
-      <segment state="final">
-        <source>SensRNet Registration App</source>
-      <target>SensRNet Registration App</target></segment>
-    </unit><unit id="2102825898069375693">
-      <notes>
-        <note category="location">src/app/navbar/navbar.component.html:10</note>
-      </notes>
-      <segment state="final">
-        <source>Menu</source>
-      <target>Menu</target></segment>
     </unit><unit id="3719027099325959755">
       <notes>
-        
-        
-      <note category="location">src/app/forms/devices/devices.component.html:23</note><note category="location">src/app/sidebar/sidebar.component.html:8</note></notes>
+
+
+      <note category="location">src/app/sidebar/sidebar.component.html:6</note></notes>
       <segment state="final">
         <source>Devices</source>
       <target>Devices</target></segment>
@@ -1201,16 +1229,16 @@
       <target>You need to join an organization first.</target></segment>
     </unit><unit id="5778514899777017666">
       <notes>
-        
-        
-        
+
+
+
       <note category="location">src/app/forms/device/device.component.html:11</note><note category="location">src/app/form-controls/sensor/sensor.component.html:3</note></notes>
       <segment state="final">
         <source>Sensors</source>
       <target>Sensors</target></segment>
     </unit><unit id="3301086086650990787">
       <notes>
-        
+
       <note category="location">src/app/components/observation-goal/observation-goal.component.html:49</note></notes>
       <segment state="final">
         <source>Register</source>
@@ -1224,18 +1252,18 @@
       <target>Register Observation Goal</target></segment>
     </unit><unit id="9075163810858994898">
       <notes>
-        
-        
-        
-      <note category="location">src/app/components/observation-goals/observation-goals.component.html:23</note><note category="location">src/app/form-controls/datastream/datastream.component.html:89</note><note category="location">src/app/sidebar/sidebar.component.html:13</note></notes>
+
+
+
+      <note category="location">src/app/form-controls/datastream/datastream.component.html:89</note><note category="location">src/app/sidebar/sidebar.component.html:12</note></notes>
       <segment state="final">
         <source>Observation Goals</source>
       <target>Observation Goals</target></segment>
     </unit><unit id="3193976279273491157">
       <notes>
-        <note category="location">src/app/components/observation-goals/observation-goals.component.html:44</note>
-        <note category="location">src/app/forms/devices/devices.component.html:40</note>
-      </notes>
+        
+        
+      <note category="location">src/app/components/observation-goals/observation-goals.component.html:43</note><note category="location">src/app/forms/devices/devices.component.html:39</note></notes>
       <segment state="final">
         <source>Actions</source>
       <target>Actions</target></segment>
@@ -1262,70 +1290,70 @@
       <target>Do you really want to remove the observation goal?</target></segment>
     </unit><unit id="8455841993733304388">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:20</note>
-      </notes>
+
+      <note category="location">src/app/components/map/map.component.html:10</note></notes>
       <segment state="final">
         <source>Sensor details</source>
       <target>Sensor details</target></segment>
     </unit><unit id="1650073357556875190">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:23</note>
-      </notes>
+
+      <note category="location">src/app/components/map/map.component.html:13</note></notes>
       <segment state="final">
         <source>Attribute</source>
       <target>Attribute</target></segment>
     </unit><unit id="6555318547274416232">
       <notes>
-        <note category="location">src/app/components/map/map.component.html:24</note>
-      </notes>
+
+      <note category="location">src/app/components/map/map.component.html:14</note></notes>
       <segment state="final">
         <source>Value</source>
       <target>Value</target></segment>
     </unit><unit id="1806667489382256324">
       <notes>
-        
-      <note category="location">src/app/components/map/map.component.html:30</note><note category="location">src/app/form-controls/device-type/device-type.component.html:3</note><note category="location">src/app/forms/devices/devices.component.html:32</note></notes>
+
+      <note category="location">src/app/components/map/map.component.html:20</note><note category="location">src/app/form-controls/device-type/device-type.component.html:3</note><note category="location">src/app/forms/devices/devices.component.html:31</note></notes>
       <segment state="final">
         <source>Category</source>
       <target>Category</target></segment>
     </unit><unit id="2887948366226336935">
       <notes>
-        
-        
-        
-      <note category="location">src/app/components/map/map.component.html:38</note><note category="location">src/app/forms/device/device.component.html:33</note><note category="location">src/app/forms/devices/devices.component.html:36</note></notes>
+
+
+
+      <note category="location">src/app/components/map/map.component.html:28</note><note category="location">src/app/forms/device/device.component.html:33</note><note category="location">src/app/forms/devices/devices.component.html:35</note></notes>
       <segment state="final">
         <source>Connectivity</source>
       <target>Connectivity</target></segment>
     </unit><unit id="8204176479746810612">
       <notes>
-        
+
       <note category="location">src/app/form-controls/sensor-status/sensor-status.component.html:7</note></notes>
       <segment state="final">
         <source>Active</source>
       <target>Active</target></segment>
     </unit><unit id="7585826646011739428">
       <notes>
-        
-      <note category="location">src/app/components/map/map.component.html:50</note></notes>
+
+      <note category="location">src/app/components/map/map.component.html:40</note></notes>
       <segment state="final">
         <source>Edit</source>
       <target>Edit</target></segment>
     </unit><unit id="7022070615528435141">
       <notes>
-        
-      <note category="location">src/app/components/map/map.component.html:53</note></notes>
+
+      <note category="location">src/app/components/map/map.component.html:43</note></notes>
       <segment state="final">
         <source>Delete</source>
       <target>Delete</target></segment>
     </unit><unit id="2509141182388535183">
       <notes>
-        
-      <note category="location">src/app/components/map/map.component.html:58</note></notes>
+
+      <note category="location">src/app/components/map/map.component.html:48</note></notes>
       <segment state="final">
         <source>View</source>
       <target>View</target></segment>
     </unit>
-    
+
   </file>
 </xliff>

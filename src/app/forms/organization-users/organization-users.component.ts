@@ -8,7 +8,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 @Component({
   selector: 'app-organization-users',
   templateUrl: './organization-users.component.html',
-  styleUrls: ['./organization-users.component.scss']
 })
 export class OrganizationUsersComponent implements OnInit {
   public form: FormGroup;

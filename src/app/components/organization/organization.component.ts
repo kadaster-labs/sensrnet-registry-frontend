@@ -15,7 +15,6 @@ enum OrganizationView {
 @Component({
   selector: 'app-organization',
   templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.scss']
 })
 export class OrganizationComponent implements OnInit, OnDestroy {
   public legalEntityId: string;

@@ -1,6 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
-    <table class="table table-striped table-hover table-bordered">
-        <caption class="hidden" i18n>Users</caption>
+    <table class="table table-striped table-hover table-bordered" aria-label="Table of users">
         <thead>
         <tr>
             <th scope="col"></th>
@@ -24,5 +23,5 @@
         </tbody>
     </table>
     <hr>
-    <button class="btn btn-primary btn-lg mr-3 mb-1" type="submit" i18n>Save</button>
+    <button class="btn btn-primary btn-lg" type="submit" i18n>Save</button>
 </form>
