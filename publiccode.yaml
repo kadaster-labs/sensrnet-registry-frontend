@@ -32,7 +32,7 @@ roadmap: "https://github.com/kadaster-labs/sensrnet-home/blob/main/docs/ProductV
 
 developmentStatus: development
 
-softwareType: "standalone/other"
+softwareType: "standalone/web"
 
 #intendedAudience:
 #  scope:
@@ -114,6 +114,10 @@ dependsOn:
     open:
         - name: Kubernetes
           versionMin: "1.15.5-do.1"
+        - name: sensrnet/registry-frontend
+        - name: sensrnet/registry-backend
+        - name: sensrnet/multichain-node
+        - name: sensrnet/sync-bridge
 
 installations:
     - type: helm
