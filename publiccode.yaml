@@ -114,10 +114,11 @@ dependsOn:
     open:
         - name: Kubernetes
           versionMin: "1.15.5-do.1"
-        - name: sensrnet/registry-frontend
+        - name: traefik/traefik
         - name: sensrnet/registry-backend
         - name: sensrnet/multichain-node
         - name: sensrnet/sync-bridge
+        - name: sensrnet/registry-frontend
 
 installations:
     - type: helm
