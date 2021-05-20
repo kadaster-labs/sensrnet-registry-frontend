@@ -6,18 +6,12 @@
 <p align="center">
     <a href="https://github.com/kadaster-labs/sensrnet-registry-frontend/releases" alt="Version">
         <img src="https://img.shields.io/github/package-json/v/kadaster-labs/sensrnet-registry-frontend" />
-    </a> 
-    <a href="https://github.com/kadaster-labs/sensrnet-registry-frontend/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/kadaster-labs/sensrnet-registry-frontend" />
     </a>
-    <a href="https://github.com/badges/shields/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/m/kadaster-labs/sensrnet-registry-frontend" />
+    <a href="https://github.com/kadaster-labs/sensrnet-registry-frontend/actions?query=workflow%3A%22Node.js+CI%22" alt="Build status">
+        <img src="https://github.com/kadaster-labs/sensrnet-registry-frontend/workflows/Node.js%20CI/badge.svg" />
     </a>
     <a href="https://sonarcloud.io/dashboard?id=kadaster-labs_sensrnet-registry-frontend" alt="Quality Gate">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=kadaster-labs_sensrnet-registry-frontend&metric=alert_status" />
-    </a>
-    <a href="https://sonarcloud.io/dashboard?id=kadaster-labs_sensrnet-registry-frontend" alt="Lines of code">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=kadaster-labs_sensrnet-registry-frontend&metric=ncloc" />
     </a>
 </p>
 
@@ -27,7 +21,7 @@ This is the repo for the frontend component of SensRNet. For the how and why of 
 Before starting with development, you'll need the following things:
 - [Node.js v12](https://nodejs.org/en/)
 - Angular CLI: `npm install -g @angular/cli`
-- Install dependencies: `npm install` 
+- Install dependencies: `npm install`
 
 The VS Code editor with ESLint plugin is recommended, but not required.
 
@@ -71,7 +65,7 @@ Once the images are available in the container registry, deployment can be done 
 The default language for the UI is English. However, since during the MVP process the main audience is Dutch, the site serves the Dutch content by default. Since the app is internationalized, we also have the possibility to easily translate and launch the site in a different language later on.
 
 ### Development
-A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with 
+A comprehensive guide on how to do i18n and l10n in Angular is found at https://angular.io/guide/i18n. In its most basic form, the custom attribute `i18n` is placed on HTML elements. A translation file can then be generated with
 ```
 npm run extract-i18n
 ```
