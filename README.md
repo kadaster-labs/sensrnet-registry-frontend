@@ -52,14 +52,8 @@ Note: Docker CE is required for building the images.
 Commands:
 - `docker-compose up --build`
 
-## Building Docker images
-Deployment is done in an Azure Kubernetes Service (AKS) cluster. For releases, run `./scripts/release.sh`. It updates the package version and builds the Docker images. Additionally, it pushes the newly created images to the Azure Container Registry (ACR).
-
-*Note: since VPN is still required for building the project, this script won't work as is. For the `npm install` step the VPN is required, but for `az acr login` is needs to be off. Easiest for now is to run this script line for line, enabling VPN just before `npm install` and disabling right after.*
-
 ## Deployment
-Once the images are available in the container registry, deployment can be done (on Kubernetes) by using Kustomize and the desired config, i.e.
-`kustomize build deployment/overlays/gemeente-a | kubectl apply -f -`
+Once the images are available in the container registry, deployment can be done (on Kubernetes) by using our Helm Charts. They can be found at https://github.com/kadaster-labs/sensrnet-helm-charts.
 
 ## Internationalization + Localization
 The default language for the UI is English. However, since during the MVP process the main audience is Dutch, the site serves the Dutch content by default. Since the app is internationalized, we also have the possibility to easily translate and launch the site in a different language later on.
