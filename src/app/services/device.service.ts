@@ -34,7 +34,7 @@ export interface IUpdateDeviceBody {
   description?: string;
   category?: string;
   connectivity?: string;
-  location: IUpdateLocationBody;
+  location?: IUpdateLocationBody;
 }
 
 export interface IRegisterSensorBody {
@@ -119,6 +119,7 @@ export class DeviceService {
 
       this.deviceUpdated$ = new Observable((observer: Subscriber<IDevice>) => {
         const updateFunction = (sensor: IDevice) => observer.next(sensor);
+
         deviceUpdated$.subscribe(updateFunction);
         deviceRelocated$.subscribe(updateFunction);
       });
@@ -190,7 +191,7 @@ export class DeviceService {
     return await devicePromise as IDevice[];
   }
 
-  public async getMyDevices(legalEntityId, pageIndex, pageSize, sortField, sortDirection) {
+  public async getMyDevices(legalEntityId, pageIndex, pageSize, sortField, sortDirection, name?) {
     let devices;
     if (legalEntityId) {
       let params = new HttpParams();
@@ -199,6 +200,10 @@ export class DeviceService {
       params = params.set('sortField', sortField);
       params = params.set('sortDirection', sortDirection);
       params = params.set('legalEntityId', legalEntityId);
+
+      if (name) {
+        params = params.set('name', name);
+      }
 
       const url = `${this.env.apiUrl}/device?${params.toString()}`;
       devices = await this.http.get(url).toPromise() as ISensor[];

@@ -1,21 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { DeviceService } from '../../services/device.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { DeviceService, IUpdateDeviceBody } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
-import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import {getCategoryTranslation} from '../../model/bodies/sensorTypes';
 import {LegalEntityService} from '../../services/legal-entity.service';
 import {IDevice} from '../../model/bodies/device-model';
 import {Router} from '@angular/router';
 import {ModalService} from '../../services/modal.service';
 import {AlertService} from '../../services/alert.service';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {OidcSecurityService} from 'angular-auth-oidc-client';
+import {ConnectionService} from '../../services/connection.service';
 
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss'],
 })
-export class DevicesComponent implements OnInit {
+export class DevicesComponent implements OnInit, OnDestroy {
   public legalEntity;
+  public subscriptions = [];
   public devices: IDevice[] = [];
+  public selectedDeviceIds: string[] = [];
 
   public pageIndex = 0;
   public pageSize = 15;
@@ -26,9 +32,13 @@ export class DevicesComponent implements OnInit {
 
   public getCategoryTranslation = getCategoryTranslation;
 
+  public showLocation = false;
+  private filterChanged: Subject<string> = new Subject<string>();
+
   public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
-  public confirmBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device?`;
   public joinOrganizationString = $localize`:@@join.organization:You need to join an organization first.`;
+  public confirmUpdateString = $localize`:@@update.device.confirm.body:Do you really want to update the devices?`;
+  public confirmDeleteBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device?`;
 
   constructor(
     private readonly router: Router,
@@ -37,6 +47,8 @@ export class DevicesComponent implements OnInit {
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
     private readonly legalEntityService: LegalEntityService,
+    private connectionService: ConnectionService,
+    private oidcSecurityService: OidcSecurityService,
   ) {}
 
   getSortClass(sortField) {
@@ -76,10 +88,10 @@ export class DevicesComponent implements OnInit {
     }
   }
 
-  public async getPage(pageIndex) {
+  public async getPage(pageIndex, name?) {
     if (this.legalEntity && this.legalEntity._id) {
       this.devices = await this.deviceService.getMyDevices(this.legalEntity._id, pageIndex, this.pageSize,
-        this.sortField, this.sortDirection);
+        this.sortField, this.sortDirection, name);
     } else {
       this.devices = [];
     }
@@ -92,21 +104,76 @@ export class DevicesComponent implements OnInit {
   }
 
   public async deleteDevice(deviceId: string): Promise<void> {
-    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString);
     if (confirmed) {
       try {
         await this.deviceService.unregister(deviceId);
+        await this.getPage(this.pageIndex);
       } catch (e) {
         this.alertService.error(e.error.message);
       }
     }
   }
 
-  public selectDevice(sensor: IDevice) {
-    this.locationService.highlightLocation({
-      type: 'Point',
-      coordinates: sensor.location.coordinates
-    });
+  public toggleLocation() {
+    this.showLocation = !this.showLocation;
+  }
+
+  public toggleDevice(sensorId: string) {
+    if (this.selectedDeviceIds.includes(sensorId)) {
+      this.selectedDeviceIds = this.selectedDeviceIds.filter(x => x !== sensorId);
+    } else {
+      this.selectedDeviceIds.push(sensorId);
+    }
+  }
+
+  public selectDevice(sensorId: string) {
+    if (!this.selectedDeviceIds.includes(sensorId)) {
+      this.selectedDeviceIds.push(sensorId);
+    }
+  }
+
+  public async updateDevice(e, field) {
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString);
+    if (confirmed) {
+      const promises = [];
+      for (const deviceId of this.selectedDeviceIds) {
+        let updateBody: IUpdateDeviceBody;
+        if (field === 'name') {
+          updateBody = {
+            name: e.target.value,
+          };
+        } else if (field === 'connectivity') {
+          updateBody = {
+            connectivity: e.target.value,
+          };
+        } else if (field === 'description') {
+          updateBody = {
+            description: e.target.value,
+          };
+        } else if (field === 'location') {
+          const longitude = e.length > 0 ? e[0] : null;
+          const latitude = e.length > 1 ? e[1] : null;
+          const height = e.length > 2 ? e[2] : null;
+
+          updateBody = {
+            location: {
+              location: [latitude, longitude, height],
+            }
+          };
+        }
+
+        if (updateBody) {
+          promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
+        }
+      }
+
+      await Promise.all(promises);
+    }
+  }
+
+  filterInputChanged(name) {
+    this.filterChanged.next(name);
   }
 
   public async registerDevice() {
@@ -119,7 +186,41 @@ export class DevicesComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.legalEntity = await this.legalEntityService.get().toPromise();
-
     await this.getPage(0);
+
+    this.subscriptions.push(this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
+      if (auth) {
+        this.connectionService.refreshLegalEntity();
+      }
+    }));
+
+    this.subscriptions.push(
+      this.locationService.location$.subscribe(location => {
+        if (this.showLocation && location.coordinates) {
+          this.updateDevice(location.coordinates, 'location');
+        }
+      })
+    );
+
+    this.subscriptions.push(this.filterChanged
+      .pipe(debounceTime(750))
+      .subscribe(name => this.getPage(this.pageIndex, name)));
+
+    const { onUpdate, onRemove } = await this.deviceService.subscribe();
+
+    this.subscriptions.push(onUpdate.subscribe((updatedDevice: IDevice) => {
+      for (let i = 0; i < this.devices.length; i++) {
+        const device = this.devices[i];
+        if (device._id === updatedDevice._id) {
+          this.devices[i] = updatedDevice;
+        }
+      }
+    }));
+
+    this.subscriptions.push(onRemove.subscribe(_ => this.getPage(this.pageIndex)));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(x => x.unsubscribe());
   }
 }

@@ -352,7 +352,7 @@
       <notes>
         
         
-      <note category="location">src/app/components/map/map.component.ts:92</note><note category="location">src/app/forms/devices/devices.component.ts:29</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:92</note><note category="location">src/app/forms/devices/devices.component.ts:38</note></notes>
       <segment state="translated">
         <source>Please confirm</source>
       <target>Bevestig alstublieft</target></segment>
@@ -360,7 +360,7 @@
       <notes>
         
         
-      <note category="location">src/app/components/map/map.component.ts:93</note><note category="location">src/app/forms/devices/devices.component.ts:30</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:93</note><note category="location">src/app/forms/devices/devices.component.ts:41</note></notes>
       <segment state="translated">
         <source>Do you really want to delete the device?</source>
       <target>Weet u zeker dat u het apparaat wilt verwijderen?</target></segment>
@@ -374,7 +374,7 @@
     </unit><unit id="1177467005869954871">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:547</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:546</note></notes>
       <segment state="translated">
         <source>Enter location</source>
       <target>Voer locatie in</target></segment>
@@ -476,7 +476,7 @@
 
 
 
-      <note category="location">src/app/components/observation-goal/observation-goal.component.html:18</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:27</note><note category="location">src/app/form-controls/datastream/datastream.component.html:19</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note><note category="location">src/app/form-controls/sensor/sensor.component.html:9</note><note category="location">src/app/forms/device/device.component.html:23</note><note category="location">src/app/forms/devices/devices.component.html:27</note><note category="location">src/app/forms/organization-join/organization-join.component.html:4</note><note category="location">src/app/forms/organization-join/organization-join.component.html:10</note></notes>
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:18</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:27</note><note category="location">src/app/form-controls/datastream/datastream.component.html:19</note><note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:2</note><note category="location">src/app/form-controls/sensor/sensor.component.html:9</note><note category="location">src/app/forms/device/device.component.html:23</note><note category="location">src/app/forms/devices/devices.component.html:25</note><note category="location">src/app/forms/devices/devices.component.html:32</note><note category="location">src/app/forms/devices/devices.component.html:63</note><note category="location">src/app/forms/organization-join/organization-join.component.html:4</note><note category="location">src/app/forms/organization-join/organization-join.component.html:10</note></notes>
       <segment state="translated">
         <source>Name</source>
       <target>Naam</target></segment>
@@ -491,7 +491,7 @@
       <notes>
 
 
-      <note category="location">src/app/components/observation-goal/observation-goal.component.html:26</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:31</note><note category="location">src/app/form-controls/datastream/datastream.component.html:30</note><note category="location">src/app/form-controls/sensor/sensor.component.html:19</note><note category="location">src/app/forms/device/device.component.html:37</note></notes>
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:26</note><note category="location">src/app/components/observation-goals/observation-goals.component.html:31</note><note category="location">src/app/form-controls/datastream/datastream.component.html:30</note><note category="location">src/app/form-controls/sensor/sensor.component.html:19</note><note category="location">src/app/forms/device/device.component.html:37</note><note category="location">src/app/forms/devices/devices.component.html:44</note><note category="location">src/app/forms/devices/devices.component.html:72</note></notes>
       <segment state="translated">
         <source>Description</source>
       <target>Beschrijving</target></segment>
@@ -644,11 +644,25 @@
       <target>Geen valide URL</target></segment>
     </unit><unit id="8829497237648100098">
       <notes>
-        <note category="location">src/app/forms/organization-join/organization-join.component.html:3</note>
-      </notes>
+        
+      <note category="location">src/app/forms/devices/devices.component.html:24</note><note category="location">src/app/forms/organization-join/organization-join.component.html:3</note></notes>
       <segment state="translated">
         <source>Filter</source>
       <target>Filteren</target></segment>
+    </unit><unit id="2159130950882492111">
+      <notes>
+        <note category="location">src/app/forms/devices/devices.component.html:77</note>
+      </notes>
+      <segment state="translated">
+        <source>Cancel</source>
+      <target>Annuleer</target></segment>
+    </unit><unit id="3797570084942068182">
+      <notes>
+        <note category="location">src/app/forms/devices/devices.component.html:80</note>
+      </notes>
+      <segment state="translated">
+        <source>Select</source>
+      <target>Selecteer</target></segment>
     </unit><unit id="5481284030283031915">
       <notes>
 
@@ -1103,7 +1117,7 @@
     </unit><unit id="471816275243265264">
       <notes>
 
-      <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:5</note></notes>
+      <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:5</note><note category="location">src/app/forms/devices/devices.component.html:48</note></notes>
       <segment state="translated">
         <source>Location</source>
       <target>Locatie</target></segment>
@@ -1222,11 +1236,18 @@
       <target>Apparaten</target></segment>
     </unit><unit id="join.organization">
       <notes>
-        <note category="location">src/app/forms/devices/devices.component.ts:31</note>
-      </notes>
+        
+      <note category="location">src/app/forms/devices/devices.component.ts:39</note></notes>
       <segment state="translated">
         <source>You need to join an organization first.</source>
       <target>U moet eerst toetreden tot een organisatie.</target></segment>
+    </unit><unit id="update.device.confirm.body">
+      <notes>
+        <note category="location">src/app/forms/devices/devices.component.ts:40</note>
+      </notes>
+      <segment state="translated">
+        <source>Do you really want to update the devices?</source>
+      <target>Weet u zeker dat u de apparaten wilt updaten?</target></segment>
     </unit><unit id="5778514899777017666">
       <notes>
 
@@ -1263,7 +1284,7 @@
       <notes>
         
         
-      <note category="location">src/app/components/observation-goals/observation-goals.component.html:43</note><note category="location">src/app/forms/devices/devices.component.html:39</note></notes>
+      <note category="location">src/app/components/observation-goals/observation-goals.component.html:43</note><note category="location">src/app/forms/devices/devices.component.html:51</note></notes>
       <segment state="translated">
         <source>Actions</source>
       <target>Acties</target></segment>
@@ -1312,7 +1333,7 @@
     </unit><unit id="1806667489382256324">
       <notes>
 
-      <note category="location">src/app/components/map/map.component.html:20</note><note category="location">src/app/form-controls/device-type/device-type.component.html:3</note><note category="location">src/app/forms/devices/devices.component.html:31</note></notes>
+      <note category="location">src/app/components/map/map.component.html:20</note><note category="location">src/app/form-controls/device-type/device-type.component.html:3</note><note category="location">src/app/forms/devices/devices.component.html:36</note></notes>
       <segment state="translated">
         <source>Category</source>
       <target>Categorie</target></segment>
@@ -1321,7 +1342,7 @@
 
 
 
-      <note category="location">src/app/components/map/map.component.html:28</note><note category="location">src/app/forms/device/device.component.html:33</note><note category="location">src/app/forms/devices/devices.component.html:35</note></notes>
+      <note category="location">src/app/components/map/map.component.html:28</note><note category="location">src/app/forms/device/device.component.html:33</note><note category="location">src/app/forms/devices/devices.component.html:40</note><note category="location">src/app/forms/devices/devices.component.html:69</note></notes>
       <segment state="translated">
         <source>Connectivity</source>
       <target>Connectiviteit</target></segment>

@@ -4,7 +4,7 @@
         <div class="col-1">
             <app-sidebar></app-sidebar>
         </div>
-        <div class="col-6">
+        <div [ngClass]="{'col-6': showLocation, 'col-11': !showLocation }">
             <div class="row">
                 <div class="col-md-6 col-sm-12">
                     <h3>
@@ -19,44 +19,80 @@
                 </div>
             </div>
             <hr>
-            <table class="table table-striped table-hover table-bordered" aria-label="Table of devices">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th class="pointer w-30 hover-shadow" scope="col" (click)="setSort('name')">
-                        <span i18n>Name</span>
-                        <fa-icon [icon]="getSortClass('name')" class="ml-2"></fa-icon>
-                    </th>
-                    <th class="pointer w-20 hover-shadow" scope="col" (click)="setSort('category')">
-                        <span i18n>Category</span>
-                        <fa-icon [icon]="getSortClass('category')" class="ml-2"></fa-icon>
-                    </th>
-                    <th class="pointer w-25 hover-shadow" scope="col" (click)="setSort('connectivity')">
-                        <span i18n>Connectivity</span>
-                        <fa-icon [icon]="getSortClass('connectivity')" class="ml-2"></fa-icon>
-                    </th>
-                    <th class="w-15" scope="col">
-                        <span i18n>Actions</span>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let device of devices; let i = index" class="pointer">
-                    <th scope="row" (click)="selectDevice(device)">{{ i + 1 }}</th>
-                    <td (click)="selectDevice(device)">{{ device.name }}</td>
-                    <td (click)="selectDevice(device)">{{ getCategoryTranslation(device.category) }}</td>
-                    <td (click)="selectDevice(device)">{{ device.connectivity }}</td>
-                    <td class="px-1 pt-1 pb-0 m-0">
-                        <button type="button" class="btn btn-primary btn-sm mx-1 my-1" (click)="editDevice(device._id)">
+            <div class="col-12 overflow-auto no-gutters p-0 m-0">
+                <div class="form-group">
+                    <label i18n>Filter</label>
+                    <input (keyup)="filterInputChanged($event.target.value)" type="text" class="form-control" placeholder="Name" i18n-placeholder/>
+                </div>
+                <table class="table table-striped table-hover table-bordered" aria-label="Table of devices">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th class="pointer min-w-50 hover-shadow" scope="col" (click)="setSort('name')">
+                                <span i18n>Name</span>
+                                <fa-icon [icon]="getSortClass('name')" class="ml-2"></fa-icon>
+                            </th>
+                            <th class="pointer min-w-50 hover-shadow" scope="col" (click)="setSort('category')">
+                                <span i18n>Category</span>
+                                <fa-icon [icon]="getSortClass('category')" class="ml-2"></fa-icon>
+                            </th>
+                            <th class="pointer min-w-50 hover-shadow" scope="col" (click)="setSort('connectivity')">
+                                <span i18n>Connectivity</span>
+                                <fa-icon [icon]="getSortClass('connectivity')" class="ml-2"></fa-icon>
+                            </th>
+                            <th class="pointer min-w-50 hover-shadow" scope="col" (click)="setSort('description')">
+                                <span i18n>Description</span>
+                                <fa-icon [icon]="getSortClass('description')" class="ml-2"></fa-icon>
+                            </th>
+                            <th class="pointer min-w-50 hover-shadow" scope="col">
+                                <span i18n>Location</span>
+                            </th>
+                            <th class="w-15" scope="col">
+                                <span i18n>Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let device of devices; let i = index" class="pointer">
+                        <th scope="row" (click)="toggleDevice(device._id)">
+                            <div class="form-check">
+                                <input [checked]="selectedDeviceIds.includes(device._id)" class="form-check-input" type="checkbox">
+                            </div>
+                        </th>
+                        <td>
+                            <input (click)="selectDevice(device._id)" class="form-control" type="text" placeholder="Name" [ngModel]="device.name" (change)="updateDevice($event, 'name')" i18n-placeholder>
+                        </td>
+                        <td class="pt-3">
+                            {{ getCategoryTranslation(device.category) }}
+                        </td>
+                        <td>
+                            <input (click)="selectDevice(device._id)" class="form-control" type="text" placeholder="Connectivity" [ngModel]="device.connectivity" (change)="updateDevice($event, 'connectivity')" i18n-placeholder>
+                        </td>
+                        <td>
+                            <input (click)="selectDevice(device._id)" class="form-control" type="text" placeholder="Description" [ngModel]="device.description" (change)="updateDevice($event, 'description')" i18n-placeholder>
+                        </td>
+                        <td class="px-1 pt-2 pb-0 m-0" (click)="selectDevice(device._id)">
+                            <button type="button" class="btn btn-primary btn-sm mx-1 my-1" (click)="toggleLocation()">
+                                <span *ngIf="showLocation; else selectLocation">
+                                    <span i18n>Cancel</span>
+                                </span>
+                                <ng-template #selectLocation>
+                                    <span i18n>Select</span>
+                                </ng-template>
+                            </button>
+                        </td>
+                        <td class="px-1 pt-2 pb-0 m-0">
+                            <button type="button" class="btn btn-primary btn-sm mx-1 my-1" (click)="editDevice(device._id)">
                                 <fa-icon icon="pencil-alt"></fa-icon>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm mx-0 my-1" (click)="deleteDevice(device._id)">
-                            <fa-icon icon="trash-alt"></fa-icon>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm mx-0 my-1" (click)="deleteDevice(device._id)">
+                                <fa-icon icon="trash-alt"></fa-icon>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <nav class="d-flex justify-content-center">
                 <ul class="pagination mb-0">
                     <li class="page-item" (click)="getPreviousPage()">
@@ -71,7 +107,7 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-5" style="height: 85vh; max-height: 85vh">
+        <div *ngIf="showLocation" class="col-5" style="height: 85vh; max-height: 85vh">
             <app-map searchBarHeight="1.5rem"></app-map>
         </div>
     </div>
