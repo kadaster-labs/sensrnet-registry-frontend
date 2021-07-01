@@ -152,13 +152,13 @@ export class DevicesComponent implements OnInit, OnDestroy {
             description: e.target.value,
           };
         } else if (field === 'location') {
-          const longitude = e.length > 0 ? e[0] : null;
-          const latitude = e.length > 1 ? e[1] : null;
+          const latitude = e.length > 0 ? e[0] : null;
+          const longitude = e.length > 1 ? e[1] : null;
           const height = e.length > 2 ? e[2] : null;
 
           updateBody = {
             location: {
-              location: [latitude, longitude, height],
+              location: [longitude, latitude, height],
             }
           };
         }
