@@ -154,7 +154,13 @@ export class DevicesComponent implements OnInit, OnDestroy {
         } else if (field === 'location') {
           const latitude = e.length > 0 ? e[0] : null;
           const longitude = e.length > 1 ? e[1] : null;
-          const height = e.length > 2 ? e[2] : null;
+
+          let height = 0;
+          for (const device of this.devices) {
+            if (device._id === deviceId && device.location.coordinates.length > 2) {
+              height = device.location.coordinates[2];
+            }
+          }
 
           updateBody = {
             location: {
