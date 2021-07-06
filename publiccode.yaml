@@ -114,7 +114,6 @@ dependsOn:
     open:
         - name: Kubernetes
           versionMin: "1.15.5-do.1"
-        - name: traefik/traefik
         - name: sensrnet/registry-backend
         - name: sensrnet/multichain-node
         - name: sensrnet/sync-bridge
