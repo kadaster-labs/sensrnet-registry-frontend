@@ -19,15 +19,40 @@
                 </div>
             </div>
             <hr>
-            <div class="col-12 overflow-auto no-gutters p-0 m-0">
+            <div *ngIf="canEdit || canEditLocation || canDelete" class="col-12 overflow-auto no-gutters p-0 mt-0 mb-2 mx-0">
+                <div class="font-weight-bold mb-2">
+                    <span>Actions</span>
+                </div>
+                <a *ngIf="canEdit" type="button" class="btn btn-primary mr-2" (click)="editSelectedDevice()">
+                    <span class="mr-2" i18n>Extensive Edit</span>
+                    <fa-icon icon="pencil-alt" class="ml-1"></fa-icon>
+                </a>
+                <a *ngIf="canEditLocation" type="button" class="btn btn-primary mr-2" (click)="toggleLocation()">
+                    <span *ngIf="showLocation; else selectLocation">
+                        <span class="mr-2" i18n>Cancel</span>
+                    </span>
+                    <ng-template #selectLocation>
+                        <span class="mr-2" i18n>Location</span>
+                    </ng-template>
+                    <fa-icon icon="pencil-alt" class="ml-1"></fa-icon>
+                </a>
+                <a *ngIf="canDelete" type="button" class="btn btn-danger mr-2" (click)="deleteSelectedDevices()">
+                    <span class="mr-2" i18n>Delete</span>
+                    <fa-icon icon="trash-alt" class="ml-1"></fa-icon>
+                </a>
+            </div>
+            <div [formGroup]="devicesTable" class="col-12 overflow-auto no-gutters p-0 m-0">
                 <div class="form-group">
-                    <label i18n>Filter</label>
+                    <label class="font-weight-bold" i18n>Filter</label>
                     <input (keyup)="filterInputChanged($event.target.value)" type="text" class="form-control" placeholder="Name" i18n-placeholder/>
                 </div>
                 <table class="table table-striped table-hover table-bordered" aria-label="Table of devices">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th class="pointer min-w-50 hover-shadow" scope="col">
+                                <span i18n>ID</span>
+                            </th>
                             <th class="pointer min-w-50 hover-shadow" scope="col" (click)="setSort('name')">
                                 <span i18n>Name</span>
                                 <fa-icon [icon]="getSortClass('name')" class="ml-2"></fa-icon>
@@ -44,54 +69,46 @@
                                 <span i18n>Description</span>
                                 <fa-icon [icon]="getSortClass('description')" class="ml-2"></fa-icon>
                             </th>
-                            <th class="pointer min-w-50 hover-shadow" scope="col">
-                                <span i18n>Location</span>
-                            </th>
-                            <th class="w-15" scope="col">
-                                <span i18n>Actions</span>
-                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let device of devices; let i = index" class="pointer">
-                        <th scope="row" (click)="toggleDevice(device._id)">
-                            <div class="form-check">
-                                <input [checked]="selectedDeviceIds.includes(device._id)" class="form-check-input" type="checkbox">
-                            </div>
-                        </th>
-                        <td>
-                            <input (click)="selectDevice(device._id)" class="form-control" type="text" placeholder="Name" [ngModel]="device.name" (change)="updateDevice($event, 'name')" i18n-placeholder>
-                        </td>
-                        <td class="pt-3">
-                            {{ getCategoryTranslation(device.category) }}
-                        </td>
-                        <td>
-                            <input (click)="selectDevice(device._id)" class="form-control" type="text" placeholder="Connectivity" [ngModel]="device.connectivity" (change)="updateDevice($event, 'connectivity')" i18n-placeholder>
-                        </td>
-                        <td>
-                            <input (click)="selectDevice(device._id)" class="form-control" type="text" placeholder="Description" [ngModel]="device.description" (change)="updateDevice($event, 'description')" i18n-placeholder>
-                        </td>
-                        <td class="px-1 pt-2 pb-0 m-0" (click)="selectDevice(device._id)">
-                            <button type="button" class="btn btn-primary btn-sm mx-1 my-1" (click)="toggleLocation()">
-                                <span *ngIf="showLocation; else selectLocation">
-                                    <span i18n>Cancel</span>
-                                </span>
-                                <ng-template #selectLocation>
-                                    <span i18n>Select</span>
-                                </ng-template>
-                            </button>
-                        </td>
-                        <td class="px-1 pt-2 pb-0 m-0">
-                            <button type="button" class="btn btn-primary btn-sm mx-1 my-1" (click)="editDevice(device._id)">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm mx-0 my-1" (click)="deleteDevice(device._id)">
-                                <fa-icon icon="trash-alt"></fa-icon>
-                            </button>
-                        </td>
-                    </tr>
+                        <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls ; let i=index">
+                            <tr [formGroupName]="i">
+                                <th scope="row" (click)="toggleDevice(group.value.id)">
+                                    <div class="form-check">
+                                        <input [checked]="selectedDeviceIds.includes(group.value.id)" class="form-check-input" type="checkbox">
+                                    </div>
+                                </th>
+                                <td class="pt-3">
+                                    <span class="font-weight-bold"> {{ group.value.id }} </span>
+                                </td>
+                                <td>
+                                    <input (click)="selectDevice(group.value.id)"
+                                           [ngClass]="{ 'is-invalid': (group.get('name').dirty || group.get('name').touched) && group.get('name').errors }"
+                                           class="form-control" type="text" placeholder="Name" formControlName="name" i18n-placeholder>
+                                </td>
+                                <td>
+                                    <select data-container="body" class="form-control" formControlName="category" title="Nothing selected" i18n-title>
+                                        <option *ngFor="let item of sensorCategories | keyvalue" [value]="item.key">
+                                            {{ getCategoryTranslation(item.value) }}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input (click)="selectDevice(group.value.id)" class="form-control" type="text" placeholder="Connectivity" formControlName="connectivity" i18n-placeholder>
+                                </td>
+                                <td>
+                                    <input (click)="selectDevice(group.value.id)" class="form-control" type="text" placeholder="Description" formControlName="description" i18n-placeholder>
+                                </td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
+            </div>
+            <div>
+                <a type="button" class="btn btn-primary float-right" (click)="saveDevices()">
+                    <span class="mr-2" i18n>Save</span>
+                </a>
             </div>
             <nav class="d-flex justify-content-center">
                 <ul class="pagination mb-0">

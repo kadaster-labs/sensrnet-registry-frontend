@@ -1,16 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import { DeviceService, IUpdateDeviceBody } from '../../services/device.service';
+import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
+import { IDevice } from '../../model/bodies/device-model';
+import { ModalService } from '../../services/modal.service';
+import { AlertService } from '../../services/alert.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { LocationService } from '../../services/location.service';
-import {getCategoryTranslation} from '../../model/bodies/sensorTypes';
-import {LegalEntityService} from '../../services/legal-entity.service';
-import {IDevice} from '../../model/bodies/device-model';
-import {Router} from '@angular/router';
-import {ModalService} from '../../services/modal.service';
-import {AlertService} from '../../services/alert.service';
-import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {OidcSecurityService} from 'angular-auth-oidc-client';
-import {ConnectionService} from '../../services/connection.service';
+import { ConnectionService } from '../../services/connection.service';
+import { LegalEntityService } from '../../services/legal-entity.service';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { DeviceService, IUpdateDeviceBody } from '../../services/device.service';
+import { getCategoryTranslation, Category } from '../../model/bodies/sensorTypes';
 
 @Component({
   selector: 'app-devices',
@@ -30,25 +31,37 @@ export class DevicesComponent implements OnInit, OnDestroy {
   public sortDirections = {ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING'};
   public sortDirection = this.sortDirections.ASCENDING;
 
+  public sensorCategories = Category;
   public getCategoryTranslation = getCategoryTranslation;
 
   public showLocation = false;
+
+  public canEdit = false;
+  public canDelete = false;
+  public canEditLocation = false;
+
+  public devicesTable: FormGroup = this.fb.group({
+    tableRows: this.fb.array([])
+  });
+
   private filterChanged: Subject<string> = new Subject<string>();
 
   public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
+  public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
   public joinOrganizationString = $localize`:@@join.organization:You need to join an organization first.`;
-  public confirmUpdateString = $localize`:@@update.device.confirm.body:Do you really want to update the devices?`;
-  public confirmDeleteBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device?`;
+  public confirmUpdateString = $localize`:@@update.device.confirm.body:Do you really want to update the device(s)?`;
+  public confirmDeleteBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device(s)?`;
 
   constructor(
     private readonly router: Router,
+    private readonly fb: FormBuilder,
     private readonly modalService: ModalService,
     private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
+    private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
-    private connectionService: ConnectionService,
-    private oidcSecurityService: OidcSecurityService,
+    private readonly oidcSecurityService: OidcSecurityService,
   ) {}
 
   getSortClass(sortField) {
@@ -95,22 +108,52 @@ export class DevicesComponent implements OnInit, OnDestroy {
     } else {
       this.devices = [];
     }
+    this.filterSelectedDevices(this.devices.map(x => x._id));
+
+    this.devicesTable = this.fb.group({
+      tableRows: this.fb.array([])
+    });
+
+    const control = this.devicesTable.get('tableRows') as FormArray;
+    this.devices.map(x => control.push(this.initiateDeviceForm(x)));
 
     this.pageIndex = pageIndex;
   }
 
-  public async editDevice(deviceId: string): Promise<void> {
-    await this.router.navigate([`/device/${deviceId}`]);
+  public initiateDeviceForm(device): FormGroup {
+    return this.fb.group({
+      id: [device._id],
+      name: [device.name, [Validators.required, Validators.minLength(6)]],
+      category: [device.category],
+      connectivity: [device.connectivity],
+      description: [device.description],
+    });
   }
 
-  public async deleteDevice(deviceId: string): Promise<void> {
-    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString);
-    if (confirmed) {
-      try {
-        await this.deviceService.unregister(deviceId);
-        await this.getPage(this.pageIndex);
-      } catch (e) {
-        this.alertService.error(e.error.message);
+  get getFormControls() {
+    return this.devicesTable.get('tableRows') as FormArray;
+  }
+
+  public async editSelectedDevice(): Promise<void> {
+    if (this.selectedDeviceIds) {
+      const selectedDeviceId = this.selectedDeviceIds[0];
+      await this.router.navigate([`/device/${selectedDeviceId}`]);
+    }
+  }
+
+  public async deleteSelectedDevices(): Promise<void> {
+    if (this.selectedDeviceIds) {
+      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString);
+      if (confirmed) {
+        try {
+          for (const deviceId of this.selectedDeviceIds) {
+            await this.deviceService.unregister(deviceId);
+          }
+
+          await this.getPage(this.pageIndex);
+        } catch (e) {
+          this.alertService.error(e.error.message);
+        }
       }
     }
   }
@@ -119,54 +162,63 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.showLocation = !this.showLocation;
   }
 
+  public updateActions() {
+    const selectedDevicesCount = this.selectedDeviceIds.length;
+    if (selectedDevicesCount > 0) {
+      this.canDelete = true;
+      this.canEditLocation = true;
+      this.canEdit = selectedDevicesCount === 1;
+    } else {
+      this.canEdit = false;
+      this.canDelete = false;
+      this.canEditLocation = false;
+    }
+  }
+
   public toggleDevice(sensorId: string) {
     if (this.selectedDeviceIds.includes(sensorId)) {
       this.selectedDeviceIds = this.selectedDeviceIds.filter(x => x !== sensorId);
     } else {
       this.selectedDeviceIds.push(sensorId);
     }
+
+    this.updateActions();
+  }
+
+  public filterSelectedDevices(deviceIds: string[]) {
+    this.selectedDeviceIds = this.selectedDeviceIds.filter(x => deviceIds.includes(x));
+
+    this.updateActions();
   }
 
   public selectDevice(sensorId: string) {
     if (!this.selectedDeviceIds.includes(sensorId)) {
       this.selectedDeviceIds.push(sensorId);
     }
+
+    this.updateActions();
   }
 
-  public async updateDevice(e, field) {
+  public async updateDeviceLocation(newLocation) {
     const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString);
     if (confirmed) {
+
       const promises = [];
       for (const deviceId of this.selectedDeviceIds) {
-        let updateBody: IUpdateDeviceBody;
-        if (field === 'name') {
-          updateBody = {
-            name: e.target.value,
-          };
-        } else if (field === 'connectivity') {
-          updateBody = {
-            connectivity: e.target.value,
-          };
-        } else if (field === 'description') {
-          updateBody = {
-            description: e.target.value,
-          };
-        } else if (field === 'location') {
-          const latitude = e.length > 0 ? e[0] : null;
-          const longitude = e.length > 1 ? e[1] : null;
-          const location = [longitude, latitude];
+        const latitude = newLocation.length > 0 ? newLocation[0] : null;
+        const longitude = newLocation.length > 1 ? newLocation[1] : null;
+        const location = [longitude, latitude];
 
-          for (const device of this.devices) {
-            if (device._id === deviceId && device.location.coordinates.length > 2) {
-              location.push(device.location.coordinates[2]);
-              break;
-            }
+        for (const device of this.devices) {
+          if (device._id === deviceId && device.location.coordinates.length > 2) {
+            location.push(device.location.coordinates[2]);
+            break;
           }
-
-          updateBody = {
-            location: { location }
-          };
         }
+
+        const updateBody: IUpdateDeviceBody = {
+          location: { location },
+        };
 
         if (updateBody) {
           promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
@@ -179,6 +231,44 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   filterInputChanged(name) {
     this.filterChanged.next(name);
+  }
+
+  public async saveDevices() {
+    if (!this.devicesTable.valid) {
+      this.alertService.error(this.formInvalidMessage);
+      return;
+    }
+
+    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString);
+    if (confirmed) {
+      const promises = [];
+
+      const devices = this.devicesTable.get('tableRows') as FormArray;
+      for (const device of devices.controls) {
+        const deviceId = device.value.id;
+        const updateBody: IUpdateDeviceBody = {};
+
+        if (device.get('name').dirty) {
+          updateBody.name = device.value.name;
+        }
+        if (device.get('category').dirty) {
+          updateBody.category = device.value.category;
+        }
+        if (device.get('connectivity').dirty) {
+          updateBody.connectivity = device.value.connectivity;
+        }
+        if (device.get('description').dirty) {
+          updateBody.description = device.value.description;
+        }
+
+        if (Object.keys(updateBody).length) {
+          promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
+        }
+      }
+
+      await Promise.all(promises);
+      this.devicesTable.markAsPristine();
+    }
   }
 
   public async registerDevice() {
@@ -202,7 +292,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.locationService.location$.subscribe(location => {
         if (this.showLocation && location.coordinates) {
-          this.updateDevice(location.coordinates, 'location');
+          this.updateDeviceLocation(location.coordinates);
         }
       })
     );
