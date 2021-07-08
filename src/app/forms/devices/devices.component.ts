@@ -48,9 +48,10 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   public confirmTitleString = $localize`:@@confirm.title:Please confirm`;
   public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
+  public updatedDevicesString = $localize`:@@updated.devices:Successfully updated device(s).`;
   public joinOrganizationString = $localize`:@@join.organization:You need to join an organization first.`;
-  public confirmUpdateString = $localize`:@@update.device.confirm.body:Do you really want to update the device(s)?`;
-  public confirmDeleteBodyString = $localize`:@@delete.device.confirm.body:Do you really want to delete the device(s)?`;
+  public confirmUpdateString = $localize`:@@update.devices.confirm.body:Do you really want to update the device(s)?`;
+  public confirmDeleteBodyString = $localize`:@@delete.devices.confirm.body:Do you really want to delete the device(s)?`;
 
   constructor(
     private readonly router: Router,
@@ -226,6 +227,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
       }
 
       await Promise.all(promises);
+      this.alertService.success(this.updatedDevicesString);
     }
   }
 
@@ -268,6 +270,8 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
       await Promise.all(promises);
       this.devicesTable.markAsPristine();
+
+      this.alertService.success(this.updatedDevicesString);
     }
   }
 
