@@ -7,7 +7,7 @@
         <div [ngClass]="{'col-6': activeStepIndex === 0, 'col-11': activeStepIndex !== 0 }">
             <div class="row">
                 <div class="col-6">
-                    <h3 *ngIf="activeStepIndex === 0" i18n>Device Properties</h3>
+                    <h3 *ngIf="activeStepIndex === 0" i18n>Device</h3>
                     <h3 *ngIf="activeStepIndex === 1" i18n>Sensors</h3>
                     <h3 *ngIf="activeStepIndex === 2" i18n>Datastreams</h3>
                 </div>
@@ -18,8 +18,12 @@
             <hr>
             <form [formGroup]="deviceForm" (ngSubmit)="submitDevice()">
                 <div [ngStyle]="{display: activeStepIndex === 0 ? 'block' : 'none'}">
+                    <div *ngIf="deviceControls.id.value" class="form-group">
+                        <span i18n>ID:</span>
+                        <span class="font-weight-bold ml-1">{{ deviceControls.id.value }}</span>
+                    </div>
                     <app-device-type formControlName="category" [submitted]="submitted" (sensorType)="setNameFromCategory($event)"></app-device-type>
-                    <div class="form-group mb-4">
+                    <div class="form-group">
                         <label i18n>Name</label>
                         <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
                             [ngClass]="{ 'is-invalid': (deviceControls.name.dirty || deviceControls.name.touched || submitted) && deviceControls.name.errors }"

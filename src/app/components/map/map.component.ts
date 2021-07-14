@@ -342,7 +342,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private onSingleClick(event: MapBrowserEvent) {
-    console.log(event);
     const mapCoordinateRD = event.coordinate;
     const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
 
@@ -589,7 +588,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-
     this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
       if (auth) {
         this.connectionService.refreshLegalEntity();
