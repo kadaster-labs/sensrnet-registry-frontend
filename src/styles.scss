@@ -39,14 +39,16 @@ $bar-text-color: $gray-700;
 }
 
 .ol-overlaycontainer-stopevent .locate {
-  top: calc(.5em + 50px);
-  left: 3em;
+  top: auto;
+  right: 0.5em;
+  bottom: 6.1em;
+  left: auto;
 }
 
 .ol-overlaycontainer-stopevent .ol-rotate {
   top: auto;
   right: 0.5em;
-  bottom: 6.1em;
+  bottom: 8.1em;
   left: auto;
 }
 
