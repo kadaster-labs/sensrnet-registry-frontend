@@ -1,17 +1,17 @@
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IDevice } from '../../model/bodies/device-model';
-import { ModalService } from '../../services/modal.service';
-import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LocationService } from '../../services/location.service';
-import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
-import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { DeviceService, IRegisterDataStreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDataStreamBody,
-  IUpdateDeviceBody, IUpdateSensorBody,
-} from '../../services/device.service';
-import { ObservationGoalService } from '../../services/observation-goal.service';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { urlRegex } from '../../helpers/form.helpers';
+import { IDevice } from '../../model/bodies/device-model';
+import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { AlertService } from '../../services/alert.service';
+import {
+  DeviceService, IRegisterDataStreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDataStreamBody,
+  IUpdateDeviceBody, IUpdateSensorBody
+} from '../../services/device.service';
+import { LocationService } from '../../services/location.service';
+import { ObservationGoalService } from '../../services/observation-goal.service';
 
 @Component({
   selector: 'app-device',
@@ -39,11 +39,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
 
   constructor(
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly alertService: AlertService,
-    private readonly modalService: ModalService,
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
     private readonly observationGoalService: ObservationGoalService,
@@ -68,11 +66,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (this.deviceId) {
             this.activeStepIndex = step;
           } else {
-            try {
-              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch (e) {
-              console.log('dismissed modal');
-            }
+            this.alertService.warning(this.saveBodyString);
           }
         } else if (this.activeStepIndex === 1) {
           const sensors = this.sensorForm.get('sensors') as FormArray;
@@ -81,9 +75,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (allRegistered) {
             this.activeStepIndex = step;
           } else {
-            try {
-              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch {}
+            this.alertService.warning(this.saveBodyString);
           }
         } else if (this.activeStepIndex === 2) {
           let allRegistered = true;
@@ -101,9 +93,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (allRegistered) {
             this.activeStepIndex = step;
           } else {
-            try {
-              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch {}
+            this.alertService.warning(this.saveBodyString);
           }
         }
       }
