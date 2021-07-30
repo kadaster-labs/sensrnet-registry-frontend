@@ -1,12 +1,13 @@
-import { IContactDetails, ILegalEntity } from '../../model/legalEntity';
-import { UserService } from '../../services/user.service';
-import { AlertService } from '../../services/alert.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { UserUpdateBody } from '../../model/bodies/user-update';
-import { LegalEntityService } from '../../services/legal-entity.service';
-import { ConnectionService } from '../../services/connection.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { urlRegex } from '../../helpers/form.helpers';
+import { UserUpdateBody } from '../../model/bodies/user-update';
+import { IContactDetails, ILegalEntity } from '../../model/legalEntity';
+import { AlertService } from '../../services/alert.service';
+import { ConnectionService } from '../../services/connection.service';
+import { LegalEntityService } from '../../services/legal-entity.service';
+import { UserService } from '../../services/user.service';
 import { createOrganizationMailValidator } from '../../validators/organization-mail.validator';
 
 @Component({
@@ -22,12 +23,19 @@ export class OrganizationUpdateComponent implements OnInit {
 
   public updateSuccessMessage = $localize`:@@organization.update:Updated the organization.`;
 
+  public leaveOrgConfirmTitleString = $localize`:@@leave.organization.confirm.title:Leave Organization`;
+  public leaveOrgConfirmBodyString = $localize`:@@leave.organization.confirm.body:You are about to leave your organization. Are you sure?`;
+
+  public removeOrgConfirmTitleString = $localize`:@@remove.organization.confirm.title:Remove Organization`;
+  public removeOrgConfirmBodyString = $localize`:@@remove.organization.confirm.body:You are about to remove your organization. First all devices need to be removed before this will succeed. Are you sure to continue now?`;
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly alertService: AlertService,
     private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
+    private readonly modalService: ModalService,
   ) { }
 
   get f() {
@@ -60,17 +68,35 @@ export class OrganizationUpdateComponent implements OnInit {
   }
 
   public async leave() {
-    const userUpdate: UserUpdateBody = {
-      leaveLegalEntity: true,
-    };
-    try {
-      await this.userService.update(userUpdate).toPromise();
+    await this.modalService.confirm(this.leaveOrgConfirmTitleString, this.leaveOrgConfirmBodyString)
+      .then(async () => {
+        const userUpdate: UserUpdateBody = {
+          leaveLegalEntity: true,
+        };
+        try {
+          await this.userService.update(userUpdate).toPromise();
 
-      this.setLegalEntityId.emit(null);
-      this.connectionService.updateSocketLegalEntity(null);
-    } catch (e) {
-      this.alertService.error(e.error.message);
-    }
+          this.setLegalEntityId.emit(null);
+          this.connectionService.updateSocketLegalEntity(null);
+        } catch (e) {
+          this.alertService.error(e.error.message);
+        }
+      }, () => { });
+  }
+
+  public async remove() {
+    await this.modalService.confirm(this.removeOrgConfirmTitleString, this.removeOrgConfirmBodyString)
+      .then(async () => {
+        try {
+          await this.legalEntityService.delete().toPromise();
+          this.alertService.success('Successfully removed your organization!');
+
+          this.connectionService.updateSocketLegalEntity(null);
+          this.setLegalEntityId.emit(null);
+        } catch (e) {
+          this.alertService.error(e.error.message);
+        }
+      }, () => { });
   }
 
   public async submit() {
