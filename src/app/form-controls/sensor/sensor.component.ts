@@ -1,9 +1,9 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ModalService } from '../../services/modal.service';
-import { DeviceService } from '../../services/device.service';
-import { AlertService } from '../../services/alert.service';
+import { ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { urlRegex } from '../../helpers/form.helpers';
+import { AlertService } from '../../services/alert.service';
+import { DeviceService } from '../../services/device.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-sensor',
@@ -30,7 +30,7 @@ export class SensorComponent implements ControlValueAccessor {
     private modalService: ModalService,
     private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
-    ) {}
+  ) { }
 
   createSensor(): FormGroup {
     return this.formBuilder.group({
@@ -54,17 +54,16 @@ export class SensorComponent implements ControlValueAccessor {
     const sensors = this.parentForm.get('sensors') as FormArray;
     const sensorId = this.parentForm.get(`sensors.${index}`).value.id;
 
-    try {
-      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
-      if (confirmed) {
-        if (sensorId) {
-          await this.deviceService.removeSensor(this.deviceId, sensorId).toPromise();
+    await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString).then(() => {
+      if (sensorId) {
+        try {
+          this.deviceService.removeSensor(this.deviceId, sensorId).toPromise();
+        } catch (e) {
+          this.alertService.error(e.error.message);
         }
-        sensors.removeAt(index);
       }
-    } catch (e) {
-      this.alertService.error(e.error.message);
-    }
+      sensors.removeAt(index);
+    }, () => { });
   }
 
   public getSensorElement(i, elem) {

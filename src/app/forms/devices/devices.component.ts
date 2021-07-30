@@ -28,7 +28,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   public pageSize = 15;
 
   public sortField = 'name';
-  public sortDirections = {ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING'};
+  public sortDirections = { ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING' };
   public sortDirection = this.sortDirections.ASCENDING;
 
   public sensorCategories = Category;
@@ -63,7 +63,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     private readonly connectionService: ConnectionService,
     private readonly legalEntityService: LegalEntityService,
     private readonly oidcSecurityService: OidcSecurityService,
-  ) {}
+  ) { }
 
   getSortClass(sortField) {
     let sortClass;
@@ -144,8 +144,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   public async deleteSelectedDevices(): Promise<void> {
     if (this.selectedDeviceIds) {
-      const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString);
-      if (confirmed) {
+      await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString).then(async () => {
         try {
           for (const deviceId of this.selectedDeviceIds) {
             await this.deviceService.unregister(deviceId);
@@ -155,7 +154,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
         } catch (e) {
           this.alertService.error(e.error.message);
         }
-      }
+      }, () => { });
     }
   }
 
@@ -201,9 +200,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   public async updateDeviceLocation(newLocation) {
-    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString);
-    if (confirmed) {
-
+    await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString).then(async () => {
       const promises = [];
       for (const deviceId of this.selectedDeviceIds) {
         const latitude = newLocation.length > 0 ? newLocation[0] : null;
@@ -228,7 +225,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
       await Promise.all(promises);
       this.alertService.success(this.updatedDevicesString);
-    }
+    }, () => { });
   }
 
   filterInputChanged(name) {
@@ -241,8 +238,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString);
-    if (confirmed) {
+    await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString).then(async () => {
       const promises = [];
 
       const devices = this.devicesTable.get('tableRows') as FormArray;
@@ -272,7 +268,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
       this.devicesTable.markAsPristine();
 
       this.alertService.success(this.updatedDevicesString);
-    }
+    }, () => { });
   }
 
   public async registerDevice() {

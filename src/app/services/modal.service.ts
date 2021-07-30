@@ -25,20 +25,13 @@ export class ModalService {
     message: string,
     btnOkText: string = this.btnOkText,
     btnCancelText: string = this.btnCancelText,
-    dialogSize: 'sm'|'lg' = 'sm'): Promise<boolean> {
+    dialogSize: 'sm'|'lg' = 'sm'): Promise<any> {
     const modalRef = this.modalService.open(ModalComponent, { size: dialogSize, windowClass: 'modal-window' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.message = message;
     modalRef.componentInstance.btnOkText = btnOkText;
     modalRef.componentInstance.btnCancelText = btnCancelText;
 
-    let result;
-    try {
-      result = await modalRef.result;
-    } catch {
-      result = false;
-    }
-
-    return result;
+    return modalRef.result;
   }
 }

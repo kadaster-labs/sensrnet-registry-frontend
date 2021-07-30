@@ -16,7 +16,7 @@ export class ModalComponent {
     ) {}
 
   public decline() {
-    this.activeModal.close(false);
+    this.activeModal.dismiss();
   }
 
   public accept() {

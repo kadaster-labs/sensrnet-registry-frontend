@@ -6,7 +6,7 @@ import { AlertService } from '../../services/alert.service';
 import { Component, forwardRef, Input } from '@angular/core';
 import { DeviceService } from '../../services/device.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { ObservationGoalService} from '../../services/observation-goal.service';
+import { ObservationGoalService } from '../../services/observation-goal.service';
 import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -37,7 +37,7 @@ export class DataStreamComponent implements ControlValueAccessor {
     private readonly alertService: AlertService,
     private readonly deviceService: DeviceService,
     private readonly observationGoalService: ObservationGoalService,
-    ) {}
+  ) { }
 
   createDataStream(): FormGroup {
     return this.formBuilder.group({
@@ -71,21 +71,16 @@ export class DataStreamComponent implements ControlValueAccessor {
     const dataStreams = sensors.at(sensorIndex).get(`dataStreams`) as FormArray;
     const dataStreamId = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}`).value.id;
 
-    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString)
-      .then(async confirmed => {
-        if (confirmed) {
-          if (sensorId && dataStreamId) {
-            try {
-              await this.deviceService.removeDataStream(this.deviceId, sensorId, dataStreamId).toPromise();
-              dataStreams.removeAt(dataStreamIndex);
-            } catch (e) {
-              this.alertService.error(e.error.message);
-            }
-          } else {
-            dataStreams.removeAt(dataStreamIndex);
-          }
+    this.modalService.confirm(this.confirmTitleString, this.confirmBodyString).then(() => {
+      if (sensorId && dataStreamId) {
+        try {
+          this.deviceService.removeDataStream(this.deviceId, sensorId, dataStreamId).toPromise();
+        } catch (e) {
+          this.alertService.error(e.error.message);
         }
-      }).catch(() => console.log('User dismissed the dialog.'));
+      }
+      dataStreams.removeAt(dataStreamIndex);
+    }, () => { });
   }
 
   public getDataStreamElement(sensorIndex, dataStreamIndex, element) {
@@ -155,7 +150,7 @@ export class DataStreamComponent implements ControlValueAccessor {
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      switchMap( x =>  this.observationGoalService.getObservationGoals({
+      switchMap(x => this.observationGoalService.getObservationGoals({
         pageIndex: 0, pageSize: 15, name: x,
       }))
     )
