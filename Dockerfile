@@ -1,6 +1,6 @@
 
 # First Stage : to install and build dependences
-FROM node:12.18.4 as builder
+FROM node:16.5.0 as builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN npm run build
 
 
 # Second Stage : Setup command to serve the app using NGinx
-FROM nginxinc/nginx-unprivileged:1.18.0-alpine
+FROM nginx:1.21.1-alpine
 
 COPY VERSION .
 COPY ./entrypoint.sh ./entrypoint.sh
