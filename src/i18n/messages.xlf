@@ -15,12 +15,13 @@
         <note category="description">Currently selected slide number read by screen reader</note>
       </notes>
       <segment>
-        <source> Slide <ph id="0" equiv="INTERPOLATION" disp="private _pauseO"/> of <ph id="1" equiv="INTERPOLATION_1" disp="Subject(false);"/> </source>
+        <source> Slide <ph id="0" equiv="INTERPOLATION" disp="OnHover$ = new"/> of <ph id="1" equiv="INTERPOLATION_1" disp=";
+  private _pa"/> </source>
       </segment>
     </unit>
     <unit id="ngb.carousel.previous">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:132,133</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:132,134</note>
       </notes>
       <segment>
         <source>Previous</source>
@@ -28,7 +29,7 @@
     </unit>
     <unit id="ngb.carousel.next">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:147,151</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts:147,152</note>
       </notes>
       <segment>
         <source>Next</source>
@@ -36,7 +37,7 @@
     </unit>
     <unit id="ngb.datepicker.select-month">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:43,47</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:44,49</note>
         <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:49,50</note>
       </notes>
       <segment>
@@ -46,7 +47,7 @@
     <unit id="ngb.datepicker.select-year">
       <notes>
         <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:59,63</note>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:72,74</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:74</note>
       </notes>
       <segment>
         <source>Select year</source>
@@ -64,7 +65,7 @@
     <unit id="ngb.datepicker.next-month">
       <notes>
         <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:44,48</note>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:57,61</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:59,61</note>
       </notes>
       <segment>
         <source>Next month</source>
@@ -72,7 +73,7 @@
     </unit>
     <unit id="ngb.pagination.first">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:182</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:182,183</note>
       </notes>
       <segment>
         <source>««</source>
@@ -120,7 +121,7 @@
     </unit>
     <unit id="ngb.pagination.next-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:225,228</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:226,228</note>
       </notes>
       <segment>
         <source>Next</source>
@@ -136,10 +137,13 @@
     </unit>
     <unit id="ngb.progressbar.value">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts:31,38</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts:32,38</note>
       </notes>
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="turn this._max;"/></source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="; }
+
+  /**
+   *"/></source>
       </segment>
     </unit>
     <unit id="ngb.timepicker.HH">
@@ -168,7 +172,7 @@
     </unit>
     <unit id="ngb.timepicker.minutes">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:57,58</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:58,59</note>
       </notes>
       <segment>
         <source>Minutes</source>
@@ -184,7 +188,7 @@
     </unit>
     <unit id="ngb.timepicker.decrement-hours">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:67,68</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:68,69</note>
       </notes>
       <segment>
         <source>Decrement hours</source>
@@ -192,7 +196,7 @@
     </unit>
     <unit id="ngb.timepicker.increment-minutes">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:75,76</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:75,77</note>
       </notes>
       <segment>
         <source>Increment minutes</source>
@@ -200,7 +204,7 @@
     </unit>
     <unit id="ngb.timepicker.decrement-minutes">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:82</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:82,83</note>
       </notes>
       <segment>
         <source>Decrement minutes</source>
@@ -232,7 +236,7 @@
     </unit>
     <unit id="ngb.timepicker.decrement-seconds">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:105,109</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:106,109</note>
       </notes>
       <segment>
         <source>Decrement seconds</source>
@@ -240,24 +244,24 @@
     </unit>
     <unit id="ngb.timepicker.AM">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:116,123</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:118,123</note>
       </notes>
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="Step: number;"/></source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="/**
+   * Whe"/></source>
       </segment>
     </unit>
     <unit id="ngb.timepicker.PM">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:125,130</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:125,132</note>
       </notes>
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="sible.
-   */"/></source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="@Input() spinn"/></source>
       </segment>
     </unit>
     <unit id="ngb.toast.close-aria">
       <notes>
-        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/toast/toast.ts:76,85</note>
+        <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/toast/toast.ts:78,85</note>
       </notes>
       <segment>
         <source>Close</source>
@@ -351,7 +355,7 @@
     </unit>
     <unit id="map.locate">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:91</note>
+        <note category="location">src/app/components/map/map.component.ts:90</note>
       </notes>
       <segment>
         <source>Locate me</source>
@@ -359,7 +363,7 @@
     </unit>
     <unit id="confirm.title">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:92</note>
+        <note category="location">src/app/components/map/map.component.ts:91</note>
         <note category="location">src/app/forms/devices/devices.component.ts:49</note>
       </notes>
       <segment>
@@ -368,7 +372,7 @@
     </unit>
     <unit id="delete.device.confirm.body">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:93</note>
+        <note category="location">src/app/components/map/map.component.ts:92</note>
       </notes>
       <segment>
         <source>Do you really want to delete the device?</source>
@@ -376,7 +380,7 @@
     </unit>
     <unit id="map.geo.support">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:94</note>
+        <note category="location">src/app/components/map/map.component.ts:93</note>
       </notes>
       <segment>
         <source>Geolocation is not supported by this browser.</source>
@@ -384,7 +388,7 @@
     </unit>
     <unit id="1177467005869954871">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:546</note>
+        <note category="location">src/app/components/map/map.component.ts:545</note>
       </notes>
       <segment>
         <source>Enter location</source>
@@ -560,7 +564,7 @@
     <unit id="4021752662928002901">
       <notes>
         <note category="location">src/app/components/observation-goal/observation-goal.component.html:46</note>
-        <note category="location">src/app/forms/organization-update/organization-update.component.html:5</note>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:4</note>
       </notes>
       <segment>
         <source>Update</source>
@@ -1308,20 +1312,68 @@
         <source>Join</source>
       </segment>
     </unit>
+    <unit id="2547571169649786686">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Danger zone</source>
+      </segment>
+    </unit>
     <unit id="2273088133016853024">
       <notes>
-        <note category="location">src/app/forms/organization-update/organization-update.component.html:4</note>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:9</note>
       </notes>
       <segment>
         <source>Leave</source>
       </segment>
     </unit>
+    <unit id="4814285799071780083">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:10</note>
+      </notes>
+      <segment>
+        <source>Remove</source>
+      </segment>
+    </unit>
     <unit id="organization.update">
       <notes>
-        <note category="location">src/app/forms/organization-update/organization-update.component.ts:23</note>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:24</note>
       </notes>
       <segment>
         <source>Updated the organization.</source>
+      </segment>
+    </unit>
+    <unit id="leave.organization.confirm.title">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:26</note>
+      </notes>
+      <segment>
+        <source>Leave Organization</source>
+      </segment>
+    </unit>
+    <unit id="leave.organization.confirm.body">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:27</note>
+      </notes>
+      <segment>
+        <source>You are about to leave your organization. Are you sure?</source>
+      </segment>
+    </unit>
+    <unit id="remove.organization.confirm.title">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:29</note>
+      </notes>
+      <segment>
+        <source>Remove Organization</source>
+      </segment>
+    </unit>
+    <unit id="remove.organization.confirm.body">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:30</note>
+      </notes>
+      <segment>
+        <source>You are about to remove your organization. First all devices need to be removed before this will succeed. Are you sure to continue now?</source>
       </segment>
     </unit>
     <unit id="4768749765465246664">
