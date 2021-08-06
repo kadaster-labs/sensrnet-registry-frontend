@@ -57,7 +57,7 @@ export interface IUpdateSensorBody {
   documentation?: string;
 }
 
-export interface IRegisterDataStreamBody {
+export interface IRegisterDatastreamBody {
   _id?: string;
   name: string;
   description?: string;
@@ -74,7 +74,7 @@ export interface IRegisterDataStreamBody {
   dataLink?: string;
 }
 
-export interface IUpdateDataStreamBody {
+export interface IUpdateDatastreamBody {
   _id?: string;
   name?: string;
   description?: string;
@@ -155,18 +155,18 @@ export class DeviceService {
     return this.http.delete(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}`);
   }
 
-  public registerDataStream(deviceId: string, sensorId: string, dataStream: IRegisterDataStreamBody) {
-    return this.http.post(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream`, dataStream);
+  public registerDatastream(deviceId: string, sensorId: string, datastream: IRegisterDatastreamBody) {
+    return this.http.post(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream`, datastream);
   }
 
-  public updateDataStream(deviceId: string, sensorId: string, dataStreamId: string,
-                          dataStream: IUpdateDataStreamBody) {
-    return this.http.put(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}`,
-      dataStream);
+  public updateDatastream(deviceId: string, sensorId: string, datastreamId: string,
+                          datastream: IUpdateDatastreamBody) {
+    return this.http.put(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${datastreamId}`,
+      datastream);
   }
 
-  public removeDataStream(deviceId: string, sensorId: string, dataStreamId: string) {
-    return this.http.delete(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}`);
+  public removeDatastream(deviceId: string, sensorId: string, datastreamId: string) {
+    return this.http.delete(`${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${datastreamId}`);
   }
 
   public async getDevices(bottomLeftLongitude?: string, bottomLeftLatitude?: string, upperRightLongitude?: string,
@@ -214,41 +214,6 @@ export class DeviceService {
     return devices;
   }
 
-  /** Update sensor details */
-  public updateDetails(sensorId: string, details: IUpdateSensorBody) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/details`, details).toPromise();
-  }
-
-  /** Update location of a sensor */
-  public updateLocation(sensorId: string, location: IUpdateLocationBody) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/location`, location).toPromise();
-  }
-
-  /** Activate a sensor */
-  public activate(sensorId: string) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/activate`, {}).toPromise();
-  }
-
-  /** Deactivate a sensor */
-  public deactivate(sensorId: string) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/deactivate`, {}).toPromise();
-  }
-
-  /** Add datastream to sensor */
-  public addDatastream(sensorId: string, datastream: object) {
-    return this.http.post(`${this.env.apiUrl}/sensor/${sensorId}/datastream`, datastream).toPromise();
-  }
-
-  /** Update datastream on sensor */
-  public updateDatastream(sensorId: string, datastreamId: string, datastream: object) {
-    return this.http.put(`${this.env.apiUrl}/sensor/${sensorId}/datastream/${datastreamId}`, datastream).toPromise();
-  }
-
-  /** Delete a datastream from sensor */
-  public deleteDatastream(sensorId: string, datastreamId: string) {
-    return this.http.delete(`${this.env.apiUrl}/sensor/${sensorId}/datastream/${datastreamId}`).toPromise();
-  }
-
   /** Unregister a sensor */
   public unregister(id: string) {
     return this.http.delete(`${this.env.apiUrl}/device/${id}`).toPromise();
@@ -259,13 +224,13 @@ export class DeviceService {
     return this.http.get(`${this.env.apiUrl}/device/${id}`);
   }
 
-  public linkObservationGoal(deviceId: string, sensorId: string, dataStreamId: string, observationGoalId: string) {
-    const url = `${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}/linkgoal`;
+  public linkObservationGoal(deviceId: string, sensorId: string, datastreamId: string, observationGoalId: string) {
+    const url = `${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${datastreamId}/linkgoal`;
     return this.http.put(url, {observationGoalId});
   }
 
-  public unlinkObservationGoal(deviceId: string, sensorId: string, dataStreamId: string, observationGoalId: string) {
-    const url = `${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${dataStreamId}/unlinkgoal`;
+  public unlinkObservationGoal(deviceId: string, sensorId: string, datastreamId: string, observationGoalId: string) {
+    const url = `${this.env.apiUrl}/device/${deviceId}/sensor/${sensorId}/datastream/${datastreamId}/unlinkgoal`;
     return this.http.put(url, {observationGoalId});
   }
 }
