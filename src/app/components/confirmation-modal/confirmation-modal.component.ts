@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modal.html',
+  selector: 'app--confirmation-modal',
+  templateUrl: './confirmation-modal.html',
 })
-export class ModalComponent {
+export class ConfirmationModalComponent {
   @Input() title: string;
   @Input() message: string;
   @Input() btnOkText: string;
@@ -16,11 +16,11 @@ export class ModalComponent {
     ) {}
 
   public decline() {
-    this.activeModal.close(false);
+    this.activeModal.dismiss();
   }
 
   public accept() {
-    this.activeModal.close(true);
+    this.activeModal.close();
   }
 
   public dismiss() {

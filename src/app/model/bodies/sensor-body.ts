@@ -7,7 +7,7 @@ export interface ISensor {
   name?: string;
   location: ISensorLocation;
   baseObjectId?: string;
-  dataStreams?: Array<any>;
+  datastreams?: Array<any>;
   aim?: string;
   description?: string;
   manufacturer?: string;

@@ -6,6 +6,6 @@
 </div>
 <div class="modal-body">{{ message }}</div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-danger mb-0" (click)="decline()">{{ btnCancelText }}</button>
-    <button type="button" class="btn btn-primary mb-0" (click)="accept()">{{ btnOkText }}</button>
+    <button type="button" class="btn btn-secondary mb-0" ngbAutofocus data-dismiss="modal" (click)="decline()">{{ btnCancelText }}</button>
+    <button type="button" class="btn btn-primary btn-danger mb-0" (click)="accept()">{{ btnOkText }}</button>
 </div>
