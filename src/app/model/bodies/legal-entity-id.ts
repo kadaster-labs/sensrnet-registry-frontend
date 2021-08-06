@@ -1,5 +1,3 @@
 export class LegalEntityId {
-  constructor(
-    public legalEntityId: string,
-  ) {}
+    constructor(public legalEntityId: string) {}
 }

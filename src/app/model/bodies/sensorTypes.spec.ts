@@ -39,6 +39,6 @@ describe('sensorTypes NL translation', () => {
     });
 });
 
-function testInstanceExists(types: object) {
+function testInstanceExists(types: Record<string, unknown>) {
     expect(types).toBeTruthy();
 }
