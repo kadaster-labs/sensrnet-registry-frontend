@@ -203,8 +203,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
         const styleSelectedCluster = (feature) => {
             const zoomLevel = this.map.getView().getZoom();
-            
-            if (Object.prototype.hasOwnProperty.call(feature.values_, 'selectclusterfeature') && zoomLevel > this.clusterMaxZoom) {
+
+            if (
+                Object.prototype.hasOwnProperty.call(feature.values_, 'selectclusterfeature') &&
+                zoomLevel > this.clusterMaxZoom
+            ) {
                 const category = feature.get('features')[0].values_.category;
                 const ownsDevice = this.ownsDevice(feature.get('features')[0].values_.device);
                 return styleCache[`${ownsDevice}_${category}`];
