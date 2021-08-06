@@ -1,8 +1,8 @@
-import {Router} from '@angular/router';
-import {ModalService} from '../../services/modal.service';
-import {AlertService} from '../../services/alert.service';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {IObservationGoal, ObservationGoalService} from '../../services/observation-goal.service';
+import { Router } from '@angular/router';
+import { ModalService } from '../../services/modal.service';
+import { AlertService } from '../../services/alert.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { IObservationGoal, ObservationGoalService } from '../../services/observation-goal.service';
 
 @Component({
   selector: 'app-observation-goals',
@@ -17,7 +17,7 @@ export class ObservationGoalsComponent implements OnInit, OnDestroy {
   public pageSize = 15;
 
   public sortField = 'name';
-  public sortDirections = {ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING'};
+  public sortDirections = { ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING' };
   public sortDirection = this.sortDirections.ASCENDING;
 
   public successString = $localize`:@@goal.success:Successfully removed observation goal.`;
@@ -30,7 +30,7 @@ export class ObservationGoalsComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService,
     private readonly alertService: AlertService,
     private readonly observationGoalService: ObservationGoalService,
-  ) {}
+  ) { }
 
   public async getPreviousPage() {
     if (this.pageIndex > 0) {
@@ -58,18 +58,17 @@ export class ObservationGoalsComponent implements OnInit, OnDestroy {
   }
 
   public async removeObservationGoal(observationGoalId: string): Promise<void> {
-    const confirmed = await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString);
-
-    if (confirmed) {
+    await this.modalService.confirm(this.confirmTitleString, this.confirmBodyString).then(() => {
       try {
-        await this.observationGoalService.delete(observationGoalId).toPromise();
-        await this.getPage(this.pageIndex);
+        this.observationGoalService.delete(observationGoalId).toPromise();
+        this.getPage(this.pageIndex);
 
         this.alertService.success(this.successString);
       } catch (e) {
         this.alertService.error(e.error.message);
       }
-    }
+    }, () => { });
+
   }
 
   getSortClass(sortField) {

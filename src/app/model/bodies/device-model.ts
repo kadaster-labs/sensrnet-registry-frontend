@@ -1,4 +1,4 @@
-export interface IDataStream {
+export interface IDatastream {
   _id: string;
   sensorId: string;
   name: string;
@@ -45,6 +45,6 @@ export interface IDevice {
     coordinates: number[],
   };
   sensors?: ISensor[];
-  dataStreams?: IDataStream[];
+  datastreams?: IDatastream[];
   canEdit?: boolean;
 }

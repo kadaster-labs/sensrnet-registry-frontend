@@ -1,5 +1,5 @@
-export interface IDataStream {
-  dataStreamId?: string;
+export interface IDatastream {
+  datastreamId?: string;
   name?: string;
   reason?: string;
   description?: string;

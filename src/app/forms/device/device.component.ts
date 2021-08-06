@@ -1,17 +1,17 @@
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IDevice } from '../../model/bodies/device-model';
-import { ModalService } from '../../services/modal.service';
-import { AlertService } from '../../services/alert.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LocationService } from '../../services/location.service';
-import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
-import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { DeviceService, IRegisterDataStreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDataStreamBody,
-  IUpdateDeviceBody, IUpdateSensorBody,
-} from '../../services/device.service';
-import { ObservationGoalService } from '../../services/observation-goal.service';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { urlRegex } from '../../helpers/form.helpers';
+import { IDevice } from '../../model/bodies/device-model';
+import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { AlertService } from '../../services/alert.service';
+import {
+  DeviceService, IRegisterDatastreamBody, IRegisterDeviceBody, IRegisterSensorBody, IUpdateDatastreamBody,
+  IUpdateDeviceBody, IUpdateSensorBody
+} from '../../services/device.service';
+import { LocationService } from '../../services/location.service';
+import { ObservationGoalService } from '../../services/observation-goal.service';
 
 @Component({
   selector: 'app-device',
@@ -39,11 +39,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
 
   constructor(
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly alertService: AlertService,
-    private readonly modalService: ModalService,
     private readonly deviceService: DeviceService,
     private readonly locationService: LocationService,
     private readonly observationGoalService: ObservationGoalService,
@@ -68,11 +66,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (this.deviceId) {
             this.activeStepIndex = step;
           } else {
-            try {
-              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch (e) {
-              console.log('dismissed modal');
-            }
+            this.alertService.warning(this.saveBodyString);
           }
         } else if (this.activeStepIndex === 1) {
           const sensors = this.sensorForm.get('sensors') as FormArray;
@@ -81,18 +75,16 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (allRegistered) {
             this.activeStepIndex = step;
           } else {
-            try {
-              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch {}
+            this.alertService.warning(this.saveBodyString);
           }
         } else if (this.activeStepIndex === 2) {
           let allRegistered = true;
 
           const sensors = this.sensorForm.get('sensors') as FormArray;
           for (const sensorEntry of sensors.controls) {
-            const dataStreams = sensorEntry.get('dataStreams') as FormArray;
-            for (const dataStreamForm of dataStreams.controls) {
-              if (!dataStreamForm.value.id) {
+            const datastreams = sensorEntry.get('datastreams') as FormArray;
+            for (const datastreamForm of datastreams.controls) {
+              if (!datastreamForm.value.id) {
                 allRegistered = false;
               }
             }
@@ -101,9 +93,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
           if (allRegistered) {
             this.activeStepIndex = step;
           } else {
-            try {
-              await this.modalService.confirm(this.saveTitleString, this.saveBodyString);
-            } catch {}
+            this.alertService.warning(this.saveBodyString);
           }
         }
       }
@@ -132,7 +122,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     await this.registerSensors();
   }
 
-  public async submitDataStreams() {
+  public async submitDatastreams() {
     this.submitted = true;
 
     if (!this.sensorForm.valid) {
@@ -140,7 +130,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.registerDataStreams();
+    await this.registerDatastreams();
   }
 
   public getStepCount(): number {
@@ -178,13 +168,13 @@ export class DeviceComponent implements OnInit, OnDestroy {
     sensors.clear();
 
     for (const sensor of device.sensors) {
-      const dataStreams = new FormArray([]);
-      if (device.dataStreams) {
-        for (const dataStream of device.dataStreams) {
-          if (dataStream.sensorId === sensor._id) {
+      const datastreams = new FormArray([]);
+      if (device.datastreams) {
+        for (const datastream of device.datastreams) {
+          if (datastream.sensorId === sensor._id) {
             const observationGoals = [];
-            if (dataStream.observationGoalIds) {
-              for (const observationGoalId of dataStream.observationGoalIds) {
+            if (datastream.observationGoalIds) {
+              for (const observationGoalId of datastream.observationGoalIds) {
                 const observationGoal = await this.observationGoalService.get(observationGoalId).toPromise();
                 if (observationGoal) {
                   observationGoals.push(observationGoal);
@@ -192,19 +182,19 @@ export class DeviceComponent implements OnInit, OnDestroy {
               }
             }
 
-            dataStreams.push(this.formBuilder.group({
-              id: dataStream._id,
-              name: [dataStream.name, Validators.required],
-              description: dataStream.description,
-              theme: dataStream.theme ? {value: dataStream.theme} : null,
-              dataQuality: dataStream.dataQuality,
-              isActive: !!dataStream.isActive,
-              isPublic: !!dataStream.isPublic,
-              isOpenData: !!dataStream.isOpenData,
-              containsPersonalInfoData: !!dataStream.containsPersonalInfoData,
-              isReusable: !!dataStream.isReusable,
-              documentation: dataStream.documentation,
-              dataLink: dataStream.dataLink,
+            datastreams.push(this.formBuilder.group({
+              id: datastream._id,
+              name: [datastream.name, Validators.required],
+              description: datastream.description,
+              theme: datastream.theme ? {value: datastream.theme} : null,
+              dataQuality: datastream.dataQuality,
+              isActive: !!datastream.isActive,
+              isPublic: !!datastream.isPublic,
+              isOpenData: !!datastream.isOpenData,
+              containsPersonalInfoData: !!datastream.containsPersonalInfoData,
+              isReusable: !!datastream.isReusable,
+              documentation: datastream.documentation,
+              dataLink: datastream.dataLink,
               observationGoals: [observationGoals],
             }));
           }
@@ -219,7 +209,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         manufacturer: sensor.manufacturer,
         supplier: sensor.supplier,
         documentation: [sensor.documentation, [Validators.pattern(urlRegex)]],
-        dataStreams,
+        datastreams,
       }));
       this.sensorForm.markAsPristine();
     }
@@ -295,24 +285,24 @@ export class DeviceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async updateObservationGoals(sensorId, dataStreamId, observationGoalIds) {
+  public async updateObservationGoals(sensorId, datastreamId, observationGoalIds) {
     const device = await this.deviceService.get(this.deviceId).toPromise() as IDevice;
-    const deviceDataStreams = device && device.dataStreams ? device.dataStreams.filter(
-      x => x._id === dataStreamId) : [];
+    const deviceDatastreams = device && device.datastreams ? device.datastreams.filter(
+      x => x._id === datastreamId) : [];
 
     const promises = [];
-    if (deviceDataStreams.length) {
-      const existingObservationGoalIds = deviceDataStreams[0].observationGoalIds;
+    if (deviceDatastreams.length) {
+      const existingObservationGoalIds = deviceDatastreams[0].observationGoalIds;
       for (const observationGoalId of observationGoalIds) {
         if (!existingObservationGoalIds || !existingObservationGoalIds.includes(observationGoalId)) {
-          promises.push(this.deviceService.linkObservationGoal(this.deviceId, sensorId, dataStreamId,
+          promises.push(this.deviceService.linkObservationGoal(this.deviceId, sensorId, datastreamId,
             observationGoalId).toPromise());
         }
       }
       if (existingObservationGoalIds) {
         for (const existingObservationGoalId of existingObservationGoalIds) {
           if (!observationGoalIds.includes(existingObservationGoalId)) {
-            promises.push(this.deviceService.unlinkObservationGoal(this.deviceId, sensorId, dataStreamId,
+            promises.push(this.deviceService.unlinkObservationGoal(this.deviceId, sensorId, datastreamId,
               existingObservationGoalId).toPromise());
           }
         }
@@ -388,41 +378,41 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.submitted = false;
   }
 
-  public async registerDataStreams() {
+  public async registerDatastreams() {
     const sensors = this.sensorForm.get('sensors') as FormArray;
 
     let failed = false;
     for (const sensorEntry of sensors.controls) {
       const sensorId = sensorEntry.value.id;
 
-      const dataStreams = sensorEntry.get('dataStreams') as FormArray;
-      for (const dataStreamEntry of dataStreams.controls) {
-        const dataStreamFormValue = dataStreamEntry.value;
-        const dataStream: IRegisterDataStreamBody = {
-          name: dataStreamFormValue.name,
-          description: dataStreamFormValue.description,
-          theme: dataStreamFormValue.theme ? dataStreamFormValue.theme.value : null,
-          dataQuality: dataStreamFormValue.dataQuality,
-          isActive: dataStreamFormValue.isActive,
-          isPublic: dataStreamFormValue.isPublic,
-          isOpenData: dataStreamFormValue.isOpenData,
-          containsPersonalInfoData: dataStreamFormValue.containsPersonalInfoData,
-          isReusable: dataStreamFormValue.isReusable,
-          documentation: dataStreamFormValue.documentation,
-          dataLink: dataStreamFormValue.dataLink,
+      const datastreams = sensorEntry.get('datastreams') as FormArray;
+      for (const datastreamEntry of datastreams.controls) {
+        const datastreamFormValue = datastreamEntry.value;
+        const datastream: IRegisterDatastreamBody = {
+          name: datastreamFormValue.name,
+          description: datastreamFormValue.description,
+          theme: datastreamFormValue.theme ? datastreamFormValue.theme.value : null,
+          dataQuality: datastreamFormValue.dataQuality,
+          isActive: datastreamFormValue.isActive,
+          isPublic: datastreamFormValue.isPublic,
+          isOpenData: datastreamFormValue.isOpenData,
+          containsPersonalInfoData: datastreamFormValue.containsPersonalInfoData,
+          isReusable: datastreamFormValue.isReusable,
+          documentation: datastreamFormValue.documentation,
+          dataLink: datastreamFormValue.dataLink,
         };
 
         try {
-          const dataStreamId = dataStreamEntry.value.id;
-          if (sensorId && !dataStreamId) {
+          const datastreamId = datastreamEntry.value.id;
+          if (sensorId && !datastreamId) {
             try {
-              const dataStreamResult: Record<string, any> = await this.deviceService.registerDataStream(this.deviceId,
-                sensorId, dataStream).toPromise();
-              dataStreamEntry.patchValue({id: dataStreamResult.dataStreamId});
+              const datastreamResult: Record<string, any> = await this.deviceService.registerDatastream(this.deviceId,
+                sensorId, datastream).toPromise();
+              datastreamEntry.patchValue({id: datastreamResult.datastreamId});
 
-              if (dataStreamFormValue.observationGoals) {
-                for (const observationGoal of dataStreamFormValue.observationGoals) {
-                  await this.deviceService.linkObservationGoal(this.deviceId, sensorId, dataStreamResult.dataStreamId,
+              if (datastreamFormValue.observationGoals) {
+                for (const observationGoal of datastreamFormValue.observationGoals) {
+                  await this.deviceService.linkObservationGoal(this.deviceId, sensorId, datastreamResult.datastreamId,
                     observationGoal._id).toPromise();
                 }
               }
@@ -431,49 +421,49 @@ export class DeviceComponent implements OnInit, OnDestroy {
               this.alertService.error(e.error.message);
             }
           } else {
-            const dataStreamUpdate: Record<string, any> = {};
-            if (dataStreamEntry.get('name').dirty) {
-              dataStreamUpdate.name = dataStreamFormValue.name;
+            const datastreamUpdate: Record<string, any> = {};
+            if (datastreamEntry.get('name').dirty) {
+              datastreamUpdate.name = datastreamFormValue.name;
             }
-            if (dataStreamEntry.get('description').dirty) {
-              dataStreamUpdate.description = dataStreamFormValue.description;
+            if (datastreamEntry.get('description').dirty) {
+              datastreamUpdate.description = datastreamFormValue.description;
             }
-            if (dataStreamEntry.get('theme').dirty) {
-              dataStreamUpdate.theme = dataStreamFormValue.theme ? dataStreamFormValue.theme.value : null;
+            if (datastreamEntry.get('theme').dirty) {
+              datastreamUpdate.theme = datastreamFormValue.theme ? datastreamFormValue.theme.value : null;
             }
-            if (dataStreamEntry.get('dataQuality').dirty) {
-              dataStreamUpdate.dataQuality = dataStreamFormValue.dataQuality;
+            if (datastreamEntry.get('dataQuality').dirty) {
+              datastreamUpdate.dataQuality = datastreamFormValue.dataQuality;
             }
-            if (dataStreamEntry.get('isActive').dirty) {
-              dataStreamUpdate.isActive = dataStreamFormValue.isActive;
+            if (datastreamEntry.get('isActive').dirty) {
+              datastreamUpdate.isActive = datastreamFormValue.isActive;
             }
-            if (dataStreamEntry.get('isPublic').dirty) {
-              dataStreamUpdate.isPublic = dataStreamFormValue.isPublic;
+            if (datastreamEntry.get('isPublic').dirty) {
+              datastreamUpdate.isPublic = datastreamFormValue.isPublic;
             }
-            if (dataStreamEntry.get('isOpenData').dirty) {
-              dataStreamUpdate.isOpenData = dataStreamFormValue.isOpenData;
+            if (datastreamEntry.get('isOpenData').dirty) {
+              datastreamUpdate.isOpenData = datastreamFormValue.isOpenData;
             }
-            if (dataStreamEntry.get('containsPersonalInfoData').dirty) {
-              dataStreamUpdate.containsPersonalInfoData = dataStreamFormValue.containsPersonalInfoData;
+            if (datastreamEntry.get('containsPersonalInfoData').dirty) {
+              datastreamUpdate.containsPersonalInfoData = datastreamFormValue.containsPersonalInfoData;
             }
-            if (dataStreamEntry.get('isReusable').dirty) {
-              dataStreamUpdate.isReusable = dataStreamFormValue.isReusable;
+            if (datastreamEntry.get('isReusable').dirty) {
+              datastreamUpdate.isReusable = datastreamFormValue.isReusable;
             }
-            if (dataStreamEntry.get('documentation').dirty) {
-              dataStreamUpdate.documentation = dataStreamFormValue.documentation;
+            if (datastreamEntry.get('documentation').dirty) {
+              datastreamUpdate.documentation = datastreamFormValue.documentation;
             }
-            if (dataStreamEntry.get('dataLink').dirty) {
-              dataStreamUpdate.dataLink = dataStreamFormValue.dataLink;
-            }
-
-            if (dataStreamFormValue.observationGoals) {
-              const observationGoalIds = dataStreamFormValue.observationGoals.map(x => x._id);
-              await this.updateObservationGoals(sensorId, dataStreamId, observationGoalIds);
+            if (datastreamEntry.get('dataLink').dirty) {
+              datastreamUpdate.dataLink = datastreamFormValue.dataLink;
             }
 
-            if (Object.keys(dataStreamUpdate).length) {
-              await this.deviceService.updateDataStream(this.deviceId, sensorId, dataStreamId,
-                dataStreamUpdate as IUpdateDataStreamBody).toPromise();
+            if (datastreamFormValue.observationGoals) {
+              const observationGoalIds = datastreamFormValue.observationGoals.map(x => x._id);
+              await this.updateObservationGoals(sensorId, datastreamId, observationGoalIds);
+            }
+
+            if (Object.keys(datastreamUpdate).length) {
+              await this.deviceService.updateDatastream(this.deviceId, sensorId, datastreamId,
+                datastreamUpdate as IUpdateDatastreamBody).toPromise();
               this.sensorForm.markAsPristine();
             }
 
