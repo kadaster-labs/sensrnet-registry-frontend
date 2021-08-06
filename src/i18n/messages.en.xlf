@@ -75,7 +75,7 @@
       <notes>
 
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:44</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:57</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:44</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation.ts:59</note></notes>
       <segment state="translated">
         <source>Next month</source>
       <target>Next month</target></segment>
@@ -84,7 +84,7 @@
       <notes>
 
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:43</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:49</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:44</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:49</note></notes>
       <segment state="translated">
         <source>Select month</source>
       <target>Select month</target></segment>
@@ -93,7 +93,7 @@
       <notes>
 
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:59</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:72</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:59</note><note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts:74</note></notes>
       <segment state="translated">
         <source>Select year</source>
       <target>Select year</target></segment>
@@ -149,7 +149,7 @@
     <unit id="ngb.pagination.next-aria">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:225</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts:226</note></notes>
       <segment state="translated">
         <source>Next</source>
       <target>Next</target></segment>
@@ -165,7 +165,7 @@
     <unit id="ngb.progressbar.value">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts:31</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts:32</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{getValue() / max | percent}}"/></target></segment>
@@ -197,7 +197,7 @@
     <unit id="ngb.timepicker.decrement-hours">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:67</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:68</note></notes>
       <segment state="translated">
         <source>Decrement hours</source>
       <target>Decrement hours</target></segment>
@@ -221,7 +221,7 @@
     <unit id="ngb.timepicker.minutes">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:57</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:58</note></notes>
       <segment state="translated">
         <source>Minutes</source>
       <target>Minutes</target></segment>
@@ -261,7 +261,7 @@
     <unit id="ngb.timepicker.decrement-seconds">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:105</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:106</note></notes>
       <segment state="translated">
         <source>Decrement seconds</source>
       <target>Decrement seconds</target></segment>
@@ -277,7 +277,7 @@
     <unit id="ngb.timepicker.AM">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:116</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts:118</note></notes>
       <segment state="translated">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ i18n.getMorningPeriod() }}"/></target></segment>
@@ -285,7 +285,7 @@
     <unit id="ngb.toast.close-aria">
       <notes>
 
-      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/toast/toast.ts:76</note></notes>
+      <note category="location">node_modules/@ng-bootstrap/ng-bootstrap/src/toast/toast.ts:78</note></notes>
       <segment state="translated">
         <source>Close</source>
       <target>Close</target></segment>
@@ -344,7 +344,7 @@
     </unit><unit id="map.locate">
       <notes>
 
-      <note category="location">src/app/components/map/map.component.ts:91</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:90</note></notes>
       <segment state="final">
         <source>Locate me</source>
       <target>Locate me</target></segment>
@@ -352,7 +352,7 @@
       <notes>
         
         
-      <note category="location">src/app/components/map/map.component.ts:92</note><note category="location">src/app/forms/devices/devices.component.ts:49</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:91</note><note category="location">src/app/forms/devices/devices.component.ts:49</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
@@ -360,21 +360,21 @@
       <notes>
         
         
-      <note category="location">src/app/components/map/map.component.ts:93</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:92</note></notes>
       <segment state="final">
         <source>Do you really want to delete the device?</source>
       <target>Do you really want to delete the device?</target></segment>
     </unit><unit id="map.geo.support">
       <notes>
 
-      <note category="location">src/app/components/map/map.component.ts:94</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:93</note></notes>
       <segment state="final">
         <source>Geolocation is not supported by this browser.</source>
       <target>Geolocation is not supported by this browser.</target></segment>
     </unit><unit id="1177467005869954871">
       <notes>
         
-      <note category="location">src/app/components/map/map.component.ts:546</note></notes>
+      <note category="location">src/app/components/map/map.component.ts:545</note></notes>
       <segment state="final">
         <source>Enter location</source>
       <target>Enter location</target></segment>
@@ -427,6 +427,13 @@
       <segment state="final">
         <source>Join</source>
       <target>Join</target></segment>
+    </unit><unit id="2547571169649786686">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:7</note>
+      </notes>
+      <segment state="final">
+        <source>Danger zone</source>
+      <target>Danger zone</target></segment>
     </unit><unit id="5674286808255988565">
       <notes>
 
@@ -715,21 +722,56 @@
     </unit><unit id="organization.update">
       <notes>
 
-      <note category="location">src/app/forms/organization-update/organization-update.component.ts:23</note></notes>
+      <note category="location">src/app/forms/organization-update/organization-update.component.ts:24</note></notes>
       <segment state="final">
         <source>Updated the organization.</source>
       <target>Updated the organization.</target></segment>
+    </unit><unit id="leave.organization.confirm.title">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:26</note>
+      </notes>
+      <segment state="final">
+        <source>Leave Organization</source>
+      <target>Leave Organization</target></segment>
+    </unit><unit id="leave.organization.confirm.body">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:27</note>
+      </notes>
+      <segment state="final">
+        <source>You are about to leave your organization. Are you sure?</source>
+      <target>You are about to leave your organization. Are you sure?</target></segment>
+    </unit><unit id="remove.organization.confirm.title">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:29</note>
+      </notes>
+      <segment state="final">
+        <source>Remove Organization</source>
+      <target>Remove Organization</target></segment>
+    </unit><unit id="remove.organization.confirm.body">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.ts:30</note>
+      </notes>
+      <segment state="final">
+        <source>You are about to remove your organization. First all devices need to be removed before this will succeed. Are you sure to continue now?</source>
+      <target>You are about to remove your organization. First all devices need to be removed before this will succeed. Are you sure to continue now?</target></segment>
     </unit><unit id="2273088133016853024">
       <notes>
-        <note category="location">src/app/forms/organization-update/organization-update.component.html:4</note>
-      </notes>
+        
+      <note category="location">src/app/forms/organization-update/organization-update.component.html:9</note></notes>
       <segment state="final">
         <source>Leave</source>
       <target>Leave</target></segment>
+    </unit><unit id="4814285799071780083">
+      <notes>
+        <note category="location">src/app/forms/organization-update/organization-update.component.html:10</note>
+      </notes>
+      <segment state="final">
+        <source>Remove</source>
+      <target>Remove</target></segment>
     </unit><unit id="4021752662928002901">
       <notes>
 
-      <note category="location">src/app/components/observation-goal/observation-goal.component.html:46</note><note category="location">src/app/forms/organization-update/organization-update.component.html:5</note></notes>
+      <note category="location">src/app/components/observation-goal/observation-goal.component.html:46</note><note category="location">src/app/forms/organization-update/organization-update.component.html:4</note></notes>
       <segment state="final">
         <source>Update</source>
       <target>Update</target></segment>
