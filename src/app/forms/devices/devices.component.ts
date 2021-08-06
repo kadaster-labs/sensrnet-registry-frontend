@@ -144,17 +144,18 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   public async deleteSelectedDevices(): Promise<void> {
     if (this.selectedDeviceIds) {
-      await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString).then(async () => {
-        try {
-          for (const deviceId of this.selectedDeviceIds) {
-            await this.deviceService.unregister(deviceId);
-          }
+      await this.modalService.confirm(this.confirmTitleString, this.confirmDeleteBodyString)
+        .then(async () => {
+          try {
+            for (const deviceId of this.selectedDeviceIds) {
+              await this.deviceService.unregister(deviceId);
+            }
 
-          await this.getPage(this.pageIndex);
-        } catch (e) {
-          this.alertService.error(e.error.message);
-        }
-      }, () => { });
+            await this.getPage(this.pageIndex);
+          } catch (e) {
+            this.alertService.error(e.error.message);
+          }
+        }, () => { });
     }
   }
 
@@ -200,32 +201,33 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   public async updateDeviceLocation(newLocation) {
-    await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString).then(async () => {
-      const promises = [];
-      for (const deviceId of this.selectedDeviceIds) {
-        const latitude = newLocation.length > 0 ? newLocation[0] : null;
-        const longitude = newLocation.length > 1 ? newLocation[1] : null;
-        const location = [longitude, latitude];
+    await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString)
+      .then(async () => {
+        const promises = [];
+        for (const deviceId of this.selectedDeviceIds) {
+          const latitude = newLocation.length > 0 ? newLocation[0] : null;
+          const longitude = newLocation.length > 1 ? newLocation[1] : null;
+          const location = [longitude, latitude];
 
-        for (const device of this.devices) {
-          if (device._id === deviceId && device.location.coordinates.length > 2) {
-            location.push(device.location.coordinates[2]);
-            break;
+          for (const device of this.devices) {
+            if (device._id === deviceId && device.location.coordinates.length > 2) {
+              location.push(device.location.coordinates[2]);
+              break;
+            }
+          }
+
+          const updateBody: IUpdateDeviceBody = {
+            location: { location },
+          };
+
+          if (updateBody) {
+            promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
           }
         }
 
-        const updateBody: IUpdateDeviceBody = {
-          location: { location },
-        };
-
-        if (updateBody) {
-          promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
-        }
-      }
-
-      await Promise.all(promises);
-      this.alertService.success(this.updatedDevicesString);
-    }, () => { });
+        await Promise.all(promises);
+        this.alertService.success(this.updatedDevicesString);
+      }, () => { });
   }
 
   filterInputChanged(name) {
@@ -238,37 +240,38 @@ export class DevicesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString).then(async () => {
-      const promises = [];
+    await this.modalService.confirm(this.confirmTitleString, this.confirmUpdateString)
+      .then(async () => {
+        const promises = [];
 
-      const devices = this.devicesTable.get('tableRows') as FormArray;
-      for (const device of devices.controls) {
-        const deviceId = device.value.id;
-        const updateBody: IUpdateDeviceBody = {};
+        const devices = this.devicesTable.get('tableRows') as FormArray;
+        for (const device of devices.controls) {
+          const deviceId = device.value.id;
+          const updateBody: IUpdateDeviceBody = {};
 
-        if (device.get('name').dirty) {
-          updateBody.name = device.value.name;
-        }
-        if (device.get('category').dirty) {
-          updateBody.category = device.value.category;
-        }
-        if (device.get('connectivity').dirty) {
-          updateBody.connectivity = device.value.connectivity;
-        }
-        if (device.get('description').dirty) {
-          updateBody.description = device.value.description;
+          if (device.get('name').dirty) {
+            updateBody.name = device.value.name;
+          }
+          if (device.get('category').dirty) {
+            updateBody.category = device.value.category;
+          }
+          if (device.get('connectivity').dirty) {
+            updateBody.connectivity = device.value.connectivity;
+          }
+          if (device.get('description').dirty) {
+            updateBody.description = device.value.description;
+          }
+
+          if (Object.keys(updateBody).length) {
+            promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
+          }
         }
 
-        if (Object.keys(updateBody).length) {
-          promises.push(this.deviceService.update(deviceId, updateBody).toPromise());
-        }
-      }
+        await Promise.all(promises);
+        this.devicesTable.markAsPristine();
 
-      await Promise.all(promises);
-      this.devicesTable.markAsPristine();
-
-      this.alertService.success(this.updatedDevicesString);
-    }, () => { });
+        this.alertService.success(this.updatedDevicesString);
+      }, () => { });
   }
 
   public async registerDevice() {

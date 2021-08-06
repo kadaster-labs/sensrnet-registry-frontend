@@ -21,7 +21,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { DeviceComponent } from './forms/device/device.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
-import { ModalComponent } from './components/modal/modal.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { DevicesComponent } from './forms/devices/devices.component';
 import { ThemeComponent } from './form-controls/theme/theme.component';
 import { DatastreamComponent } from './form-controls/datastream/datastream.component';
@@ -63,7 +63,7 @@ import * as freeSolidSvgIcons from '@fortawesome/free-solid-svg-icons';
     DatastreamComponent,
     SensorComponent,
     OrganizationUsersComponent,
-    ModalComponent,
+    ConfirmationModalComponent,
     ObservationGoalComponent,
     ObservationGoalsComponent,
     OrganizationComponent,
