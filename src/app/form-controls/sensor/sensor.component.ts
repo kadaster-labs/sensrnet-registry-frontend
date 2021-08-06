@@ -41,7 +41,7 @@ export class SensorComponent implements ControlValueAccessor {
       manufacturer: null,
       supplier: null,
       documentation: [null, [Validators.pattern(urlRegex)]],
-      dataStreams: new FormArray([]),
+      datastreams: new FormArray([]),
     });
   }
 

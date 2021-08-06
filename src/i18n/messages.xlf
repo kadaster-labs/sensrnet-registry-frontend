@@ -790,7 +790,7 @@
         <source>Observation Goals</source>
       </segment>
     </unit>
-    <unit id="dataStream.delete.confirm.title">
+    <unit id="datastream.delete.confirm.title">
       <notes>
         <note category="location">src/app/form-controls/datastream/datastream.component.ts:31</note>
       </notes>
@@ -798,7 +798,7 @@
         <source>Please confirm</source>
       </segment>
     </unit>
-    <unit id="dataStream.delete.confirm.body">
+    <unit id="datastream.delete.confirm.body">
       <notes>
         <note category="location">src/app/form-controls/datastream/datastream.component.ts:32</note>
       </notes>

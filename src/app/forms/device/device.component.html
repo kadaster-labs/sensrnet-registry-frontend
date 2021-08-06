@@ -64,7 +64,7 @@
                     <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex + 1)" i18n>Next</button>
                 </div>
             </form>
-            <form [formGroup]="sensorForm" (ngSubmit)="submitDataStreams()">
+            <form [formGroup]="sensorForm" (ngSubmit)="submitDatastreams()">
                 <div [ngStyle]="{display: activeStepIndex === 2 ? 'block' : 'none'}">
                     <app-datastream formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
                     <hr class="my-2">

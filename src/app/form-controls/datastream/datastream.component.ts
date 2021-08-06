@@ -16,20 +16,20 @@ import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DataStreamComponent),
+      useExisting: forwardRef(() => DatastreamComponent),
       multi: true,
     },
   ]
 })
-export class DataStreamComponent implements ControlValueAccessor {
+export class DatastreamComponent implements ControlValueAccessor {
   @Input() public deviceId: string;
   @Input() public submitted: boolean;
   @Input() public parentForm: FormGroup;
 
   @ViewChildren('observationGoals') observationGoalsElements;
 
-  public confirmTitleString = $localize`:@@dataStream.delete.confirm.title:Please confirm`;
-  public confirmBodyString = $localize`:@@dataStream.delete.confirm.body:Do you really want to delete the datastream?`;
+  public confirmTitleString = $localize`:@@datastream.delete.confirm.title:Please confirm`;
+  public confirmBodyString = $localize`:@@datastream.delete.confirm.body:Do you really want to delete the datastream?`;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -39,7 +39,7 @@ export class DataStreamComponent implements ControlValueAccessor {
     private readonly observationGoalService: ObservationGoalService,
   ) { }
 
-  createDataStream(): FormGroup {
+  createDatastream(): FormGroup {
     return this.formBuilder.group({
       id: null,
       name: [null, Validators.required],
@@ -58,33 +58,33 @@ export class DataStreamComponent implements ControlValueAccessor {
     });
   }
 
-  addDataStream(sensorIndex): void {
+  addDatastream(sensorIndex): void {
     const sensors = this.parentForm.get(`sensors`) as FormArray;
-    const dataStreams = sensors.at(sensorIndex).get(`dataStreams`) as FormArray;
-    dataStreams.push(this.createDataStream());
+    const datastreams = sensors.at(sensorIndex).get(`datastreams`) as FormArray;
+    datastreams.push(this.createDatastream());
   }
 
-  removeDataStream(sensorIndex, dataStreamIndex): void {
+  removeDatastream(sensorIndex, datastreamIndex): void {
     const sensors = this.parentForm.get(`sensors`) as FormArray;
     const sensorId = this.parentForm.get(`sensors.${sensorIndex}`).value.id;
 
-    const dataStreams = sensors.at(sensorIndex).get(`dataStreams`) as FormArray;
-    const dataStreamId = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}`).value.id;
+    const datastreams = sensors.at(sensorIndex).get(`datastreams`) as FormArray;
+    const datastreamId = this.parentForm.get(`sensors.${sensorIndex}.datastreams.${datastreamIndex}`).value.id;
 
     this.modalService.confirm(this.confirmTitleString, this.confirmBodyString).then(() => {
-      if (sensorId && dataStreamId) {
+      if (sensorId && datastreamId) {
         try {
-          this.deviceService.removeDataStream(this.deviceId, sensorId, dataStreamId).toPromise();
+          this.deviceService.removeDatastream(this.deviceId, sensorId, datastreamId).toPromise();
         } catch (e) {
           this.alertService.error(e.error.message);
         }
       }
-      dataStreams.removeAt(dataStreamIndex);
+      datastreams.removeAt(datastreamIndex);
     }, () => { });
   }
 
-  public getDataStreamElement(sensorIndex, dataStreamIndex, element) {
-    return this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.${element}`);
+  public getDatastreamElement(sensorIndex, datastreamIndex, element) {
+    return this.parentForm.get(`sensors.${sensorIndex}.datastreams.${datastreamIndex}.${element}`);
   }
 
   get value() {
@@ -119,11 +119,11 @@ export class DataStreamComponent implements ControlValueAccessor {
     return observationGoal.name;
   }
 
-  addObservationGoal(sensorIndex, dataStreamIndex, $e) {
+  addObservationGoal(sensorIndex, datastreamIndex, $e) {
     $e.preventDefault();
 
     const newGoal = $e.item;
-    const goals = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value;
+    const goals = this.parentForm.get(`sensors.${sensorIndex}.datastreams.${datastreamIndex}.observationGoals`).value;
     if (!goals.some(x => x._id === newGoal._id)) {
       goals.push($e.item);
     }
@@ -131,8 +131,8 @@ export class DataStreamComponent implements ControlValueAccessor {
     this.observationGoalsElements.toArray().map(x => x.nativeElement.value = '');
   }
 
-  removeObservationGoal(sensorIndex, dataStreamIndex, item) {
-    const observationGoals = this.parentForm.get(`sensors.${sensorIndex}.dataStreams.${dataStreamIndex}.observationGoals`).value;
+  removeObservationGoal(sensorIndex, datastreamIndex, item) {
+    const observationGoals = this.parentForm.get(`sensors.${sensorIndex}.datastreams.${datastreamIndex}.observationGoals`).value;
 
     let observationGoalIndex = null;
     for (let i = 0; i < observationGoals.length; i++) {

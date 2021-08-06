@@ -761,14 +761,14 @@
       <segment state="final">
         <source>Role</source>
       <target>Role</target></segment>
-    </unit><unit id="dataStream.delete.confirm.title">
+    </unit><unit id="datastream.delete.confirm.title">
       <notes>
 
       <note category="location">src/app/form-controls/datastream/datastream.component.ts:31</note></notes>
       <segment state="final">
         <source>Please confirm</source>
       <target>Please confirm</target></segment>
-    </unit><unit id="dataStream.delete.confirm.body">
+    </unit><unit id="datastream.delete.confirm.body">
       <notes>
 
       <note category="location">src/app/form-controls/datastream/datastream.component.ts:32</note></notes>

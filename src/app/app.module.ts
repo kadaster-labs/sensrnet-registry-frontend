@@ -24,7 +24,7 @@ import { LanguageSwitcherComponent } from './components/language-switcher/langua
 import { ModalComponent } from './components/modal/modal.component';
 import { DevicesComponent } from './forms/devices/devices.component';
 import { ThemeComponent } from './form-controls/theme/theme.component';
-import { DataStreamComponent } from './form-controls/datastream/datastream.component';
+import { DatastreamComponent } from './form-controls/datastream/datastream.component';
 import { DeviceTypeComponent } from './form-controls/device-type/device-type.component';
 import { OrganizationComponent } from './components/organization/organization.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
@@ -60,7 +60,7 @@ import * as freeSolidSvgIcons from '@fortawesome/free-solid-svg-icons';
     SidebarComponent,
     MapComponent,
     DevicesComponent,
-    DataStreamComponent,
+    DatastreamComponent,
     SensorComponent,
     OrganizationUsersComponent,
     ModalComponent,
