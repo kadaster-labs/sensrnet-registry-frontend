@@ -1,24 +1,25 @@
-import { AlertComponent } from './alert.component';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
-  let component: AlertComponent;
-  let fixture: ComponentFixture<AlertComponent>;
+    let component: AlertComponent;
+    let fixture: ComponentFixture<AlertComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AlertComponent ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(
+        waitForAsync(() => {
+            TestBed.configureTestingModule({
+                declarations: [AlertComponent],
+            }).compileComponents();
+        }),
+    );
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AlertComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AlertComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  xit('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    xit('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
