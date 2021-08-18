@@ -4,6 +4,8 @@ networks:
   backend:
     name: backend
     driver: bridge
+    ipam:
+      driver: default
 
 services:
   registry-frontend:
