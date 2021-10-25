@@ -41,6 +41,7 @@ import { EnvServiceProvider } from './services/env.service.provider';
 import { ModalService } from './services/modal.service';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ViewerComponent } from './viewer/viewer.component';
+import {ObservedAreaComponent} from "./form-controls/observed-area/observed-area.component";
 
 @NgModule({
     declarations: [
@@ -70,6 +71,7 @@ import { ViewerComponent } from './viewer/viewer.component';
         OrganizationJoinComponent,
         OrganizationCreateComponent,
         OrganizationContactComponent,
+        ObservedAreaComponent,
     ],
     imports: [
         BrowserModule,

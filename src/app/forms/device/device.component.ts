@@ -40,7 +40,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
     public saveSuccessMessage = $localize`:@@device.register.success:Saved!`;
     public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
-    public saveTitleString = $localize`:@@step.confirm.title:Save the step!`;
     public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
 
     constructor(

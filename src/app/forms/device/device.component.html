@@ -4,7 +4,7 @@
         <div class="col-1">
             <app-sidebar></app-sidebar>
         </div>
-        <div [ngClass]="{'col-6': activeStepIndex === 0, 'col-11': activeStepIndex !== 0 }">
+        <div [ngClass]="activeStepIndex === 1 ? 'col-11' : 'col-6'">
             <div class="row">
                 <div class="col-6">
                     <h3 *ngIf="activeStepIndex === 0" i18n>Device</h3>
@@ -73,7 +73,7 @@
                 </div>
             </form>
         </div>
-        <div *ngIf="activeStepIndex === 0" class="col-5" style="height: 85vh; max-height: 85vh">
+        <div *ngIf="activeStepIndex === 0 || activeStepIndex === 2" class="col-5" style="height: 85vh; max-height: 85vh">
             <app-map searchBarHeight="1.5rem" [clearLocationHighLight]="!deviceId"></app-map>
         </div>
     </div>

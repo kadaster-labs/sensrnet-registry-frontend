@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
+import GeometryType from 'ol/geom/GeometryType';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ISensorLocation } from '../model/bodies/location';
 
 @Injectable({ providedIn: 'root' })
 export class LocationService {
-    private location: BehaviorSubject<ISensorLocation> = new BehaviorSubject({
-        type: 'Point',
-        coordinates: [0, 0, 0],
-    });
+    private drawLocation: BehaviorSubject<GeometryType> = new BehaviorSubject(null);
+    private drawGeometry: BehaviorSubject<Record<string, any>> = new BehaviorSubject(null);
 
     private locationMarker: BehaviorSubject<ISensorLocation> = new BehaviorSubject({
         type: 'Point',
@@ -16,16 +15,22 @@ export class LocationService {
 
     private locationHighlight: BehaviorSubject<ISensorLocation> = new BehaviorSubject(null);
 
-    location$: Observable<ISensorLocation> = this.location.asObservable();
+    drawLocation$: Observable<GeometryType> = this.drawLocation.asObservable();
+    drawGeometry$: Observable<Record<string, any>> = this.drawGeometry.asObservable();
+
     showLocation$: Observable<ISensorLocation> = this.locationMarker.asObservable();
     locationHighlight$: Observable<ISensorLocation> = this.locationHighlight.asObservable();
 
-    setLocation(location: ISensorLocation) {
-        this.location.next(location);
+    addDrawGeometry(geometry: Record<string, any>) {
+        this.drawGeometry.next(geometry);
     }
 
-    unsetLocation() {
-        this.location.next(null);
+    enableDraw(type: GeometryType): void {
+        this.drawLocation.next(type);
+    }
+
+    disableDraw(): void {
+        this.drawLocation.next(null);
     }
 
     showLocation(location: ISensorLocation) {

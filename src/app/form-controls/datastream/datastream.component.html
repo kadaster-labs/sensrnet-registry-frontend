@@ -67,6 +67,7 @@
                                         <span i18n>Is Reusable</span>
                                     </label>
                                 </div>
+                                <app-observed-area formControlName="observedArea" [submitted]="submitted"></app-observed-area>
                                 <div class="col-12">
                                     <label><span i18n>Documentation</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                                     <input formControlName="documentation" type="text" placeholder="Enter URL of documentation" class="form-control"

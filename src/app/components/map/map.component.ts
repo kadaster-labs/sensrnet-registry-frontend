@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, Input, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -12,9 +12,11 @@ import Control from 'ol/control/Control';
 import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
-import { MultiPoint } from 'ol/geom';
+import { Circle as CircleGeom, MultiPoint } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
+import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
+import Draw from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
 import OlMap from 'ol/Map';
 import { Cluster } from 'ol/source';
@@ -65,6 +67,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public getCategoryTranslation = getCategoryTranslation;
 
+    public draw: Draw;
     public popupOverlay: Overlay;
     public clusterSource: Cluster;
     public vectorSource: VectorSource<any>;
@@ -358,16 +361,8 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     private onSingleClick(event: MapBrowserEvent) {
-        const mapCoordinateRD = event.coordinate;
-        const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
-
         this.hideOverlay();
         this.removeHighlight();
-
-        this.locationService.setLocation({
-            type: 'Point',
-            coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
-        });
 
         event.map.forEachFeatureAtPixel(event.pixel, (data) => {
             const features = data.getProperties().features;
@@ -548,6 +543,49 @@ export class MapComponent implements OnInit, OnDestroy {
         );
     }
 
+    private addDraw(type = GeometryType.CIRCLE): void {
+        this.draw = new Draw({
+            type,
+            source: this.selectLocationSource,
+        });
+        this.draw.on('drawend', (e) => {
+            if (type === GeometryType.POINT) {
+                const geom = e.feature.getGeometry() as Point;
+                const coordinatesWGS84 = proj4(this.epsgRD, this.epsgWGS84, geom.getCoordinates());
+
+                this.locationService.addDrawGeometry({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [coordinatesWGS84[1], coordinatesWGS84[0], 0],
+                    },
+                });
+            } else if (type === GeometryType.CIRCLE) {
+                const geom = e.feature.getGeometry() as CircleGeom;
+                const centerWGS84 = proj4(this.epsgRD, this.epsgWGS84, geom.getCenter());
+
+                this.locationService.addDrawGeometry({
+                    type: 'Feature',
+                    properties: {
+                        radius: geom.getRadius(),
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [centerWGS84[1], centerWGS84[0], 0],
+                    },
+                });
+            }
+        });
+
+        this.map.addInteraction(this.draw);
+    }
+
+    private removeDraw(): void {
+        if (this.draw) {
+            this.map.removeInteraction(this.draw);
+        }
+    }
+
     private addLayerSwitcher(): void {
         const layerSwitcher = new LayerSwitcher({
             reverse: true,
@@ -650,6 +688,13 @@ export class MapComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
+            this.locationService.drawLocation$.subscribe((drawLocation: GeometryType) => {
+                if (drawLocation) {
+                    this.addDraw(drawLocation);
+                } else {
+                    this.removeDraw();
+                }
+            }),
             this.locationService.showLocation$.subscribe((deviceLocation) => {
                 this.removeLocationFeatures();
 
@@ -694,6 +739,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.locationService.disableDraw();
         this.subscriptions.forEach((x) => x.unsubscribe());
 
         // this.map actually lives in map.service.ts. If we let it live, all layers and listeners are re-added each time the

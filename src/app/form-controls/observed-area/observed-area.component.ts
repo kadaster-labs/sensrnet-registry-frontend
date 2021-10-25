@@ -20,22 +20,22 @@ export interface SensorLocationFormValues {
 }
 
 @Component({
-    selector: 'app-sensor-location',
-    templateUrl: './sensor-location.component.html',
+    selector: 'app-observed-area',
+    templateUrl: './observed-area.component.html',
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SensorLocationComponent),
+            useExisting: forwardRef(() => ObservedAreaComponent),
             multi: true,
         },
         {
             provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => SensorLocationComponent),
+            useExisting: forwardRef(() => ObservedAreaComponent),
             multi: true,
         },
     ],
 })
-export class SensorLocationComponent implements ControlValueAccessor, OnDestroy {
+export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
     public form: FormGroup;
     public subscriptions: Subscription[] = [];
 
