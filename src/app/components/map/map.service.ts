@@ -79,8 +79,8 @@ export class MapService {
             opacity: 1,
             source: new WMTS({
                 attributions: 'Kaartgegevens: &copy; <a href="https://www.kadaster.nl">Kadaster</a>',
-                url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
-                layer: 'brtachtergrondkaartgrijs',
+                url: 'https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0?',
+                layer: 'grijs',
                 matrixSet: 'EPSG:28992',
                 format: 'image/png',
                 projection: this.projection,
