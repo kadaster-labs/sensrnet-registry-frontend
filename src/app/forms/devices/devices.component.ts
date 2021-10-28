@@ -13,6 +13,7 @@ import { DeviceService, IUpdateDeviceBody } from '../../services/device.service'
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { LocationService } from '../../services/location.service';
 import { ModalService } from '../../services/modal.service';
+import {DrawOption} from "../../model/bodies/draw-options";
 
 @Component({
     selector: 'app-devices',
@@ -174,7 +175,8 @@ export class DevicesComponent implements OnInit, OnDestroy {
         this.showLocation = !this.showLocation;
 
         if (this.showLocation) {
-            this.locationService.enableDraw(GeometryType.POINT);
+            const drawOption: DrawOption = { variant: GeometryType.POINT, center: null };
+            this.locationService.enableDraw(drawOption);
         } else {
             this.locationService.disableDraw();
         }

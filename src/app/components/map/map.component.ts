@@ -1,40 +1,42 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {Component, ElementRef, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { MapBrowserEvent, Overlay } from 'ol';
+import {OidcSecurityService} from 'angular-auth-oidc-client';
+import {MapBrowserEvent, Overlay} from 'ol';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import LayerSwitcher from 'ol-layerswitcher';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import Control from 'ol/control/Control';
-import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
+import {extend, Extent, getBottomLeft, getCenter, getTopRight} from 'ol/extent';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
-import { Circle as CircleGeom, MultiPoint } from 'ol/geom';
+import {Circle as CircleGeom, MultiPoint} from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
 import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
-import Draw from 'ol/interaction/Draw';
+import Draw, {SketchCoordType} from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
 import OlMap from 'ol/Map';
-import { Cluster } from 'ol/source';
+import {Cluster} from 'ol/source';
 import VectorSource from 'ol/source/Vector';
-import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
+import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import { FitOptions } from 'ol/View';
+import {FitOptions} from 'ol/View';
 import proj4 from 'proj4';
 
-import { IDevice } from '../../model/bodies/device-model';
-import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
-import { AlertService } from '../../services/alert.service';
-import { ConnectionService } from '../../services/connection.service';
-import { DeviceService } from '../../services/device.service';
-import { LocationService } from '../../services/location.service';
-import { ModalService } from '../../services/modal.service';
-import { MapService } from './map.service';
-import { SearchPDOK } from './searchPDOK';
+import {IDevice} from '../../model/bodies/device-model';
+import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
+import {AlertService} from '../../services/alert.service';
+import {ConnectionService} from '../../services/connection.service';
+import {DeviceService} from '../../services/device.service';
+import {LocationService} from '../../services/location.service';
+import {ModalService} from '../../services/modal.service';
+import {MapService} from './map.service';
+import {SearchPDOK} from './searchPDOK';
+import {Coordinate} from "ol/coordinate";
+import {DrawOption} from "../../model/bodies/draw-options";
 
 @Component({
     selector: 'app-map',
@@ -169,6 +171,10 @@ export class MapComponent implements OnInit, OnDestroy {
             let style: Style[];
 
             const FEATURES_ = feature.get('features');
+            if (!FEATURES_) {
+                return;
+            }
+
             const numberOfFeatures = FEATURES_.length;
             if (numberOfFeatures === 1) {
                 const category = feature.get('features')[0].values_.category;
@@ -368,7 +374,7 @@ export class MapComponent implements OnInit, OnDestroy {
             const features = data.getProperties().features;
 
             // check if feature is a cluster with multiple features
-            if (features.length < 2) {
+            if (!features || features.length < 2) {
                 return;
             }
 
@@ -543,13 +549,38 @@ export class MapComponent implements OnInit, OnDestroy {
         );
     }
 
-    private addDraw(type = GeometryType.CIRCLE): void {
+    private addDraw(drawOption: DrawOption): void {
+        let geometryFunction;
+        if (drawOption && drawOption.variant === GeometryType.CIRCLE) {
+            geometryFunction = (coordinates: SketchCoordType, geometry: CircleGeom) => {
+                const center =
+                    drawOption.center !== null
+                        ? proj4(this.epsgWGS84, this.epsgRD, drawOption.center)
+                        : (coordinates[0] as Coordinate);
+
+                const last = coordinates[coordinates.length - 1];
+                const dx = center[0] - last[0],
+                    dy = center[1] - last[1];
+
+                const radius = Math.sqrt(dx * dx + dy * dy);
+                if (!geometry) {
+                    geometry = new CircleGeom(center, radius);
+                } else {
+                    geometry.setRadius(radius);
+                }
+
+                return geometry;
+            };
+        }
+
         this.draw = new Draw({
-            type,
+            geometryFunction,
+            type: drawOption.variant,
             source: this.selectLocationSource,
         });
+
         this.draw.on('drawend', (e) => {
-            if (type === GeometryType.POINT) {
+            if (drawOption.variant === GeometryType.POINT) {
                 const geom = e.feature.getGeometry() as Point;
                 const coordinatesWGS84 = proj4(this.epsgRD, this.epsgWGS84, geom.getCoordinates());
 
@@ -560,7 +591,7 @@ export class MapComponent implements OnInit, OnDestroy {
                         coordinates: [coordinatesWGS84[1], coordinatesWGS84[0], 0],
                     },
                 });
-            } else if (type === GeometryType.CIRCLE) {
+            } else if (drawOption.variant === GeometryType.CIRCLE) {
                 const geom = e.feature.getGeometry() as CircleGeom;
                 const centerWGS84 = proj4(this.epsgRD, this.epsgWGS84, geom.getCenter());
 
@@ -578,6 +609,9 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         this.map.addInteraction(this.draw);
+        if (drawOption.center !== null) {
+            this.draw.appendCoordinates([proj4(this.epsgWGS84, this.epsgRD, drawOption.center)]);
+        }
     }
 
     private removeDraw(): void {
@@ -688,9 +722,9 @@ export class MapComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
-            this.locationService.drawLocation$.subscribe((drawLocation: GeometryType) => {
-                if (drawLocation) {
-                    this.addDraw(drawLocation);
+            this.locationService.drawLocation$.subscribe((drawOption: DrawOption) => {
+                if (drawOption) {
+                    this.addDraw(drawOption);
                 } else {
                     this.removeDraw();
                 }

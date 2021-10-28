@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-12 px-0 mx-0">
                     <div class="row">
-                        <div formArrayName="datastreams" *ngFor="let datastream of sensor.get('datastreams')['controls']; let j = index;" class="mt-3 col-6 form-group">
+                        <div formArrayName="datastreams" *ngFor="let datastream of sensor.get('datastreams')['controls']; let j = index;" class="mt-3 col-12 form-group">
                             <div class="row py-3 border bg-white" formGroupName="{{j}}">
                                 <div class="col-12">
                                     <label i18n>Name</label>
@@ -67,7 +67,9 @@
                                         <span i18n>Is Reusable</span>
                                     </label>
                                 </div>
-                                <app-observed-area formControlName="observedArea" [submitted]="submitted"></app-observed-area>
+                                <div class="col-12">
+                                    <app-observed-area [deviceId]="deviceId" formControlName="observedArea" [submitted]="submitted"></app-observed-area>
+                                </div>
                                 <div class="col-12">
                                     <label><span i18n>Documentation</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                                     <input formControlName="documentation" type="text" placeholder="Enter URL of documentation" class="form-control"

@@ -12,6 +12,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import { Subscription } from 'rxjs';
 import { ISensorLocation } from '../../model/bodies/location';
 import { LocationService } from '../../services/location.service';
+import {DrawOption} from "../../model/bodies/draw-options";
 
 export interface SensorLocationFormValues {
     latitude: number;
@@ -102,7 +103,8 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
         this.selectLocation = selectLocation;
 
         if (selectLocation) {
-            this.locationService.enableDraw(GeometryType.POINT);
+            const drawOption: DrawOption = { variant: GeometryType.POINT, center: null };
+            this.locationService.enableDraw(drawOption);
         } else {
             this.locationService.disableDraw();
         }
