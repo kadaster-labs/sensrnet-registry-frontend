@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy } from '@angular/core';
 import {
     ControlValueAccessor,
     FormBuilder,
@@ -12,7 +12,6 @@ import GeometryType from 'ol/geom/GeometryType';
 import { Subscription } from 'rxjs';
 import { IDevice } from '../../model/bodies/device-model';
 import { DrawOption } from '../../model/bodies/draw-options';
-import { ISensorLocation } from '../../model/bodies/location';
 import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 
@@ -38,17 +37,21 @@ export interface SensorLocationFormValues {
         },
     ],
 })
-export class ObservedAreaComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
     public form: FormGroup;
     public subscriptions: Subscription[] = [];
 
     public selectLocation = false;
 
     private deviceLocation: number[];
-    private location: ISensorLocation;
 
-    @Input() public deviceId: string;
     @Input() public submitted: boolean;
+
+    @Input() set device(device: IDevice) {
+        if (device) {
+            this.deviceLocation = device.location.coordinates;
+        }
+    }
 
     get f() {
         return this.form.controls;
@@ -73,8 +76,8 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnInit, OnDe
         private readonly formBuilder: FormBuilder,
     ) {
         this.form = this.formBuilder.group({
-            latitude: [null, Validators.required],
-            longitude: [null, Validators.required],
+            type: null,
+            radius: null,
         });
 
         this.subscriptions.push(
@@ -88,18 +91,12 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnInit, OnDe
         this.subscriptions.push(
             this.locationService.drawGeometry$.subscribe((location: Record<string, any>) => {
                 if (this.selectLocation === true) {
-                    this.location = {
-                        type: 'Point',
-                        coordinates: location.geometry.coordinates,
-                    };
-
                     this.form.setValue({
-                        latitude: this.location.coordinates[0],
-                        longitude: this.location.coordinates[1],
+                        type: 'Circle',
+                        radius: location.properties.radius,
                     });
 
                     this.setSelectLocation(false);
-                    // this.locationService.showLocation(this.location);
                 }
             }),
         );
@@ -140,10 +137,5 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnInit, OnDe
 
     public ngOnDestroy() {
         this.subscriptions.forEach((s) => s.unsubscribe());
-    }
-
-    public async ngOnInit(): Promise<void> {
-        const device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
-        this.deviceLocation = device.location.coordinates;
     }
 }

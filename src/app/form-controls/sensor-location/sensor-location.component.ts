@@ -10,9 +10,9 @@ import {
 } from '@angular/forms';
 import GeometryType from 'ol/geom/GeometryType';
 import { Subscription } from 'rxjs';
+import { DrawOption } from '../../model/bodies/draw-options';
 import { ISensorLocation } from '../../model/bodies/location';
 import { LocationService } from '../../services/location.service';
-import {DrawOption} from "../../model/bodies/draw-options";
 
 export interface SensorLocationFormValues {
     latitude: number;

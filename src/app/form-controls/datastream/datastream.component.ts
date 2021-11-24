@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { urlRegex } from '../../helpers/form.helpers';
+import { IDevice } from '../../model/bodies/device-model';
 import { AlertService } from '../../services/alert.service';
 import { DeviceService } from '../../services/device.service';
 import { ModalService } from '../../services/modal.service';
@@ -22,12 +23,13 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
     ],
 })
 export class DatastreamComponent implements ControlValueAccessor {
-    @Input() public deviceId: string;
     @Input() public submitted: boolean;
     @Input() public parentForm: FormGroup;
 
     @ViewChildren('observationGoals') observationGoalsElements;
 
+    public _deviceId: string;
+    public device: IDevice;
     public confirmTitleString = $localize`:@@datastream.delete.confirm.title:Please confirm`;
     public confirmBodyString = $localize`:@@datastream.delete.confirm.body:Do you really want to delete the datastream?`;
 
@@ -39,6 +41,22 @@ export class DatastreamComponent implements ControlValueAccessor {
         private readonly observationGoalService: ObservationGoalService,
     ) {}
 
+    @Input() set deviceId(deviceId: string) {
+        this._deviceId = deviceId;
+
+        if (deviceId) {
+            this.setDevice(deviceId).then();
+        }
+    }
+
+    get deviceId(): string {
+        return this._deviceId;
+    }
+
+    public async setDevice(deviceId) {
+        this.device = (await this.deviceService.get(deviceId).toPromise()) as IDevice;
+    }
+
     createDatastream(): FormGroup {
         return this.formBuilder.group({
             id: null,
@@ -47,6 +65,7 @@ export class DatastreamComponent implements ControlValueAccessor {
             observedProperty: null,
             theme: [],
             dataQuality: null,
+            observedArea: null,
             isActive: true,
             isPublic: true,
             isOpenData: true,

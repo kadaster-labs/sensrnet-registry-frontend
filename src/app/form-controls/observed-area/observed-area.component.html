@@ -1,13 +1,13 @@
 <div class="col-12 px-0" [formGroup]="form">
     <div class="row no-gutters">
         <div class="col-4 text-left">
-            <label class="text-left" for="location" i18n>Observed Area</label>
+            <label class="text-left" for="observedArea" i18n>Observed Area</label>
         </div>
         <div class="col-8">
-            <button type="button" class="btn btn-outline-secondary" [ngClass]="{ 'btn-outline-success': form.valid }"
+            <button type="button" class="btn btn-outline-secondary" [ngClass]="{ 'btn-outline-success': form.controls.type.value !== null }"
                     (click)="setSelectLocation(true)">
                 <span class="mr-2" i18n>Select on map</span>
-                <fa-icon [icon]="['far', 'check-square']" *ngIf="form.valid" aria-hidden="true"></fa-icon>
+                <fa-icon [icon]="['far', 'check-square']" *ngIf="form.controls.type.value !== null" aria-hidden="true"></fa-icon>
             </button>
         </div>
     </div>

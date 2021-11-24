@@ -1,42 +1,42 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, ElementRef, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-import {OidcSecurityService} from 'angular-auth-oidc-client';
-import {MapBrowserEvent, Overlay} from 'ol';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { MapBrowserEvent, Overlay } from 'ol';
 import SelectCluster from 'ol-ext/interaction/SelectCluster';
 import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import LayerSwitcher from 'ol-layerswitcher';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import Control from 'ol/control/Control';
-import {extend, Extent, getBottomLeft, getCenter, getTopRight} from 'ol/extent';
+import { Coordinate } from 'ol/coordinate';
+import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
-import {Circle as CircleGeom, MultiPoint} from 'ol/geom';
+import { Circle as CircleGeom, MultiPoint } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
 import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
-import Draw, {SketchCoordType} from 'ol/interaction/Draw';
+import Draw, { SketchCoordType } from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
 import OlMap from 'ol/Map';
-import {Cluster} from 'ol/source';
+import { Cluster } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
-import {Circle as CircleStyle, Fill, Icon, Style, Text} from 'ol/style';
+import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
-import {FitOptions} from 'ol/View';
+import { FitOptions } from 'ol/View';
 import proj4 from 'proj4';
 
-import {IDevice} from '../../model/bodies/device-model';
-import {Category, getCategoryTranslation} from '../../model/bodies/sensorTypes';
-import {AlertService} from '../../services/alert.service';
-import {ConnectionService} from '../../services/connection.service';
-import {DeviceService} from '../../services/device.service';
-import {LocationService} from '../../services/location.service';
-import {ModalService} from '../../services/modal.service';
-import {MapService} from './map.service';
-import {SearchPDOK} from './searchPDOK';
-import {Coordinate} from "ol/coordinate";
-import {DrawOption} from "../../model/bodies/draw-options";
+import { IDevice } from '../../model/bodies/device-model';
+import { DrawOption } from '../../model/bodies/draw-options';
+import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { AlertService } from '../../services/alert.service';
+import { ConnectionService } from '../../services/connection.service';
+import { DeviceService } from '../../services/device.service';
+import { LocationService } from '../../services/location.service';
+import { ModalService } from '../../services/modal.service';
+import { MapService } from './map.service';
+import { SearchPDOK } from './searchPDOK';
 
 @Component({
     selector: 'app-map',
@@ -75,6 +75,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public vectorSource: VectorSource<any>;
     public highlightLayer: VectorLayer;
     public selectCluster: SelectCluster;
+    public observedAreaLayer: VectorLayer;
     public highlightSource: VectorSource<Geometry>;
     public clusterLayer: AnimatedCluster;
     public selectLocationLayer: VectorLayer;
@@ -482,6 +483,41 @@ export class MapComponent implements OnInit, OnDestroy {
         this.map.removeLayer(this.highlightLayer);
     }
 
+    public showObservedAreas(device: IDevice): void {
+        this.map.removeLayer(this.observedAreaLayer);
+
+        const features = [];
+        const center = device.location.coordinates;
+        for (const dataStream of device.datastreams) {
+            if (dataStream.observationArea) {
+                features.push(new Feature(new CircleGeom(center, dataStream.observationArea.radius)));
+            }
+        }
+
+        this.observedAreaLayer = new VectorLayer({
+            source: new VectorSource({
+                features,
+            }),
+            style: [
+                new Style({
+                    fill: new Fill({ color: 'rgba(63, 127, 191, 0.5)' }),
+                    stroke: new Stroke({
+                        color: 'rgba(191, 63, 63, 0.54)',
+                        width: 14,
+                    }),
+                }),
+            ],
+            opacity: 0.7,
+            zIndex: 2,
+        });
+
+        this.map.addLayer(this.observedAreaLayer);
+    }
+
+    public hideObservedAreas() {
+        this.map.removeLayer(this.observedAreaLayer);
+    }
+
     private zoomToPoint(point: Point) {
         const view = this.map.getView();
         view.fit(point, {
@@ -730,20 +766,22 @@ export class MapComponent implements OnInit, OnDestroy {
                 }
             }),
             this.locationService.showLocation$.subscribe((deviceLocation) => {
-                this.removeLocationFeatures();
-
                 if (deviceLocation) {
-                    const locationFeature = new Feature({
-                        geometry: new Point(
-                            proj4(this.epsgWGS84, this.epsgRD, [
-                                deviceLocation.coordinates[1],
-                                deviceLocation.coordinates[0],
-                            ]),
-                        ),
-                    });
-                    this.setLocation(locationFeature);
-                } else {
-                    this.clearLocationLayer();
+                    this.removeLocationFeatures();
+
+                    if (deviceLocation) {
+                        const locationFeature = new Feature({
+                            geometry: new Point(
+                                proj4(this.epsgWGS84, this.epsgRD, [
+                                    deviceLocation.coordinates[1],
+                                    deviceLocation.coordinates[0],
+                                ]),
+                            ),
+                        });
+                        this.setLocation(locationFeature);
+                    } else {
+                        this.clearLocationLayer();
+                    }
                 }
             }),
         );
@@ -774,7 +812,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.locationService.disableDraw();
-        this.subscriptions.forEach((x) => x.unsubscribe());
+        this.subscriptions.forEach((s) => s.unsubscribe());
 
         // this.map actually lives in map.service.ts. If we let it live, all layers and listeners are re-added each time the
         // map component is recreated. Instead of manually keeping track of it, just kill the map and recreate it next time.

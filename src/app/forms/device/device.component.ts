@@ -123,7 +123,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             return;
         }
 
-        await this.registerSensors();
+        await this.saveSensors();
     }
 
     public async submitDatastreams() {
@@ -134,7 +134,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             return;
         }
 
-        await this.registerDatastreams();
+        await this.saveDatastreams();
     }
 
     public getStepCount(): number {
@@ -206,6 +206,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                 documentation: datastream.documentation,
                                 dataLink: datastream.dataLink,
                                 observationGoals: [observationGoals],
+                                observedArea: datastream.observationArea,
                             }),
                         );
                     }
@@ -337,7 +338,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         await Promise.all(promises);
     }
 
-    public async registerSensors() {
+    public async saveSensors() {
         const sensors = this.sensorForm.get('sensors') as FormArray;
 
         let failed = false;
@@ -406,7 +407,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.submitted = false;
     }
 
-    public async registerDatastreams() {
+    public async saveDatastreams() {
         const sensors = this.sensorForm.get('sensors') as FormArray;
 
         let failed = false;
@@ -428,6 +429,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     isReusable: datastreamFormValue.isReusable,
                     documentation: datastreamFormValue.documentation,
                     dataLink: datastreamFormValue.dataLink,
+                    observedArea: datastreamFormValue.observedArea,
                 };
 
                 try {
@@ -489,6 +491,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
                         }
                         if (datastreamEntry.get('dataLink').dirty) {
                             datastreamUpdate.dataLink = datastreamFormValue.dataLink;
+                        }
+                        if (datastreamEntry.get('observedArea').dirty) {
+                            datastreamUpdate.observedArea = datastreamFormValue.observedArea;
                         }
 
                         if (datastreamFormValue.observationGoals) {
