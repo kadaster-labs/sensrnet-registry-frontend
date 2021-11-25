@@ -6,6 +6,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { IDevice } from '../../model/bodies/device-model';
+import { DrawOption } from '../../model/bodies/draw-options';
 import { getCategoryTranslation, Category } from '../../model/bodies/sensorTypes';
 import { AlertService } from '../../services/alert.service';
 import { ConnectionService } from '../../services/connection.service';
@@ -13,7 +14,6 @@ import { DeviceService, IUpdateDeviceBody } from '../../services/device.service'
 import { LegalEntityService } from '../../services/legal-entity.service';
 import { LocationService } from '../../services/location.service';
 import { ModalService } from '../../services/modal.service';
-import {DrawOption} from "../../model/bodies/draw-options";
 
 @Component({
     selector: 'app-devices',

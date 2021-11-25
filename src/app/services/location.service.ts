@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import GeometryType from 'ol/geom/GeometryType';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DrawOption } from '../model/bodies/draw-options';
 import { ISensorLocation } from '../model/bodies/location';
