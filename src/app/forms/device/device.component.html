@@ -66,7 +66,7 @@
             </form>
             <form [formGroup]="sensorForm" (ngSubmit)="submitDatastreams()">
                 <div [ngStyle]="{display: activeStepIndex === 2 ? 'block' : 'none'}">
-                    <app-datastream formArrayName="sensors" [deviceId]="deviceId" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
+                    <app-datastream formArrayName="sensors" [device]="device" [parentForm]="sensorForm" [submitted]="submitted"></app-datastream>
                     <hr class="my-2">
                     <button type="submit" class="btn btn-primary btn-lg mr-2" i18n>Save</button>
                     <button type="button" class="btn btn-outline-secondary btn-lg" (click)="goToStep(activeStepIndex - 1)" i18n>Previous</button>

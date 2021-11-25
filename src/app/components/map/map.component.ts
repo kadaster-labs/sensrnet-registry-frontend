@@ -235,17 +235,17 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         this.clusterLayer = new AnimatedCluster({
-            name: 'Cluster',
-            source: this.clusterSource,
-            style: styleCluster,
             zIndex: 1,
+            name: 'Cluster',
+            style: styleCluster,
+            source: this.clusterSource,
         });
         this.map.addLayer(this.clusterLayer);
 
         this.selectCluster = new SelectCluster({
-            layers: [this.clusterLayer],
             pointRadius: 40,
             style: styleCluster,
+            layers: [this.clusterLayer],
             featureStyle: styleSelectedCluster,
         });
         this.map.addInteraction(this.selectCluster);
@@ -482,28 +482,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public showObservedAreas(observedAreas: IObservedAreaDTO): void {
         const center = observedAreas.center;
         const features = observedAreas.observedAreas.map((x) => new Feature(new CircleGeom(center, x.radius)));
-
         this.observedAreaSource.addFeatures(features);
-
-        // this.observedAreaSource = new VectorSource({
-        //     features: features,
-        // });
-        // this.observedAreaLayer = new VectorLayer({
-        //     source: this.observedAreaSource,
-        //     style: [
-        //         new Style({
-        //             fill: new Fill({ color: 'rgba(30, 144, 255, 0.1)' }),
-        //             stroke: new Stroke({
-        //                 width: 3,
-        //                 color: 'rgb(30, 144, 255)',
-        //             }),
-        //         }),
-        //     ],
-        //     zIndex: 1,
-        //     opacity: 0.8,
-        // });
-        //
-        // this.map.addLayer(this.observedAreaLayer);
     }
 
     public hideObservedAreas() {
@@ -767,9 +746,9 @@ export class MapComponent implements OnInit, OnDestroy {
                 }
             }),
             this.locationService.showLocation$.subscribe((deviceLocation) => {
-                if (deviceLocation) {
-                    this.clearLocationLayer();
+                this.clearLocationLayer();
 
+                if (deviceLocation) {
                     const locationFeature = new Feature({
                         geometry: new Point(
                             proj4(this.epsgWGS84, this.epsgRD, [
@@ -782,9 +761,9 @@ export class MapComponent implements OnInit, OnDestroy {
                 }
             }),
             this.locationService.locationHighlight$.subscribe((deviceLocation) => {
-                if (deviceLocation) {
-                    this.removeHighlight();
+                this.removeHighlight();
 
+                if (deviceLocation) {
                     const geometry = new Feature({
                         geometry: new Point(
                             proj4(this.epsgWGS84, this.epsgRD, [

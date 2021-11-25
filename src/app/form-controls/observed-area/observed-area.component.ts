@@ -116,11 +116,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
 
             const observedAreas = {
                 center: this.deviceLocation,
-                observedAreas: [
-                    {
-                        radius: this.form.value.radius,
-                    },
-                ],
+                observedAreas: [{ radius: this.form.value.radius }],
             };
             this.observedAreaService.showObservedAreas(observedAreas);
         }

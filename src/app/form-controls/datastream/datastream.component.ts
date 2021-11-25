@@ -1,4 +1,4 @@
-import { ViewChildren, Component, forwardRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { ViewChildren, Component, forwardRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -22,14 +22,12 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
         },
     ],
 })
-export class DatastreamComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class DatastreamComponent implements ControlValueAccessor {
     @Input() public submitted: boolean;
     @Input() public parentForm: FormGroup;
 
     @ViewChildren('observationGoals') observationGoalsElements;
 
-    public device: IDevice;
-    public _deviceId: string;
     public subscriptions = [];
 
     public confirmTitleString = $localize`:@@datastream.delete.confirm.title:Please confirm`;
@@ -43,20 +41,14 @@ export class DatastreamComponent implements ControlValueAccessor, OnInit, OnDest
         private readonly observationGoalService: ObservationGoalService,
     ) {}
 
-    @Input() set deviceId(deviceId: string) {
-        this._deviceId = deviceId;
+    public _device: IDevice;
 
-        if (deviceId) {
-            this.setDevice(deviceId).then();
-        }
+    @Input() set device(device: IDevice) {
+        this._device = device;
     }
 
-    get deviceId(): string {
-        return this._deviceId;
-    }
-
-    public async setDevice(deviceId) {
-        this.device = (await this.deviceService.get(deviceId).toPromise()) as IDevice;
+    get device() {
+        return this._device;
     }
 
     createDatastream(): FormGroup {
@@ -96,7 +88,7 @@ export class DatastreamComponent implements ControlValueAccessor, OnInit, OnDest
             () => {
                 if (sensorId && datastreamId) {
                     try {
-                        this.deviceService.removeDatastream(this.deviceId, sensorId, datastreamId).toPromise().then();
+                        this.deviceService.removeDatastream(this.device._id, sensorId, datastreamId).toPromise().then();
                     } catch (e) {
                         this.alertService.error(e.error.message);
                     }
@@ -188,20 +180,4 @@ export class DatastreamComponent implements ControlValueAccessor, OnInit, OnDest
                 }),
             ),
         );
-
-    public async ngOnInit(): Promise<void> {
-        const { onUpdate } = await this.deviceService.subscribe();
-
-        this.subscriptions.push(
-            onUpdate.subscribe((newDevice: IDevice) => {
-                if (newDevice._id === this._deviceId) {
-                    this.device = newDevice;
-                }
-            }),
-        );
-    }
-
-    ngOnDestroy(): void {
-        this.subscriptions.forEach((s) => s.unsubscribe());
-    }
 }

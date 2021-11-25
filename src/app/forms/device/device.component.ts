@@ -272,7 +272,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
             if (this.deviceForm.controls.locationDescription.dirty) {
                 location.description = this.deviceForm.value.locationDescription;
             }
-
             if (this.deviceForm.controls.location.dirty) {
                 const deviceLocation = this.deviceForm.value.location;
                 location.location = [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height];
@@ -297,7 +296,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.submitted = false;
         } else {
             const deviceLocation = this.deviceForm.value.location;
-
             const device: IRegisterDeviceBody = {
                 name: this.deviceForm.value.name,
                 description: this.deviceForm.value.description,
