@@ -6,7 +6,6 @@ import {
     FormGroup,
     NG_VALIDATORS,
     NG_VALUE_ACCESSOR,
-    Validators,
 } from '@angular/forms';
 import GeometryType from 'ol/geom/GeometryType';
 import { Subscription } from 'rxjs';
@@ -14,6 +13,7 @@ import { IDevice } from '../../model/bodies/device-model';
 import { DrawOption } from '../../model/bodies/draw-options';
 import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
+import { ObservedAreaService } from '../../services/observed-area.service';
 
 export interface SensorLocationFormValues {
     latitude: number;
@@ -71,9 +71,10 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
     }
 
     constructor(
-        private readonly locationService: LocationService,
-        private readonly deviceService: DeviceService,
         private readonly formBuilder: FormBuilder,
+        private readonly deviceService: DeviceService,
+        private readonly locationService: LocationService,
+        private readonly observedAreaService: ObservedAreaService,
     ) {
         this.form = this.formBuilder.group({
             type: null,
@@ -106,10 +107,22 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
         this.selectLocation = selectLocation;
 
         if (selectLocation) {
+            this.observedAreaService.hideObservedAreas();
+
             const drawOption = { variant: GeometryType.CIRCLE, center: this.deviceLocation } as DrawOption;
             this.locationService.enableDraw(drawOption);
         } else {
             this.locationService.disableDraw();
+
+            const observedAreas = {
+                center: this.deviceLocation,
+                observedAreas: [
+                    {
+                        radius: this.form.value.radius,
+                    },
+                ],
+            };
+            this.observedAreaService.showObservedAreas(observedAreas);
         }
     }
 

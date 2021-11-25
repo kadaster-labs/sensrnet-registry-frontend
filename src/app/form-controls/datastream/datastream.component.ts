@@ -1,4 +1,4 @@
-import { ViewChildren, Component, forwardRef, Input } from '@angular/core';
+import { ViewChildren, Component, forwardRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -22,14 +22,16 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
         },
     ],
 })
-export class DatastreamComponent implements ControlValueAccessor {
+export class DatastreamComponent implements ControlValueAccessor, OnInit, OnDestroy {
     @Input() public submitted: boolean;
     @Input() public parentForm: FormGroup;
 
     @ViewChildren('observationGoals') observationGoalsElements;
 
-    public _deviceId: string;
     public device: IDevice;
+    public _deviceId: string;
+    public subscriptions = [];
+
     public confirmTitleString = $localize`:@@datastream.delete.confirm.title:Please confirm`;
     public confirmBodyString = $localize`:@@datastream.delete.confirm.body:Do you really want to delete the datastream?`;
 
@@ -94,7 +96,7 @@ export class DatastreamComponent implements ControlValueAccessor {
             () => {
                 if (sensorId && datastreamId) {
                     try {
-                        this.deviceService.removeDatastream(this.deviceId, sensorId, datastreamId).toPromise();
+                        this.deviceService.removeDatastream(this.deviceId, sensorId, datastreamId).toPromise().then();
                     } catch (e) {
                         this.alertService.error(e.error.message);
                     }
@@ -186,4 +188,20 @@ export class DatastreamComponent implements ControlValueAccessor {
                 }),
             ),
         );
+
+    public async ngOnInit(): Promise<void> {
+        const { onUpdate } = await this.deviceService.subscribe();
+
+        this.subscriptions.push(
+            onUpdate.subscribe((newDevice: IDevice) => {
+                if (newDevice._id === this._deviceId) {
+                    this.device = newDevice;
+                }
+            }),
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach((s) => s.unsubscribe());
+    }
 }

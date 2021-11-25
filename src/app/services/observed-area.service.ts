@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IDevice } from '../model/bodies/device-model';
+
+export interface IObservedAreaDTO {
+    center: number[];
+    observedAreas: Array<Record<string, any>>;
+}
 
 @Injectable({ providedIn: 'root' })
-export class LocationService {
-    private observedArea: BehaviorSubject<IDevice> = new BehaviorSubject(null);
+export class ObservedAreaService {
+    private observedArea: BehaviorSubject<IObservedAreaDTO> = new BehaviorSubject(null);
 
-    observedArea$: Observable<IDevice> = this.observedArea.asObservable();
+    observedArea$: Observable<IObservedAreaDTO> = this.observedArea.asObservable();
 
-    showObservedArea(device: IDevice): void {
-        this.observedArea.next(device);
+    showObservedAreas(observedAreas: IObservedAreaDTO): void {
+        this.observedArea.next(observedAreas);
     }
 
-    disableDraw(): void {
+    hideObservedAreas(): void {
         this.observedArea.next(null);
     }
 }

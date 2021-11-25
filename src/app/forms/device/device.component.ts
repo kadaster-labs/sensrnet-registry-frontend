@@ -17,6 +17,7 @@ import {
 } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { ObservationGoalService } from '../../services/observation-goal.service';
+import { IObservedAreaDTO, ObservedAreaService } from '../../services/observed-area.service';
 
 @Component({
     selector: 'app-device',
@@ -25,6 +26,7 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
 })
 export class DeviceComponent implements OnInit, OnDestroy {
     public deviceId: string;
+    public device: IDevice;
 
     public submitted = false;
     public activeStepIndex = 0;
@@ -36,11 +38,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     public formControlSteps: Array<Array<any>>;
 
-    public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
     public saveSuccessMessage = $localize`:@@device.register.success:Saved!`;
-    public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
-
+    public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
     public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
+    public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         private readonly alertService: AlertService,
         private readonly deviceService: DeviceService,
         private readonly locationService: LocationService,
+        private readonly observedAreaService: ObservedAreaService,
         private readonly observationGoalService: ObservationGoalService,
     ) {}
 
@@ -104,6 +106,25 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
     }
 
+    public setDevice(device) {
+        this.device = device;
+
+        const observedAreas = [];
+        if (this.device.datastreams) {
+            for (const dataStream of this.device.datastreams) {
+                if (dataStream.observationArea) {
+                    observedAreas.push(dataStream.observationArea);
+                }
+            }
+        }
+
+        const observedAreaObject: IObservedAreaDTO = {
+            observedAreas: observedAreas,
+            center: this.device.location.coordinates,
+        };
+        this.observedAreaService.showObservedAreas(observedAreaObject);
+    }
+
     public async submitDevice() {
         this.submitted = true;
 
@@ -145,7 +166,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         return { active: this.activeStepIndex === pageIndex, finished: this.activeStepIndex > pageIndex };
     }
 
-    public async setDevice(device: IDevice): Promise<void> {
+    public async initDeviceForm(device: IDevice): Promise<void> {
         this.locationService.highlightLocation({
             type: 'Point',
             coordinates: device.location.coordinates,
@@ -529,7 +550,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.submitted = false;
     }
 
-    public ngOnInit() {
+    public async ngOnInit() {
         this.deviceForm = this.formBuilder.group({
             id: null,
             category: null,
@@ -563,19 +584,34 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.route.params.subscribe(async (params) => {
                 if (params.id) {
-                    const device = await this.deviceService.get(params.id).toPromise();
-                    if (device) {
-                        this.deviceId = params.id;
-                        this.setDevice(device as IDevice);
-                    }
+                    this.deviceId = params.id;
+                    const device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
 
+                    this.setDevice(device);
+                    await this.initDeviceForm(this.device);
                     this.locationService.showLocation(null);
+                }
+            }),
+        );
+
+        const { onLocate, onUpdate } = await this.deviceService.subscribe();
+
+        this.subscriptions.push(
+            onLocate.subscribe((newDevice: IDevice) => {
+                if (newDevice._id === this.deviceId) {
+                    this.setDevice(newDevice);
+                }
+            }),
+            onUpdate.subscribe((newDevice: IDevice) => {
+                if (newDevice._id === this.deviceId) {
+                    this.setDevice(newDevice);
                 }
             }),
         );
     }
 
     public ngOnDestroy(): void {
+        this.observedAreaService.hideObservedAreas();
         this.subscriptions.forEach((x) => x.unsubscribe());
     }
 }
