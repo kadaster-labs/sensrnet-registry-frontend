@@ -20,6 +20,7 @@ import Point from 'ol/geom/Point';
 import Draw, { SketchCoordType } from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
 import OlMap from 'ol/Map';
+import { register } from 'ol/proj/proj4';
 import { Cluster } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
@@ -480,8 +481,23 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     public showObservedAreas(observedAreas: IObservedAreaDTO): void {
-        const center = observedAreas.center;
-        const features = observedAreas.observedAreas.map((x) => new Feature(new CircleGeom(center, x.radius)));
+        const features = [];
+        if (observedAreas.center && observedAreas.center.length && observedAreas.observedAreaRadii) {
+            const center = proj4(this.epsgWGS84, this.epsgRD, observedAreas.center.slice(0, 2));
+            features.push(
+                ...observedAreas.observedAreaRadii.map((x) => {
+                    return new Feature(new CircleGeom(center, x.radius));
+                }),
+            );
+        }
+        if (observedAreas.observedAreaPolygons) {
+            const reader = new GeoJSON({
+                dataProjection: 'EPSG:WGS84',
+                featureProjection: 'EPSG:RD',
+            });
+            features.push(...observedAreas.observedAreaPolygons.map((x) => reader.readFeature(x)));
+        }
+
         this.observedAreaSource.addFeatures(features);
     }
 
@@ -693,6 +709,10 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     public async ngOnInit(): Promise<void> {
+        proj4.defs('EPSG:RD', this.epsgRD);
+        proj4.defs('EPSG:WGS84', this.epsgWGS84);
+        register(proj4);
+
         this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
             if (auth) {
                 this.connectionService.refreshLegalEntity();
@@ -780,11 +800,6 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.hideObservedAreas();
 
                 if (observedAreas) {
-                    observedAreas = {
-                        observedAreas: observedAreas.observedAreas,
-                        center: proj4(this.epsgWGS84, this.epsgRD, observedAreas['center'].slice(0, 2)),
-                    };
-
                     this.showObservedAreas(observedAreas);
                 }
             }),

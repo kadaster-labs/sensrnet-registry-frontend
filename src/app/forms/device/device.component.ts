@@ -119,8 +119,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
 
         const observedAreaObject: IObservedAreaDTO = {
-            observedAreas: observedAreas,
-            center: this.device.location.coordinates,
+            observedAreaPolygons: observedAreas,
         };
         this.observedAreaService.showObservedAreas(observedAreaObject);
     }
@@ -212,6 +211,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
                             }
                         }
 
+                        const hasObservedArea = datastream.observationArea !== null;
+
                         datastreams.push(
                             this.formBuilder.group({
                                 id: datastream._id,
@@ -227,7 +228,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                 documentation: datastream.documentation,
                                 dataLink: datastream.dataLink,
                                 observationGoals: [observationGoals],
-                                observedArea: datastream.observationArea,
+                                observedArea: {
+                                    type: null,
+                                    radius: null,
+                                    hasObservedArea,
+                                },
                             }),
                         );
                     }
@@ -426,6 +431,18 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.submitted = false;
     }
 
+    public getObservedArea(observedArea) {
+        let result = null;
+        if (observedArea && observedArea.type && observedArea.radius !== null) {
+            result = {
+                type: observedArea.type,
+                radius: observedArea.radius,
+            };
+        }
+
+        return result;
+    }
+
     public async saveDatastreams() {
         const sensors = this.sensorForm.get('sensors') as FormArray;
 
@@ -448,7 +465,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     isReusable: datastreamFormValue.isReusable,
                     documentation: datastreamFormValue.documentation,
                     dataLink: datastreamFormValue.dataLink,
-                    observedArea: datastreamFormValue.observedArea,
+                    observedArea: this.getObservedArea(datastreamFormValue.observedArea),
                 };
 
                 try {
@@ -512,7 +529,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                             datastreamUpdate.dataLink = datastreamFormValue.dataLink;
                         }
                         if (datastreamEntry.get('observedArea').dirty) {
-                            datastreamUpdate.observedArea = datastreamFormValue.observedArea;
+                            datastreamUpdate.observedArea = this.getObservedArea(datastreamFormValue.observedArea);
                         }
 
                         if (datastreamFormValue.observationGoals) {

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface IObservedAreaDTO {
-    center: number[];
-    observedAreas: Array<Record<string, any>>;
+    center?: number[];
+    observedAreaRadii?: Array<Record<string, any>>;
+    observedAreaPolygons?: Array<Record<string, any>>;
 }
 
 @Injectable({ providedIn: 'root' })

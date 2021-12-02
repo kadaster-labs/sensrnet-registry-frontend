@@ -79,6 +79,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
         this.form = this.formBuilder.group({
             type: null,
             radius: null,
+            hasObservedArea: false,
         });
 
         this.subscriptions.push(
@@ -94,6 +95,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
                 if (this.selectLocation === true) {
                     this.form.setValue({
                         type: 'Circle',
+                        hasObservedArea: true,
                         radius: location.properties.radius,
                     });
 
@@ -116,7 +118,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
 
             const observedAreas = {
                 center: this.deviceLocation,
-                observedAreas: [{ radius: this.form.value.radius }],
+                observedAreaRadii: [{ radius: this.form.value.radius }],
             };
             this.observedAreaService.showObservedAreas(observedAreas);
         }
