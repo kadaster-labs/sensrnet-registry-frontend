@@ -23,6 +23,7 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
     ],
 })
 export class DatastreamComponent implements ControlValueAccessor {
+    @Input() public device: IDevice;
     @Input() public submitted: boolean;
     @Input() public parentForm: FormGroup;
 
@@ -40,16 +41,6 @@ export class DatastreamComponent implements ControlValueAccessor {
         private readonly deviceService: DeviceService,
         private readonly observationGoalService: ObservationGoalService,
     ) {}
-
-    public _device: IDevice;
-
-    @Input() set device(device: IDevice) {
-        this._device = device;
-    }
-
-    get device() {
-        return this._device;
-    }
 
     createDatastream(): FormGroup {
         return this.formBuilder.group({

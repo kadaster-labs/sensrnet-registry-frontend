@@ -482,14 +482,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public showObservedAreas(observedAreas: IObservedAreaDTO): void {
         const features = [];
-        if (observedAreas.center && observedAreas.center.length && observedAreas.observedAreaRadii) {
-            const center = proj4(this.epsgWGS84, this.epsgRD, observedAreas.center.slice(0, 2));
-            features.push(
-                ...observedAreas.observedAreaRadii.map((x) => {
-                    return new Feature(new CircleGeom(center, x.radius));
-                }),
-            );
-        }
         if (observedAreas.observedAreaPolygons) {
             const reader = new GeoJSON({
                 dataProjection: 'EPSG:WGS84',

@@ -211,8 +211,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
                             }
                         }
 
-                        const hasObservedArea = datastream.observationArea !== null;
-
                         datastreams.push(
                             this.formBuilder.group({
                                 id: datastream._id,
@@ -228,11 +226,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                 documentation: datastream.documentation,
                                 dataLink: datastream.dataLink,
                                 observationGoals: [observationGoals],
-                                observedArea: {
-                                    type: null,
-                                    radius: null,
-                                    hasObservedArea,
-                                },
+                                observedArea: datastream.observationArea,
                             }),
                         );
                     }
@@ -251,8 +245,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     datastreams,
                 }),
             );
-            this.sensorForm.markAsPristine();
         }
+        this.sensorForm.markAsPristine();
     }
 
     public async saveDevice() {
@@ -281,7 +275,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
                 const deviceLocation = this.deviceForm.value.location;
                 location.location = [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height];
             }
-
             if (Object.keys(location).length) {
                 deviceUpdate.location = location;
             }
@@ -413,7 +406,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
                         await this.deviceService
                             .updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate as IUpdateSensorBody)
                             .toPromise();
-                        this.sensorForm.markAsPristine();
                         this.alertService.success(this.saveSuccessMessage);
                     }
                 } catch (e) {
@@ -425,22 +417,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
 
         if (!failed) {
+            this.sensorForm.markAsPristine();
             this.alertService.success(this.saveSuccessMessage);
         }
 
         this.submitted = false;
-    }
-
-    public getObservedArea(observedArea) {
-        let result = null;
-        if (observedArea && observedArea.type && observedArea.radius !== null) {
-            result = {
-                type: observedArea.type,
-                radius: observedArea.radius,
-            };
-        }
-
-        return result;
     }
 
     public async saveDatastreams() {
@@ -465,7 +446,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     isReusable: datastreamFormValue.isReusable,
                     documentation: datastreamFormValue.documentation,
                     dataLink: datastreamFormValue.dataLink,
-                    observedArea: this.getObservedArea(datastreamFormValue.observedArea),
+                    observedArea: datastreamFormValue.observedArea,
                 };
 
                 try {
@@ -529,9 +510,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
                             datastreamUpdate.dataLink = datastreamFormValue.dataLink;
                         }
                         if (datastreamEntry.get('observedArea').dirty) {
-                            datastreamUpdate.observedArea = this.getObservedArea(datastreamFormValue.observedArea);
+                            datastreamUpdate.observedArea = datastreamFormValue.observedArea;
                         }
-
                         if (datastreamFormValue.observationGoals) {
                             const observationGoalIds = datastreamFormValue.observationGoals.map((x) => x._id);
                             await this.updateObservationGoals(sensorId, datastreamId, observationGoalIds);
@@ -546,7 +526,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                     datastreamUpdate as IUpdateDatastreamBody,
                                 )
                                 .toPromise();
-                            this.sensorForm.markAsPristine();
                         }
 
                         this.submitted = false;
@@ -559,6 +538,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
 
         if (!failed) {
+            this.sensorForm.markAsPristine();
             this.alertService.success(this.saveSuccessMessage, false, 4000);
         }
 
@@ -603,7 +583,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     const device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
 
                     this.setDevice(device);
-                    await this.initDeviceForm(this.device);
+                    await this.initDeviceForm(device);
                     this.locationService.showLocation(null);
                 }
             }),

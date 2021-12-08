@@ -4,10 +4,10 @@
             <label class="text-left" for="observedArea" i18n>Observed Area</label>
         </div>
         <div class="col-8">
-            <button type="button" class="btn btn-outline-secondary" [ngClass]="{ 'btn-outline-success': form.controls.hasObservedArea.value === true }"
+            <button type="button" class="btn btn-outline-secondary" [ngClass]="{ 'btn-outline-success': value.type !== null }"
                     (click)="setSelectLocation(true)">
                 <span class="mr-2" i18n>Select on map</span>
-                <fa-icon [icon]="['far', 'check-square']" *ngIf="form.controls.hasObservedArea.value === true" aria-hidden="true"></fa-icon>
+                <fa-icon [icon]="['far', 'check-square']" *ngIf="value.type !== null" aria-hidden="true"></fa-icon>
             </button>
         </div>
     </div>

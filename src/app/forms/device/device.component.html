@@ -41,7 +41,7 @@
                         <label for="description"><span i18n>Description</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                         <textarea class="form-control" type="text" formControlName="description" placeholder="Describe the device" i18n-placeholder></textarea>
                     </div>
-                    <app-sensor-location formControlName="location" [submitted]="submitted"></app-sensor-location>
+                    <app-sensor-location formControlName="location" [device]="device" [submitted]="submitted"></app-sensor-location>
                     <div class="form-group">
                         <label for="locationName"><span i18n>Location name</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                         <input class="form-control" type="text" formControlName="locationName" placeholder="Name of the device location" i18n-placeholder>

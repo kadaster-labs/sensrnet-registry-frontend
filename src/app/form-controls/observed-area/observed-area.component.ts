@@ -7,6 +7,7 @@ import {
     NG_VALIDATORS,
     NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import * as circleToPolygon from 'circle-to-polygon';
 import GeometryType from 'ol/geom/GeometryType';
 import { Subscription } from 'rxjs';
 import { IDevice } from '../../model/bodies/device-model';
@@ -15,10 +16,9 @@ import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { ObservedAreaService } from '../../services/observed-area.service';
 
-export interface SensorLocationFormValues {
-    latitude: number;
-    longitude: number;
-    height: number;
+export interface ObservedAreaFormValues {
+    type: string;
+    coordinates: any[];
 }
 
 @Component({
@@ -57,11 +57,11 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
         return this.form.controls;
     }
 
-    get value(): SensorLocationFormValues {
+    get value(): ObservedAreaFormValues {
         return this.form.value;
     }
 
-    set value(value: SensorLocationFormValues) {
+    set value(value: ObservedAreaFormValues) {
         if (!value) {
             return;
         }
@@ -78,8 +78,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
     ) {
         this.form = this.formBuilder.group({
             type: null,
-            radius: null,
-            hasObservedArea: false,
+            coordinates: null,
         });
 
         this.subscriptions.push(
@@ -93,11 +92,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
         this.subscriptions.push(
             this.locationService.drawGeometry$.subscribe((location: Record<string, any>) => {
                 if (this.selectLocation === true) {
-                    this.form.setValue({
-                        type: 'Circle',
-                        hasObservedArea: true,
-                        radius: location.properties.radius,
-                    });
+                    this.form.setValue(circleToPolygon(this.deviceLocation, location.properties.radius));
 
                     this.setSelectLocation(false);
                 }
@@ -117,8 +112,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
             this.locationService.disableDraw();
 
             const observedAreas = {
-                center: this.deviceLocation,
-                observedAreaRadii: [{ radius: this.form.value.radius }],
+                observedAreaPolygons: [this.form.value],
             };
             this.observedAreaService.showObservedAreas(observedAreas);
         }
@@ -135,7 +129,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
         this.onTouched = fn;
     }
 
-    public writeValue(value: SensorLocationFormValues) {
+    public writeValue(value: ObservedAreaFormValues) {
         if (value) {
             this.value = value;
         }
@@ -143,7 +137,7 @@ export class ObservedAreaComponent implements ControlValueAccessor, OnDestroy {
 
     // communicate the inner form validation to the parent form
     public validate(_: FormControl) {
-        return this.form.valid ? null : { location: { valid: false } };
+        return this.form.valid ? null : { observedArea: { valid: false } };
     }
 
     public ngOnDestroy() {

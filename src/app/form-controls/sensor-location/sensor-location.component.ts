@@ -10,8 +10,10 @@ import {
 } from '@angular/forms';
 import GeometryType from 'ol/geom/GeometryType';
 import { Subscription } from 'rxjs';
+import { IDevice } from '../../model/bodies/device-model';
 import { DrawOption } from '../../model/bodies/draw-options';
 import { ISensorLocation } from '../../model/bodies/location';
+import { AlertService } from '../../services/alert.service';
 import { LocationService } from '../../services/location.service';
 
 export interface SensorLocationFormValues {
@@ -40,10 +42,13 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     public form: FormGroup;
     public subscriptions: Subscription[] = [];
 
-    public selectLocation = false;
-
     private location: ISensorLocation;
 
+    public selectLocation = false;
+    public observationAreaString = $localize`:@@location.area:The device has observation area's. These will be removed 
+    when the location is updated.`;
+
+    @Input() public device: IDevice;
     @Input() public submitted: boolean;
 
     get f() {
@@ -63,7 +68,11 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
         this.onTouched();
     }
 
-    constructor(private readonly locationService: LocationService, private readonly formBuilder: FormBuilder) {
+    constructor(
+        private readonly formBuilder: FormBuilder,
+        private readonly alertService: AlertService,
+        private readonly locationService: LocationService,
+    ) {
         this.form = this.formBuilder.group({
             height: [0, Validators.required],
             latitude: [null, Validators.required],
@@ -92,17 +101,32 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
                         height: this.form.get('height').value,
                     });
 
-                    this.locationService.showLocation(this.location);
                     this.setSelectLocation(false);
+                    this.locationService.showLocation(this.location);
                 }
             }),
         );
+    }
+
+    public hasObservationAreas() {
+        let result;
+        if (this.device && this.device.datastreams && this.device.datastreams.length) {
+            const observationAreas = this.device.datastreams.map((x) => x.observationArea).filter(Boolean);
+            result = observationAreas.length > 0;
+        } else {
+            result = false;
+        }
+
+        return result;
     }
 
     public setSelectLocation(selectLocation): void {
         this.selectLocation = selectLocation;
 
         if (selectLocation) {
+            if (this.hasObservationAreas()) {
+                this.alertService.warning(this.observationAreaString);
+            }
             const drawOption: DrawOption = { variant: GeometryType.POINT, center: null };
             this.locationService.enableDraw(drawOption);
         } else {
