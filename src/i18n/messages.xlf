@@ -269,7 +269,7 @@
     </unit>
     <unit id="app.title">
       <notes>
-        <note category="location">src/app/app.component.ts:7</note>
+        <note category="location">src/app/app.component.ts:6</note>
       </notes>
       <segment>
         <source>Sensor Registry</source>
@@ -355,7 +355,7 @@
     </unit>
     <unit id="map.locate">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:90</note>
+        <note category="location">src/app/components/map/map.component.ts:96</note>
       </notes>
       <segment>
         <source>Locate me</source>
@@ -363,8 +363,8 @@
     </unit>
     <unit id="confirm.title">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:91</note>
-        <note category="location">src/app/forms/devices/devices.component.ts:49</note>
+        <note category="location">src/app/components/map/map.component.ts:97</note>
+        <note category="location">src/app/forms/devices/devices.component.ts:51</note>
       </notes>
       <segment>
         <source>Please confirm</source>
@@ -372,7 +372,7 @@
     </unit>
     <unit id="delete.device.confirm.body">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:92</note>
+        <note category="location">src/app/components/map/map.component.ts:98</note>
       </notes>
       <segment>
         <source>Do you really want to delete the device?</source>
@@ -380,7 +380,7 @@
     </unit>
     <unit id="map.geo.support">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:93</note>
+        <note category="location">src/app/components/map/map.component.ts:99</note>
       </notes>
       <segment>
         <source>Geolocation is not supported by this browser.</source>
@@ -388,7 +388,7 @@
     </unit>
     <unit id="1177467005869954871">
       <notes>
-        <note category="location">src/app/components/map/map.component.ts:545</note>
+        <note category="location">src/app/components/map/map.component.ts:657</note>
       </notes>
       <segment>
         <source>Enter location</source>
@@ -396,7 +396,7 @@
     </unit>
     <unit id="4526390416021631012">
       <notes>
-        <note category="location">src/app/components/map/map.service.ts:56</note>
+        <note category="location">src/app/components/map/map.service.ts:58</note>
       </notes>
       <segment>
         <source>BAG</source>
@@ -404,7 +404,7 @@
     </unit>
     <unit id="5086643504817308506">
       <notes>
-        <note category="location">src/app/components/map/map.service.ts:69</note>
+        <note category="location">src/app/components/map/map.service.ts:71</note>
       </notes>
       <segment>
         <source>Overlays</source>
@@ -519,9 +519,9 @@
         <note category="location">src/app/form-controls/datastream/datastream.component.html:4</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:30</note>
         <note category="location">src/app/form-controls/datastream/datastream.component.html:37</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:80</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:89</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:74</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:83</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:92</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:9</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:21</note>
@@ -552,8 +552,8 @@
     <unit id="8651329520452925938">
       <notes>
         <note category="location">src/app/components/observation-goal/observation-goal.component.html:41</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:76</note>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:85</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:79</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:88</note>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:12</note>
         <note category="location">src/app/form-controls/sensor/sensor.component.html:44</note>
       </notes>
@@ -753,7 +753,7 @@
     </unit>
     <unit id="4895326106573044490">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:71</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:74</note>
         <note category="location">src/app/form-controls/sensor/sensor.component.html:39</note>
       </notes>
       <segment>
@@ -762,7 +762,7 @@
     </unit>
     <unit id="5880667752120449727">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:72</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:75</note>
         <note category="location">src/app/form-controls/sensor/sensor.component.html:40</note>
       </notes>
       <segment>
@@ -771,7 +771,7 @@
     </unit>
     <unit id="8732411010010701151">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:80</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:83</note>
       </notes>
       <segment>
         <source>Datalink</source>
@@ -779,7 +779,7 @@
     </unit>
     <unit id="3465033560498443683">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:81</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:84</note>
       </notes>
       <segment>
         <source>Enter URL of data</source>
@@ -787,7 +787,7 @@
     </unit>
     <unit id="9075163810858994898">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.html:89</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.html:92</note>
         <note category="location">src/app/sidebar/sidebar.component.html:12</note>
       </notes>
       <segment>
@@ -796,7 +796,7 @@
     </unit>
     <unit id="datastream.delete.confirm.title">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.ts:31</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.ts:34</note>
       </notes>
       <segment>
         <source>Please confirm</source>
@@ -804,7 +804,7 @@
     </unit>
     <unit id="datastream.delete.confirm.body">
       <notes>
-        <note category="location">src/app/form-controls/datastream/datastream.component.ts:32</note>
+        <note category="location">src/app/form-controls/datastream/datastream.component.ts:35</note>
       </notes>
       <segment>
         <source>Do you really want to delete the datastream?</source>
@@ -827,6 +827,23 @@
       </notes>
       <segment>
         <source>Category is required</source>
+      </segment>
+    </unit>
+    <unit id="438612142444721005">
+      <notes>
+        <note category="location">src/app/form-controls/observed-area/observed-area.component.html:4</note>
+      </notes>
+      <segment>
+        <source>Observed Area</source>
+      </segment>
+    </unit>
+    <unit id="5824839776083689686">
+      <notes>
+        <note category="location">src/app/form-controls/observed-area/observed-area.component.html:9</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:8</note>
+      </notes>
+      <segment>
+        <source>Select on map</source>
       </segment>
     </unit>
     <unit id="5481284030283031915">
@@ -887,14 +904,6 @@
         <source>Location</source>
       </segment>
     </unit>
-    <unit id="5824839776083689686">
-      <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:8</note>
-      </notes>
-      <segment>
-        <source>Select on map</source>
-      </segment>
-    </unit>
     <unit id="7397645067969084297">
       <notes>
         <note category="location">src/app/form-controls/sensor-location/sensor-location.component.html:15</note>
@@ -917,6 +926,15 @@
       </notes>
       <segment>
         <source>Location and Height are required</source>
+      </segment>
+    </unit>
+    <unit id="location.area">
+      <notes>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.ts:48,49</note>
+      </notes>
+      <segment>
+        <source>The device has observation area&apos;s. These will be removed 
+    when the location is updated.</source>
       </segment>
     </unit>
     <unit id="1755726504733757199">
@@ -1166,45 +1184,37 @@
         <source>Previous</source>
       </segment>
     </unit>
-    <unit id="form.register.invalid">
-      <notes>
-        <note category="location">src/app/forms/device/device.component.ts:34</note>
-        <note category="location">src/app/forms/devices/devices.component.ts:50</note>
-      </notes>
-      <segment>
-        <source>The form is invalid</source>
-      </segment>
-    </unit>
     <unit id="device.register.success">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:35</note>
+        <note category="location">src/app/forms/device/device.component.ts:41</note>
       </notes>
       <segment>
         <source>Saved!</source>
       </segment>
     </unit>
-    <unit id="device.register.failure">
+    <unit id="form.register.invalid">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:36</note>
+        <note category="location">src/app/forms/device/device.component.ts:42</note>
+        <note category="location">src/app/forms/devices/devices.component.ts:52</note>
       </notes>
       <segment>
-        <source>An error has occurred during saving:</source>
-      </segment>
-    </unit>
-    <unit id="step.confirm.title">
-      <notes>
-        <note category="location">src/app/forms/device/device.component.ts:38</note>
-      </notes>
-      <segment>
-        <source>Save the step!</source>
+        <source>The form is invalid</source>
       </segment>
     </unit>
     <unit id="step.confirm.body">
       <notes>
-        <note category="location">src/app/forms/device/device.component.ts:39</note>
+        <note category="location">src/app/forms/device/device.component.ts:43</note>
       </notes>
       <segment>
         <source>You need to save before continuing</source>
+      </segment>
+    </unit>
+    <unit id="device.register.failure">
+      <notes>
+        <note category="location">src/app/forms/device/device.component.ts:44</note>
+      </notes>
+      <segment>
+        <source>An error has occurred during saving:</source>
       </segment>
     </unit>
     <unit id="6494659399288890250">
@@ -1258,7 +1268,7 @@
     </unit>
     <unit id="updated.devices">
       <notes>
-        <note category="location">src/app/forms/devices/devices.component.ts:51</note>
+        <note category="location">src/app/forms/devices/devices.component.ts:53</note>
       </notes>
       <segment>
         <source>Successfully updated device(s).</source>
@@ -1266,7 +1276,7 @@
     </unit>
     <unit id="join.organization">
       <notes>
-        <note category="location">src/app/forms/devices/devices.component.ts:52</note>
+        <note category="location">src/app/forms/devices/devices.component.ts:54</note>
       </notes>
       <segment>
         <source>You need to join an organization first.</source>
@@ -1274,7 +1284,7 @@
     </unit>
     <unit id="update.devices.confirm.body">
       <notes>
-        <note category="location">src/app/forms/devices/devices.component.ts:53</note>
+        <note category="location">src/app/forms/devices/devices.component.ts:55</note>
       </notes>
       <segment>
         <source>Do you really want to update the device(s)?</source>
@@ -1282,7 +1292,7 @@
     </unit>
     <unit id="delete.devices.confirm.body">
       <notes>
-        <note category="location">src/app/forms/devices/devices.component.ts:54</note>
+        <note category="location">src/app/forms/devices/devices.component.ts:56</note>
       </notes>
       <segment>
         <source>Do you really want to delete the device(s)?</source>
@@ -1634,7 +1644,7 @@
     </unit>
     <unit id="modal.accept">
       <notes>
-        <note category="location">src/app/services/modal.service.ts:9</note>
+        <note category="location">src/app/services/modal.service.ts:8</note>
       </notes>
       <segment>
         <source>OK</source>
@@ -1642,7 +1652,7 @@
     </unit>
     <unit id="modal.decline">
       <notes>
-        <note category="location">src/app/services/modal.service.ts:10</note>
+        <note category="location">src/app/services/modal.service.ts:9</note>
       </notes>
       <segment>
         <source>Cancel</source>

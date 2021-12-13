@@ -23,6 +23,7 @@ import { ObservationGoalsComponent } from './components/observation-goals/observ
 import { OrganizationComponent } from './components/organization/organization.component';
 import { DatastreamComponent } from './form-controls/datastream/datastream.component';
 import { DeviceTypeComponent } from './form-controls/device-type/device-type.component';
+import { ObservedAreaComponent } from './form-controls/observed-area/observed-area.component';
 import { OrganizationContactComponent } from './form-controls/organization-contact/organization-contact.component';
 import { SensorLocationComponent } from './form-controls/sensor-location/sensor-location.component';
 import { SensorStatusComponent } from './form-controls/sensor-status/sensor-status.component';
@@ -70,6 +71,7 @@ import { ViewerComponent } from './viewer/viewer.component';
         OrganizationJoinComponent,
         OrganizationCreateComponent,
         OrganizationContactComponent,
+        ObservedAreaComponent,
     ],
     imports: [
         BrowserModule,

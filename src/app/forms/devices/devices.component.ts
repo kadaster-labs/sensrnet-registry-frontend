@@ -2,9 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import GeometryType from 'ol/geom/GeometryType';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { IDevice } from '../../model/bodies/device-model';
+import { DrawOption } from '../../model/bodies/draw-options';
 import { getCategoryTranslation, Category } from '../../model/bodies/sensorTypes';
 import { AlertService } from '../../services/alert.service';
 import { ConnectionService } from '../../services/connection.service';
@@ -171,6 +173,13 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
     public toggleLocation() {
         this.showLocation = !this.showLocation;
+
+        if (this.showLocation) {
+            const drawOption: DrawOption = { variant: GeometryType.POINT, center: null };
+            this.locationService.enableDraw(drawOption);
+        } else {
+            this.locationService.disableDraw();
+        }
     }
 
     public updateActions() {
@@ -309,9 +318,9 @@ export class DevicesComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
-            this.locationService.location$.subscribe((location) => {
-                if (this.showLocation && location.coordinates) {
-                    this.updateDeviceLocation(location.coordinates);
+            this.locationService.drawGeometry$.subscribe((location: Record<string, any>) => {
+                if (this.showLocation && location.geometry.coordinates) {
+                    this.updateDeviceLocation(location.geometry.coordinates);
                 }
             }),
         );

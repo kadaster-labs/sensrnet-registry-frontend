@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, Input, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -9,14 +9,18 @@ import AnimatedCluster from 'ol-ext/layer/AnimatedCluster';
 import LayerSwitcher from 'ol-layerswitcher';
 import OverlayPositioning from 'ol//OverlayPositioning';
 import Control from 'ol/control/Control';
+import { Coordinate } from 'ol/coordinate';
 import { extend, Extent, getBottomLeft, getCenter, getTopRight } from 'ol/extent';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
-import { MultiPoint } from 'ol/geom';
+import { Circle as CircleGeom, MultiPoint } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
+import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
+import Draw, { SketchCoordType } from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
 import OlMap from 'ol/Map';
+import { register } from 'ol/proj/proj4';
 import { Cluster } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import { Circle as CircleStyle, Fill, Icon, Style, Text } from 'ol/style';
@@ -25,12 +29,14 @@ import { FitOptions } from 'ol/View';
 import proj4 from 'proj4';
 
 import { IDevice } from '../../model/bodies/device-model';
+import { DrawOption } from '../../model/bodies/draw-options';
 import { Category, getCategoryTranslation } from '../../model/bodies/sensorTypes';
 import { AlertService } from '../../services/alert.service';
 import { ConnectionService } from '../../services/connection.service';
 import { DeviceService } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { ModalService } from '../../services/modal.service';
+import { IObservedAreaDTO, ObservedAreaService } from '../../services/observed-area.service';
 import { MapService } from './map.service';
 import { SearchPDOK } from './searchPDOK';
 
@@ -54,6 +60,7 @@ export class MapComponent implements OnInit, OnDestroy {
         private locationService: LocationService,
         private connectionService: ConnectionService,
         private oidcSecurityService: OidcSecurityService,
+        private observedAreaService: ObservedAreaService,
     ) {}
 
     public map: OlMap;
@@ -65,11 +72,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public getCategoryTranslation = getCategoryTranslation;
 
+    public draw: Draw;
     public popupOverlay: Overlay;
     public clusterSource: Cluster;
     public vectorSource: VectorSource<any>;
     public highlightLayer: VectorLayer;
     public selectCluster: SelectCluster;
+    public observedAreaSource: VectorSource<any>;
+    public observedAreaLayer: VectorLayer;
     public highlightSource: VectorSource<Geometry>;
     public clusterLayer: AnimatedCluster;
     public selectLocationLayer: VectorLayer;
@@ -80,8 +90,6 @@ export class MapComponent implements OnInit, OnDestroy {
         '+y_0=463000 +ellps=bessel +units=m +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,' +
         '-1.8703473836068,4.0812 +no_defs';
     private epsgWGS84 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
-
-    public hideTreeDataset = false;
 
     public clusterMaxZoom = 15;
 
@@ -166,6 +174,10 @@ export class MapComponent implements OnInit, OnDestroy {
             let style: Style[];
 
             const FEATURES_ = feature.get('features');
+            if (!FEATURES_) {
+                return;
+            }
+
             const numberOfFeatures = FEATURES_.length;
             if (numberOfFeatures === 1) {
                 const category = feature.get('features')[0].values_.category;
@@ -224,17 +236,17 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         this.clusterLayer = new AnimatedCluster({
-            name: 'Cluster',
-            source: this.clusterSource,
-            style: styleCluster,
             zIndex: 1,
+            name: 'Cluster',
+            style: styleCluster,
+            source: this.clusterSource,
         });
-
         this.map.addLayer(this.clusterLayer);
 
         this.selectCluster = new SelectCluster({
             pointRadius: 40,
             style: styleCluster,
+            layers: [this.clusterLayer],
             featureStyle: styleSelectedCluster,
         });
         this.map.addInteraction(this.selectCluster);
@@ -250,7 +262,7 @@ export class MapComponent implements OnInit, OnDestroy {
             this.removeHighlight();
 
             const activeFeatures = event.element.get('features');
-            if (activeFeatures.length === 1) {
+            if (activeFeatures && activeFeatures.length === 1) {
                 const feature = activeFeatures[0];
                 const geometry = new Feature({
                     geometry: feature.values_.geometry,
@@ -259,7 +271,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.showOverlay(feature.values_.geometry.flatCoordinates);
 
                 this.highlightFeature(geometry);
-            } else if (activeFeatures.length > 1) {
+            } else if (activeFeatures && activeFeatures.length > 1) {
                 this.removeHighlight();
                 this.hideOverlay();
             }
@@ -358,22 +370,14 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     private onSingleClick(event: MapBrowserEvent) {
-        const mapCoordinateRD = event.coordinate;
-        const mapCoordinateWGS84 = proj4(this.epsgRD, this.epsgWGS84, mapCoordinateRD);
-
         this.hideOverlay();
         this.removeHighlight();
-
-        this.locationService.setLocation({
-            type: 'Point',
-            coordinates: [mapCoordinateWGS84[1], mapCoordinateWGS84[0], 0],
-        });
 
         event.map.forEachFeatureAtPixel(event.pixel, (data) => {
             const features = data.getProperties().features;
 
             // check if feature is a cluster with multiple features
-            if (features.length < 2) {
+            if (!features || features.length < 2) {
                 return;
             }
 
@@ -444,16 +448,11 @@ export class MapComponent implements OnInit, OnDestroy {
         this.map.addLayer(this.selectLocationLayer);
     }
 
-    public removeLocationFeatures() {
-        this.map.removeLayer(this.selectLocationLayer);
-    }
-
     public clearLocationLayer() {
         this.map.removeLayer(this.selectLocationLayer);
     }
 
     public highlightFeature(feature: Feature) {
-        this.map.removeLayer(this.highlightLayer);
         this.highlightSource = new VectorSource({
             features: [feature],
         });
@@ -479,6 +478,23 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public removeHighlight() {
         this.map.removeLayer(this.highlightLayer);
+    }
+
+    public showObservedAreas(observedAreas: IObservedAreaDTO): void {
+        const features = [];
+        if (observedAreas.observedAreaPolygons) {
+            const reader = new GeoJSON({
+                dataProjection: 'EPSG:WGS84',
+                featureProjection: 'EPSG:RD',
+            });
+            features.push(...observedAreas.observedAreaPolygons.map((x) => reader.readFeature(x)));
+        }
+
+        this.observedAreaSource.addFeatures(features);
+    }
+
+    public hideObservedAreas() {
+        this.observedAreaSource.clear();
     }
 
     private zoomToPoint(point: Point) {
@@ -548,6 +564,77 @@ export class MapComponent implements OnInit, OnDestroy {
         );
     }
 
+    private addDraw(drawOption: DrawOption): void {
+        let geometryFunction;
+        if (drawOption && drawOption.variant === GeometryType.CIRCLE) {
+            geometryFunction = (coordinates: SketchCoordType, geometry: CircleGeom) => {
+                const center =
+                    drawOption.center !== null
+                        ? proj4(this.epsgWGS84, this.epsgRD, drawOption.center)
+                        : (coordinates[0] as Coordinate);
+
+                const last = coordinates[coordinates.length - 1];
+                const dx = center[0] - last[0],
+                    dy = center[1] - last[1];
+
+                const radius = Math.sqrt(dx * dx + dy * dy);
+                if (!geometry) {
+                    geometry = new CircleGeom(center, radius);
+                } else {
+                    geometry.setRadius(radius);
+                }
+
+                return geometry;
+            };
+        }
+
+        this.draw = new Draw({
+            geometryFunction,
+            type: drawOption.variant,
+            source: this.selectLocationSource,
+        });
+
+        this.draw.on('drawend', (e) => {
+            if (drawOption.variant === GeometryType.POINT) {
+                const geom = e.feature.getGeometry() as Point;
+                const coordinatesWGS84 = proj4(this.epsgRD, this.epsgWGS84, geom.getCoordinates());
+
+                this.locationService.addDrawGeometry({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [coordinatesWGS84[1], coordinatesWGS84[0], 0],
+                    },
+                });
+            } else if (drawOption.variant === GeometryType.CIRCLE) {
+                const geom = e.feature.getGeometry() as CircleGeom;
+                const centerWGS84 = proj4(this.epsgRD, this.epsgWGS84, geom.getCenter());
+
+                this.locationService.addDrawGeometry({
+                    type: 'Feature',
+                    properties: {
+                        radius: geom.getRadius(),
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [centerWGS84[1], centerWGS84[0], 0],
+                    },
+                });
+            }
+        });
+
+        this.map.addInteraction(this.draw);
+        if (drawOption.center !== null) {
+            this.draw.appendCoordinates([proj4(this.epsgWGS84, this.epsgRD, drawOption.center)]);
+        }
+    }
+
+    private removeDraw(): void {
+        if (this.draw) {
+            this.map.removeInteraction(this.draw);
+        }
+    }
+
     private addLayerSwitcher(): void {
         const layerSwitcher = new LayerSwitcher({
             reverse: true,
@@ -614,6 +701,10 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     public async ngOnInit(): Promise<void> {
+        proj4.defs('EPSG:RD', this.epsgRD);
+        proj4.defs('EPSG:WGS84', this.epsgWGS84);
+        register(proj4);
+
         this.oidcSecurityService.checkAuth().subscribe((auth: boolean) => {
             if (auth) {
                 this.connectionService.refreshLegalEntity();
@@ -627,6 +718,24 @@ export class MapComponent implements OnInit, OnDestroy {
         this.initMap();
         this.initFeatures();
 
+        this.observedAreaSource = new VectorSource({ features: [] });
+        this.observedAreaLayer = new VectorLayer({
+            source: this.observedAreaSource,
+            style: [
+                new Style({
+                    fill: new Fill({ color: 'rgba(30, 144, 255, 0.1)' }),
+                    stroke: new Stroke({
+                        width: 3,
+                        color: 'rgb(30, 144, 255)',
+                    }),
+                }),
+            ],
+            zIndex: 1,
+            opacity: 0.8,
+        });
+
+        this.map.addLayer(this.observedAreaLayer);
+
         const { onLocate, onUpdate, onRemove } = await this.deviceService.subscribe();
 
         this.subscriptions.push(
@@ -635,23 +744,21 @@ export class MapComponent implements OnInit, OnDestroy {
                 const newFeature = new GeoJSON().readFeature(feature);
                 this.vectorSource.addFeature(newFeature);
             }),
-        );
-
-        this.subscriptions.push(
             onUpdate.subscribe((updatedDevice: IDevice) => {
                 this.updateDevice(updatedDevice);
             }),
-        );
-
-        this.subscriptions.push(
             onRemove.subscribe((removedDevice: IDevice) => {
                 this.deviceDeleted(removedDevice);
             }),
-        );
-
-        this.subscriptions.push(
+            this.locationService.drawLocation$.subscribe((drawOption: DrawOption) => {
+                if (drawOption) {
+                    this.addDraw(drawOption);
+                } else {
+                    this.removeDraw();
+                }
+            }),
             this.locationService.showLocation$.subscribe((deviceLocation) => {
-                this.removeLocationFeatures();
+                this.clearLocationLayer();
 
                 if (deviceLocation) {
                     const locationFeature = new Feature({
@@ -663,13 +770,8 @@ export class MapComponent implements OnInit, OnDestroy {
                         ),
                     });
                     this.setLocation(locationFeature);
-                } else {
-                    this.clearLocationLayer();
                 }
             }),
-        );
-
-        this.subscriptions.push(
             this.locationService.locationHighlight$.subscribe((deviceLocation) => {
                 this.removeHighlight();
 
@@ -686,6 +788,13 @@ export class MapComponent implements OnInit, OnDestroy {
                     this.highlightFeature(geometry);
                 }
             }),
+            this.observedAreaService.observedArea$.subscribe((observedAreas: IObservedAreaDTO) => {
+                this.hideObservedAreas();
+
+                if (observedAreas) {
+                    this.showObservedAreas(observedAreas);
+                }
+            }),
         );
 
         this.addSearchButton();
@@ -694,7 +803,8 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscriptions.forEach((x) => x.unsubscribe());
+        this.locationService.disableDraw();
+        this.subscriptions.forEach((s) => s.unsubscribe());
 
         // this.map actually lives in map.service.ts. If we let it live, all layers and listeners are re-added each time the
         // map component is recreated. Instead of manually keeping track of it, just kill the map and recreate it next time.

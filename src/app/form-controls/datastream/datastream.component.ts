@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray, ControlValueAccessor, Validators, NG
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { urlRegex } from '../../helpers/form.helpers';
+import { IDevice } from '../../model/bodies/device-model';
 import { AlertService } from '../../services/alert.service';
 import { DeviceService } from '../../services/device.service';
 import { ModalService } from '../../services/modal.service';
@@ -22,11 +23,13 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
     ],
 })
 export class DatastreamComponent implements ControlValueAccessor {
-    @Input() public deviceId: string;
+    @Input() public device: IDevice;
     @Input() public submitted: boolean;
     @Input() public parentForm: FormGroup;
 
     @ViewChildren('observationGoals') observationGoalsElements;
+
+    public subscriptions = [];
 
     public confirmTitleString = $localize`:@@datastream.delete.confirm.title:Please confirm`;
     public confirmBodyString = $localize`:@@datastream.delete.confirm.body:Do you really want to delete the datastream?`;
@@ -47,6 +50,7 @@ export class DatastreamComponent implements ControlValueAccessor {
             observedProperty: null,
             theme: [],
             dataQuality: null,
+            observedArea: null,
             isActive: true,
             isPublic: true,
             isOpenData: true,
@@ -75,7 +79,7 @@ export class DatastreamComponent implements ControlValueAccessor {
             () => {
                 if (sensorId && datastreamId) {
                     try {
-                        this.deviceService.removeDatastream(this.deviceId, sensorId, datastreamId).toPromise();
+                        this.deviceService.removeDatastream(this.device._id, sensorId, datastreamId).toPromise().then();
                     } catch (e) {
                         this.alertService.error(e.error.message);
                     }

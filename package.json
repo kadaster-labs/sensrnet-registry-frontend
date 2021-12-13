@@ -34,6 +34,7 @@
     "bootstrap": "^4.6.0",
     "bootstrap-select": "^1.13.18",
     "core-js": "^2.6.12",
+    "circle-to-polygon": "^2.2.0",
     "jquery": "^3.6.0",
     "jwt-decode": "^3.1.1",
     "ol": "^6.3.1",

@@ -17,6 +17,7 @@ import {
 } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
 import { ObservationGoalService } from '../../services/observation-goal.service';
+import { IObservedAreaDTO, ObservedAreaService } from '../../services/observed-area.service';
 
 @Component({
     selector: 'app-device',
@@ -25,6 +26,7 @@ import { ObservationGoalService } from '../../services/observation-goal.service'
 })
 export class DeviceComponent implements OnInit, OnDestroy {
     public deviceId: string;
+    public device: IDevice;
 
     public submitted = false;
     public activeStepIndex = 0;
@@ -36,12 +38,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     public formControlSteps: Array<Array<any>>;
 
-    public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
     public saveSuccessMessage = $localize`:@@device.register.success:Saved!`;
-    public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
-
-    public saveTitleString = $localize`:@@step.confirm.title:Save the step!`;
+    public formInvalidMessage = $localize`:@@form.register.invalid:The form is invalid`;
     public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
+    public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -49,6 +49,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         private readonly alertService: AlertService,
         private readonly deviceService: DeviceService,
         private readonly locationService: LocationService,
+        private readonly observedAreaService: ObservedAreaService,
         private readonly observationGoalService: ObservationGoalService,
     ) {}
 
@@ -105,6 +106,24 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
     }
 
+    public setDevice(device) {
+        this.device = device;
+
+        const observedAreas = [];
+        if (this.device.datastreams) {
+            for (const dataStream of this.device.datastreams) {
+                if (dataStream.observationArea) {
+                    observedAreas.push(dataStream.observationArea);
+                }
+            }
+        }
+
+        const observedAreaObject: IObservedAreaDTO = {
+            observedAreaPolygons: observedAreas,
+        };
+        this.observedAreaService.showObservedAreas(observedAreaObject);
+    }
+
     public async submitDevice() {
         this.submitted = true;
 
@@ -124,7 +143,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             return;
         }
 
-        await this.registerSensors();
+        await this.saveSensors();
     }
 
     public async submitDatastreams() {
@@ -135,7 +154,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             return;
         }
 
-        await this.registerDatastreams();
+        await this.saveDatastreams();
     }
 
     public getStepCount(): number {
@@ -146,7 +165,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         return { active: this.activeStepIndex === pageIndex, finished: this.activeStepIndex > pageIndex };
     }
 
-    public async setDevice(device: IDevice): Promise<void> {
+    public async initDeviceForm(device: IDevice): Promise<void> {
         this.locationService.highlightLocation({
             type: 'Point',
             coordinates: device.location.coordinates,
@@ -207,6 +226,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                 documentation: datastream.documentation,
                                 dataLink: datastream.dataLink,
                                 observationGoals: [observationGoals],
+                                observedArea: datastream.observationArea,
                             }),
                         );
                     }
@@ -225,8 +245,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     datastreams,
                 }),
             );
-            this.sensorForm.markAsPristine();
         }
+        this.sensorForm.markAsPristine();
     }
 
     public async saveDevice() {
@@ -274,7 +294,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.submitted = false;
         } else {
             const deviceLocation = this.deviceForm.value.location;
-
             const device: IRegisterDeviceBody = {
                 name: this.deviceForm.value.name,
                 description: this.deviceForm.value.description,
@@ -336,7 +355,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         await Promise.all(promises);
     }
 
-    public async registerSensors() {
+    public async saveSensors() {
         const sensors = this.sensorForm.get('sensors') as FormArray;
 
         let failed = false;
@@ -387,7 +406,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
                         await this.deviceService
                             .updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate as IUpdateSensorBody)
                             .toPromise();
-                        this.sensorForm.markAsPristine();
                         this.alertService.success(this.saveSuccessMessage);
                     }
                 } catch (e) {
@@ -399,13 +417,14 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
 
         if (!failed) {
+            this.sensorForm.markAsPristine();
             this.alertService.success(this.saveSuccessMessage);
         }
 
         this.submitted = false;
     }
 
-    public async registerDatastreams() {
+    public async saveDatastreams() {
         const sensors = this.sensorForm.get('sensors') as FormArray;
 
         let failed = false;
@@ -427,6 +446,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     isReusable: datastreamFormValue.isReusable,
                     documentation: datastreamFormValue.documentation,
                     dataLink: datastreamFormValue.dataLink,
+                    observedArea: datastreamFormValue.observedArea,
                 };
 
                 try {
@@ -489,7 +509,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
                         if (datastreamEntry.get('dataLink').dirty) {
                             datastreamUpdate.dataLink = datastreamFormValue.dataLink;
                         }
-
+                        if (datastreamEntry.get('observedArea').dirty) {
+                            datastreamUpdate.observedArea = datastreamFormValue.observedArea;
+                        }
                         if (datastreamFormValue.observationGoals) {
                             const observationGoalIds = datastreamFormValue.observationGoals.map((x) => x._id);
                             await this.updateObservationGoals(sensorId, datastreamId, observationGoalIds);
@@ -504,7 +526,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                     datastreamUpdate as IUpdateDatastreamBody,
                                 )
                                 .toPromise();
-                            this.sensorForm.markAsPristine();
                         }
 
                         this.submitted = false;
@@ -517,13 +538,14 @@ export class DeviceComponent implements OnInit, OnDestroy {
         }
 
         if (!failed) {
+            this.sensorForm.markAsPristine();
             this.alertService.success(this.saveSuccessMessage, false, 4000);
         }
 
         this.submitted = false;
     }
 
-    public ngOnInit() {
+    public async ngOnInit() {
         this.deviceForm = this.formBuilder.group({
             id: null,
             category: null,
@@ -557,19 +579,34 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.route.params.subscribe(async (params) => {
                 if (params.id) {
-                    const device = await this.deviceService.get(params.id).toPromise();
-                    if (device) {
-                        this.deviceId = params.id;
-                        this.setDevice(device as IDevice);
-                    }
+                    this.deviceId = params.id;
+                    const device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
 
+                    this.setDevice(device);
+                    await this.initDeviceForm(device);
                     this.locationService.showLocation(null);
+                }
+            }),
+        );
+
+        const { onLocate, onUpdate } = await this.deviceService.subscribe();
+
+        this.subscriptions.push(
+            onLocate.subscribe((newDevice: IDevice) => {
+                if (newDevice._id === this.deviceId) {
+                    this.setDevice(newDevice);
+                }
+            }),
+            onUpdate.subscribe((newDevice: IDevice) => {
+                if (newDevice._id === this.deviceId) {
+                    this.setDevice(newDevice);
                 }
             }),
         );
     }
 
     public ngOnDestroy(): void {
+        this.observedAreaService.hideObservedAreas();
         this.subscriptions.forEach((x) => x.unsubscribe());
     }
 }
