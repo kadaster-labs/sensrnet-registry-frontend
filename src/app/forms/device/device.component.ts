@@ -227,6 +227,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                 dataLink: datastream.dataLink,
                                 observationGoals: [observationGoals],
                                 observedArea: datastream.observationArea,
+                                unitOfMeasurement: datastream.unitOfMeasurement,
                             }),
                         );
                     }
@@ -591,18 +592,12 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
         const { onLocate, onUpdate } = await this.deviceService.subscribe();
 
-        this.subscriptions.push(
-            onLocate.subscribe((newDevice: IDevice) => {
-                if (newDevice._id === this.deviceId) {
-                    this.setDevice(newDevice);
-                }
-            }),
-            onUpdate.subscribe((newDevice: IDevice) => {
-                if (newDevice._id === this.deviceId) {
-                    this.setDevice(newDevice);
-                }
-            }),
-        );
+        const handler = (newDevice: IDevice) => {
+            if (newDevice._id === this.deviceId) {
+                this.setDevice(newDevice);
+            }
+        };
+        this.subscriptions.push(onLocate.subscribe(handler), onUpdate.subscribe(handler));
     }
 
     public ngOnDestroy(): void {

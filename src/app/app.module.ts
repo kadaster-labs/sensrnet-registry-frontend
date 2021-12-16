@@ -42,6 +42,7 @@ import { EnvServiceProvider } from './services/env.service.provider';
 import { ModalService } from './services/modal.service';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ViewerComponent } from './viewer/viewer.component';
+import { UnitOfMeasurementComponent } from './form-controls/datastream-unit-of-measurement/unit-of-measurement.component';
 
 @NgModule({
     declarations: [
@@ -72,6 +73,7 @@ import { ViewerComponent } from './viewer/viewer.component';
         OrganizationCreateComponent,
         OrganizationContactComponent,
         ObservedAreaComponent,
+        UnitOfMeasurementComponent,
     ],
     imports: [
         BrowserModule,
