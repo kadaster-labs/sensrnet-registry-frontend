@@ -425,129 +425,102 @@ export class DeviceComponent implements OnInit, OnDestroy {
         this.submitted = false;
     }
 
+    public async registerDatastream(sensorId, datastream, datastreamFormEntry, datastreamFormValue) {
+        const datastreamResult: Record<string, any> = await this.deviceService
+            .registerDatastream(this.deviceId, sensorId, datastream)
+            .toPromise();
+        datastreamFormEntry.patchValue({ id: datastreamResult.datastreamId });
+
+        if (datastreamFormValue.observationGoals) {
+            for (const observationGoal of datastreamFormValue.observationGoals) {
+                await this.deviceService
+                    .linkObservationGoal(this.deviceId, sensorId, datastreamResult.datastreamId, observationGoal._id)
+                    .toPromise();
+            }
+        }
+    }
+
+    public async updateDatastream(sensorId, datastreamId, datastreamFormEntry, datastreamFormValue) {
+        const fieldsToUpdate = [
+            'name',
+            'description',
+            'dataQuality',
+            'isActive',
+            'isPublic',
+            'isOpenData',
+            'containsPersonalInfoData',
+            'isReusable',
+            'documentation',
+            'dataLink',
+            'observedArea',
+            'unitOfMeasurement',
+        ];
+
+        const datastreamUpdate: Record<string, any> = {};
+        if (datastreamFormEntry.get('theme').dirty) {
+            datastreamUpdate.theme = datastreamFormValue.theme ? datastreamFormValue.theme.value : null;
+        }
+        for (const field of fieldsToUpdate) {
+            if (datastreamFormEntry.get(field).dirty) {
+                datastreamUpdate[field] = datastreamFormValue[field];
+            }
+        }
+        if (datastreamFormValue.observationGoals) {
+            const observationGoalIds = datastreamFormValue.observationGoals.map((x) => x._id);
+            await this.updateObservationGoals(sensorId, datastreamId, observationGoalIds);
+        }
+
+        if (Object.keys(datastreamUpdate).length) {
+            await this.deviceService
+                .updateDatastream(this.deviceId, sensorId, datastreamId, datastreamUpdate as IUpdateDatastreamBody)
+                .toPromise();
+        }
+    }
+
+    public async saveSensorDatastreams(sensorId, datastreamsFormArray) {
+        for (const datastreamFormEntry of datastreamsFormArray.controls) {
+            const datastreamFormValue = datastreamFormEntry.value;
+            const datastream: IRegisterDatastreamBody = {
+                name: datastreamFormValue.name,
+                description: datastreamFormValue.description,
+                theme: datastreamFormValue.theme ? datastreamFormValue.theme.value : null,
+                dataQuality: datastreamFormValue.dataQuality,
+                isActive: datastreamFormValue.isActive,
+                isPublic: datastreamFormValue.isPublic,
+                isOpenData: datastreamFormValue.isOpenData,
+                containsPersonalInfoData: datastreamFormValue.containsPersonalInfoData,
+                isReusable: datastreamFormValue.isReusable,
+                documentation: datastreamFormValue.documentation,
+                dataLink: datastreamFormValue.dataLink,
+                observedArea: datastreamFormValue.observedArea,
+                unitOfMeasurement: datastreamFormValue.unitOfMeasurement,
+            };
+
+            const datastreamId = datastreamFormEntry.value.id;
+            if (sensorId && !datastreamId) {
+                await this.registerDatastream(sensorId, datastream, datastreamFormEntry, datastreamFormValue);
+            } else {
+                await this.updateDatastream(sensorId, datastreamId, datastreamFormEntry, datastreamFormValue);
+            }
+        }
+    }
+
     public async saveDatastreams() {
         const sensors = this.sensorForm.get('sensors') as FormArray;
 
-        let failed = false;
-        for (const sensorEntry of sensors.controls) {
-            const sensorId = sensorEntry.value.id;
-
-            const datastreams = sensorEntry.get('datastreams') as FormArray;
-            for (const datastreamEntry of datastreams.controls) {
-                const datastreamFormValue = datastreamEntry.value;
-                const datastream: IRegisterDatastreamBody = {
-                    name: datastreamFormValue.name,
-                    description: datastreamFormValue.description,
-                    theme: datastreamFormValue.theme ? datastreamFormValue.theme.value : null,
-                    dataQuality: datastreamFormValue.dataQuality,
-                    isActive: datastreamFormValue.isActive,
-                    isPublic: datastreamFormValue.isPublic,
-                    isOpenData: datastreamFormValue.isOpenData,
-                    containsPersonalInfoData: datastreamFormValue.containsPersonalInfoData,
-                    isReusable: datastreamFormValue.isReusable,
-                    documentation: datastreamFormValue.documentation,
-                    dataLink: datastreamFormValue.dataLink,
-                    observedArea: datastreamFormValue.observedArea,
-                    unitOfMeasurement: datastreamFormValue.unitOfMeasurement,
-                };
-
-                try {
-                    const datastreamId = datastreamEntry.value.id;
-                    if (sensorId && !datastreamId) {
-                        try {
-                            const datastreamResult: Record<string, any> = await this.deviceService
-                                .registerDatastream(this.deviceId, sensorId, datastream)
-                                .toPromise();
-                            datastreamEntry.patchValue({ id: datastreamResult.datastreamId });
-
-                            if (datastreamFormValue.observationGoals) {
-                                for (const observationGoal of datastreamFormValue.observationGoals) {
-                                    await this.deviceService
-                                        .linkObservationGoal(
-                                            this.deviceId,
-                                            sensorId,
-                                            datastreamResult.datastreamId,
-                                            observationGoal._id,
-                                        )
-                                        .toPromise();
-                                }
-                            }
-                        } catch (e) {
-                            failed = true;
-                            this.alertService.error(e.error.message);
-                        }
-                    } else {
-                        const datastreamUpdate: Record<string, any> = {};
-                        if (datastreamEntry.get('name').dirty) {
-                            datastreamUpdate.name = datastreamFormValue.name;
-                        }
-                        if (datastreamEntry.get('description').dirty) {
-                            datastreamUpdate.description = datastreamFormValue.description;
-                        }
-                        if (datastreamEntry.get('theme').dirty) {
-                            datastreamUpdate.theme = datastreamFormValue.theme ? datastreamFormValue.theme.value : null;
-                        }
-                        if (datastreamEntry.get('dataQuality').dirty) {
-                            datastreamUpdate.dataQuality = datastreamFormValue.dataQuality;
-                        }
-                        if (datastreamEntry.get('isActive').dirty) {
-                            datastreamUpdate.isActive = datastreamFormValue.isActive;
-                        }
-                        if (datastreamEntry.get('isPublic').dirty) {
-                            datastreamUpdate.isPublic = datastreamFormValue.isPublic;
-                        }
-                        if (datastreamEntry.get('isOpenData').dirty) {
-                            datastreamUpdate.isOpenData = datastreamFormValue.isOpenData;
-                        }
-                        if (datastreamEntry.get('containsPersonalInfoData').dirty) {
-                            datastreamUpdate.containsPersonalInfoData = datastreamFormValue.containsPersonalInfoData;
-                        }
-                        if (datastreamEntry.get('isReusable').dirty) {
-                            datastreamUpdate.isReusable = datastreamFormValue.isReusable;
-                        }
-                        if (datastreamEntry.get('documentation').dirty) {
-                            datastreamUpdate.documentation = datastreamFormValue.documentation;
-                        }
-                        if (datastreamEntry.get('dataLink').dirty) {
-                            datastreamUpdate.dataLink = datastreamFormValue.dataLink;
-                        }
-                        if (datastreamEntry.get('observedArea').dirty) {
-                            datastreamUpdate.observedArea = datastreamFormValue.observedArea;
-                        }
-                        if (datastreamEntry.get('unitOfMeasurement').dirty) {
-                            datastreamUpdate.unitOfMeasurement = datastreamFormValue.unitOfMeasurement;
-                        }
-                        if (datastreamFormValue.observationGoals) {
-                            const observationGoalIds = datastreamFormValue.observationGoals.map((x) => x._id);
-                            await this.updateObservationGoals(sensorId, datastreamId, observationGoalIds);
-                        }
-
-                        if (Object.keys(datastreamUpdate).length) {
-                            await this.deviceService
-                                .updateDatastream(
-                                    this.deviceId,
-                                    sensorId,
-                                    datastreamId,
-                                    datastreamUpdate as IUpdateDatastreamBody,
-                                )
-                                .toPromise();
-                        }
-
-                        this.submitted = false;
-                        this.alertService.success(this.saveSuccessMessage, false, 4000);
-                    }
-                } catch (e) {
-                    this.alertService.error(e.error.message, false, 4000);
-                }
+        try {
+            for (const sensorEntry of sensors.controls) {
+                const datastreamsFormArray = sensorEntry.get('datastreams') as FormArray;
+                await this.saveSensorDatastreams(sensorEntry.value.id, datastreamsFormArray);
             }
-        }
 
-        if (!failed) {
             this.sensorForm.markAsPristine();
             this.alertService.success(this.saveSuccessMessage, false, 4000);
+        } catch (e) {
+            this.alertService.error(e.error.message, false, 4000);
+        } finally {
+            this.submitted = false;
         }
-
-        this.submitted = false;
     }
 
     public async ngOnInit() {

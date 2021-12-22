@@ -70,8 +70,12 @@ export class UnitOfMeasurementComponent implements ControlValueAccessor, OnDestr
         );
     }
 
-    public onChange: any = () => {};
-    public onTouched: any = () => {};
+    public onChange: any = () => {
+        // This is intentional
+    };
+    public onTouched: any = () => {
+        // This is intentional
+    };
 
     public registerOnChange(fn: any) {
         this.onChange = fn;
@@ -101,18 +105,7 @@ export class UnitOfMeasurementComponent implements ControlValueAccessor, OnDestr
         this.form.patchValue($e.item);
     }
 
-    searchName = (text$: Observable<string>) =>
-        text$.pipe(
-            debounceTime(200),
-            distinctUntilChanged(),
-            map((x) =>
-                unitOfMeasurementTypes
-                    .filter((y) => this.formatUnitOfMeasurement(y).toLowerCase().includes(x))
-                    .slice(0, 10),
-            ),
-        );
-
-    searchSymbol = (text$: Observable<string>) =>
+    searchUnitOfMeasurement = (text$: Observable<string>) =>
         text$.pipe(
             debounceTime(200),
             distinctUntilChanged(),
