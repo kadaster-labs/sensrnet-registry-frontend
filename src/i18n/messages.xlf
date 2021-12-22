@@ -2211,18 +2211,15 @@
         <source>Pa</source>
       </segment>
     </unit>
-    <unit id="uof.decibel.name">
+    <unit id="uof.db.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:173</note>
       </notes>
       <segment>
         <source>Decibel</source>
       </segment>
     </unit>
-    <unit id="uof.decibel.symbol">
+    <unit id="uof.db.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note>
       </notes>
@@ -2230,7 +2227,15 @@
         <source>db</source>
       </segment>
     </unit>
-    <unit id="uof.decibela.symbol">
+    <unit id="uof.dba.name">
+      <notes>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
+      </notes>
+      <segment>
+        <source>Decibel</source>
+      </segment>
+    </unit>
+    <unit id="uof.dba.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note>
       </notes>
@@ -2238,7 +2243,15 @@
         <source>db(A)</source>
       </segment>
     </unit>
-    <unit id="uof.decibelb.symbol">
+    <unit id="uof.dbb.name">
+      <notes>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
+      </notes>
+      <segment>
+        <source>Decibel</source>
+      </segment>
+    </unit>
+    <unit id="uof.dbb.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note>
       </notes>
@@ -2246,7 +2259,15 @@
         <source>db(B)</source>
       </segment>
     </unit>
-    <unit id="uof.decibelc.symbol">
+    <unit id="uof.dbc.name">
+      <notes>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:173</note>
+      </notes>
+      <segment>
+        <source>Decibel</source>
+      </segment>
+    </unit>
+    <unit id="uof.dbc.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:174</note>
       </notes>
@@ -2270,7 +2291,7 @@
         <source>W</source>
       </segment>
     </unit>
-    <unit id="uof.kilowatt.name">
+    <unit id="uof.kw.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:181</note>
       </notes>
@@ -2278,7 +2299,7 @@
         <source>Kilowatt</source>
       </segment>
     </unit>
-    <unit id="uof.kilowatt.symbol">
+    <unit id="uof.kw.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:182</note>
       </notes>
@@ -2286,7 +2307,7 @@
         <source>kW</source>
       </segment>
     </unit>
-    <unit id="uof.megawatt.name">
+    <unit id="uof.mw.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:185</note>
       </notes>
@@ -2294,7 +2315,7 @@
         <source>Megawatt</source>
       </segment>
     </unit>
-    <unit id="uof.megawatt.symbol">
+    <unit id="uof.mw.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:186</note>
       </notes>
@@ -2302,7 +2323,7 @@
         <source>MW</source>
       </segment>
     </unit>
-    <unit id="uof.gigawatt.name">
+    <unit id="uof.gw.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:189</note>
       </notes>
@@ -2310,7 +2331,7 @@
         <source>Gigawatt</source>
       </segment>
     </unit>
-    <unit id="uof.gigawatt.symbol">
+    <unit id="uof.gw.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:190</note>
       </notes>
@@ -2334,7 +2355,7 @@
         <source>kVA</source>
       </segment>
     </unit>
-    <unit id="uof.kA.name">
+    <unit id="uof.ka.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:197</note>
       </notes>
@@ -2342,7 +2363,7 @@
         <source>Ampère</source>
       </segment>
     </unit>
-    <unit id="uof.kA.symbol">
+    <unit id="uof.ka.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:198</note>
       </notes>
@@ -2366,7 +2387,7 @@
         <source>V</source>
       </segment>
     </unit>
-    <unit id="uof.kilovolt.name">
+    <unit id="uof.kv.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:205</note>
       </notes>
@@ -2374,7 +2395,7 @@
         <source>Kilovolt</source>
       </segment>
     </unit>
-    <unit id="uof.kilovolt.symbol">
+    <unit id="uof.kv.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:206</note>
       </notes>

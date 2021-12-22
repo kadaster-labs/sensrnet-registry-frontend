@@ -158,36 +158,36 @@ const pressureUnitOfMeasurements = [
 
 const intensityUnitOfMeasurements = [
     {
-        name: $localize`:@@uof.decibel.name:Decibel`,
-        symbol: $localize`:@@uof.decibel.symbol:db`,
+        name: $localize`:@@uof.db.name:Decibel`, // Default decibel
+        symbol: $localize`:@@uof.db.symbol:db`,
     },
     {
-        name: $localize`:@@uof.decibela.name:Decibel`,
-        symbol: $localize`:@@uof.decibela.symbol:db(A)`,
+        name: $localize`:@@uof.dba.name:Decibel`, // Corrected db for human ear
+        symbol: $localize`:@@uof.dba.symbol:db(A)`,
     },
     {
-        name: $localize`:@@uof.decibelb.name:Decibel`,
-        symbol: $localize`:@@uof.decibelb.symbol:db(B)`,
+        name: $localize`:@@uof.dbb.name:Decibel`, // Decibel filter b
+        symbol: $localize`:@@uof.dbb.symbol:db(B)`,
     },
     {
-        name: $localize`:@@uof.decibelc.name:Decibel`,
-        symbol: $localize`:@@uof.decibelc.symbol:db(C)`,
+        name: $localize`:@@uof.dbc.name:Decibel`, // Decibel filter c
+        symbol: $localize`:@@uof.dbc.symbol:db(C)`,
     },
     {
         name: $localize`:@@uof.watt.name:Watt`,
         symbol: $localize`:@@uof.watt.symbol:W`,
     },
     {
-        name: $localize`:@@uof.kilowatt.name:Kilowatt`,
-        symbol: $localize`:@@uof.kilowatt.symbol:kW`,
+        name: $localize`:@@uof.kw.name:Kilowatt`,
+        symbol: $localize`:@@uof.kw.symbol:kW`,
     },
     {
-        name: $localize`:@@uof.megawatt.name:Megawatt`,
-        symbol: $localize`:@@uof.megawatt.symbol:MW`,
+        name: $localize`:@@uof.mw.name:Megawatt`,
+        symbol: $localize`:@@uof.mw.symbol:MW`,
     },
     {
-        name: $localize`:@@uof.gigawatt.name:Gigawatt`,
-        symbol: $localize`:@@uof.gigawatt.symbol:GW`,
+        name: $localize`:@@uof.gw.name:Gigawatt`,
+        symbol: $localize`:@@uof.gw.symbol:GW`,
     },
     {
         name: $localize`:@@uof.kva.name:Kilovolt-Ampère`,
@@ -202,8 +202,8 @@ const intensityUnitOfMeasurements = [
         symbol: $localize`:@@uof.volt.symbol:V`,
     },
     {
-        name: $localize`:@@uof.kilovolt.name:Kilovolt`,
-        symbol: $localize`:@@uof.kilovolt.symbol:kV`,
+        name: $localize`:@@uof.kv.name:Kilovolt`,
+        symbol: $localize`:@@uof.kv.symbol:kV`,
     },
 ];
 

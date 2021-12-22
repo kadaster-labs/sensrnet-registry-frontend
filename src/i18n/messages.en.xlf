@@ -1462,38 +1462,56 @@
       <segment state="final">
         <source>Pa</source>
       <target>Pa</target></segment>
-    </unit><unit id="uof.decibel.name">
+    </unit><unit id="uof.db.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:173</note>
       </notes>
       <segment state="final">
         <source>Decibel</source>
       <target>Decibel</target></segment>
-    </unit><unit id="uof.decibel.symbol">
+    </unit><unit id="uof.db.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note>
       </notes>
       <segment state="final">
         <source>db</source>
       <target>db</target></segment>
-    </unit><unit id="uof.decibela.symbol">
+    </unit><unit id="uof.dba.name">
+      <notes>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
+      </notes>
+      <segment state="final">
+        <source>Decibel</source>
+      <target>Decibel</target></segment>
+    </unit><unit id="uof.dba.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note>
       </notes>
       <segment state="final">
         <source>db(A)</source>
       <target>db(A)</target></segment>
-    </unit><unit id="uof.decibelb.symbol">
+    </unit><unit id="uof.dbb.name">
+      <notes>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
+      </notes>
+      <segment state="final">
+        <source>Decibel</source>
+      <target>Decibel</target></segment>
+    </unit><unit id="uof.dbb.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note>
       </notes>
       <segment state="final">
         <source>db(B)</source>
       <target>db(B)</target></segment>
-    </unit><unit id="uof.decibelc.symbol">
+    </unit><unit id="uof.dbc.name">
+      <notes>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:173</note>
+      </notes>
+      <segment state="final">
+        <source>Decibel</source>
+      <target>Decibel</target></segment>
+    </unit><unit id="uof.dbc.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:174</note>
       </notes>
@@ -1514,42 +1532,42 @@
       <segment state="final">
         <source>W</source>
       <target>W</target></segment>
-    </unit><unit id="uof.kilowatt.name">
+    </unit><unit id="uof.kw.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:181</note>
       </notes>
       <segment state="final">
         <source>Kilowatt</source>
       <target>Kilowatt</target></segment>
-    </unit><unit id="uof.kilowatt.symbol">
+    </unit><unit id="uof.kw.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:182</note>
       </notes>
       <segment state="final">
         <source>kW</source>
       <target>kW</target></segment>
-    </unit><unit id="uof.megawatt.name">
+    </unit><unit id="uof.mw.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:185</note>
       </notes>
       <segment state="final">
         <source>Megawatt</source>
       <target>Megawatt</target></segment>
-    </unit><unit id="uof.megawatt.symbol">
+    </unit><unit id="uof.mw.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:186</note>
       </notes>
       <segment state="final">
         <source>MW</source>
       <target>MW</target></segment>
-    </unit><unit id="uof.gigawatt.name">
+    </unit><unit id="uof.gw.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:189</note>
       </notes>
       <segment state="final">
         <source>Gigawatt</source>
       <target>Gigawatt</target></segment>
-    </unit><unit id="uof.gigawatt.symbol">
+    </unit><unit id="uof.gw.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:190</note>
       </notes>
@@ -1570,14 +1588,14 @@
       <segment state="final">
         <source>kVA</source>
       <target>kVA</target></segment>
-    </unit><unit id="uof.kA.name">
+    </unit><unit id="uof.ka.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:197</note>
       </notes>
       <segment state="final">
         <source>Ampère</source>
       <target>Ampère</target></segment>
-    </unit><unit id="uof.kA.symbol">
+    </unit><unit id="uof.ka.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:198</note>
       </notes>
@@ -1598,14 +1616,14 @@
       <segment state="final">
         <source>V</source>
       <target>V</target></segment>
-    </unit><unit id="uof.kilovolt.name">
+    </unit><unit id="uof.kv.name">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:205</note>
       </notes>
       <segment state="final">
         <source>Kilovolt</source>
       <target>Kilovolt</target></segment>
-    </unit><unit id="uof.kilovolt.symbol">
+    </unit><unit id="uof.kv.symbol">
       <notes>
         <note category="location">src/app/model/bodies/unitOfMeasurements.ts:206</note>
       </notes>
