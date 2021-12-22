@@ -162,15 +162,15 @@ const intensityUnitOfMeasurements = [
         symbol: $localize`:@@uof.decibel.symbol:db`,
     },
     {
-        name: $localize`:@@uof.decibel.name:Decibel`,
+        name: $localize`:@@uof.decibela.name:Decibel`,
         symbol: $localize`:@@uof.decibela.symbol:db(A)`,
     },
     {
-        name: $localize`:@@uof.decibel.name:Decibel`,
+        name: $localize`:@@uof.decibelb.name:Decibel`,
         symbol: $localize`:@@uof.decibelb.symbol:db(B)`,
     },
     {
-        name: $localize`:@@uof.decibel.name:Decibel`,
+        name: $localize`:@@uof.decibelc.name:Decibel`,
         symbol: $localize`:@@uof.decibelc.symbol:db(C)`,
     },
     {
@@ -194,8 +194,8 @@ const intensityUnitOfMeasurements = [
         symbol: $localize`:@@uof.kva.symbol:kVA`,
     },
     {
-        name: $localize`:@@uof.kA.name:Ampère`,
-        symbol: $localize`:@@uof.kA.symbol:kA`,
+        name: $localize`:@@uof.ka.name:Ampère`,
+        symbol: $localize`:@@uof.ka.symbol:kA`,
     },
     {
         name: $localize`:@@uof.volt.name:Volt`,

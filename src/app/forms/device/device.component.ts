@@ -88,8 +88,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
                     const sensors = this.sensorForm.get('sensors') as FormArray;
                     for (const sensorEntry of sensors.controls) {
-                        const datastreams = sensorEntry.get('datastreams') as FormArray;
-                        for (const datastreamForm of datastreams.controls) {
+                        const datastreams = sensorEntry.get('datastreams');
+                        for (const datastreamForm of datastreams['controls']) {
                             if (!datastreamForm.value.id) {
                                 allRegistered = false;
                             }
@@ -506,10 +506,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
     }
 
     public async saveDatastreams() {
-        const sensors = this.sensorForm.get('sensors') as FormArray;
+        const sensors = this.sensorForm.get('sensors');
 
         try {
-            for (const sensorEntry of sensors.controls) {
+            for (const sensorEntry of sensors['controls']) {
                 const datastreamsFormArray = sensorEntry.get('datastreams') as FormArray;
                 await this.saveSensorDatastreams(sensorEntry.value.id, datastreamsFormArray);
             }
