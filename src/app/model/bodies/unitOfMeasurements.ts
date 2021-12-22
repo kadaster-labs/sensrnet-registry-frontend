@@ -156,56 +156,24 @@ const pressureUnitOfMeasurements = [
     },
 ];
 
-const intensityUnitOfMeasurements = [
-    {
-        name: $localize`:@@uof.db.name:Decibel`, // Default decibel
-        symbol: $localize`:@@uof.db.symbol:db`,
-    },
-    {
-        name: $localize`:@@uof.dba.name:Decibel`, // Corrected db for human ear
-        symbol: $localize`:@@uof.dba.symbol:db(A)`,
-    },
-    {
-        name: $localize`:@@uof.dbb.name:Decibel`, // Decibel filter b
-        symbol: $localize`:@@uof.dbb.symbol:db(B)`,
-    },
-    {
-        name: $localize`:@@uof.dbc.name:Decibel`, // Decibel filter c
-        symbol: $localize`:@@uof.dbc.symbol:db(C)`,
-    },
-    {
-        name: $localize`:@@uof.watt.name:Watt`,
-        symbol: $localize`:@@uof.watt.symbol:W`,
-    },
-    {
-        name: $localize`:@@uof.kw.name:Kilowatt`,
-        symbol: $localize`:@@uof.kw.symbol:kW`,
-    },
-    {
-        name: $localize`:@@uof.mw.name:Megawatt`,
-        symbol: $localize`:@@uof.mw.symbol:MW`,
-    },
-    {
-        name: $localize`:@@uof.gw.name:Gigawatt`,
-        symbol: $localize`:@@uof.gw.symbol:GW`,
-    },
-    {
-        name: $localize`:@@uof.kva.name:Kilovolt-Ampère`,
-        symbol: $localize`:@@uof.kva.symbol:kVA`,
-    },
-    {
-        name: $localize`:@@uof.ka.name:Ampère`,
-        symbol: $localize`:@@uof.ka.symbol:kA`,
-    },
-    {
-        name: $localize`:@@uof.volt.name:Volt`,
-        symbol: $localize`:@@uof.volt.symbol:V`,
-    },
-    {
-        name: $localize`:@@uof.kv.name:Kilovolt`,
-        symbol: $localize`:@@uof.kv.symbol:kV`,
-    },
+const intensityUnitOfMeasurementEntries = [
+    [$localize`:@@uof.db.name:Decibel`, $localize`:@@uof.db.symbol:db`], // Default decibel
+    [$localize`:@@uof.dba.name:Decibel`, $localize`:@@uof.dba.symbol:db(A)`], // Decibel filter b
+    [$localize`:@@uof.dbb.name:Decibel`, $localize`:@@uof.dbb.symbol:db(B)`], // Decibel filter c
+    [$localize`:@@uof.watt.name:Watt`, $localize`:@@uof.watt.symbol:W`],
+    [$localize`:@@uof.kw.name:Kilowatt`, $localize`:@@uof.kw.symbol:kW`],
+    [$localize`:@@uof.mw.name:Megawatt`, $localize`:@@uof.mw.symbol:MW`],
+    [$localize`:@@uof.gw.name:Gigawatt`, $localize`:@@uof.gw.symbol:GW`],
+    [$localize`:@@uof.kva.name:Kilovolt-Ampère`, $localize`:@@uof.kva.symbol:kVA`],
+    [$localize`:@@uof.ka.name:Ampère`, $localize`:@@uof.ka.symbol:kA`],
+    [$localize`:@@uof.volt.name:Volt`, $localize`:@@uof.volt.symbol:V`],
+    [$localize`:@@uof.kv.name:Kilovolt`, $localize`:@@uof.kv.symbol:kV`],
 ];
+
+const intensityUnitOfMeasurements = intensityUnitOfMeasurementEntries.map((intensityUnitOfMeasurementEntry) => ({
+    name: intensityUnitOfMeasurementEntry[0],
+    symbol: intensityUnitOfMeasurementEntry[1],
+}));
 
 const speedUnitOfMeasurements = [
     {
