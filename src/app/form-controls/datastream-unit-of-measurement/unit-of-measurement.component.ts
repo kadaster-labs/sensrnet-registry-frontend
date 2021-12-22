@@ -92,17 +92,12 @@ export class UnitOfMeasurementComponent implements ControlValueAccessor, OnDestr
         return this.form.valid ? null : { location: { valid: false } };
     }
 
-    public ngOnDestroy() {
-        this.subscriptions.forEach((s) => s.unsubscribe());
-    }
-
     formatUnitOfMeasurement(unitOfMeasurement: Record<string, any>) {
         return `${unitOfMeasurement.name} (${unitOfMeasurement.symbol})`;
     }
 
     setUnitOfMeasurement($e) {
         $e.preventDefault();
-
         this.form.patchValue($e.item);
     }
 
@@ -110,13 +105,25 @@ export class UnitOfMeasurementComponent implements ControlValueAccessor, OnDestr
         text$.pipe(
             debounceTime(200),
             distinctUntilChanged(),
-            map((x) => unitOfMeasurementTypes.filter((y) => y.name.toLowerCase().startsWith(x))),
+            map((x) =>
+                unitOfMeasurementTypes
+                    .filter((y) => this.formatUnitOfMeasurement(y).toLowerCase().includes(x))
+                    .slice(0, 10),
+            ),
         );
 
     searchSymbol = (text$: Observable<string>) =>
         text$.pipe(
             debounceTime(200),
             distinctUntilChanged(),
-            map((x) => unitOfMeasurementTypes.filter((y) => y.symbol.toLowerCase().startsWith(x))),
+            map((x) =>
+                unitOfMeasurementTypes
+                    .filter((y) => this.formatUnitOfMeasurement(y).toLowerCase().includes(x))
+                    .slice(0, 10),
+            ),
         );
+
+    public ngOnDestroy() {
+        this.subscriptions.forEach((s) => s.unsubscribe());
+    }
 }

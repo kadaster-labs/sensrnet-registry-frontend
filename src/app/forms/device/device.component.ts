@@ -448,6 +448,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     documentation: datastreamFormValue.documentation,
                     dataLink: datastreamFormValue.dataLink,
                     observedArea: datastreamFormValue.observedArea,
+                    unitOfMeasurement: datastreamFormValue.unitOfMeasurement,
                 };
 
                 try {
@@ -512,6 +513,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
                         }
                         if (datastreamEntry.get('observedArea').dirty) {
                             datastreamUpdate.observedArea = datastreamFormValue.observedArea;
+                        }
+                        if (datastreamEntry.get('unitOfMeasurement').dirty) {
+                            datastreamUpdate.unitOfMeasurement = datastreamFormValue.unitOfMeasurement;
                         }
                         if (datastreamFormValue.observationGoals) {
                             const observationGoalIds = datastreamFormValue.observationGoals.map((x) => x._id);
