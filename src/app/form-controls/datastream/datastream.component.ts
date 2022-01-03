@@ -59,6 +59,7 @@ export class DatastreamComponent implements ControlValueAccessor {
             documentation: [null, [Validators.pattern(urlRegex)]],
             dataLink: [null, [Validators.pattern(urlRegex)]],
             observationGoals: [[]],
+            unitOfMeasurement: null,
         });
     }
 

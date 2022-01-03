@@ -1,0 +1,14 @@
+<div [formGroup]="form">
+    <div class="form-row">
+        <div class="col">
+            <div class="form-group mb-0">
+                <input class="form-control" [resultFormatter]="formatUnitOfMeasurement" [ngbTypeahead]="searchUnitOfMeasurement" (selectItem)="setUnitOfMeasurement($event)" type="text" formControlName="name" placeholder="Enter Name" i18n-placeholder>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group mb-0">
+                <input class="form-control" [resultFormatter]="formatUnitOfMeasurement" [ngbTypeahead]="searchUnitOfMeasurement" (selectItem)="setUnitOfMeasurement($event)" type="text" formControlName="symbol" placeholder="Enter Symbol" i18n-placeholder>
+            </div>
+        </div>
+    </div>
+</div>

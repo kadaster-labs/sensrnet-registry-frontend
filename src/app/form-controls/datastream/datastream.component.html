@@ -71,6 +71,10 @@
                                     <app-observed-area [device]="device" formControlName="observedArea" [submitted]="submitted"></app-observed-area>
                                 </div>
                                 <div class="col-12">
+                                    <label><span i18n>Unit Of Measurement</span><span class="font-italic text-muted" i18n> - Optional</span></label>
+                                    <app-unit-of-measurement formControlName="unitOfMeasurement" [submitted]="submitted"></app-unit-of-measurement>
+                                </div>
+                                <div class="col-12">
                                     <label><span i18n>Documentation</span><span class="font-italic text-muted" i18n> - Optional</span></label>
                                     <input formControlName="documentation" type="text" placeholder="Enter URL of documentation" class="form-control"
                                            [ngClass]="{ 'is-invalid': submitted && getDatastreamElement(i, j, 'documentation').errors }" i18n-placeholder>

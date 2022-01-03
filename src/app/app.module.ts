@@ -21,6 +21,7 @@ import { MapService } from './components/map/map.service';
 import { ObservationGoalComponent } from './components/observation-goal/observation-goal.component';
 import { ObservationGoalsComponent } from './components/observation-goals/observation-goals.component';
 import { OrganizationComponent } from './components/organization/organization.component';
+import { UnitOfMeasurementComponent } from './form-controls/datastream-unit-of-measurement/unit-of-measurement.component';
 import { DatastreamComponent } from './form-controls/datastream/datastream.component';
 import { DeviceTypeComponent } from './form-controls/device-type/device-type.component';
 import { ObservedAreaComponent } from './form-controls/observed-area/observed-area.component';
@@ -72,6 +73,7 @@ import { ViewerComponent } from './viewer/viewer.component';
         OrganizationCreateComponent,
         OrganizationContactComponent,
         ObservedAreaComponent,
+        UnitOfMeasurementComponent,
     ],
     imports: [
         BrowserModule,
