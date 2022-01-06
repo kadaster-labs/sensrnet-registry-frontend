@@ -955,11 +955,10 @@
     </unit>
     <unit id="location.area">
       <notes>
-        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.ts:48,49</note>
+        <note category="location">src/app/form-controls/sensor-location/sensor-location.component.ts:48</note>
       </notes>
       <segment>
-        <source>The device has observation area&apos;s. These will be removed 
-    when the location is updated.</source>
+        <source>The device has observed area&apos;s. These will be removed when the location is updated.</source>
       </segment>
     </unit>
     <unit id="1755726504733757199">
@@ -2213,7 +2212,7 @@
     </unit>
     <unit id="uof.db.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:160</note>
       </notes>
       <segment>
         <source>Decibel</source>
@@ -2221,7 +2220,7 @@
     </unit>
     <unit id="uof.db.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:160</note>
       </notes>
       <segment>
         <source>db</source>
@@ -2229,7 +2228,7 @@
     </unit>
     <unit id="uof.dba.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note>
       </notes>
       <segment>
         <source>Decibel</source>
@@ -2237,7 +2236,7 @@
     </unit>
     <unit id="uof.dba.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note>
       </notes>
       <segment>
         <source>db(A)</source>
@@ -2245,7 +2244,7 @@
     </unit>
     <unit id="uof.dbb.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note>
       </notes>
       <segment>
         <source>Decibel</source>
@@ -2253,31 +2252,15 @@
     </unit>
     <unit id="uof.dbb.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note>
       </notes>
       <segment>
         <source>db(B)</source>
       </segment>
     </unit>
-    <unit id="uof.dbc.name">
-      <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:173</note>
-      </notes>
-      <segment>
-        <source>Decibel</source>
-      </segment>
-    </unit>
-    <unit id="uof.dbc.symbol">
-      <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:174</note>
-      </notes>
-      <segment>
-        <source>db(C)</source>
-      </segment>
-    </unit>
     <unit id="uof.watt.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:177</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:163</note>
       </notes>
       <segment>
         <source>Watt</source>
@@ -2285,7 +2268,7 @@
     </unit>
     <unit id="uof.watt.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:178</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:163</note>
       </notes>
       <segment>
         <source>W</source>
@@ -2293,7 +2276,7 @@
     </unit>
     <unit id="uof.kw.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:181</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:164</note>
       </notes>
       <segment>
         <source>Kilowatt</source>
@@ -2301,7 +2284,7 @@
     </unit>
     <unit id="uof.kw.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:182</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:164</note>
       </notes>
       <segment>
         <source>kW</source>
@@ -2309,7 +2292,7 @@
     </unit>
     <unit id="uof.mw.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:185</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
       </notes>
       <segment>
         <source>Megawatt</source>
@@ -2317,7 +2300,7 @@
     </unit>
     <unit id="uof.mw.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:186</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
       </notes>
       <segment>
         <source>MW</source>
@@ -2325,7 +2308,7 @@
     </unit>
     <unit id="uof.gw.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:189</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note>
       </notes>
       <segment>
         <source>Gigawatt</source>
@@ -2333,7 +2316,7 @@
     </unit>
     <unit id="uof.gw.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:190</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note>
       </notes>
       <segment>
         <source>GW</source>
@@ -2341,7 +2324,7 @@
     </unit>
     <unit id="uof.kva.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:193</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:167</note>
       </notes>
       <segment>
         <source>Kilovolt-Ampère</source>
@@ -2349,7 +2332,7 @@
     </unit>
     <unit id="uof.kva.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:194</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:167</note>
       </notes>
       <segment>
         <source>kVA</source>
@@ -2357,7 +2340,7 @@
     </unit>
     <unit id="uof.ka.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:197</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:168</note>
       </notes>
       <segment>
         <source>Ampère</source>
@@ -2365,7 +2348,7 @@
     </unit>
     <unit id="uof.ka.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:198</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:168</note>
       </notes>
       <segment>
         <source>kA</source>
@@ -2373,7 +2356,7 @@
     </unit>
     <unit id="uof.volt.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:201</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
       </notes>
       <segment>
         <source>Volt</source>
@@ -2381,7 +2364,7 @@
     </unit>
     <unit id="uof.volt.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:202</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
       </notes>
       <segment>
         <source>V</source>
@@ -2389,7 +2372,7 @@
     </unit>
     <unit id="uof.kv.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:205</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note>
       </notes>
       <segment>
         <source>Kilovolt</source>
@@ -2397,7 +2380,7 @@
     </unit>
     <unit id="uof.kv.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:206</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note>
       </notes>
       <segment>
         <source>kV</source>
@@ -2405,7 +2388,7 @@
     </unit>
     <unit id="uof.mps.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:212</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:180</note>
       </notes>
       <segment>
         <source>Meters per second</source>
@@ -2413,7 +2396,7 @@
     </unit>
     <unit id="uof.mps.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:213</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:181</note>
       </notes>
       <segment>
         <source>m/s</source>
@@ -2421,7 +2404,7 @@
     </unit>
     <unit id="uof.kmps.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:216</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:184</note>
       </notes>
       <segment>
         <source>Kilometers per second</source>
@@ -2429,7 +2412,7 @@
     </unit>
     <unit id="uof.kmps.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:217</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:185</note>
       </notes>
       <segment>
         <source>km/s</source>
@@ -2437,7 +2420,7 @@
     </unit>
     <unit id="uof.kmph.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:220</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:188</note>
       </notes>
       <segment>
         <source>Kilometers per hour</source>
@@ -2445,7 +2428,7 @@
     </unit>
     <unit id="uof.kmph.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:221</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:189</note>
       </notes>
       <segment>
         <source>km/h</source>
@@ -2453,7 +2436,7 @@
     </unit>
     <unit id="uof.mph.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:224</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:192</note>
       </notes>
       <segment>
         <source>Mile per hour</source>
@@ -2461,7 +2444,7 @@
     </unit>
     <unit id="uof.mph.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:225</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:193</note>
       </notes>
       <segment>
         <source>mph</source>
@@ -2469,7 +2452,7 @@
     </unit>
     <unit id="uof.celcius.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:231</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:199</note>
       </notes>
       <segment>
         <source>Celsius</source>
@@ -2477,7 +2460,7 @@
     </unit>
     <unit id="uof.celcius.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:232</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:200</note>
       </notes>
       <segment>
         <source>C</source>
@@ -2485,7 +2468,7 @@
     </unit>
     <unit id="uof.fahrenheit.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:235</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:203</note>
       </notes>
       <segment>
         <source>Fahrenheit</source>
@@ -2493,7 +2476,7 @@
     </unit>
     <unit id="uof.fahrenheit.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:236</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:204</note>
       </notes>
       <segment>
         <source>F</source>
@@ -2501,7 +2484,7 @@
     </unit>
     <unit id="uof.kelvin.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:239</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:207</note>
       </notes>
       <segment>
         <source>Kelvin</source>
@@ -2509,7 +2492,7 @@
     </unit>
     <unit id="uof.kelvin.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:240</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:208</note>
       </notes>
       <segment>
         <source>K</source>
@@ -2517,7 +2500,7 @@
     </unit>
     <unit id="uof.cm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:246</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:214</note>
       </notes>
       <segment>
         <source>Cubic centimeter</source>
@@ -2525,7 +2508,7 @@
     </unit>
     <unit id="uof.cm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:247</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:215</note>
       </notes>
       <segment>
         <source>cm3</source>
@@ -2533,7 +2516,7 @@
     </unit>
     <unit id="uof.dm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:250</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:218</note>
       </notes>
       <segment>
         <source>Cubic decimeter</source>
@@ -2541,7 +2524,7 @@
     </unit>
     <unit id="uof.dm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:251</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:219</note>
       </notes>
       <segment>
         <source>dm3</source>
@@ -2549,7 +2532,7 @@
     </unit>
     <unit id="uof.m3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:254</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:222</note>
       </notes>
       <segment>
         <source>Cubic meter</source>
@@ -2557,7 +2540,7 @@
     </unit>
     <unit id="uof.m3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:255</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:223</note>
       </notes>
       <segment>
         <source>m3</source>
@@ -2565,7 +2548,7 @@
     </unit>
     <unit id="uof.liter.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:258</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:226</note>
       </notes>
       <segment>
         <source>Liter</source>
@@ -2573,7 +2556,7 @@
     </unit>
     <unit id="uof.liter.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:259</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:227</note>
       </notes>
       <segment>
         <source>L</source>
@@ -2581,7 +2564,7 @@
     </unit>
     <unit id="uof.hectoliter.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:262</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:230</note>
       </notes>
       <segment>
         <source>Hectoliter</source>
@@ -2589,7 +2572,7 @@
     </unit>
     <unit id="uof.hectoliter.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:263</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:231</note>
       </notes>
       <segment>
         <source>hL</source>
@@ -2597,7 +2580,7 @@
     </unit>
     <unit id="uof.hm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:266</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:234</note>
       </notes>
       <segment>
         <source>Cubic hectometer</source>
@@ -2605,7 +2588,7 @@
     </unit>
     <unit id="uof.hm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:267</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:235</note>
       </notes>
       <segment>
         <source>hm3</source>
@@ -2613,7 +2596,7 @@
     </unit>
     <unit id="uof.m3s.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:273</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:241</note>
       </notes>
       <segment>
         <source>Cubic meter per second</source>
@@ -2621,7 +2604,7 @@
     </unit>
     <unit id="uof.m3s.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:274</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:242</note>
       </notes>
       <segment>
         <source>m3/s</source>
@@ -2629,7 +2612,7 @@
     </unit>
     <unit id="uof.Ls.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:277</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:245</note>
       </notes>
       <segment>
         <source>Liter per second</source>
@@ -2637,7 +2620,7 @@
     </unit>
     <unit id="uof.Ls.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:278</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:246</note>
       </notes>
       <segment>
         <source>L/s</source>
@@ -2645,7 +2628,7 @@
     </unit>
     <unit id="uof.m3h.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:281</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:249</note>
       </notes>
       <segment>
         <source>Cubic meter per hour</source>
@@ -2653,7 +2636,7 @@
     </unit>
     <unit id="uof.m3h.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:282</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:250</note>
       </notes>
       <segment>
         <source>m3/h</source>
@@ -2661,7 +2644,7 @@
     </unit>
     <unit id="uof.Lh.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:285</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:253</note>
       </notes>
       <segment>
         <source>Liter per hour</source>
@@ -2669,7 +2652,7 @@
     </unit>
     <unit id="uof.Lh.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:286</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:254</note>
       </notes>
       <segment>
         <source>L/h</source>
@@ -2677,7 +2660,7 @@
     </unit>
     <unit id="uof.m3d.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:289</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:257</note>
       </notes>
       <segment>
         <source>Cubic meter per day</source>
@@ -2685,7 +2668,7 @@
     </unit>
     <unit id="uof.m3d.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:290</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:258</note>
       </notes>
       <segment>
         <source>m3/d</source>
@@ -2693,7 +2676,7 @@
     </unit>
     <unit id="uof.Ld.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:293</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:261</note>
       </notes>
       <segment>
         <source>Liter per day</source>
@@ -2701,7 +2684,7 @@
     </unit>
     <unit id="uof.Ld.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:294</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:262</note>
       </notes>
       <segment>
         <source>L/d</source>
@@ -2709,7 +2692,7 @@
     </unit>
     <unit id="uof.ppm.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:300</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:268</note>
       </notes>
       <segment>
         <source>Part per million</source>
@@ -2717,7 +2700,7 @@
     </unit>
     <unit id="uof.ppm.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:301</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:269</note>
       </notes>
       <segment>
         <source>ppm</source>
@@ -2725,7 +2708,7 @@
     </unit>
     <unit id="uof.µgL.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:307</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:275</note>
       </notes>
       <segment>
         <source>Microgram per liter</source>
@@ -2733,7 +2716,7 @@
     </unit>
     <unit id="uof.µgL.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:308</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:276</note>
       </notes>
       <segment>
         <source>µg/L</source>
@@ -2741,7 +2724,7 @@
     </unit>
     <unit id="uof.mgL.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:311</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:279</note>
       </notes>
       <segment>
         <source>Miligram per liter</source>
@@ -2749,7 +2732,7 @@
     </unit>
     <unit id="uof.mgL.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:312</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:280</note>
       </notes>
       <segment>
         <source>mg/L</source>
@@ -2757,7 +2740,7 @@
     </unit>
     <unit id="uof.µgm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:315</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:283</note>
       </notes>
       <segment>
         <source>Microgram per cubic meter</source>
@@ -2765,7 +2748,7 @@
     </unit>
     <unit id="uof.µgm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:316</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:284</note>
       </notes>
       <segment>
         <source>µ5g/m3</source>
@@ -2773,7 +2756,7 @@
     </unit>
     <unit id="uof.mgm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:319</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:287</note>
       </notes>
       <segment>
         <source>Milligram per cubic meter</source>
@@ -2781,7 +2764,7 @@
     </unit>
     <unit id="uof.mgm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:320</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:288</note>
       </notes>
       <segment>
         <source>mg/m3</source>
@@ -2789,7 +2772,7 @@
     </unit>
     <unit id="uof.gL.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:323</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:291</note>
       </notes>
       <segment>
         <source>Gram per liter</source>
@@ -2797,7 +2780,7 @@
     </unit>
     <unit id="uof.gL.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:324</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:292</note>
       </notes>
       <segment>
         <source>g/L</source>
@@ -2805,7 +2788,7 @@
     </unit>
     <unit id="uof.kgm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:327</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:295</note>
       </notes>
       <segment>
         <source>Kilogram per cubic meter</source>
@@ -2813,7 +2796,7 @@
     </unit>
     <unit id="uof.kgm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:328</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:296</note>
       </notes>
       <segment>
         <source>kg/m3</source>
@@ -2821,7 +2804,7 @@
     </unit>
     <unit id="uof.byte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:334</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:302</note>
       </notes>
       <segment>
         <source>Byte</source>
@@ -2829,7 +2812,7 @@
     </unit>
     <unit id="uof.byte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:335</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:303</note>
       </notes>
       <segment>
         <source>B</source>
@@ -2837,7 +2820,7 @@
     </unit>
     <unit id="uof.kilobyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:338</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:306</note>
       </notes>
       <segment>
         <source>Kilobyte</source>
@@ -2845,7 +2828,7 @@
     </unit>
     <unit id="uof.kilobyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:339</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:307</note>
       </notes>
       <segment>
         <source>kB</source>
@@ -2853,7 +2836,7 @@
     </unit>
     <unit id="uof.megabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:342</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:310</note>
       </notes>
       <segment>
         <source>Megabyte</source>
@@ -2861,7 +2844,7 @@
     </unit>
     <unit id="uof.megabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:343</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:311</note>
       </notes>
       <segment>
         <source>MB</source>
@@ -2869,7 +2852,7 @@
     </unit>
     <unit id="uof.gigabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:346</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:314</note>
       </notes>
       <segment>
         <source>Gigabyte</source>
@@ -2877,7 +2860,7 @@
     </unit>
     <unit id="uof.gigabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:347</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:315</note>
       </notes>
       <segment>
         <source>GB</source>
@@ -2885,7 +2868,7 @@
     </unit>
     <unit id="uof.terabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:350</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:318</note>
       </notes>
       <segment>
         <source>Terabyte</source>
@@ -2893,7 +2876,7 @@
     </unit>
     <unit id="uof.terabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:351</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:319</note>
       </notes>
       <segment>
         <source>TB</source>
@@ -2901,7 +2884,7 @@
     </unit>
     <unit id="uof.petabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:354</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:322</note>
       </notes>
       <segment>
         <source>Petabyte</source>
@@ -2909,7 +2892,7 @@
     </unit>
     <unit id="uof.petabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:355</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:323</note>
       </notes>
       <segment>
         <source>PB</source>
@@ -2917,7 +2900,7 @@
     </unit>
     <unit id="uof.hertz.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:361</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:329</note>
       </notes>
       <segment>
         <source>Hertz</source>
@@ -2925,7 +2908,7 @@
     </unit>
     <unit id="uof.hertz.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:362</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:330</note>
       </notes>
       <segment>
         <source>Hz</source>
@@ -2933,7 +2916,7 @@
     </unit>
     <unit id="uof.megahertz.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:365</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:333</note>
       </notes>
       <segment>
         <source>Megahertz</source>
@@ -2941,7 +2924,7 @@
     </unit>
     <unit id="uof.megahertz.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:366</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:334</note>
       </notes>
       <segment>
         <source>MHz</source>
@@ -2949,7 +2932,7 @@
     </unit>
     <unit id="uof.gigahertz.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:369</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:337</note>
       </notes>
       <segment>
         <source>Gigahertz</source>
@@ -2957,7 +2940,7 @@
     </unit>
     <unit id="uof.gigahertz.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:370</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:338</note>
       </notes>
       <segment>
         <source>GHz</source>
@@ -2965,7 +2948,7 @@
     </unit>
     <unit id="uof.percentage.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:376</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:344</note>
       </notes>
       <segment>
         <source>Percentage</source>
@@ -2973,7 +2956,7 @@
     </unit>
     <unit id="uof.percentage.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:377</note>
+        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:345</note>
       </notes>
       <segment>
         <source>%</source>
