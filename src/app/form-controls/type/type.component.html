@@ -1,6 +1,6 @@
 <div [formGroup]="form" class="form-group">
     <label for="type"><span i18n>Type</span></label>
-    <select formControlName="value" class="form-control selectpicker" title="Nothing selected" data-live-search="true" i18n-title>
+    <select formControlName="typeName" class="form-control selectpicker" title="Nothing selected" data-live-search="true" i18n-title>
         <ng-container *ngFor="let sensorType of sensorTypes">
             <option class="font-weight-bold" [value]="sensorType.key">
                 {{ sensorType.value }}
@@ -10,7 +10,7 @@
             </option>
         </ng-container>
     </select>
-    <div *ngIf="(f.value.dirty || f.value.touched || submitted) && f.value.errors" class="invalid-input">
-        <span class="required-text" *ngIf="f.value.errors.required" i18n>Type is required</span>
+    <div *ngIf="(f.typeName.dirty || f.typeName.touched || submitted) && f.typeName.errors" class="invalid-input">
+        <span class="required-text" *ngIf="f.typeName.errors.required" i18n>Type is required</span>
     </div>
 </div>
