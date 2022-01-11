@@ -50,8 +50,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
 
     public sensorTypes = getSensorTypesTranslation(this.locale);
 
-    constructor(private rootFormGroup: FormGroupDirective, @Inject(LOCALE_ID) private locale: string) {
-    }
+    constructor(private rootFormGroup: FormGroupDirective, @Inject(LOCALE_ID) private locale: string) {}
 
     public get f() {
         return this.form.controls;
@@ -95,7 +94,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
 
     ngOnInit(): void {
         this.form = this.rootFormGroup.control.get(`sensors.${this.sensorIdx}`) as FormGroup;
-        
+
         this.subscriptions.push(
             // any time the inner form changes update the parent of any change
             this.form.valueChanges.subscribe((value) => {
@@ -103,7 +102,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
                 this.onTouched();
             }),
         );
-        
+
         ($('.selectpicker') as any).selectpicker('refresh');
     }
 }
