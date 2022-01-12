@@ -85,7 +85,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
 
     // communicate the inner form validation to the parent form
     public validate(_: FormControl) {
-        return this.form.valid ? null : { typeName: { valid: false } };
+        return this.form.controls.typeName.valid;
     }
 
     ngAfterViewInit(): void {
@@ -94,15 +94,6 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
 
     ngOnInit(): void {
         this.form = this.rootFormGroup.control.get(`sensors.${this.sensorIdx}`) as FormGroup;
-
-        this.subscriptions.push(
-            // any time the inner form changes update the parent of any change
-            this.form.valueChanges.subscribe((value) => {
-                this.onChange(value.typeName);
-                this.onTouched();
-            }),
-        );
-
         ($('.selectpicker') as any).selectpicker('refresh');
     }
 }
