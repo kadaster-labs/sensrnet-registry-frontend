@@ -2,9 +2,9 @@ import { Component, forwardRef, OnDestroy, Input, AfterViewInit, OnInit, Inject,
 
 import {
     ControlValueAccessor,
-    FormBuilder,
     FormControl,
     FormGroup,
+    FormGroupDirective,
     NG_VALIDATORS,
     NG_VALUE_ACCESSOR,
 } from '@angular/forms';
@@ -32,6 +32,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
     public form: FormGroup;
     public subscriptions: Subscription[] = [];
 
+    @Input() public sensorIdx: number;
     @Input() public submitted: boolean;
 
     get value() {
@@ -49,19 +50,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
 
     public sensorTypes = getSensorTypesTranslation(this.locale);
 
-    constructor(private formBuilder: FormBuilder, @Inject(LOCALE_ID) private locale: string) {
-        this.form = this.formBuilder.group({
-            value: new FormControl([]),
-        });
-
-        this.subscriptions.push(
-            // any time the inner form changes update the parent of any change
-            this.form.valueChanges.subscribe((value) => {
-                this.onChange(value);
-                this.onTouched();
-            }),
-        );
-    }
+    constructor(private rootFormGroup: FormGroupDirective, @Inject(LOCALE_ID) private locale: string) {}
 
     public get f() {
         return this.form.controls;
@@ -96,7 +85,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
 
     // communicate the inner form validation to the parent form
     public validate(_: FormControl) {
-        return this.form.valid ? null : { theme: { valid: false } };
+        return this.form.controls.typeName.valid;
     }
 
     ngAfterViewInit(): void {
@@ -104,6 +93,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
     }
 
     ngOnInit(): void {
+        this.form = this.rootFormGroup.control.get(`sensors.${this.sensorIdx}`) as FormGroup;
         ($('.selectpicker') as any).selectpicker('refresh');
     }
 }
