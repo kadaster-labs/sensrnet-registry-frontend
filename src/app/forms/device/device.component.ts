@@ -16,6 +16,7 @@ import {
     IRegisterSensorBody,
     IUpdateDatastreamBody,
     IUpdateDeviceBody,
+    IUpdateLocationBody,
     IUpdateSensorBody,
 } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
@@ -274,7 +275,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     }
 
     private async updateDevice() {
-        const deviceUpdate: Record<string, any> = {};
+        const deviceUpdate: IUpdateDeviceBody = {};
         if (this.deviceForm.controls.name.dirty) {
             deviceUpdate.name = this.deviceForm.value.name;
         }
@@ -287,7 +288,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
         if (this.deviceForm.controls.connectivity.dirty) {
             deviceUpdate.connectivity = this.deviceForm.value.connectivity;
         }
-        const location: Record<string, any> = {};
+        const location: IUpdateLocationBody = {};
         if (this.deviceForm.controls.locationName.dirty) {
             location.name = this.deviceForm.value.locationName;
         }
@@ -304,9 +305,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
         try {
             if (Object.keys(deviceUpdate).length) {
-                await this.deviceService
-                    .update(this.deviceForm.value.id, deviceUpdate as IUpdateDeviceBody)
-                    .toPromise();
+                await this.deviceService.update(this.deviceForm.value.id, deviceUpdate).toPromise();
                 this.deviceForm.markAsPristine();
                 this.alertService.success(this.saveSuccessMessage);
             }
@@ -405,7 +404,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     this.alertService.error(e.error.message);
                 }
             } else {
-                const sensorUpdate: Record<string, any> = {};
+                const sensorUpdate: IUpdateSensorBody = {};
                 if (sensorEntry.get('name').dirty) {
                     sensorUpdate.name = sensorEntryValue.name;
                 }
@@ -428,7 +427,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                 try {
                     if (Object.keys(sensorUpdate).length) {
                         await this.deviceService
-                            .updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate as IUpdateSensorBody)
+                            .updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate)
                             .toPromise();
                         this.alertService.success(this.saveSuccessMessage);
                     }
@@ -479,7 +478,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             'unitOfMeasurement',
         ];
 
-        const datastreamUpdate: Record<string, any> = {};
+        const datastreamUpdate: IUpdateDatastreamBody = {};
         if (datastreamFormEntry.get('theme').dirty) {
             datastreamUpdate.theme = datastreamFormValue.theme ? datastreamFormValue.theme.value : null;
         }
@@ -495,7 +494,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
         if (Object.keys(datastreamUpdate).length) {
             await this.deviceService
-                .updateDatastream(this.deviceId, sensorId, datastreamId, datastreamUpdate as IUpdateDatastreamBody)
+                .updateDatastream(this.deviceId, sensorId, datastreamId, datastreamUpdate)
                 .toPromise();
         }
     }
