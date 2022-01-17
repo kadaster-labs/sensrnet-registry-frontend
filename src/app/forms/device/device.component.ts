@@ -252,74 +252,82 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     public async saveDevice() {
         if (this.deviceForm.value.id) {
-            const deviceUpdate: Record<string, any> = {};
-            if (this.deviceForm.controls.name.dirty) {
-                deviceUpdate.name = this.deviceForm.value.name;
-            }
-            if (this.deviceForm.controls.description.dirty) {
-                deviceUpdate.description = this.deviceForm.value.description;
-            }
-            if (this.deviceForm.controls.category.dirty) {
-                deviceUpdate.category = this.deviceForm.value.category.category;
-            }
-            if (this.deviceForm.controls.connectivity.dirty) {
-                deviceUpdate.connectivity = this.deviceForm.value.connectivity;
-            }
-            const location: Record<string, any> = {};
-            if (this.deviceForm.controls.locationName.dirty) {
-                location.name = this.deviceForm.value.locationName;
-            }
-            if (this.deviceForm.controls.locationDescription.dirty) {
-                location.description = this.deviceForm.value.locationDescription;
-            }
-            if (this.deviceForm.controls.location.dirty) {
-                const deviceLocation = this.deviceForm.value.location;
-                location.location = [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height];
-            }
-            if (Object.keys(location).length) {
-                deviceUpdate.location = location;
-            }
-
-            try {
-                if (Object.keys(deviceUpdate).length) {
-                    await this.deviceService
-                        .update(this.deviceForm.value.id, deviceUpdate as IUpdateDeviceBody)
-                        .toPromise();
-                    this.deviceForm.markAsPristine();
-                    this.alertService.success(this.saveSuccessMessage);
-                }
-            } catch (e) {
-                this.alertService.error(e.error.message);
-            }
-
-            this.submitted = false;
+            await this.updateDevice();
         } else {
+            await this.createDevice();
+        }
+    }
+
+    private async updateDevice() {
+        const deviceUpdate: Record<string, any> = {};
+        if (this.deviceForm.controls.name.dirty) {
+            deviceUpdate.name = this.deviceForm.value.name;
+        }
+        if (this.deviceForm.controls.description.dirty) {
+            deviceUpdate.description = this.deviceForm.value.description;
+        }
+        if (this.deviceForm.controls.category.dirty) {
+            deviceUpdate.category = this.deviceForm.value.category.category;
+        }
+        if (this.deviceForm.controls.connectivity.dirty) {
+            deviceUpdate.connectivity = this.deviceForm.value.connectivity;
+        }
+        const location: Record<string, any> = {};
+        if (this.deviceForm.controls.locationName.dirty) {
+            location.name = this.deviceForm.value.locationName;
+        }
+        if (this.deviceForm.controls.locationDescription.dirty) {
+            location.description = this.deviceForm.value.locationDescription;
+        }
+        if (this.deviceForm.controls.location.dirty) {
             const deviceLocation = this.deviceForm.value.location;
-            const device: IRegisterDeviceBody = {
-                name: this.deviceForm.value.name,
-                description: this.deviceForm.value.description,
-                category: this.deviceForm.value.category.category,
-                connectivity: this.deviceForm.value.connectivity,
-                location: {
-                    name: this.deviceForm.value.locationName,
-                    description: this.deviceForm.value.locationDescription,
-                    location: deviceLocation
-                        ? [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height]
-                        : null,
-                },
-            };
+            location.location = [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height];
+        }
+        if (Object.keys(location).length) {
+            deviceUpdate.location = location;
+        }
 
-            try {
-                const deviceDetails: Record<string, any> = await this.deviceService.register(device).toPromise();
-                this.deviceId = deviceDetails.deviceId;
+        try {
+            if (Object.keys(deviceUpdate).length) {
+                await this.deviceService
+                    .update(this.deviceForm.value.id, deviceUpdate as IUpdateDeviceBody)
+                    .toPromise();
                 this.deviceForm.markAsPristine();
-
-                this.locationService.showLocation(null);
                 this.alertService.success(this.saveSuccessMessage);
-                this.submitted = false;
-            } catch (e) {
-                this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
             }
+        } catch (e) {
+            this.alertService.error(e.error.message);
+        }
+
+        this.submitted = false;
+    }
+
+    private async createDevice() {
+        const deviceLocation = this.deviceForm.value.location;
+        const device: IRegisterDeviceBody = {
+            name: this.deviceForm.value.name,
+            description: this.deviceForm.value.description,
+            category: this.deviceForm.value.category.category,
+            connectivity: this.deviceForm.value.connectivity,
+            location: {
+                name: this.deviceForm.value.locationName,
+                description: this.deviceForm.value.locationDescription,
+                location: deviceLocation
+                    ? [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height]
+                    : null,
+            },
+        };
+
+        try {
+            const deviceDetails: Record<string, any> = await this.deviceService.register(device).toPromise();
+            this.deviceId = deviceDetails.deviceId;
+            this.deviceForm.markAsPristine();
+
+            this.locationService.showLocation(null);
+            this.alertService.success(this.saveSuccessMessage);
+            this.submitted = false;
+        } catch (e) {
+            this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
         }
     }
 
