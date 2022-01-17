@@ -33,6 +33,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     public subscriptions: Subscription[] = [];
 
+    private submitting = false;
     public deviceForm: FormGroup;
     public sensorForm: FormGroup;
 
@@ -254,7 +255,12 @@ export class DeviceComponent implements OnInit, OnDestroy {
         if (this.deviceForm.value.id) {
             await this.updateDevice();
         } else {
+            if (this.submitting) {
+                return;
+            }
+            this.submitting = true;
             await this.createDevice();
+            this.submitting = false;
         }
     }
 
