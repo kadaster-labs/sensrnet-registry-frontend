@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { urlRegex } from '../../helpers/form.helpers';
 import { IDevice } from '../../model/bodies/device-model';
@@ -46,6 +46,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly route: ActivatedRoute,
+        private readonly router: Router,
         private readonly formBuilder: FormBuilder,
         private readonly alertService: AlertService,
         private readonly deviceService: DeviceService,
@@ -261,6 +262,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.submitting = true;
             await this.createDevice();
             this.submitting = false;
+            await this.router.navigate([`/device/${this.deviceId}`]);
         }
     }
 
