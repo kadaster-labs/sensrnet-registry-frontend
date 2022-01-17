@@ -1,11 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { urlRegex } from '../../helpers/form.helpers';
 import { IDevice } from '../../model/bodies/device-model';
 import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { EventType } from '../../model/events/event-type';
 import { AlertService } from '../../services/alert.service';
+import { ConnectionService } from '../../services/connection.service';
 import {
     DeviceService,
     IRegisterDatastreamBody,
@@ -44,11 +47,15 @@ export class DeviceComponent implements OnInit, OnDestroy {
     public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
     public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
+    public deviceLoading = false;
+    private deviceCreated$: Observable<IDevice>;
+
     constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
         private readonly formBuilder: FormBuilder,
         private readonly alertService: AlertService,
+        private readonly connectionService: ConnectionService,
         private readonly deviceService: DeviceService,
         private readonly locationService: LocationService,
         private readonly observedAreaService: ObservedAreaService,
@@ -574,7 +581,24 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.route.params.subscribe(async (params) => {
                 if (params.id) {
                     this.deviceId = params.id;
-                    const device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
+
+                    this.deviceLoading = true;
+                    let device: IDevice;
+                    try {
+                        device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
+                    } catch (response) {
+                        if (
+                            response instanceof HttpErrorResponse &&
+                            response.error.statusCode === 404 &&
+                            response.error.message === 'Device not found'
+                        ) {
+                            // When device is created, not all databases are instantly updated. A racing condition might
+                            // therefore occur that the device is not yet available to edit.
+                            device = await this.waitForDevice(this.deviceId);
+                        }
+                    } finally {
+                        this.deviceLoading = false;
+                    }
 
                     this.setDevice(device);
                     await this.initDeviceForm(device);
@@ -591,6 +615,21 @@ export class DeviceComponent implements OnInit, OnDestroy {
             }
         };
         this.subscriptions.push(onLocate.subscribe(handler), onUpdate.subscribe(handler));
+    }
+
+    private waitForDevice(deviceId: string): Promise<IDevice> {
+        return new Promise((resolve) => {
+            // Wait for the DeviceLocated Event for this device. Note: don't use the DeviceRegistered event here. Upon
+            // registering a device, both DeviceRegistered and DeviceLocated are created, the latter being the last to
+            // be created. Waiting for DeviceRegistered might therefore trigger the resolve while not all information is
+            // available.
+            this.deviceCreated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
+            this.deviceCreated$.subscribe((device: IDevice) => {
+                if (device._id === deviceId) {
+                    resolve(device);
+                }
+            });
+        });
     }
 
     public ngOnDestroy(): void {
