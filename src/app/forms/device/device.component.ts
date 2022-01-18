@@ -49,7 +49,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
     public deviceLoading = false;
-    private deviceCreated$: Observable<IDevice>;
+    private deviceLocated$: Observable<IDevice>;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -622,12 +622,14 @@ export class DeviceComponent implements OnInit, OnDestroy {
             // registering a device, both DeviceRegistered and DeviceLocated are created, the latter being the last to
             // be created. Waiting for DeviceRegistered might therefore trigger the resolve while not all information is
             // available.
-            this.deviceCreated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
-            this.deviceCreated$.subscribe((device: IDevice) => {
+            this.deviceLocated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
+            const onDeviceLocated = (device: IDevice) => {
                 if (device._id === deviceId) {
                     resolve(device);
                 }
-            });
+            };
+            const deviceLocatedSubscription = this.deviceLocated$.subscribe(onDeviceLocated);
+            this.subscriptions.push(deviceLocatedSubscription);
         });
     }
 
