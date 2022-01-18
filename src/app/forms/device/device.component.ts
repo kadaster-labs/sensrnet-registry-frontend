@@ -1,11 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { urlRegex } from '../../helpers/form.helpers';
 import { IDevice } from '../../model/bodies/device-model';
 import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
+import { EventType } from '../../model/events/event-type';
 import { AlertService } from '../../services/alert.service';
+import { ConnectionService } from '../../services/connection.service';
 import {
     DeviceService,
     IRegisterDatastreamBody,
@@ -13,6 +16,7 @@ import {
     IRegisterSensorBody,
     IUpdateDatastreamBody,
     IUpdateDeviceBody,
+    IUpdateLocationBody,
     IUpdateSensorBody,
 } from '../../services/device.service';
 import { LocationService } from '../../services/location.service';
@@ -33,6 +37,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     public subscriptions: Subscription[] = [];
 
+    private submitting = false;
     public deviceForm: FormGroup;
     public sensorForm: FormGroup;
 
@@ -43,10 +48,15 @@ export class DeviceComponent implements OnInit, OnDestroy {
     public saveBodyString = $localize`:@@step.confirm.body:You need to save before continuing`;
     public saveFailedMessage = $localize`:@@device.register.failure:An error has occurred during saving:`;
 
+    public deviceLoading = false;
+    private deviceLocated$: Observable<IDevice>;
+
     constructor(
         private readonly route: ActivatedRoute,
+        private readonly router: Router,
         private readonly formBuilder: FormBuilder,
         private readonly alertService: AlertService,
+        private readonly connectionService: ConnectionService,
         private readonly deviceService: DeviceService,
         private readonly locationService: LocationService,
         private readonly observedAreaService: ObservedAreaService,
@@ -239,7 +249,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     id: sensor._id,
                     name: [sensor.name, Validators.required],
                     description: [sensor.description, Validators.required],
-                    typeName: [sensor.type ? { value: sensor.type } : null, Validators.required],
+                    typeName: [sensor.type, Validators.required],
                     manufacturer: sensor.manufacturer,
                     supplier: sensor.supplier,
                     documentation: [sensor.documentation, [Validators.pattern(urlRegex)]],
@@ -252,74 +262,86 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     public async saveDevice() {
         if (this.deviceForm.value.id) {
-            const deviceUpdate: Record<string, any> = {};
-            if (this.deviceForm.controls.name.dirty) {
-                deviceUpdate.name = this.deviceForm.value.name;
-            }
-            if (this.deviceForm.controls.description.dirty) {
-                deviceUpdate.description = this.deviceForm.value.description;
-            }
-            if (this.deviceForm.controls.category.dirty) {
-                deviceUpdate.category = this.deviceForm.value.category.category;
-            }
-            if (this.deviceForm.controls.connectivity.dirty) {
-                deviceUpdate.connectivity = this.deviceForm.value.connectivity;
-            }
-            const location: Record<string, any> = {};
-            if (this.deviceForm.controls.locationName.dirty) {
-                location.name = this.deviceForm.value.locationName;
-            }
-            if (this.deviceForm.controls.locationDescription.dirty) {
-                location.description = this.deviceForm.value.locationDescription;
-            }
-            if (this.deviceForm.controls.location.dirty) {
-                const deviceLocation = this.deviceForm.value.location;
-                location.location = [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height];
-            }
-            if (Object.keys(location).length) {
-                deviceUpdate.location = location;
-            }
-
-            try {
-                if (Object.keys(deviceUpdate).length) {
-                    await this.deviceService
-                        .update(this.deviceForm.value.id, deviceUpdate as IUpdateDeviceBody)
-                        .toPromise();
-                    this.deviceForm.markAsPristine();
-                    this.alertService.success(this.saveSuccessMessage);
-                }
-            } catch (e) {
-                this.alertService.error(e.error.message);
-            }
-
-            this.submitted = false;
+            await this.updateDevice();
         } else {
-            const deviceLocation = this.deviceForm.value.location;
-            const device: IRegisterDeviceBody = {
-                name: this.deviceForm.value.name,
-                description: this.deviceForm.value.description,
-                category: this.deviceForm.value.category.category,
-                connectivity: this.deviceForm.value.connectivity,
-                location: {
-                    name: this.deviceForm.value.locationName,
-                    description: this.deviceForm.value.locationDescription,
-                    location: deviceLocation
-                        ? [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height]
-                        : null,
-                },
-            };
-
-            try {
-                const deviceDetails: Record<string, any> = await this.deviceService.register(device).toPromise();
-                this.deviceId = deviceDetails.deviceId;
-                this.deviceForm.markAsPristine();
-
-                this.locationService.showLocation(null);
-                this.alertService.success(this.saveSuccessMessage);
-                this.submitted = false;
-            } catch (e) {
-                this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
+            if (this.submitting) {
+                return;
             }
+            this.submitting = true;
+            await this.createDevice();
+            this.submitting = false;
+            await this.router.navigate([`/device/${this.deviceId}`]);
+        }
+    }
+
+    private async updateDevice() {
+        const deviceUpdate: IUpdateDeviceBody = {};
+        if (this.deviceForm.controls.name.dirty) {
+            deviceUpdate.name = this.deviceForm.value.name;
+        }
+        if (this.deviceForm.controls.description.dirty) {
+            deviceUpdate.description = this.deviceForm.value.description;
+        }
+        if (this.deviceForm.controls.category.dirty) {
+            deviceUpdate.category = this.deviceForm.value.category.category;
+        }
+        if (this.deviceForm.controls.connectivity.dirty) {
+            deviceUpdate.connectivity = this.deviceForm.value.connectivity;
+        }
+        const location: IUpdateLocationBody = {};
+        if (this.deviceForm.controls.locationName.dirty) {
+            location.name = this.deviceForm.value.locationName;
+        }
+        if (this.deviceForm.controls.locationDescription.dirty) {
+            location.description = this.deviceForm.value.locationDescription;
+        }
+        if (this.deviceForm.controls.location.dirty) {
+            const deviceLocation = this.deviceForm.value.location;
+            location.location = [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height];
+        }
+        if (Object.keys(location).length) {
+            deviceUpdate.location = location;
+        }
+
+        try {
+            if (Object.keys(deviceUpdate).length) {
+                await this.deviceService.update(this.deviceForm.value.id, deviceUpdate).toPromise();
+                this.deviceForm.markAsPristine();
+                this.alertService.success(this.saveSuccessMessage);
+            }
+        } catch (e) {
+            this.alertService.error(e.error.message);
+        }
+
+        this.submitted = false;
+    }
+
+    private async createDevice() {
+        const deviceLocation = this.deviceForm.value.location;
+        const device: IRegisterDeviceBody = {
+            name: this.deviceForm.value.name,
+            description: this.deviceForm.value.description,
+            category: this.deviceForm.value.category.category,
+            connectivity: this.deviceForm.value.connectivity,
+            location: {
+                name: this.deviceForm.value.locationName,
+                description: this.deviceForm.value.locationDescription,
+                location: deviceLocation
+                    ? [deviceLocation.longitude, deviceLocation.latitude, deviceLocation.height]
+                    : null,
+            },
+        };
+
+        try {
+            const deviceDetails: Record<string, any> = await this.deviceService.register(device).toPromise();
+            this.deviceId = deviceDetails.deviceId;
+            this.deviceForm.markAsPristine();
+
+            this.locationService.showLocation(null);
+            this.alertService.success(this.saveSuccessMessage);
+            this.submitted = false;
+        } catch (e) {
+            this.alertService.error(`${this.saveFailedMessage} ${e.error.message}.`);
         }
     }
 
@@ -366,7 +388,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                 const sensor: IRegisterSensorBody = {
                     name: sensorEntryValue.name,
                     description: sensorEntryValue.description,
-                    type: sensorEntryValue.typeName.value,
+                    type: sensorEntryValue.typeName,
                     manufacturer: sensorEntryValue.manufacturer,
                     supplier: sensorEntryValue.supplier,
                     documentation: sensorEntryValue.documentation,
@@ -382,7 +404,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     this.alertService.error(e.error.message);
                 }
             } else {
-                const sensorUpdate: Record<string, any> = {};
+                const sensorUpdate: IUpdateSensorBody = {};
                 if (sensorEntry.get('name').dirty) {
                     sensorUpdate.name = sensorEntryValue.name;
                 }
@@ -390,7 +412,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                     sensorUpdate.description = sensorEntryValue.description;
                 }
                 if (sensorEntry.get('typeName').dirty) {
-                    sensorUpdate.type = sensorEntryValue.typeName.value;
+                    sensorUpdate.type = sensorEntryValue.typeName;
                 }
                 if (sensorEntry.get('manufacturer').dirty) {
                     sensorUpdate.manufacturer = sensorEntryValue.manufacturer;
@@ -405,7 +427,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                 try {
                     if (Object.keys(sensorUpdate).length) {
                         await this.deviceService
-                            .updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate as IUpdateSensorBody)
+                            .updateSensor(this.deviceId, sensorEntryValue.id, sensorUpdate)
                             .toPromise();
                         this.alertService.success(this.saveSuccessMessage);
                     }
@@ -456,7 +478,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
             'unitOfMeasurement',
         ];
 
-        const datastreamUpdate: Record<string, any> = {};
+        const datastreamUpdate: IUpdateDatastreamBody = {};
         if (datastreamFormEntry.get('theme').dirty) {
             datastreamUpdate.theme = datastreamFormValue.theme ? datastreamFormValue.theme.value : null;
         }
@@ -472,7 +494,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
         if (Object.keys(datastreamUpdate).length) {
             await this.deviceService
-                .updateDatastream(this.deviceId, sensorId, datastreamId, datastreamUpdate as IUpdateDatastreamBody)
+                .updateDatastream(this.deviceId, sensorId, datastreamId, datastreamUpdate)
                 .toPromise();
         }
     }
@@ -558,7 +580,24 @@ export class DeviceComponent implements OnInit, OnDestroy {
             this.route.params.subscribe(async (params) => {
                 if (params.id) {
                     this.deviceId = params.id;
-                    const device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
+
+                    this.deviceLoading = true;
+                    let device: IDevice;
+                    try {
+                        device = (await this.deviceService.get(this.deviceId).toPromise()) as IDevice;
+                    } catch (response) {
+                        if (
+                            response instanceof HttpErrorResponse &&
+                            response.error.statusCode === 404 &&
+                            response.error.message === 'Device not found'
+                        ) {
+                            // When device is created, not all databases are instantly updated. A racing condition might
+                            // therefore occur that the device is not yet available to edit.
+                            device = await this.waitForDevice(this.deviceId);
+                        }
+                    } finally {
+                        this.deviceLoading = false;
+                    }
 
                     this.setDevice(device);
                     await this.initDeviceForm(device);
@@ -575,6 +614,23 @@ export class DeviceComponent implements OnInit, OnDestroy {
             }
         };
         this.subscriptions.push(onLocate.subscribe(handler), onUpdate.subscribe(handler));
+    }
+
+    private waitForDevice(deviceId: string): Promise<IDevice> {
+        return new Promise((resolve) => {
+            // Wait for the DeviceLocated Event for this device. Note: don't use the DeviceRegistered event here. Upon
+            // registering a device, both DeviceRegistered and DeviceLocated are created, the latter being the last to
+            // be created. Waiting for DeviceRegistered might therefore trigger the resolve while not all information is
+            // available.
+            this.deviceLocated$ = this.connectionService.subscribeTo(EventType.DeviceLocated);
+            const onDeviceLocated = (device: IDevice) => {
+                if (device._id === deviceId) {
+                    resolve(device);
+                }
+            };
+            const deviceLocatedSubscription = this.deviceLocated$.subscribe(onDeviceLocated);
+            this.subscriptions.push(deviceLocatedSubscription);
+        });
     }
 
     public ngOnDestroy(): void {
