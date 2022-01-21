@@ -4,7 +4,7 @@ export interface IDatastream {
     name: string;
     description?: string;
     unitOfMeasurement?: Record<string, any>;
-    observationArea?: Record<string, any>;
+    observedArea?: Record<string, any>;
     theme?: string[];
     dataQuality?: string;
     isActive?: boolean;

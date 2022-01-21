@@ -1464,673 +1464,659 @@
       <target>Pa</target></segment>
     </unit><unit id="uof.db.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:160</note></notes>
       <segment state="translated">
         <source>Decibel</source>
       <target>Decibel</target></segment>
     </unit><unit id="uof.db.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:160</note></notes>
       <segment state="translated">
         <source>db</source>
       <target>db</target></segment>
     </unit><unit id="uof.dba.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note></notes>
       <segment state="translated">
         <source>Decibel</source>
       <target>Decibel</target></segment>
     </unit><unit id="uof.dba.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:161</note></notes>
       <segment state="translated">
         <source>db(A)</source>
       <target>db(A)</target></segment>
     </unit><unit id="uof.dbb.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note></notes>
       <segment state="translated">
         <source>Decibel</source>
       <target>Decibel</target></segment>
     </unit><unit id="uof.dbb.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:162</note></notes>
       <segment state="translated">
         <source>db(B)</source>
       <target>db(B)</target></segment>
-    </unit><unit id="uof.dbc.name">
-      <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:173</note>
-      </notes>
-      <segment state="translated">
-        <source>Decibel</source>
-      <target>Decibel</target></segment>
-    </unit><unit id="uof.dbc.symbol">
-      <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:174</note>
-      </notes>
-      <segment state="translated">
-        <source>db(C)</source>
-      <target>db(C)</target></segment>
     </unit><unit id="uof.watt.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:177</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:163</note></notes>
       <segment state="translated">
         <source>Watt</source>
       <target>Watt</target></segment>
     </unit><unit id="uof.watt.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:178</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:163</note></notes>
       <segment state="translated">
         <source>W</source>
       <target>W</target></segment>
     </unit><unit id="uof.kw.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:181</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:164</note></notes>
       <segment state="translated">
         <source>Kilowatt</source>
       <target>Kilowatt</target></segment>
     </unit><unit id="uof.kw.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:182</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:164</note></notes>
       <segment state="translated">
         <source>kW</source>
       <target>kW</target></segment>
     </unit><unit id="uof.mw.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:185</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note></notes>
       <segment state="translated">
         <source>Megawatt</source>
       <target>Megawatt</target></segment>
     </unit><unit id="uof.mw.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:186</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:165</note></notes>
       <segment state="translated">
         <source>MW</source>
       <target>MW</target></segment>
     </unit><unit id="uof.gw.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:189</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note></notes>
       <segment state="translated">
         <source>Gigawatt</source>
       <target>Gigawatt</target></segment>
     </unit><unit id="uof.gw.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:190</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:166</note></notes>
       <segment state="translated">
         <source>GW</source>
       <target>GW</target></segment>
     </unit><unit id="uof.kva.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:193</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:167</note></notes>
       <segment state="translated">
         <source>Kilovolt-Ampère</source>
       <target>Kilovolt-Ampère</target></segment>
     </unit><unit id="uof.kva.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:194</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:167</note></notes>
       <segment state="translated">
         <source>kVA</source>
       <target>kVA</target></segment>
     </unit><unit id="uof.ka.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:197</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:168</note></notes>
       <segment state="translated">
         <source>Ampère</source>
       <target>Ampère</target></segment>
     </unit><unit id="uof.ka.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:198</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:168</note></notes>
       <segment state="translated">
         <source>kA</source>
       <target>kA</target></segment>
     </unit><unit id="uof.volt.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:201</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note></notes>
       <segment state="translated">
         <source>Volt</source>
       <target>Volt</target></segment>
     </unit><unit id="uof.volt.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:202</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:169</note></notes>
       <segment state="translated">
         <source>V</source>
       <target>V</target></segment>
     </unit><unit id="uof.kv.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:205</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note></notes>
       <segment state="translated">
         <source>Kilovolt</source>
       <target>Kilovolt</target></segment>
     </unit><unit id="uof.kv.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:206</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:170</note></notes>
       <segment state="translated">
         <source>kV</source>
       <target>kV</target></segment>
     </unit><unit id="uof.mps.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:212</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:180</note></notes>
       <segment state="translated">
         <source>Meters per second</source>
       <target>Meter per seconde</target></segment>
     </unit><unit id="uof.mps.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:213</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:181</note></notes>
       <segment state="translated">
         <source>m/s</source>
       <target>m/s</target></segment>
     </unit><unit id="uof.kmps.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:216</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:184</note></notes>
       <segment state="translated">
         <source>Kilometers per second</source>
       <target>Kilometer per seconde</target></segment>
     </unit><unit id="uof.kmps.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:217</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:185</note></notes>
       <segment state="translated">
         <source>km/s</source>
       <target>km/s</target></segment>
     </unit><unit id="uof.kmph.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:220</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:188</note></notes>
       <segment state="translated">
         <source>Kilometers per hour</source>
       <target>Kilometer per uur</target></segment>
     </unit><unit id="uof.kmph.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:221</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:189</note></notes>
       <segment state="translated">
         <source>km/h</source>
       <target>km/h</target></segment>
     </unit><unit id="uof.mph.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:224</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:192</note></notes>
       <segment state="translated">
         <source>Mile per hour</source>
       <target>Mijl per uur</target></segment>
     </unit><unit id="uof.mph.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:225</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:193</note></notes>
       <segment state="translated">
         <source>mph</source>
       <target>mph</target></segment>
     </unit><unit id="uof.celcius.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:231</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:199</note></notes>
       <segment state="translated">
         <source>Celsius</source>
       <target>Celsius</target></segment>
     </unit><unit id="uof.celcius.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:232</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:200</note></notes>
       <segment state="translated">
         <source>C</source>
       <target>C</target></segment>
     </unit><unit id="uof.fahrenheit.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:235</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:203</note></notes>
       <segment state="translated">
         <source>Fahrenheit</source>
       <target>Fahrenheit</target></segment>
     </unit><unit id="uof.fahrenheit.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:236</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:204</note></notes>
       <segment state="translated">
         <source>F</source>
       <target>F</target></segment>
     </unit><unit id="uof.kelvin.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:239</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:207</note></notes>
       <segment state="translated">
         <source>Kelvin</source>
       <target>Kelvin</target></segment>
     </unit><unit id="uof.kelvin.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:240</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:208</note></notes>
       <segment state="translated">
         <source>K</source>
       <target>K</target></segment>
     </unit><unit id="uof.cm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:246</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:214</note></notes>
       <segment state="translated">
         <source>Cubic centimeter</source>
       <target>Kubieke centimeter</target></segment>
     </unit><unit id="uof.cm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:247</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:215</note></notes>
       <segment state="translated">
         <source>cm3</source>
       <target>cm3</target></segment>
     </unit><unit id="uof.dm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:250</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:218</note></notes>
       <segment state="translated">
         <source>Cubic decimeter</source>
       <target>Kubieke decimeter</target></segment>
     </unit><unit id="uof.dm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:251</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:219</note></notes>
       <segment state="translated">
         <source>dm3</source>
       <target>dm3</target></segment>
     </unit><unit id="uof.m3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:254</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:222</note></notes>
       <segment state="translated">
         <source>Cubic meter</source>
       <target>Kubieke meter</target></segment>
     </unit><unit id="uof.m3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:255</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:223</note></notes>
       <segment state="translated">
         <source>m3</source>
       <target>m3</target></segment>
     </unit><unit id="uof.liter.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:258</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:226</note></notes>
       <segment state="translated">
         <source>Liter</source>
       <target>Liter</target></segment>
     </unit><unit id="uof.liter.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:259</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:227</note></notes>
       <segment state="translated">
         <source>L</source>
       <target>L</target></segment>
     </unit><unit id="uof.hectoliter.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:262</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:230</note></notes>
       <segment state="translated">
         <source>Hectoliter</source>
       <target>Hectoliter</target></segment>
     </unit><unit id="uof.hectoliter.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:263</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:231</note></notes>
       <segment state="translated">
         <source>hL</source>
       <target>hL</target></segment>
     </unit><unit id="uof.hm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:266</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:234</note></notes>
       <segment state="translated">
         <source>Cubic hectometer</source>
       <target>Kubieke hectometer</target></segment>
     </unit><unit id="uof.hm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:267</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:235</note></notes>
       <segment state="translated">
         <source>hm3</source>
       <target>hm3</target></segment>
     </unit><unit id="uof.m3s.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:273</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:241</note></notes>
       <segment state="translated">
         <source>Cubic meter per second</source>
       <target>Kubieke meter per seconde</target></segment>
     </unit><unit id="uof.m3s.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:274</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:242</note></notes>
       <segment state="translated">
         <source>m3/s</source>
       <target>m3/s</target></segment>
     </unit><unit id="uof.Ls.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:277</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:245</note></notes>
       <segment state="translated">
         <source>Liter per second</source>
       <target>Liter per seconde</target></segment>
     </unit><unit id="uof.Ls.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:278</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:246</note></notes>
       <segment state="translated">
         <source>L/s</source>
       <target>L/s</target></segment>
     </unit><unit id="uof.m3h.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:281</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:249</note></notes>
       <segment state="translated">
         <source>Cubic meter per hour</source>
       <target>Kubieke meter per uur</target></segment>
     </unit><unit id="uof.m3h.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:282</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:250</note></notes>
       <segment state="translated">
         <source>m3/h</source>
       <target>m3/h</target></segment>
     </unit><unit id="uof.Lh.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:285</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:253</note></notes>
       <segment state="translated">
         <source>Liter per hour</source>
       <target>Liter per uur</target></segment>
     </unit><unit id="uof.Lh.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:286</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:254</note></notes>
       <segment state="translated">
         <source>L/h</source>
       <target>L/h</target></segment>
     </unit><unit id="uof.m3d.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:289</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:257</note></notes>
       <segment state="translated">
         <source>Cubic meter per day</source>
       <target>Kubieke meter per dag</target></segment>
     </unit><unit id="uof.m3d.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:290</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:258</note></notes>
       <segment state="translated">
         <source>m3/d</source>
       <target>m3/d</target></segment>
     </unit><unit id="uof.Ld.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:293</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:261</note></notes>
       <segment state="translated">
         <source>Liter per day</source>
       <target>Liter per dag</target></segment>
     </unit><unit id="uof.Ld.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:294</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:262</note></notes>
       <segment state="translated">
         <source>L/d</source>
       <target>L/d</target></segment>
     </unit><unit id="uof.ppm.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:300</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:268</note></notes>
       <segment state="translated">
         <source>Part per million</source>
       <target>Deel per miljoen</target></segment>
     </unit><unit id="uof.ppm.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:301</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:269</note></notes>
       <segment state="translated">
         <source>ppm</source>
       <target>ppm</target></segment>
     </unit><unit id="uof.µgL.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:307</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:275</note></notes>
       <segment state="translated">
         <source>Microgram per liter</source>
       <target>Microgram per liter</target></segment>
     </unit><unit id="uof.µgL.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:308</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:276</note></notes>
       <segment state="translated">
         <source>µg/L</source>
       <target>µg/L</target></segment>
     </unit><unit id="uof.mgL.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:311</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:279</note></notes>
       <segment state="translated">
         <source>Miligram per liter</source>
       <target>Miligram per liter</target></segment>
     </unit><unit id="uof.mgL.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:312</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:280</note></notes>
       <segment state="translated">
         <source>mg/L</source>
       <target>mg/L</target></segment>
     </unit><unit id="uof.µgm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:315</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:283</note></notes>
       <segment state="translated">
         <source>Microgram per cubic meter</source>
       <target>Microgram per kubische meter</target></segment>
     </unit><unit id="uof.µgm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:316</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:284</note></notes>
       <segment state="translated">
         <source>µ5g/m3</source>
       <target>µ5g/m3</target></segment>
     </unit><unit id="uof.mgm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:319</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:287</note></notes>
       <segment state="translated">
         <source>Milligram per cubic meter</source>
       <target>Milligram per kubische meter</target></segment>
     </unit><unit id="uof.mgm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:320</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:288</note></notes>
       <segment state="translated">
         <source>mg/m3</source>
       <target>mg/m3</target></segment>
     </unit><unit id="uof.gL.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:323</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:291</note></notes>
       <segment state="translated">
         <source>Gram per liter</source>
       <target>Gram per liter</target></segment>
     </unit><unit id="uof.gL.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:324</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:292</note></notes>
       <segment state="translated">
         <source>g/L</source>
       <target>g/L</target></segment>
     </unit><unit id="uof.kgm3.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:327</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:295</note></notes>
       <segment state="translated">
         <source>Kilogram per cubic meter</source>
       <target>Kilogram per kubische meter</target></segment>
     </unit><unit id="uof.kgm3.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:328</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:296</note></notes>
       <segment state="translated">
         <source>kg/m3</source>
       <target>kg/m3</target></segment>
     </unit><unit id="uof.byte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:334</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:302</note></notes>
       <segment state="translated">
         <source>Byte</source>
       <target>Byte</target></segment>
     </unit><unit id="uof.byte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:335</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:303</note></notes>
       <segment state="translated">
         <source>B</source>
       <target>B</target></segment>
     </unit><unit id="uof.kilobyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:338</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:306</note></notes>
       <segment state="translated">
         <source>Kilobyte</source>
       <target>Kilobyte</target></segment>
     </unit><unit id="uof.kilobyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:339</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:307</note></notes>
       <segment state="translated">
         <source>kB</source>
       <target>kB</target></segment>
     </unit><unit id="uof.megabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:342</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:310</note></notes>
       <segment state="translated">
         <source>Megabyte</source>
       <target>Megabyte</target></segment>
     </unit><unit id="uof.megabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:343</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:311</note></notes>
       <segment state="translated">
         <source>MB</source>
       <target>MB</target></segment>
     </unit><unit id="uof.gigabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:346</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:314</note></notes>
       <segment state="translated">
         <source>Gigabyte</source>
       <target>Gigabyte</target></segment>
     </unit><unit id="uof.gigabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:347</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:315</note></notes>
       <segment state="translated">
         <source>GB</source>
       <target>GB</target></segment>
     </unit><unit id="uof.terabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:350</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:318</note></notes>
       <segment state="translated">
         <source>Terabyte</source>
       <target>Terabyte</target></segment>
     </unit><unit id="uof.terabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:351</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:319</note></notes>
       <segment state="translated">
         <source>TB</source>
       <target>TB</target></segment>
     </unit><unit id="uof.petabyte.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:354</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:322</note></notes>
       <segment state="translated">
         <source>Petabyte</source>
       <target>Petabyte</target></segment>
     </unit><unit id="uof.petabyte.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:355</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:323</note></notes>
       <segment state="translated">
         <source>PB</source>
       <target>PB</target></segment>
     </unit><unit id="uof.hertz.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:361</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:329</note></notes>
       <segment state="translated">
         <source>Hertz</source>
       <target>Hertz</target></segment>
     </unit><unit id="uof.hertz.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:362</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:330</note></notes>
       <segment state="translated">
         <source>Hz</source>
       <target>Hz</target></segment>
     </unit><unit id="uof.megahertz.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:365</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:333</note></notes>
       <segment state="translated">
         <source>Megahertz</source>
       <target>Megahertz</target></segment>
     </unit><unit id="uof.megahertz.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:366</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:334</note></notes>
       <segment state="translated">
         <source>MHz</source>
       <target>MHz</target></segment>
     </unit><unit id="uof.gigahertz.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:369</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:337</note></notes>
       <segment state="translated">
         <source>Gigahertz</source>
       <target>Gigahertz</target></segment>
     </unit><unit id="uof.gigahertz.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:370</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:338</note></notes>
       <segment state="translated">
         <source>GHz</source>
       <target>GHz</target></segment>
     </unit><unit id="uof.percentage.name">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:376</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:344</note></notes>
       <segment state="translated">
         <source>Percentage</source>
       <target>Percentage</target></segment>
     </unit><unit id="uof.percentage.symbol">
       <notes>
-        <note category="location">src/app/model/bodies/unitOfMeasurements.ts:377</note>
-      </notes>
+        
+      <note category="location">src/app/model/bodies/unitOfMeasurements.ts:345</note></notes>
       <segment state="translated">
         <source>%</source>
       <target>%</target></segment>
@@ -2400,10 +2386,8 @@
         <note category="location">src/app/form-controls/sensor-location/sensor-location.component.ts:48,49</note>
       </notes>
       <segment state="translated">
-        <source>The device has observation area's. These will be removed 
-    when the location is updated.</source>
-      <target>Het apparaat heeft waargenomen gebieden. Deze zullen verwijderd worden 
-    wanneer de locatie geüpdatet wordt.</target></segment>
+        <source>The device has observed area's. These will be removed when the location is updated.</source>
+      <target>Het apparaat heeft waargenomen gebieden. Deze zullen verwijderd worden wanneer de locatie geüpdatet wordt.</target></segment>
     </unit><unit id="1399584566118768300">
       <notes>
         <note category="location">src/app/form-controls/organization-contact/organization-contact.component.html:16</note>

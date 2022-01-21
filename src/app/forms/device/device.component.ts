@@ -122,8 +122,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
         const observedAreas = [];
         if (this.device.datastreams) {
             for (const dataStream of this.device.datastreams) {
-                if (dataStream.observationArea) {
-                    observedAreas.push(dataStream.observationArea);
+                if (dataStream.observedArea) {
+                    observedAreas.push(dataStream.observedArea);
                 }
             }
         }
@@ -236,7 +236,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                                 documentation: datastream.documentation,
                                 dataLink: datastream.dataLink,
                                 observationGoals: [observationGoals],
-                                observedArea: datastream.observationArea,
+                                observedArea: datastream.observedArea,
                                 unitOfMeasurement: datastream.unitOfMeasurement,
                             }),
                         );

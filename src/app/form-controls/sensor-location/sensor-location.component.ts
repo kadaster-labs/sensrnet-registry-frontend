@@ -45,8 +45,7 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
     private location: ISensorLocation;
 
     public selectLocation = false;
-    public observationAreaString = $localize`:@@location.area:The device has observation area's. These will be removed 
-    when the location is updated.`;
+    public observedAreaString = $localize`:@@location.area:The device has observed area's. These will be removed when the location is updated.`;
 
     @Input() public device: IDevice;
     @Input() public submitted: boolean;
@@ -108,11 +107,10 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
         );
     }
 
-    public hasObservationAreas() {
+    public hasObservedAreas() {
         let result;
         if (this.device && this.device.datastreams && this.device.datastreams.length) {
-            const observationAreas = this.device.datastreams.map((x) => x.observationArea).filter(Boolean);
-            result = observationAreas.length > 0;
+            result = this.device.datastreams.map((x) => x.observedArea).filter(Boolean).length > 0;
         } else {
             result = false;
         }
@@ -124,8 +122,8 @@ export class SensorLocationComponent implements ControlValueAccessor, OnDestroy 
         this.selectLocation = selectLocation;
 
         if (selectLocation) {
-            if (this.hasObservationAreas()) {
-                this.alertService.warning(this.observationAreaString);
+            if (this.hasObservedAreas()) {
+                this.alertService.warning(this.observedAreaString);
             }
             const drawOption: DrawOption = { variant: GeometryType.POINT, center: null };
             this.locationService.enableDraw(drawOption);

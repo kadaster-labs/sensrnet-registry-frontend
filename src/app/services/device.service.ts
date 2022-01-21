@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
 import { IDevice } from '../model/bodies/device-model';
-import { ISensor } from '../model/bodies/sensor-body';
 import { EventType } from '../model/events/event-type';
 import { ConnectionService } from './connection.service';
 import { EnvService } from './env.service';
@@ -218,7 +217,7 @@ export class DeviceService {
             }
 
             const url = `${this.env.apiUrl}/device?${params.toString()}`;
-            devices = (await this.http.get(url).toPromise()) as ISensor[];
+            devices = (await this.http.get(url).toPromise()) as IDevice[];
         } else {
             devices = [];
         }
