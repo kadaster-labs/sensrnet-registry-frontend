@@ -15,7 +15,7 @@ RUN npm run build
 
 
 # Second Stage : Setup command to serve the app using NGinx
-FROM nginx:1.21.1-alpine
+FROM nginx:1.21.6-alpine
 
 COPY VERSION .
 COPY ./entrypoint.sh ./entrypoint.sh

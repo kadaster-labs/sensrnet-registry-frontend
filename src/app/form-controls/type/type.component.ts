@@ -43,7 +43,7 @@ export class TypeComponent implements ControlValueAccessor, OnInit, OnDestroy, A
         if (!value) {
             return;
         }
-        this.form.setValue(value);
+        this.form.patchValue(value);
         this.onChange(value);
         this.onTouched();
     }

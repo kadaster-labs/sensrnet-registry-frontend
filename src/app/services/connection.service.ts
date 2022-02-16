@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { BehaviorSubject, Subject, Observable, Subscriber } from 'rxjs';
-import * as io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { ILegalEntity } from '../model/legalEntity';
 import { EnvService } from './env.service';
 
@@ -13,7 +13,7 @@ export class SocketEvent {
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionService {
-    private socket: SocketIOClient.Socket;
+    private socket: Socket;
 
     private legalEntitySubject: BehaviorSubject<ILegalEntity> = new BehaviorSubject<ILegalEntity>(null);
     public legalEntity$: Observable<ILegalEntity> = this.legalEntitySubject.asObservable();
