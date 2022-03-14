@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
 import {
     NG_VALUE_ACCESSOR,
     NG_VALIDATORS,
@@ -37,7 +37,6 @@ export class DeviceTypeComponent implements ControlValueAccessor, OnDestroy {
     public subscriptions: Subscription[] = [];
 
     @Input() public submitted: boolean;
-    @Output() sensorType = new EventEmitter<string>();
 
     public sensorCategories = Category;
     public getCategoryTranslation = getCategoryTranslation;
@@ -66,24 +65,10 @@ export class DeviceTypeComponent implements ControlValueAccessor, OnDestroy {
                 this.onTouched();
             }),
         );
-
-        this.onFormChanges();
     }
 
     get f() {
         return this.form.controls;
-    }
-
-    private onFormChanges() {
-        if (!this.form.get('category')) {
-            return;
-        }
-
-        this.form.get('category').valueChanges.subscribe((category: Category) => {
-            if (category) {
-                this.sensorType.emit(category);
-            }
-        });
     }
 
     public ngOnDestroy() {
