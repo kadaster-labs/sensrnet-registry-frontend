@@ -432,6 +432,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
                         this.alertService.success(this.saveSuccessMessage);
                     }
                 } catch (e) {
+                    failed = true;
                     this.alertService.error(e.error.message);
                 }
 
