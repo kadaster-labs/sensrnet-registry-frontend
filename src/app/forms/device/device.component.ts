@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { urlRegex } from '../../helpers/form.helpers';
 import { IDevice } from '../../model/bodies/device-model';
-import { getCategoryTranslation } from '../../model/bodies/sensorTypes';
 import { EventType } from '../../model/events/event-type';
 import { AlertService } from '../../services/alert.service';
 import { ConnectionService } from '../../services/connection.service';
@@ -65,10 +64,6 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     get deviceControls() {
         return this.deviceForm.controls;
-    }
-
-    public setNameFromCategory(item: string) {
-        this.deviceForm.controls.name.setValue(getCategoryTranslation(item));
     }
 
     public async goToStep(step: number): Promise<void> {

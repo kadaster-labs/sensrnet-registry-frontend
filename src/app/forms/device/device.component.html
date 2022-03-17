@@ -22,7 +22,7 @@
                         <span i18n>ID:</span>
                         <span class="font-weight-bold ml-1">{{ deviceControls.id.value }}</span>
                     </div>
-                    <app-device-type formControlName="category" [submitted]="submitted" (sensorType)="setNameFromCategory($event)"></app-device-type>
+                    <app-device-type formControlName="category" [submitted]="submitted"></app-device-type>
                     <div class="form-group">
                         <label i18n>Name</label>
                         <input class="form-control" type="text" formControlName="name" placeholder="Enter name"
